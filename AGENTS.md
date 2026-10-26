@@ -12,8 +12,9 @@ they differ, this file wins for this repository.
 One tool to post to publication platforms (X, Bluesky, Tumblr, Blogger,
 Facebook), talk through communication platforms (Discord, Telegram, Matrix)
 and link them with the rest (e-mail, webhooks, ntfy, NATS). **Early stage:**
-the core works end to end with six platform plugins (Bluesky, Mastodon, X,
-Tumblr, Blogger, Facebook), tested only against fakes of their APIs.
+the core works end to end with platform plugins for Bluesky, Mastodon, X,
+Tumblr, Blogger, Facebook, Discord, Telegram and Matrix, tested only against
+fakes of their APIs, and an inbox of received messages.
 
 Read first:
 

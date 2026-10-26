@@ -6,8 +6,8 @@ Universal tool for administration of chatting and communication platforms
 ## **EARLY STAGE OF PROJECT**
 
 The core works end to end, with plugins for Bluesky, Mastodon, X, Tumblr,
-Blogger and Facebook, tested only against fakes of their APIs so far, not
-yet against real accounts. `dryrun` sends nothing, for trying.
+Blogger, Facebook, Discord (bot or webhook), Telegram and Matrix, tested
+only against fakes of their APIs so far, not yet against real accounts. `dryrun` sends nothing, for trying.
 Plan: [docs/devlog/VISION.md](docs/devlog/VISION.md).
 
 ---

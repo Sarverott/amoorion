@@ -15,3 +15,10 @@ post each, deleted afterwards where the platform allows)?
 *Lean:* the author gives a test account per platform in the vault and the
 go-ahead per platform; the agent runs `amoorion publish` once each and
 fixes what the real API answers differently.
+
+Ready for it: `uv run task test:live -- <platform>…` posts one marked test
+post per platform named, reads it back and replies to it where the plugin
+can, and prints the links (no plugin deletes yet, so deleting is by hand).
+It covers the communication platforms of phase 3 too: Discord (bot and
+webhook), Telegram, Matrix. The author can run it alone, or name the
+platforms the agent may run it for.

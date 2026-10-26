@@ -36,12 +36,16 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Blogger by mail: post, TLS only
 - [x] Facebook Page: post, read, replies as comments
 - [ ] Every platform tried against a real account (needs the author's
-      accounts and go-ahead; all are tested only against fakes so far)
+      accounts and go-ahead, Q13; ready: `task test:live -- <platform>…`)
 
 ## Phase 3: communication platforms
 
-- [ ] Discord
-- [ ] Telegram
-- [ ] Matrix
+- [x] Inbox of received messages, SQLite; `read` and hooks fill it (Q11)
+- [x] Discord: a bot (post, read, reply) and a channel webhook (post), Q12
+- [x] Telegram: a bot in one chat (Bot API)
+- [x] Matrix: one room (client-server API)
+- [x] A live test for every platform, run only when named (`task test:live`)
+- [ ] Listening live (Discord gateway, Telegram updates, Matrix sync) as
+      daemon services filling the inbox
 
 Phases 4–5 (linking, deployment): see [VISION.md](VISION.md).

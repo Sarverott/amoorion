@@ -2,6 +2,31 @@
 
 Newest on top.
 
+## 2026-10-26: orders of phase 3 carried out
+
+- Inbox (Q11): `amoorion.inbox`, SQLite at `AMOORION_INBOX` (default
+  `$XDG_DATA_HOME/amoorion/inbox.sqlite3`); kept once by (platform, id),
+  hook messages without an id get one. `read` keeps what it read and stays
+  `read_only` (it changes nothing on platforms). A root `conftest.py`
+  points every test's inbox into its tmp dir.
+- `HttpPlugin.hidden()`: secrets that are part of URLs (Telegram's bot
+  token, a Discord webhook's token) are replaced by `***` in errors, also
+  in `requests` connection errors, which quote the URL.
+- Discord (Q12): one package, two entry points, `discord` (bot, REST only,
+  no gateway yet) and `discord-webhook`. `allowed_mentions: {parse: []}`
+  always, so `@everyone` in a post pings nobody. Reading others' messages
+  needs the Message Content intent.
+- Telegram reads with `getUpdates` without an offset: nothing is confirmed,
+  updates stay readable 24 h; it fails while a webhook is set, and never
+  shows the bot's own messages (the live test skips reading there).
+- Matrix: plain `m.text` events, own transaction ids; encrypted rooms not
+  supported. Aliases `#…` resolved through the room directory.
+- Live tests (the order "prepare tests for each platform"):
+  `tests/live/test_live.py`, one per installed platform but dryrun,
+  deselected by default (`-m "not live"` in addopts) and skipped unless
+  named in `AMOORION_LIVE`; not run by the agent (needs Q13's go-ahead).
+  `tests/test_live_harness.py` runs the same test on dryrun.
+
 ## 2026-10-26: orders of phase 2 carried out
 
 - The author's `init` task had `deps: [setup, check, init:env]`: deps run

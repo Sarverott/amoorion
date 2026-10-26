@@ -32,8 +32,13 @@ packages/            one package per platform, a uv workspace (Q10)
 | `amoorion-tumblr` | Tumblr | post, read | API v2 (Neue Post Format), OAuth 1.0a |
 | `amoorion-blogger` | Blogger | post | e-mail to the blog's secret address (SMTP, TLS) |
 | `amoorion-facebook` | Facebook Page | post, read, reply (comments) | Graph API, Page token |
+| `amoorion-discord` | Discord | `discord`: post, read, reply; `discord-webhook`: post | bot token (REST API); channel webhook (Q12) |
+| `amoorion-telegram` | Telegram | post, read, reply | Bot API, bot token |
+| `amoorion-matrix` | Matrix | post, read, reply | client-server API, access token |
 
-Every package's README lists its secrets.
+Every package's README lists its secrets. Each is tested against a fake of
+its API; `tests/live/` tries each against its real account, only when asked
+(`task test:live -- <platform>…`, Q13).
 
 ## How they depend on each other
 
