@@ -50,6 +50,11 @@ tasks:
     cmds:
       - uv run --frozen amoorion {{.CLI_ARGS}}
 
+  plugin:new:
+    desc: 'Start a plugin package: task plugin:new -- <platform> <ClassName> "<description>"'
+    cmds:
+      - scripts/new-plugin.sh {{.CLI_ARGS}}
+
   test:
     desc: Run the tests (pytest)
     cmds:
