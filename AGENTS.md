@@ -12,7 +12,7 @@ they differ, this file wins for this repository.
 One tool to post to publication platforms (X, Bluesky, Tumblr, Blogger,
 Facebook), talk through communication platforms (Discord, Telegram, Matrix)
 and link them with the rest (e-mail, webhooks, ntfy, NATS). **Early stage:**
-only the skeleton exists.
+the core works end to end with the `dryrun` platform; no real platform yet.
 
 Read first:
 
@@ -20,6 +20,7 @@ Read first:
 2. [docs/devlog/TODO.md](docs/devlog/TODO.md): what is being worked on now
 3. [docs/devlog/BRAINSTORM.md](docs/devlog/BRAINSTORM.md): open questions `Q<n>`
 4. [docs/changelog/](docs/changelog/): how it got here, answered orders and decisions
+5. [docs/structure.md](docs/structure.md): the shape of `src/amoorion/`
 
 The author's answers come in [docs/devlog/ORDERS.md](docs/devlog/ORDERS.md)
 (empty between batches).
@@ -41,7 +42,10 @@ uv run amoorion          # run the CLI
 ## Layout
 
 ```
-src/amoorion/          the package (CLI entry point: amoorion:main)
+src/amoorion/core.py   Model, View, Controller, Registry: the base of every namespace
+src/amoorion/<ns>/     models, vault, plugins, methods, hooks, cli, api, mcp, daemon;
+                       core mechanics in <ns>/base.py (see docs/structure.md)
+example.env            the link to the vault; copy to .env
 tests/                 pytest tests
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS
 docs/changelog/        phase-<n>.md, append-only
@@ -62,14 +66,17 @@ docs/.agents/          agent notes (see below)
    `~/__WORKSHOP/forge/NOTES-for-repositories.md`.
 2. **Don't settle open questions in code.** If a change depends on a `Q<n>`,
    ask, or pick the *Lean:* option only when told to.
-3. **No secrets in the repository.** Platform tokens and passwords come from
-   the environment or `.BOS/setup/`, never from committed files.
-4. **Ask first** before anything outward-facing: pushing, tagging a release,
-   publishing a package, posting to any real platform account.
-5. **Branches:** BOS flow `master` → `development` → `revision` → `testing`
+3. **Secrets only from the vault.** `.env` holds only the link to it; never
+   commit tokens or passwords.
+4. **Everything is a method.** A new operation goes into `methods/`, not
+   into one front-end; CLI, API and MCP pick it up. Platforms are plugins.
+5. **Ask first** before tagging a release, publishing a package or posting
+   to any real platform account. Pushing `development` is allowed.
+6. **Branches:** BOS flow `master` → `development` → `revision` → `testing`
    → `releasing` → `master` via PR. Work on `development`.
-6. **Commits:** one per finished step, conventional message ending in the
-   agent's `Co-Authored-By:` line. Pushing needs the author's go-ahead.
+7. **Commits:** one per finished step, gated on `task check`, conventional
+   message ending in the agent's `Co-Authored-By:` line. Push when reaching a
+   point that needs the author's answer, then ask.
 
 ## `docs/.agents/` — agent notes
 

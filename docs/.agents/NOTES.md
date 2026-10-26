@@ -12,4 +12,4 @@ Newest on top.
   lefthook + yamllint, Taskfile with `setup` / `check`, `docs/devlog/`
   (VISION, TODO, BRAINSTORM, ORDERS), append-only `docs/changelog/`.
 - Commits before `743498f` (inclusive) predate commitizen.
-- Nothing pushed; the `development` branch exists only locally.
+- The author allowed pushing `development` (2026-10-26).
