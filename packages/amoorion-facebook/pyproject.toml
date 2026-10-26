@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-facebook"
-version = "0.1.0"
+version = "0.2.0"
 description = "Facebook plugin of amoorion: post, read and comment on a Page through the Graph API"
 readme = "README.md"
 license = "MIT"
