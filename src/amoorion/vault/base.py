@@ -2,22 +2,25 @@
 
 `.env` (or the environment) holds only what establishes the link:
 
-    AMOORION_VAULT=<kind>        which backend (see BACKENDS)
-    AMOORION_VAULT_ADDR=<url>    where it is, when the backend needs it
-    AMOORION_VAULT_TOKEN=<token> how to log in, when the backend needs it
+    AMOORION_VAULT=<kind>        which backend: env, bitwarden, http, keepassxc
+    AMOORION_VAULT_ADDR=<url>    where the server is, when there is one
+    AMOORION_VAULT_TOKEN=<token> what unlocks it (session, token, master password)
+    AMOORION_VAULT_PATH=<path>   where amoorion's entries are inside it
 
-Secrets are named `<platform>/<key>`, e.g. `bluesky/password`. Which real
-vault comes first is open (BRAINSTORM Q6); until then only the `env` backend
-exists, meant for development.
+Secrets are named `<platform>/<key>`, e.g. `bluesky/password`. Every backend
+keeps one entry per platform, `<prefix>/<platform>` (prefix `amoorion`
+unless the backend's path says otherwise), with one field per key.
+Each backend lives in its own module and registers in BACKENDS.
 """
 
 import os
 from pathlib import Path
-from typing import ClassVar
 
 from dotenv import load_dotenv
 
 from amoorion.core import AmoorionError, Controller, Model, Registry
+
+PREFIX = "amoorion"
 
 
 class VaultLink(Model):
@@ -26,6 +29,7 @@ class VaultLink(Model):
     kind: str = "env"
     addr: str | None = None
     token: str | None = None
+    path: str | None = None
 
     @classmethod
     def from_env(cls, env_file: Path | None = None) -> "VaultLink":
@@ -34,6 +38,7 @@ class VaultLink(Model):
             kind=os.environ.get("AMOORION_VAULT", "env"),
             addr=os.environ.get("AMOORION_VAULT_ADDR"),
             token=os.environ.get("AMOORION_VAULT_TOKEN"),
+            path=os.environ.get("AMOORION_VAULT_PATH"),
         )
 
 
@@ -44,29 +49,19 @@ class Vault(Controller):
         super().__init__()
         self.link = link
 
+    @staticmethod
+    def split(name: str) -> tuple[str, str]:
+        """`bluesky/password` -> (`bluesky`, `password`)."""
+        platform, _, key = name.partition("/")
+        if not platform or not key:
+            raise AmoorionError(f"secret name {name!r} is not <platform>/<key>")
+        return platform, key
+
     def get(self, name: str) -> str:
         raise NotImplementedError
 
 
 BACKENDS: Registry[type[Vault]] = Registry("vault backend")
-
-
-@BACKENDS.register
-class EnvVault(Vault):
-    """Development backend: `bluesky/password` is read from AMOORION_SECRET_BLUESKY_PASSWORD."""
-
-    name: ClassVar[str] = "env"
-    description: ClassVar[str] = "secrets from environment variables (development only)"
-
-    @staticmethod
-    def variable(name: str) -> str:
-        return "AMOORION_SECRET_" + name.replace("/", "_").replace("-", "_").upper()
-
-    def get(self, name: str) -> str:
-        try:
-            return os.environ[self.variable(name)]
-        except KeyError:
-            raise AmoorionError(f"secret {name!r} not found (set {self.variable(name)})") from None
 
 
 def open_vault(link: VaultLink | None = None) -> Vault:

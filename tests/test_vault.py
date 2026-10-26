@@ -7,10 +7,11 @@ from amoorion.vault import EnvVault, VaultLink, open_vault
 def test_link_from_env_file(tmp_path, monkeypatch):
     monkeypatch.delenv("AMOORION_VAULT", raising=False)
     monkeypatch.delenv("AMOORION_VAULT_ADDR", raising=False)
+    monkeypatch.delenv("AMOORION_VAULT_PATH", raising=False)
     env = tmp_path / ".env"
-    env.write_text("AMOORION_VAULT=env\nAMOORION_VAULT_ADDR=https://vault.test\n")
+    env.write_text("AMOORION_VAULT=env\nAMOORION_VAULT_ADDR=https://vault.test\nAMOORION_VAULT_PATH=secret/x\n")
     link = VaultLink.from_env(env)
-    assert link.kind == "env" and link.addr == "https://vault.test"
+    assert (link.kind, link.addr, link.path) == ("env", "https://vault.test", "secret/x")
 
 
 def test_env_vault_reads_named_secret(monkeypatch):
@@ -29,3 +30,8 @@ def test_missing_secret_names_the_variable(monkeypatch):
 def test_unknown_backend():
     with pytest.raises(AmoorionError):
         open_vault(VaultLink(kind="nope"))
+
+
+def test_secret_names_are_platform_and_key():
+    with pytest.raises(AmoorionError, match="<platform>/<key>"):
+        open_vault(VaultLink(kind="env")).get("no-key")
