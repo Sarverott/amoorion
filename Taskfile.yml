@@ -55,6 +55,19 @@ tasks:
     cmds:
       - uv run --frozen amoorion {{.CLI_ARGS}}
 
+  flow:pull:
+    desc: 'On development: pull master in; its released version becomes the next pre-release (lefthook post-merge)'
+    cmds:
+      - test "$(git branch --show-current)" = development
+      - git pull --no-rebase --no-edit origin master
+      # lefthook marks the pre-release; when hooks are off, mark here (it changes nothing twice).
+      - uv run --frozen python scripts/version.py mark
+
+  version:
+    desc: Show the version of every package (released together)
+    cmds:
+      - uv run --frozen python scripts/version.py current
+
   plugin:new:
     desc: 'Start a plugin package: task plugin:new -- <platform> <ClassName> "<description>"'
     cmds:

@@ -4,3 +4,12 @@ commit-msg:
   commands:
     commitizen:
       run: uv run --frozen cz check --allow-abort --commit-msg-file {1}
+
+# After master is pulled into development (task flow:pull): a released
+# version becomes the next pre-release, X.Y.(Z+1)a0 (docs/releasing.md).
+post-merge:
+  commands:
+    pre-release:
+      run: |
+        [ "$(git branch --show-current)" = development ] || exit 0
+        uv run --frozen python scripts/version.py mark
