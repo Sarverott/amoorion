@@ -11,11 +11,9 @@ import unicodedata
 from datetime import UTC, datetime
 from typing import Any, ClassVar
 
-import requests
-
 from amoorion.core import AmoorionError
 from amoorion.models import Account, Message, Post
-from amoorion.plugins.base import Capability, Plugin
+from amoorion.plugins import Capability, HttpPlugin
 
 SERVICE = "https://bsky.social"
 LIMIT = 300  # graphemes
@@ -53,7 +51,7 @@ def compose(post: Post) -> tuple[str, list[dict[str, Any]]]:
     return text, facets
 
 
-class Bluesky(Plugin):
+class Bluesky(HttpPlugin):
     name: ClassVar[str] = "bluesky"
     description: ClassVar[str] = "Bluesky (AT Protocol): post, read, reply"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
@@ -70,17 +68,7 @@ class Bluesky(Plugin):
 
     def _call(self, method: str, nsid: str, **kwargs: Any) -> dict[str, Any]:
         headers = {"Authorization": f"Bearer {self._session['accessJwt']}"} if self._session else {}
-        try:
-            response = requests.request(method, f"{self.service}/xrpc/{nsid}", headers=headers, timeout=30, **kwargs)
-        except requests.RequestException as error:
-            raise AmoorionError(f"bluesky unreachable: {error}") from None
-        if not response.ok:
-            try:
-                reason = response.json().get("message") or response.json().get("error")
-            except ValueError:
-                reason = response.text[:200]
-            raise AmoorionError(f"bluesky {nsid} answered {response.status_code}: {reason}")
-        return response.json() if response.content else {}
+        return self.request(method, f"{self.service}/xrpc/{nsid}", headers=headers, **kwargs)
 
     def _login(self) -> dict[str, Any]:
         if self._session is None:

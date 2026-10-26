@@ -77,14 +77,10 @@ version = "0.1.0"
 source = { editable = "packages/amoorion-bluesky" }
 dependencies = [
     { name = "amoorion" },
-    { name = "requests" },
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "amoorion", editable = "." },
-    { name = "requests", specifier = ">=2.34.2" },
-]
+requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-mastodon"
@@ -92,14 +88,10 @@ version = "0.1.0"
 source = { editable = "packages/amoorion-mastodon" }
 dependencies = [
     { name = "amoorion" },
-    { name = "requests" },
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "amoorion", editable = "." },
-    { name = "requests", specifier = ">=2.34.2" },
-]
+requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "annotated-doc"

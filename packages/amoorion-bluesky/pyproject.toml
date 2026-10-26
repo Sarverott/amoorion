@@ -10,7 +10,6 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "amoorion",
-    "requests>=2.34.2",
 ]
 
 [project.entry-points."amoorion.plugins"]

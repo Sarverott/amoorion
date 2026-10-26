@@ -11,11 +11,9 @@ import uuid
 from html.parser import HTMLParser
 from typing import Any, ClassVar
 
-import requests
-
 from amoorion.core import AmoorionError
 from amoorion.models import Account, Message, Post
-from amoorion.plugins import Capability, Plugin
+from amoorion.plugins import Capability, HttpPlugin
 
 LINK_LENGTH = 23
 DEFAULT_LIMIT = 500
@@ -60,7 +58,7 @@ def length(text: str, links: list[str]) -> int:
     return len(text)
 
 
-class Mastodon(Plugin):
+class Mastodon(HttpPlugin):
     name: ClassVar[str] = "mastodon"
     description: ClassVar[str] = "Mastodon (REST API): post, read, reply"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
@@ -71,18 +69,7 @@ class Mastodon(Plugin):
 
     def _call(self, method: str, path: str, **kwargs: Any) -> Any:
         headers = {"Authorization": f"Bearer {self.secret('token')}"} | kwargs.pop("headers", {})
-        url = f"{self.secret('uri').rstrip('/')}{path}"
-        try:
-            response = requests.request(method, url, headers=headers, timeout=30, **kwargs)
-        except requests.RequestException as error:
-            raise AmoorionError(f"mastodon unreachable: {error}") from None
-        if not response.ok:
-            try:
-                reason = response.json().get("error")
-            except ValueError:
-                reason = response.text[:200]
-            raise AmoorionError(f"mastodon {path} answered {response.status_code}: {reason}")
-        return response.json()
+        return self.request(method, f"{self.secret('uri').rstrip('/')}{path}", headers=headers, **kwargs)
 
     def _me(self) -> dict[str, Any]:
         if self._account is None:
