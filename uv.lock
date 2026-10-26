@@ -10,6 +10,7 @@ resolution-markers = [
 members = [
     "amoorion",
     "amoorion-bluesky",
+    "amoorion-mastodon",
 ]
 
 [[package]]
@@ -34,6 +35,7 @@ keepassxc = [
 [package.dev-dependencies]
 dev = [
     { name = "amoorion-bluesky" },
+    { name = "amoorion-mastodon" },
     { name = "commitizen" },
     { name = "go-task-bin" },
     { name = "httpx" },
@@ -59,6 +61,7 @@ provides-extras = ["keepassxc"]
 [package.metadata.requires-dev]
 dev = [
     { name = "amoorion-bluesky", editable = "packages/amoorion-bluesky" },
+    { name = "amoorion-mastodon", editable = "packages/amoorion-mastodon" },
     { name = "commitizen", specifier = ">=4.19.3" },
     { name = "go-task-bin", specifier = ">=3.54.0" },
     { name = "httpx", specifier = ">=0.28.1" },
@@ -72,6 +75,21 @@ dev = [
 name = "amoorion-bluesky"
 version = "0.1.0"
 source = { editable = "packages/amoorion-bluesky" }
+dependencies = [
+    { name = "amoorion" },
+    { name = "requests" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "amoorion", editable = "." },
+    { name = "requests", specifier = ">=2.34.2" },
+]
+
+[[package]]
+name = "amoorion-mastodon"
+version = "0.1.0"
+source = { editable = "packages/amoorion-mastodon" }
 dependencies = [
     { name = "amoorion" },
     { name = "requests" },

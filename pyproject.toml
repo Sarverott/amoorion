@@ -38,6 +38,7 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "amoorion-bluesky",
+    "amoorion-mastodon",
     "commitizen>=4.19.3",
     "go-task-bin>=3.54.0",
     "httpx>=0.28.1",
@@ -65,3 +66,4 @@ members = ["packages/*"]
 
 [tool.uv.sources]
 amoorion-bluesky = { workspace = true }
+amoorion-mastodon = { workspace = true }
