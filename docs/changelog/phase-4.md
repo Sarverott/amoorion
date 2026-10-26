@@ -36,3 +36,20 @@ makes marimo builds of them into the ignored `examples/build/`. A push to
 and makes a GitHub release, whose packages are attached to it and published
 to PyPI. Not run for real yet: the workflows and Read the Docs. Q15 opened.
 INQUIRIES.md joins the devlog.
+
+## UNIXUSAT=1793057763731 · commit fc0baef
+
+The author merged development into master to try the release: v0.2.0 was
+tagged and released on GitHub with its packages; PyPI refused it, having
+no trusted publisher. Their order, given in the chat, word for word:
+
+````markdown
+i made there pull request and merged it to reproduce situation i want to test for further stuff. we have now bumped version there and i want to pull it from master to dev. also i made PYPI_TOKEN secret in pypi environment. we can make it automated here with workflows we had made previously. check gitrecon and ~/_WORKSHOP/forge/sarverott/github-repos/sarverott - one of them i think was complex use of these branch flow mechanics. we want to change some things. right now i see also diffrences between versioning numebers on readthedocs and released package. in future bump the version at state of master to development and mark it as pre-release by lefthook pulls, at push dev local to origin unmark pre-release and create pull request dev to master on workflow
+````
+
+Master is pulled into development. The loop now: pulling master in marks
+the next pre-release (lefthook post-merge, `scripts/version.py mark`); a
+push to development makes it final with its changelog section and opens
+the pull request to master (flow workflow); merging it tags, releases and
+publishes, with the `PYPI_TOKEN` secret, committing nothing on master.
+The docs read the version from the package, as the package does.

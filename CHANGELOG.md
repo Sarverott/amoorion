@@ -1,3 +1,9 @@
+## v0.2.1 (2026-10-26)
+
+### Fix
+
+- __version__ comes from the installed package; it stayed 0.1.0 while the package was 0.2.0, so the docs showed another version
+
 ## v0.2.0 (2026-10-26)
 
 ### Feat

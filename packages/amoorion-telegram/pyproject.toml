@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-telegram"
-version = "0.2.0"
+version = "0.2.1"
 description = "Telegram plugin of amoorion: a bot posts, reads and replies in one chat through the Bot API"
 readme = "README.md"
 license = "MIT"

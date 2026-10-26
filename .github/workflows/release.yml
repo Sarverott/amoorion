@@ -1,12 +1,15 @@
-# A push to master (a merged pull request too) makes a release: commitizen
-# bumps every package to the next version from the conventional commits,
-# writes CHANGELOG.md, tags it and pushes; the tag becomes a GitHub release,
-# and the publish workflow builds and publishes the packages.
+# A push to master (the merged pull request from development) releases the
+# version it carries: development made it final (flow.yml) and wrote its
+# CHANGELOG.md section, so nothing is committed here. The version is tagged
+# v<version>, the GitHub release gets that section as notes, and the publish
+# workflow builds and publishes the packages. Then pull master into
+# development (task flow:pull), which marks the next pre-release.
 name: release
 
 on:
   push:
     branches: [master]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,12 +22,10 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # The bump commit itself is pushed with the workflow's token, which starts
-    # no workflow; this is a second guard against releasing a release.
-    if: ${{ !startsWith(github.event.head_commit.message, 'bump:') }}
     steps:
       - uses: actions/checkout@v5
         with:
+          ref: master
           fetch-depth: 0
 
       - uses: astral-sh/setup-uv@v6
@@ -35,31 +36,29 @@ jobs:
       - name: Check
         run: uv run --frozen task check
 
-      - name: Bump the version
-        id: bump
+      - name: Is there a release to make?
+        id: version
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          before=$(uv run -q --frozen cz version --project)
-          # Nothing to release is no failure: 3, no commits since the last
-          # release; 21, none of them asks for a new version (docs only…).
-          uv run -q --frozen cz --no-raise 3,21 bump --yes
-          after=$(uv run -q --frozen cz version --project)
-          if [ "$before" != "$after" ]; then
-            echo "tag=v$after" >> "$GITHUB_OUTPUT"
+          version=$(uv run -q --frozen python scripts/version.py current)
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "v$version is released already"
+          elif [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::$version is a pre-release; development makes it final before it comes here (flow.yml)"
+            exit 1
+          else
+            echo "tag=v$version" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Push the bump and its tag
-        if: steps.bump.outputs.tag
-        run: git push --atomic origin HEAD:master "${{ steps.bump.outputs.tag }}"
-
-      - name: Create the GitHub release
-        if: steps.bump.outputs.tag
+      - name: Tag it and create the GitHub release
+        if: steps.version.outputs.tag
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.bump.outputs.tag }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          uv run -q --frozen cz changelog "${TAG#v}" --dry-run > notes.md
-          gh release create "$TAG" --title "amoorion $TAG" --notes-file notes.md
+          git tag "$TAG"
+          git push origin "$TAG"
+          # Its section of CHANGELOG.md: from its heading to the next one.
+          awk -v head="## $TAG " 'index($0, head) == 1 {on = 1; next} /^## v/ {on = 0} on' CHANGELOG.md > notes.md
+          gh release create "$TAG" --title "amoorion $TAG" --notes-file notes.md --verify-tag
           # A release made with this token starts no workflow by itself.
           gh workflow run publish.yml --ref "$TAG" -f tag="$TAG"

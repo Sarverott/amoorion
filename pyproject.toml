@@ -1,6 +1,6 @@
 [project]
 name = "amoorion"
-version = "0.2.0"
+version = "0.2.1"
 description = "Universal tool for administration of chatting and communication platforms"
 readme = "README.md"
 license = "MIT"
@@ -65,7 +65,7 @@ examples = [
 name = "cz_conventional_commits"
 version_provider = "uv"
 tag_format = "v$version"
-update_changelog_on_bump = true
+# CHANGELOG.md is written by scripts/version.py final, not on every bump.
 major_version_zero = true
 # Every package of the workspace is released with the same version.
 version_files = [

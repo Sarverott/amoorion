@@ -1,6 +1,9 @@
 """amoorion: administration of chatting and communication platforms."""
 
-__version__ = "0.1.0"
+from importlib.metadata import version
+
+# From the installed package, so the docs, the API and `--version` never lag behind pyproject.toml.
+__version__ = version("amoorion")
 
 
 def main() -> int:

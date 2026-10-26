@@ -4,6 +4,8 @@ name: check
 on:
   push:
   pull_request:
+  # Started by flow.yml for the commits it pushes (its token starts nothing by itself).
+  workflow_dispatch:
 
 permissions:
   contents: read

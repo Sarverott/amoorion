@@ -1,0 +1,81 @@
+# A push to development readies the next release and proposes it:
+#   1. scripts/version.py final: the pre-release X.Y.Za0 becomes the version
+#      the commits since the last release ask for, with its CHANGELOG.md
+#      section, committed as "bump: ..." and pushed back to development;
+#   2. the pull request development → master is opened (or kept up to date),
+#      and the checks run on what it carries.
+# Merging it releases (release.yml). docs/releasing.md has the whole loop.
+name: flow
+
+on:
+  push:
+    branches: [development]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: flow
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: development
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install tools
+        run: uv sync --frozen
+
+      - name: Anything to release?
+        id: news
+        # Merges and version bumps alone (master just pulled in and marked) are no release.
+        run: |
+          news=$(git log --no-merges --format=%s origin/master..HEAD | grep -cv '^bump:' || true)
+          echo "commits=$news" >> "$GITHUB_OUTPUT"
+          echo "$news commits on development that master hasn't got"
+
+      - name: Final version of the next release
+        id: final
+        if: steps.news.outputs.commits != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          before=$(git rev-parse HEAD)
+          uv run --frozen python scripts/version.py final
+          if [ "$(git rev-parse HEAD)" != "$before" ]; then
+            git push origin HEAD:development
+            echo "bumped=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "version=$(uv run -q --frozen python scripts/version.py current)" >> "$GITHUB_OUTPUT"
+
+      - name: Check the bump commit
+        # Pushed with this workflow's token, it starts no check by itself.
+        if: steps.final.outputs.bumped
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run check.yml --ref development
+
+      - name: Open the pull request to master
+        if: steps.news.outputs.commits != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.final.outputs.version }}
+        run: |
+          open=$(gh pr list --head development --base master --state open --json number -q '.[0].number')
+          if [ -n "$open" ]; then
+            gh pr edit "$open" --title "Release v$VERSION"
+            echo "pull request #$open is open, updated"
+          else
+            body="Merging releases v$VERSION: tag, GitHub release with the packages, PyPI."
+            body="$body See docs/releasing.md. Opened by the flow workflow."
+            gh pr create --base master --head development --title "Release v$VERSION" --body "$body"
+          fi
