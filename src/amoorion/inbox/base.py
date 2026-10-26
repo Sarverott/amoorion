@@ -6,7 +6,7 @@ everything in one place. Where it lives is set in `.env`:
 
     AMOORION_INBOX=<path>   default: $XDG_DATA_HOME/amoorion/inbox.sqlite3
 
-Rules acting on what arrives come in phase 4.
+Rules acting on what arrives come in phase 5.
 """
 
 import os

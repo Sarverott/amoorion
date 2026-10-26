@@ -25,8 +25,10 @@ Read first:
 5. [docs/structure.md](docs/structure.md): the shape of `src/amoorion/`
 6. [docs/plugins.md](docs/plugins.md): how to write a platform plugin
 
-The author's answers come in [docs/devlog/ORDERS.md](docs/devlog/ORDERS.md)
-(empty between batches).
+The author's answers come in [docs/devlog/ORDERS.md](docs/devlog/ORDERS.md),
+the work they ask for in their own words in
+[docs/devlog/INQUIRIES.md](docs/devlog/INQUIRIES.md) (both empty between
+batches).
 
 ## Tooling and checks
 
@@ -55,7 +57,7 @@ packages/amoorion-<p>/  one package per platform (uv workspace); its README list
 scripts/new-plugin.sh  starts such a package (task plugin:new)
 example.env            the link to the vault; copy to .env
 tests/                 pytest tests
-docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS
+docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
 docs/.agents/          agent notes (see below)
 .github/               community files, workflows (check = task check)
@@ -69,7 +71,10 @@ docs/.agents/          agent notes (see below)
    new one starts with `UNIXUSAT=<ms since epoch> · commit <hash>`. An
    answered batch of ORDERS.md and the answered `Q<n>` of BRAINSTORM.md
    (with its **Decision:**) move word for word into
-   `docs/changelog/phase-<n>.md`, leaving ORDERS.md empty. Work that belongs
+   `docs/changelog/phase-<n>.md`, leaving ORDERS.md empty. An inquiry of
+   INQUIRIES.md is first drawn into a plan (VISION.md, TODO.md), then moves
+   word for word into the changelog the same way, leaving INQUIRIES.md
+   empty. Work that belongs
    to another repository is not done here: write it into
    `~/__WORKSHOP/forge/NOTES-for-repositories.md`.
 2. **Don't settle open questions in code.** If a change depends on a `Q<n>`,

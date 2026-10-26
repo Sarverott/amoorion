@@ -76,7 +76,7 @@ Where each backend keeps a secret: [docs/structure.md](docs/structure.md#vault).
 Each platform's secrets are listed in its package's README, e.g.
 [packages/amoorion-bluesky](packages/amoorion-bluesky/README.md).
 
-Run locally first; a Dockerfile and compose come next (phase 5 of the plan).
+Run locally first; a Dockerfile and compose come next (phase 6 of the plan).
 
 ## Development
 

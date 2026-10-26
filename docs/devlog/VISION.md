@@ -54,23 +54,47 @@ tests against recorded or faked HTTP; never against real accounts in CI.
 1. Bluesky (AT Protocol, app password)
 2. X / twitter (API v2, OAuth)
 3. Tumblr (API, OAuth)
-4. Blogger (posting by mail: needs the e-mail sender of phase 4 or plain SMTP)
+4. Blogger (posting by mail: needs the e-mail sender of phase 5 or plain SMTP)
 5. Facebook (Graph API, page token)
 
 Per platform: limits (length, media) checked before sending; `Post` split or
 shortened by a rule the author confirms.
 
-### Phase 3: communication platforms
+### Phase 3: communication platforms (done, against fakes)
 
-1. Discord: post and read through a bot; as a daemon service listening to
-   channels.
+1. Discord: post and read through a bot, or post through a channel
+   webhook (Q12); as a daemon service listening to channels.
 2. Telegram: bot API, same shape.
 3. Matrix: client-server API, same shape.
 
-Messages coming in reach other methods (routing: forward, notify) — the
-routing rules are a question for that phase.
+Messages coming in are kept in the inbox (Q11); rules acting on them
+(forward, notify) come in phase 5, once ntfy and NATS exist as targets.
 
-### Phase 4: linking
+### Phase 4: documentation, examples, releases
+
+From the author's first inquiry: make what is done here clear to users,
+and release it.
+
+1. **Docs on Read the Docs**, built by Sphinx from the Markdown in `docs/`
+   (MyST): the README, structure, plugins guide, plan and changelog as
+   pages, and an API reference generated from the code, so pages can link
+   to classes and functions. `task docs:build` builds it with warnings as
+   errors, and `task check` runs it, so the docs stay true.
+   `docs/requirements.txt` for Read the Docs is exported from `uv.lock`.
+2. **Examples** in `examples/` as Jupyter notebooks: first steps with
+   `dryrun`, the vault and accounts, the inbox and hooks over the API,
+   writing a plugin. They run in the tests (they post nowhere) and are
+   shown in the docs.
+3. **marimo builds** of the examples: `task examples:build` converts each
+   notebook to marimo and exports it as a page into `examples/build/`,
+   ignored by `examples/.gitignore`.
+4. **Releases:** a push to `master` (a merged pull request too) bumps the
+   version by commitizen from the conventional commits, tags it, writes
+   `CHANGELOG.md` and creates a GitHub release. A created release builds
+   every package, attaches them to the release (the git package) and
+   publishes them to PyPI.
+
+### Phase 5: linking
 
 1. Webhooks: GitHub (`X-Hub-Signature-256`), GitLab (`X-Gitlab-Token`),
    Discord; each a hook in `hooks/`.
@@ -78,7 +102,7 @@ routing rules are a question for that phase.
 3. NATS: publish methods' results, subscribe as a daemon service.
 4. E-mail client: send (also Blogger by mail) and read.
 
-### Phase 5: deployment
+### Phase 6: deployment
 
 In the order of Q4:
 

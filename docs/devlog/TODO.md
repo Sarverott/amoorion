@@ -48,4 +48,13 @@ What is being worked on now. Vision and the plan of all phases:
 - [ ] Listening live (Discord gateway, Telegram updates, Matrix sync) as
       daemon services filling the inbox
 
-Phases 4–5 (linking, deployment): see [VISION.md](VISION.md).
+## Phase 4: documentation, examples, releases
+
+- [ ] Sphinx docs from the Markdown in `docs/` (MyST), API reference from
+      the code; Read the Docs config; `task docs:build` in `task check`
+- [ ] Jupyter notebooks in `examples/`, run by the tests, shown in the docs
+- [ ] marimo builds of the examples (`task examples:build`, gitignored)
+- [ ] Release on push to `master`: commitizen bump, tag, GitHub release
+- [ ] On a release: packages attached to it and published to PyPI
+
+Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).
