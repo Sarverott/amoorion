@@ -2,7 +2,9 @@
 
 `request` sends, turns network failures and error answers into
 `AmoorionError` with the platform's own reason, and returns the JSON body.
-Plugins whose platform words its errors differently override `reason`.
+Plugins whose platform words its errors differently override `reason`;
+plugins whose URL carries a secret (a bot token, a webhook) name it in
+`hidden`, so no error shows it.
 """
 
 from typing import Any, ClassVar
@@ -33,13 +35,23 @@ class HttpPlugin(Plugin):
                     return value
         return response.text[:200]
 
+    def hidden(self) -> list[str]:
+        """Secrets that are part of the URLs and must not appear in errors."""
+        return []
+
+    def _error(self, text: str) -> AmoorionError:
+        for secret in self.hidden():
+            if secret:
+                text = text.replace(secret, "***")
+        return AmoorionError(text)
+
     def request(self, method: str, url: str, **kwargs: Any) -> Any:
         try:
             response = requests.request(method, url, timeout=self.timeout, **kwargs)
         except requests.RequestException as error:
-            raise AmoorionError(f"{self.name} unreachable: {error}") from None
+            raise self._error(f"{self.name} unreachable: {error}") from None
         if not response.ok:
-            raise AmoorionError(
+            raise self._error(
                 f"{self.name} {urlparse(url).path} answered {response.status_code}: {self.reason(response)}"
             )
         return response.json() if response.content else {}

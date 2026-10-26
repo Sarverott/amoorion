@@ -40,3 +40,26 @@ def test_request_failure_names_the_platform(monkeypatch):
     monkeypatch.setattr(requests, "request", lambda *a, **k: Answer({"message": "nope"}, status=403))
     with pytest.raises(AmoorionError, match="somewhere /x answered 403: nope"):
         Somewhere(open_vault(VaultLink(kind="env"))).request("GET", "https://h.test/x")
+
+
+def test_secrets_in_the_url_are_hidden_in_errors(monkeypatch):
+    import requests
+
+    class Tokened(HttpPlugin):
+        name = "tokened"
+
+        def hidden(self):
+            return ["sekret"]
+
+    def unreachable(*args, **kwargs):
+        raise requests.ConnectionError("cannot reach https://api.test/botsekret/send")
+
+    plugin = Tokened(open_vault(VaultLink(kind="env")))
+    monkeypatch.setattr(requests, "request", lambda *a, **k: Answer({"message": "bad"}, status=404))
+    with pytest.raises(AmoorionError) as answered:
+        plugin.request("GET", "https://api.test/botsekret/send")
+    monkeypatch.setattr(requests, "request", unreachable)
+    with pytest.raises(AmoorionError) as failed:
+        plugin.request("GET", "https://api.test/botsekret/send")
+    for error in (answered.value, failed.value):
+        assert "sekret" not in str(error) and "/bot***/send" in str(error)
