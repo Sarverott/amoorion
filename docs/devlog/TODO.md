@@ -18,10 +18,21 @@ What is being worked on now. Vision and the plan of all phases:
 
 ## Phase 1: real vault and plugin loading
 
-- [ ] First real vault backend (Q6)
-- [ ] Plugin loading from outside packages (Q7)
+- [x] Vault backends, one module each (Q6): Bitwarden / Vaultwarden (`bw`),
+      HashiCorp Vault / OpenBao (KV v2), KeePassXC file, `.env` setup
+- [x] Plugins through entry points, also from separate packages (Q7);
+      guide in `docs/plugins.md`
 - [x] `dotenv` → `python-dotenv` (Q8)
 - [x] `accounts` method: which platforms have their secrets in place
-- [ ] Default platforms for `publish`
+- [ ] Default platforms for `publish` (Q9)
 
-Phases 2–5 (platforms, linking, deployment): see [VISION.md](VISION.md).
+## Phase 2: publication platforms
+
+- [x] Bluesky: post (links and tags as facets), read, reply; tested
+      against a fake PDS, **not yet against a real account**
+- [ ] X (twitter)
+- [ ] Tumblr
+- [ ] Blogger by mail
+- [ ] Facebook
+
+Phases 3–5 (communication, linking, deployment): see [VISION.md](VISION.md).
