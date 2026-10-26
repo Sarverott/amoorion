@@ -6,6 +6,12 @@ resolution-markers = [
     "python_full_version < '3.14'",
 ]
 
+[manifest]
+members = [
+    "amoorion",
+    "amoorion-bluesky",
+]
+
 [[package]]
 name = "amoorion"
 version = "0.1.0"
@@ -27,6 +33,7 @@ keepassxc = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "amoorion-bluesky" },
     { name = "commitizen" },
     { name = "go-task-bin" },
     { name = "httpx" },
@@ -51,6 +58,7 @@ provides-extras = ["keepassxc"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "amoorion-bluesky", editable = "packages/amoorion-bluesky" },
     { name = "commitizen", specifier = ">=4.19.3" },
     { name = "go-task-bin", specifier = ">=3.54.0" },
     { name = "httpx", specifier = ">=0.28.1" },
@@ -58,6 +66,21 @@ dev = [
     { name = "pykeepass", specifier = ">=4.2.0" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "yamllint", specifier = ">=1.38.0" },
+]
+
+[[package]]
+name = "amoorion-bluesky"
+version = "0.1.0"
+source = { editable = "packages/amoorion-bluesky" }
+dependencies = [
+    { name = "amoorion" },
+    { name = "requests" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "amoorion", editable = "." },
+    { name = "requests", specifier = ">=2.34.2" },
 ]
 
 [[package]]

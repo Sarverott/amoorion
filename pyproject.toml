@@ -22,9 +22,8 @@ dependencies = [
 [project.scripts]
 amoorion = "amoorion:main"
 
-# Platform plugins, found through this group; outside packages add theirs the same way.
+# Platform plugins, found through this group; the packages in packages/ add theirs the same way.
 [project.entry-points."amoorion.plugins"]
-bluesky = "amoorion.plugins.bluesky:Bluesky"
 dryrun = "amoorion.plugins.dryrun:DryRun"
 
 [project.optional-dependencies]
@@ -38,6 +37,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "amoorion-bluesky",
     "commitizen>=4.19.3",
     "go-task-bin>=3.54.0",
     "httpx>=0.28.1",
@@ -55,4 +55,13 @@ update_changelog_on_bump = true
 major_version_zero = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "packages"]
+# Test modules of several packages may share a name.
+addopts = ["--import-mode=importlib"]
+
+# Platform plugins, one package each (decision Q10).
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+amoorion-bluesky = { workspace = true }

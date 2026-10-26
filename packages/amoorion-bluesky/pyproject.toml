@@ -1,0 +1,24 @@
+[project]
+name = "amoorion-bluesky"
+version = "0.1.0"
+description = "Bluesky plugin of amoorion: post, read and reply through the AT Protocol"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+    "requests>=2.34.2",
+]
+
+[project.entry-points."amoorion.plugins"]
+bluesky = "amoorion_bluesky:Bluesky"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"
