@@ -30,3 +30,16 @@ Universal tool for administration of chatting and communication platforms
 - webhooks - standard linkings with services like gitlab, github, discord etc.
 - ntfy notifications
 - nats.io
+
+---
+
+## Development
+
+```sh
+uv sync && uv run task setup   # tools and git hooks
+uv run task check              # tests, YAML, commit messages (= CI)
+uv run amoorion                # the CLI
+```
+
+Plan and open questions: [docs/devlog/](docs/devlog/). Guide for agents and
+contributors: [AGENTS.md](AGENTS.md).
