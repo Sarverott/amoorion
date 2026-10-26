@@ -1,0 +1,24 @@
+[project]
+name = "amoorion-discord"
+version = "0.1.0"
+description = "Discord plugin of amoorion: a bot posts, reads and replies in a channel; a channel webhook only posts"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+]
+
+[project.entry-points."amoorion.plugins"]
+discord = "amoorion_discord:Discord"
+discord-webhook = "amoorion_discord:DiscordWebhook"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"

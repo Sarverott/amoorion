@@ -11,6 +11,7 @@ members = [
     "amoorion",
     "amoorion-blogger",
     "amoorion-bluesky",
+    "amoorion-discord",
     "amoorion-facebook",
     "amoorion-mastodon",
     "amoorion-tumblr",
@@ -40,6 +41,7 @@ keepassxc = [
 dev = [
     { name = "amoorion-blogger" },
     { name = "amoorion-bluesky" },
+    { name = "amoorion-discord" },
     { name = "amoorion-facebook" },
     { name = "amoorion-mastodon" },
     { name = "amoorion-tumblr" },
@@ -70,6 +72,7 @@ provides-extras = ["keepassxc"]
 dev = [
     { name = "amoorion-blogger", editable = "packages/amoorion-blogger" },
     { name = "amoorion-bluesky", editable = "packages/amoorion-bluesky" },
+    { name = "amoorion-discord", editable = "packages/amoorion-discord" },
     { name = "amoorion-facebook", editable = "packages/amoorion-facebook" },
     { name = "amoorion-mastodon", editable = "packages/amoorion-mastodon" },
     { name = "amoorion-tumblr", editable = "packages/amoorion-tumblr" },
@@ -98,6 +101,17 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 name = "amoorion-bluesky"
 version = "0.1.0"
 source = { editable = "packages/amoorion-bluesky" }
+dependencies = [
+    { name = "amoorion" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "amoorion", editable = "." }]
+
+[[package]]
+name = "amoorion-discord"
+version = "0.1.0"
+source = { editable = "packages/amoorion-discord" }
 dependencies = [
     { name = "amoorion" },
 ]

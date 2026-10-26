@@ -39,6 +39,7 @@ build-backend = "uv_build"
 dev = [
     "amoorion-blogger",
     "amoorion-bluesky",
+    "amoorion-discord",
     "amoorion-facebook",
     "amoorion-mastodon",
     "amoorion-tumblr",
@@ -75,3 +76,4 @@ amoorion-x = { workspace = true }
 amoorion-tumblr = { workspace = true }
 amoorion-blogger = { workspace = true }
 amoorion-facebook = { workspace = true }
+amoorion-discord = { workspace = true }
