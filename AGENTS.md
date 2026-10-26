@@ -12,7 +12,8 @@ they differ, this file wins for this repository.
 One tool to post to publication platforms (X, Bluesky, Tumblr, Blogger,
 Facebook), talk through communication platforms (Discord, Telegram, Matrix)
 and link them with the rest (e-mail, webhooks, ntfy, NATS). **Early stage:**
-the core works end to end; Bluesky is the first platform, tested only against a fake server.
+the core works end to end with six platform plugins (Bluesky, Mastodon, X,
+Tumblr, Blogger, Facebook), tested only against fakes of their APIs.
 
 Read first:
 
@@ -29,11 +30,12 @@ The author's answers come in [docs/devlog/ORDERS.md](docs/devlog/ORDERS.md)
 ## Tooling and checks
 
 ```sh
-uv sync                  # tools from PyPI: task, commitizen, lefthook, yamllint, pytest
-uv run task setup        # + lefthook git hooks
+uv run task init         # fresh checkout: tools, lefthook hooks, .env, check
+uv run task setup        # tools (uv sync) and lefthook git hooks
 uv run task check        # tests, YAML, commits (= CI)
 uv run task test         # pytest only
 uv run task help         # help of the CLI and every subcommand
+uv run task plugin:new -- <platform> <Class> "<description>"   # start a plugin package
 uv run amoorion          # run the CLI
 ```
 
@@ -47,6 +49,8 @@ uv run amoorion          # run the CLI
 src/amoorion/core.py   Model, View, Controller, Registry: the base of every namespace
 src/amoorion/<ns>/     models, vault, plugins, methods, hooks, cli, api, mcp, daemon;
                        core mechanics in <ns>/base.py (see docs/structure.md)
+packages/amoorion-<p>/  one package per platform (uv workspace); its README lists its secrets
+scripts/new-plugin.sh  starts such a package (task plugin:new)
 example.env            the link to the vault; copy to .env
 tests/                 pytest tests
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS
@@ -72,8 +76,9 @@ docs/.agents/          agent notes (see below)
    commit tokens or passwords.
 4. **Everything is a method.** A new operation goes into `methods/`, not
    into one front-end; CLI, API and MCP pick it up (add new subcommands to
-   `SUBCOMMANDS` in Taskfile.yml; a test checks it). Platforms are plugins,
-   tested against fakes of their APIs, never real accounts.
+   `SUBCOMMANDS` in Taskfile.yml; a test checks it). Platforms are plugin
+   packages in `packages/`, tested against fakes of their APIs, never real
+   accounts.
 5. **Ask first** before tagging a release, publishing a package or posting
    to any real platform account. Pushing `development` is allowed.
 6. **Branches:** BOS flow `master` → `development` → `revision` → `testing`

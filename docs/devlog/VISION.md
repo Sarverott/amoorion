@@ -5,8 +5,8 @@ publication platforms: write once, post everywhere, read and answer from one
 place, and connect it all with the services around it. Free (MIT); its first
 area of use is the RedScope zone, but it is not tied to it.
 
-- **Publication:** post to X (twitter), Bluesky, Tumblr, Blogger (by mail),
-  Facebook.
+- **Publication:** post to X (twitter), Bluesky, Mastodon, Tumblr, Blogger
+  (by mail), Facebook.
 - **Communication:** Discord, Telegram, Matrix.
 - **Linking:** e-mail client, webhooks (GitLab, GitHub, Discord…), ntfy
   notifications, NATS.
@@ -19,7 +19,8 @@ receiver, phone management by adb.
 - **One core, many faces.** `core.py` (model, view, controller) under every
   namespace; each operation is a *method*, reachable from the CLI, the HTTP
   API, MCP (AI agents) and the daemon alike. Shape: [../structure.md](../structure.md).
-- **One plugin per platform**, declaring what it can do (post, read, reply).
+- **One plugin per platform**, each its own package of the uv workspace,
+  declaring what it can do (post, read, reply).
 - **Secrets only from a vault.** `.env` holds the link to it, nothing more.
 - **Local first**, then a container, then compose, then ready for a zone.
 
@@ -45,9 +46,9 @@ Depends on Q6, Q7.
 4. Configuration of defaults (which platforms `publish` goes to when `--to`
    is left out).
 
-### Phase 2: publication platforms
+### Phase 2: publication platforms (done, against fakes)
 
-One plugin each, behind `post` (and `read` where the platform allows), with
+One plugin package each (Q10), plus Mastodon (third orders), behind `post` (and `read` where the platform allows), with
 tests against recorded or faked HTTP; never against real accounts in CI.
 
 1. Bluesky (AT Protocol, app password)

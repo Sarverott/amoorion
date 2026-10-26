@@ -2,8 +2,15 @@
 
 A plugin connects amoorion to one platform. Every plugin shares one
 interface, `amoorion.plugins.Plugin`, and is found through the Python entry
-point group `amoorion.plugins` (decision Q7), whether it lives in this
-repository or in a separate package.
+point group `amoorion.plugins` (decision Q7). Each platform is its own
+package in this repository's uv workspace, `packages/amoorion-<platform>/`
+(decision Q10); a package from anywhere else works the same way.
+
+Start one with:
+
+```sh
+uv run task plugin:new -- mastodon Mastodon "Mastodon plugin of amoorion: …"
+```
 
 ## The interface
 
@@ -11,10 +18,10 @@ repository or in a separate package.
 from typing import ClassVar
 
 from amoorion.models import Message, Post
-from amoorion.plugins import Capability, Plugin
+from amoorion.plugins import Capability, HttpPlugin
 
 
-class Mastodon(Plugin):
+class Mastodon(HttpPlugin):
     name: ClassVar[str] = "mastodon"                # = the entry point name
     description: ClassVar[str] = "Mastodon through its REST API"
     capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ})
@@ -25,6 +32,10 @@ class Mastodon(Plugin):
     # reply(to, text) is left out: Capability.REPLY isn't declared, so it raises Unsupported
 ```
 
+- `HttpPlugin.request(method, url, …)` sends, and turns network failures and
+  error answers into `AmoorionError` with the platform's own reason
+  (override `reason` when the platform words it differently); a plugin that
+  doesn't speak HTTP subclasses `Plugin` (see `amoorion-blogger`).
 - `self.secret("token")` reads `mastodon/token` from the vault; never take
   secrets from anywhere else.
 - Raise `amoorion.core.AmoorionError` (or `Unsupported`) with a message a
@@ -34,22 +45,24 @@ class Mastodon(Plugin):
 
 ## Registering it
 
-In the package's `pyproject.toml`:
+In the package's `pyproject.toml` (`task plugin:new` writes it):
 
 ```toml
 [project.entry-points."amoorion.plugins"]
 mastodon = "amoorion_mastodon:Mastodon"
 ```
 
-Install the package next to amoorion (`uv add amoorion-mastodon`, or
-`uv pip install -e ../amoorion-mastodon` while developing) and
-`amoorion plugins` lists it. A plugin that fails to load is listed with its
-error; amoorion keeps working.
+Workspace packages are in the root's `dev` group, so `uv sync` installs them
+and `amoorion plugins` lists them. Outside the repository: install amoorion
+and the plugin package side by side (`uv add amoorion amoorion-mastodon`).
+A plugin that fails to load is listed with its error; amoorion keeps
+working.
 
-Built-in plugins live in `src/amoorion/plugins/<platform>/` and are declared
-in this repository's `pyproject.toml` the same way.
+Only `dryrun` stays built in (`src/amoorion/plugins/dryrun/`), for trying
+amoorion without accounts.
 
 ## Testing
 
-Test against a fake of the platform's API (a local HTTP server, see
-`tests/test_vault_http.py`), never against real accounts.
+Tests go in the package's `tests/`; `task check` runs them with the rest.
+Test against a fake of the platform's API (a local HTTP server, as in every
+package's tests), never against real accounts.

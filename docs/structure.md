@@ -11,14 +11,28 @@ src/amoorion/
 ├── core.py          Model, View, JsonView, Controller, Registry, AmoorionError
 ├── models/          data shared by all: Account, Post, Message, Result
 ├── vault/           link to the secrets vault (.env); one module per backend
-├── plugins/         one plugin per platform (entry points): bluesky/, dryrun/
+├── plugins/         plugin interface, HttpPlugin, entry point loading; dryrun/
 ├── methods/         operations: accounts, plugins, publish, read, reply
 ├── hooks/           incoming webhooks → messages
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
 ├── mcp/             MCP server: methods as tools for AI agents       (__main__)
 └── daemon/          long-running services in one process            (__main__)
+
+packages/            one package per platform, a uv workspace (Q10)
+└── amoorion-<platform>/   pyproject.toml (entry point), src/amoorion_<platform>/, tests/
 ```
+
+| Package | Platform | Can | Through |
+| ------- | -------- | --- | ------- |
+| `amoorion-bluesky` | Bluesky | post, read, reply | AT Protocol (XRPC), app password |
+| `amoorion-mastodon` | Mastodon | post, read, reply | REST API, access token |
+| `amoorion-x` | X (twitter) | post, read, reply | API v2, OAuth 1.0a |
+| `amoorion-tumblr` | Tumblr | post, read | API v2 (Neue Post Format), OAuth 1.0a |
+| `amoorion-blogger` | Blogger | post | e-mail to the blog's secret address (SMTP, TLS) |
+| `amoorion-facebook` | Facebook Page | post, read, reply (comments) | Graph API, Page token |
+
+Every package's README lists its secrets.
 
 ## How they depend on each other
 
@@ -77,10 +91,11 @@ field per key. One module per backend (Q6):
 
 `Plugin` declares `capabilities` (`post`, `read`, `reply`) and the vault keys
 it needs (`secrets`), and implements the calls; anything else raises
-`Unsupported`. Plugins are found through the entry point group
-`amoorion.plugins`, built in (`plugins/<platform>/base.py`) or from separate
-packages (Q7); one that fails to load is listed with its error. Built in:
-`bluesky`, `dryrun`. How to write one: [plugins.md](plugins.md).
+`Unsupported`. `HttpPlugin` adds JSON-over-HTTP calls with the platform's
+own error reasons. Plugins are found through the entry point group
+`amoorion.plugins`, loaded on first use; one that fails to load is listed
+with its error. The platforms are packages in `packages/` (above); only
+`dryrun` is built in. How to write one: [plugins.md](plugins.md).
 
 ### `methods/`
 

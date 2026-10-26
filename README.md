@@ -5,8 +5,9 @@ Universal tool for administration of chatting and communication platforms
 
 ## **EARLY STAGE OF PROJECT**
 
-The core works end to end. First platform: Bluesky (tested against a fake
-server, not yet against a real account); `dryrun` sends nothing, for trying.
+The core works end to end, with plugins for Bluesky, Mastodon, X, Tumblr,
+Blogger and Facebook, tested only against fakes of their APIs so far, not
+yet against real accounts. `dryrun` sends nothing, for trying.
 Plan: [docs/devlog/VISION.md](docs/devlog/VISION.md).
 
 ---
@@ -22,6 +23,7 @@ with the services around it.
 - tumblr posting by api
 - blogger posting by mail
 - facebook posting
+- mastodon posting
 
 #### Communication platforms
 - discord
@@ -45,8 +47,8 @@ per platform), **methods** (what amoorion can do), and the faces that expose
 the methods: **CLI**, **HTTP API**, **MCP** server for AI agents, and a
 **daemon** for long-running services. Secrets come only from a **vault**
 (Bitwarden / Vaultwarden, HashiCorp Vault / OpenBao, or a KeePassXC file);
-`.env` holds just the link to it. Plugins can also come from separate
-packages. Details: [docs/structure.md](docs/structure.md), writing a plugin:
+`.env` holds just the link to it. Each platform is its own package in
+`packages/` (a uv workspace). Details: [docs/structure.md](docs/structure.md), writing a plugin:
 [docs/plugins.md](docs/plugins.md).
 
 ## Usage
@@ -70,15 +72,17 @@ uv run amoorion daemon                       # long-running services
 The API needs the secret `api/token` in the vault (sent as `Authorization:
 Bearer`), and every hook its own secret; without them they refuse calls.
 Where each backend keeps a secret: [docs/structure.md](docs/structure.md#vault).
-Bluesky needs `bluesky/username` and `bluesky/password` (an app password).
+Each platform's secrets are listed in its package's README, e.g.
+[packages/amoorion-bluesky](packages/amoorion-bluesky/README.md).
 
 Run locally first; a Dockerfile and compose come next (phase 5 of the plan).
 
 ## Development
 
 ```sh
-uv sync && uv run task setup   # tools and git hooks
+uv run task init               # tools, git hooks, .env, then check
 uv run task check              # tests, YAML, commit messages (= CI)
+uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform
 ```
 
 Plan and open questions: [docs/devlog/](docs/devlog/). Guide for agents and

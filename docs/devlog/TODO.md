@@ -28,11 +28,20 @@ What is being worked on now. Vision and the plan of all phases:
 
 ## Phase 2: publication platforms
 
-- [x] Bluesky: post (links and tags as facets), read, reply; tested
-      against a fake PDS, **not yet against a real account**
-- [ ] X (twitter)
-- [ ] Tumblr
-- [ ] Blogger by mail
-- [ ] Facebook
+- [x] uv workspace, one package per platform (Q10); `task plugin:new`
+- [x] Bluesky: post (links and tags as facets), read, reply
+- [x] Mastodon: post, read, reply, the server's own character limit
+- [x] X (twitter): API v2, OAuth 1.0a, weighted 280 characters
+- [x] Tumblr: post (Neue Post Format, tags), read
+- [x] Blogger by mail: post, TLS only
+- [x] Facebook Page: post, read, replies as comments
+- [ ] Every platform tried against a real account (needs the author's
+      accounts and go-ahead; all are tested only against fakes so far)
 
-Phases 3–5 (communication, linking, deployment): see [VISION.md](VISION.md).
+## Phase 3: communication platforms
+
+- [ ] Discord
+- [ ] Telegram
+- [ ] Matrix
+
+Phases 4–5 (linking, deployment): see [VISION.md](VISION.md).
