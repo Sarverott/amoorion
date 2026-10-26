@@ -21,6 +21,8 @@ class NoParams(Model):
 
 class Method(Controller):
     Params: ClassVar[type[Model]] = NoParams
+    # True when the method changes nothing anywhere (agents may call it freely).
+    read_only: ClassVar[bool] = False
 
     def __init__(self, vault: Vault | None = None, view: View | None = None) -> None:
         super().__init__(view)
@@ -52,6 +54,7 @@ class PluginInfo(Model):
 class Plugins(Method):
     name: ClassVar[str] = "plugins"
     description: ClassVar[str] = "List the platform plugins and what they can do"
+    read_only: ClassVar[bool] = True
 
     def run(self, params: Model) -> list[PluginInfo]:
         return [
@@ -90,6 +93,7 @@ class ReadParams(Model):
 class Read(Method):
     name: ClassVar[str] = "read"
     description: ClassVar[str] = "Read the latest messages of one platform"
+    read_only: ClassVar[bool] = True
     Params: ClassVar[type[Model]] = ReadParams
 
     def run(self, params: ReadParams) -> list[Message]:
