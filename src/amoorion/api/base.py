@@ -1,5 +1,6 @@
 """API: `POST /methods/<name>` with the method's params as the body,
-`POST /hooks/<name>` for incoming webhooks, `GET /` for what is there.
+`POST /hooks/<name>` for incoming webhooks (kept in the inbox), `GET /` for
+what is there.
 
 Method calls need `Authorization: Bearer <api/token from the vault>`; without
 that secret in the vault every method call is refused. Hooks verify
@@ -16,14 +17,16 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from amoorion import __version__
 from amoorion.core import AmoorionError, JsonView
 from amoorion.hooks import HOOKS, Forbidden
+from amoorion.inbox import Inbox
 from amoorion.methods import METHODS, Method
 from amoorion.vault import Vault, open_vault
 
 bearer = HTTPBearer(auto_error=False)
 
 
-def create_app(vault: Vault | None = None) -> FastAPI:
+def create_app(vault: Vault | None = None, inbox: Inbox | None = None) -> FastAPI:
     vault = vault or open_vault()
+    inbox = inbox or Inbox()
     app = FastAPI(title="amoorion", version=__version__)
 
     def authorized(credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)]) -> None:
@@ -43,7 +46,7 @@ def create_app(vault: Vault | None = None) -> FastAPI:
 
         def call(params: Params) -> Any:  # type: ignore[valid-type]
             try:
-                return JsonView().render(method(vault).run(params))
+                return JsonView().render(method(vault, inbox=inbox).run(params))
             except AmoorionError as error:
                 raise HTTPException(400, str(error)) from None
 
@@ -72,7 +75,8 @@ def create_app(vault: Vault | None = None) -> FastAPI:
             raise HTTPException(403, str(error)) from None
         except AmoorionError as error:
             raise HTTPException(400, str(error)) from None
-        return JsonView().render(message)
+        [kept] = inbox.keep([message])
+        return JsonView().render(kept)
 
     return app
 

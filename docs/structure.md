@@ -12,7 +12,8 @@ src/amoorion/
 ├── models/          data shared by all: Account, Post, Message, Result
 ├── vault/           link to the secrets vault (.env); one module per backend
 ├── plugins/         plugin interface, HttpPlugin, entry point loading; dryrun/
-├── methods/         operations: accounts, plugins, publish, read, reply
+├── methods/         operations: accounts, inbox, plugins, publish, read, reply
+├── inbox/           received messages of every platform, SQLite (Q11)
 ├── hooks/           incoming webhooks → messages
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
@@ -42,10 +43,11 @@ flowchart TD
     models --> core
     vault --> core
     plugins --> models & vault
-    methods --> plugins
+    methods --> plugins & inbox
+    inbox --> models
     hooks --> models & vault
     cli --> methods
-    api --> methods & hooks
+    api --> methods & hooks & inbox
     mcp --> methods
     daemon --> api
 ```
@@ -103,7 +105,15 @@ with its error. The platforms are packages in `packages/` (above); only
 `read_only` marks methods that change nothing. Built in: `accounts` (which
 platforms have their secrets; values never shown), `plugins`, `publish` (one
 post to many platforms, one `Result` each, a failing platform doesn't stop
-the others), `read`, `reply`.
+the others), `read` (keeps what it read in the inbox), `reply`, `inbox`.
+
+### `inbox/`
+
+What amoorion received, of every platform, kept once by platform and id in
+a SQLite file (`AMOORION_INBOX` in `.env`, default
+`$XDG_DATA_HOME/amoorion/inbox.sqlite3`). `read` and the hooks put messages
+in; the `inbox` method lists them, newest first, optionally of one platform
+(hooks are `hook:<name>`). Rules acting on them come in phase 4 (Q11).
 
 ### `hooks/`
 
@@ -121,7 +131,7 @@ whose secret is missing from the vault refuses everything. Built in:
 
 FastAPI: `GET /`, `POST /methods/<name>` (body = params; `Authorization:
 Bearer` = secret `api/token`, without it method calls are off),
-`POST /hooks/<name>`. Binds `127.0.0.1:8000` by default.
+`POST /hooks/<name>` (the message goes to the inbox). Binds `127.0.0.1:8000` by default.
 
 ### `mcp/`
 

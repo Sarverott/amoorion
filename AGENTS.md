@@ -47,7 +47,7 @@ uv run amoorion          # run the CLI
 
 ```
 src/amoorion/core.py   Model, View, Controller, Registry: the base of every namespace
-src/amoorion/<ns>/     models, vault, plugins, methods, hooks, cli, api, mcp, daemon;
+src/amoorion/<ns>/     models, vault, plugins, methods, inbox, hooks, cli, api, mcp, daemon;
                        core mechanics in <ns>/base.py (see docs/structure.md)
 packages/amoorion-<p>/  one package per platform (uv workspace); its README lists its secrets
 scripts/new-plugin.sh  starts such a package (task plugin:new)

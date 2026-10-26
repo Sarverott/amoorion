@@ -10,6 +10,7 @@ from typing import Any, ClassVar
 from pydantic import Field
 
 from amoorion.core import AmoorionError, Controller, Model, Registry, View
+from amoorion.inbox import Inbox
 from amoorion.models import Message, Post, Result
 from amoorion.plugins import FAILED, Capability, load_plugins, open_plugin
 from amoorion.vault import Vault, open_vault
@@ -21,18 +22,26 @@ class NoParams(Model):
 
 class Method(Controller):
     Params: ClassVar[type[Model]] = NoParams
-    # True when the method changes nothing anywhere (agents may call it freely).
+    # True when the method changes nothing on any platform (agents may call it freely);
+    # keeping what it read in the local inbox doesn't count.
     read_only: ClassVar[bool] = False
 
-    def __init__(self, vault: Vault | None = None, view: View | None = None) -> None:
+    def __init__(self, vault: Vault | None = None, view: View | None = None, inbox: Inbox | None = None) -> None:
         super().__init__(view)
         self._vault = vault
+        self._inbox = inbox
 
     @property
     def vault(self) -> Vault:
         if self._vault is None:
             self._vault = open_vault()
         return self._vault
+
+    @property
+    def inbox(self) -> Inbox:
+        if self._inbox is None:
+            self._inbox = Inbox()
+        return self._inbox
 
     def run(self, params: Model) -> Model | list[Model]:
         raise NotImplementedError
@@ -125,12 +134,28 @@ class ReadParams(Model):
 @METHODS.register
 class Read(Method):
     name: ClassVar[str] = "read"
-    description: ClassVar[str] = "Read the latest messages of one platform"
+    description: ClassVar[str] = "Read the latest messages of one platform (and keep them in the inbox)"
     read_only: ClassVar[bool] = True
     Params: ClassVar[type[Model]] = ReadParams
 
     def run(self, params: ReadParams) -> list[Message]:
-        return open_plugin(params.platform, self.vault).read(params.limit)
+        return self.inbox.keep(open_plugin(params.platform, self.vault).read(params.limit))
+
+
+class InboxParams(Model):
+    platform: str | None = Field(None, description="only this platform (a hook is hook:<name>)")
+    limit: int = Field(20, ge=1, le=1000)
+
+
+@METHODS.register
+class InboxMethod(Method):
+    name: ClassVar[str] = "inbox"
+    description: ClassVar[str] = "Messages received so far, of every platform and hook, newest first"
+    read_only: ClassVar[bool] = True
+    Params: ClassVar[type[Model]] = InboxParams
+
+    def run(self, params: InboxParams) -> list[Message]:
+        return self.inbox.list(params.platform, params.limit)
 
 
 class ReplyParams(Model):
