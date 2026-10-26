@@ -1,0 +1,97 @@
+# https://taskfile.dev — entry point of amoorion.
+# Run through uv (`uv run task <name>`) or any go-task v3 on PATH.
+
+version: '3'
+
+vars:
+  # Commits up to this one were made before commitizen was set up.
+  COMMITS_FROM: 743498f
+  # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
+  SUBCOMMANDS: [accounts, inbox, plugins, publish, read, reply, api, mcp, daemon]
+
+includes:
+  docs:
+    taskfile: ./docs/Taskfile.yml
+    dir: ./docs
+
+tasks:
+  help:
+    desc: Show the help of amoorion and of every subcommand
+    cmds:
+      - task: run
+        vars: {CLI_ARGS: -h}
+      - for: {var: SUBCOMMANDS}
+        task: run
+        vars: {CLI_ARGS: '{{.ITEM}} -h'}
+
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  init:
+    desc: Set up a fresh checkout (tools, hooks, .env), then check it
+    # In order: check needs the tools that setup installs.
+    cmds:
+      - task: setup
+      - task: init:env
+      - task: check
+
+  init:env:
+    desc: Create .env from example.env (an existing .env is kept)
+    cmds:
+      - cp example.env .env
+    status:
+      - test -f .env
+
+  setup:
+    desc: Install the tools (uv sync) and git hooks (lefthook)
+    cmds:
+      - uv sync --frozen
+      - uv run --frozen lefthook install
+
+  run:
+    desc: Run the amoorion CLI
+    cmds:
+      - uv run --frozen amoorion {{.CLI_ARGS}}
+
+  plugin:new:
+    desc: 'Start a plugin package: task plugin:new -- <platform> <ClassName> "<description>"'
+    cmds:
+      - scripts/new-plugin.sh {{.CLI_ARGS}}
+
+  examples:build:
+    desc: Build the example notebooks with marimo into examples/build/ (not committed)
+    cmds:
+      - scripts/build-examples.sh
+
+  test:
+    desc: Run the tests (pytest)
+    cmds:
+      - uv run --frozen pytest
+
+  test:live:
+    desc: 'Post for real on the platforms named: task test:live -- <platform>… (needs the go-ahead)'
+    cmds:
+      - uv run --frozen pytest tests/live -m live -s -rA
+    env:
+      AMOORION_LIVE: '{{.CLI_ARGS}}'
+
+  test:quiet:
+    desc: Run the tests quietly
+    cmds:
+      - uv run --frozen pytest -q
+
+  check:
+    desc: Run every static check (same as CI)
+    deps: [test:quiet, check:yaml, check:commits, docs:build, docs:check:requirements]
+
+  check:yaml:
+    desc: Lint YAML files
+    cmds:
+      - uv run --frozen yamllint --strict .
+
+  check:commits:
+    desc: Check that commit messages follow commitizen
+    cmds:
+      - uv run --frozen cz check --rev-range {{.COMMITS_FROM}}..HEAD

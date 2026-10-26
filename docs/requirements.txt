@@ -1,0 +1,375 @@
+-e .
+    # via
+    #   amoorion-blogger
+    #   amoorion-bluesky
+    #   amoorion-discord
+    #   amoorion-docs
+    #   amoorion-facebook
+    #   amoorion-mastodon
+    #   amoorion-matrix
+    #   amoorion-telegram
+    #   amoorion-tumblr
+    #   amoorion-x
+-e ./packages/amoorion-blogger
+    # via amoorion-docs
+-e ./packages/amoorion-bluesky
+    # via amoorion-docs
+-e ./packages/amoorion-discord
+    # via amoorion-docs
+-e ./packages/amoorion-facebook
+    # via amoorion-docs
+-e ./packages/amoorion-mastodon
+    # via amoorion-docs
+-e ./packages/amoorion-matrix
+    # via amoorion-docs
+-e ./packages/amoorion-telegram
+    # via amoorion-docs
+-e ./packages/amoorion-tumblr
+    # via amoorion-docs
+-e ./packages/amoorion-x
+    # via amoorion-docs
+accessible-pygments==0.0.5
+    # via furo
+alabaster==1.0.0
+    # via sphinx
+annotated-doc==0.0.5
+    # via
+    #   fastapi
+    #   typer
+annotated-types==0.8.0
+    # via pydantic
+anyio==4.15.1
+    # via
+    #   httpx2
+    #   mcp
+    #   sse-starlette
+    #   starlette
+appnope==1.0.0 ; sys_platform == 'darwin'
+    # via ipykernel
+asttokens==3.0.2
+    # via stack-data
+attrs==26.1.0
+    # via
+    #   jsonschema
+    #   jupyter-cache
+    #   referencing
+babel==2.18.0
+    # via sphinx
+beautifulsoup4==4.15.0
+    # via furo
+certifi==2026.10.23
+    # via requests
+cffi==2.1.1 ; implementation_name == 'pypy' or platform_python_implementation != 'PyPy'
+    # via
+    #   cryptography
+    #   pyzmq
+charset-normalizer==3.5.2
+    # via requests
+click==8.5.0
+    # via
+    #   jupyter-cache
+    #   uvicorn
+colorama==0.4.6 ; sys_platform == 'win32'
+    # via
+    #   ipython
+    #   sphinx
+    #   typer
+comm==0.2.3
+    # via ipykernel
+cryptography==50.0.2
+    # via pyjwt
+debugpy==1.8.22
+    # via ipykernel
+docutils==0.22.4
+    # via
+    #   myst-parser
+    #   sphinx
+executing==2.3.0
+    # via stack-data
+fastapi==0.162.0
+    # via amoorion
+fastjsonschema==2.22.2
+    # via nbformat
+furo==2025.12.19
+    # via amoorion-docs
+h11==0.16.0
+    # via
+    #   httpcore2
+    #   uvicorn
+httpcore2==2.16.0 ; sys_platform != 'emscripten'
+    # via httpx2
+httpx2==2.16.0
+    # via mcp
+httpx2-jsfetch==1.0 ; sys_platform == 'emscripten'
+    # via httpx2
+idna==3.20
+    # via
+    #   anyio
+    #   httpx2
+    #   requests
+imagesize==2.0.1
+    # via sphinx
+importlib-metadata==10.1.0
+    # via
+    #   jupyter-cache
+    #   myst-nb
+ipykernel==7.4.0
+    # via myst-nb
+ipython==9.17.1
+    # via
+    #   ipykernel
+    #   myst-nb
+ipython-pygments-lexers==1.1.1
+    # via ipython
+jedi==0.20.1
+    # via ipython
+jinja2==3.1.6
+    # via
+    #   myst-parser
+    #   sphinx
+    #   sphinxcontrib-mermaid
+jsonschema==4.26.0
+    # via
+    #   mcp
+    #   nbformat
+jsonschema-specifications==2025.9.1
+    # via jsonschema
+jupyter-cache==1.0.1
+    # via myst-nb
+jupyter-client==8.10.0
+    # via
+    #   ipykernel
+    #   nbclient
+jupyter-core==5.9.1
+    # via
+    #   ipykernel
+    #   jupyter-client
+    #   nbclient
+    #   nbformat
+markdown-it-py==4.2.0
+    # via
+    #   mdit-py-plugins
+    #   myst-parser
+    #   rich
+markupsafe==3.0.4
+    # via jinja2
+matplotlib-inline==0.2.2
+    # via
+    #   ipykernel
+    #   ipython
+mcp==2.3.0
+    # via amoorion
+mcp-types==2.3.0
+    # via mcp
+mdit-py-plugins==0.6.1
+    # via myst-parser
+mdurl==0.1.2
+    # via markdown-it-py
+myst-nb==1.4.0
+    # via amoorion-docs
+myst-parser==5.1.0
+    # via myst-nb
+nbclient==0.11.0
+    # via
+    #   jupyter-cache
+    #   myst-nb
+nbformat==5.11.1
+    # via
+    #   jupyter-cache
+    #   myst-nb
+    #   nbclient
+nest-asyncio2==1.7.4
+    # via ipykernel
+oauthlib==4.0.0
+    # via requests-oauthlib
+opentelemetry-api==1.45.1
+    # via
+    #   fastapi
+    #   mcp
+packaging==26.3
+    # via
+    #   ipykernel
+    #   sphinx
+parso==0.8.7
+    # via jedi
+pexpect==4.9.0 ; sys_platform != 'emscripten' and sys_platform != 'win32'
+    # via ipython
+platformdirs==4.13.5
+    # via jupyter-core
+prompt-toolkit==3.0.53
+    # via ipython
+psutil==7.2.2 ; sys_platform != 'cygwin' and sys_platform != 'emscripten'
+    # via ipython
+ptyprocess==0.7.0 ; sys_platform != 'emscripten' and sys_platform != 'win32'
+    # via pexpect
+pure-eval==0.2.4
+    # via stack-data
+pycparser==3.12 ; (implementation_name != 'PyPy' and platform_python_implementation != 'PyPy') or (implementation_name == 'pypy' and platform_python_implementation == 'PyPy')
+    # via cffi
+pydantic==2.14.1
+    # via
+    #   amoorion
+    #   fastapi
+    #   mcp
+    #   mcp-types
+pydantic-core==2.50.1
+    # via pydantic
+pygments==2.21.0
+    # via
+    #   accessible-pygments
+    #   furo
+    #   ipython
+    #   ipython-pygments-lexers
+    #   rich
+    #   sphinx
+pyjwt==2.15.1
+    # via mcp
+python-dateutil==3.0.0
+    # via jupyter-client
+python-dotenv==1.2.4
+    # via
+    #   amoorion
+    #   mcp
+python-multipart==0.0.32
+    # via mcp
+pywin32==312 ; sys_platform == 'win32'
+    # via mcp
+pyyaml==6.0.3
+    # via
+    #   jupyter-cache
+    #   myst-nb
+    #   myst-parser
+    #   sphinxcontrib-mermaid
+pyzmq==27.2.0
+    # via
+    #   ipykernel
+    #   jupyter-client
+referencing==0.37.0
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
+requests==2.34.2
+    # via
+    #   amoorion
+    #   requests-oauthlib
+    #   sphinx
+requests-oauthlib==2.0.0
+    # via
+    #   amoorion-tumblr
+    #   amoorion-x
+rich==15.0.0
+    # via
+    #   amoorion
+    #   typer
+roman-numerals==4.1.0
+    # via sphinx
+rpds-py==2026.9.1
+    # via
+    #   jsonschema
+    #   referencing
+shellingham==1.5.4
+    # via typer
+six==1.17.0
+    # via python-dateutil
+snowballstemmer==3.1.1
+    # via sphinx
+soupsieve==3.0.4
+    # via beautifulsoup4
+sphinx==9.1.1 ; python_full_version < '3.13'
+    # via
+    #   amoorion-docs
+    #   furo
+    #   myst-nb
+    #   myst-parser
+    #   sphinx-basic-ng
+    #   sphinxcontrib-mermaid
+sphinx==9.2.0 ; python_full_version >= '3.13'
+    # via
+    #   amoorion-docs
+    #   furo
+    #   myst-nb
+    #   myst-parser
+    #   sphinx-basic-ng
+    #   sphinxcontrib-mermaid
+sphinx-basic-ng==1.0.0b2
+    # via furo
+sphinxcontrib-applehelp==2.0.0
+    # via sphinx
+sphinxcontrib-devhelp==2.0.0
+    # via sphinx
+sphinxcontrib-htmlhelp==2.1.0
+    # via sphinx
+sphinxcontrib-jsmath==2.0.0
+    # via sphinx
+sphinxcontrib-mermaid==2.1.1
+    # via amoorion-docs
+sphinxcontrib-qthelp==2.0.0
+    # via sphinx
+sphinxcontrib-serializinghtml==2.0.0
+    # via sphinx
+sqlalchemy==2.1.6
+    # via jupyter-cache
+sse-starlette==3.6.0
+    # via mcp
+stack-data==0.6.3
+    # via ipython
+starlette==1.10.0
+    # via
+    #   fastapi
+    #   mcp
+    #   sse-starlette
+tabulate==0.10.0
+    # via jupyter-cache
+tornado==6.6
+    # via
+    #   ipykernel
+    #   jupyter-client
+traitlets==5.16.1
+    # via
+    #   ipykernel
+    #   ipython
+    #   jupyter-client
+    #   jupyter-core
+    #   matplotlib-inline
+    #   nbclient
+    #   nbformat
+truststore==0.10.5 ; sys_platform != 'emscripten'
+    # via
+    #   httpcore2
+    #   httpx2
+typer==0.27.3
+    # via mcp
+typing-extensions==4.16.0
+    # via
+    #   anyio
+    #   beautifulsoup4
+    #   fastapi
+    #   httpx2
+    #   jupyter-client
+    #   mcp
+    #   mcp-types
+    #   myst-nb
+    #   opentelemetry-api
+    #   pydantic
+    #   pydantic-core
+    #   referencing
+    #   sqlalchemy
+    #   starlette
+    #   typing-inspection
+typing-inspection==0.4.4
+    # via
+    #   fastapi
+    #   mcp
+    #   pydantic
+tzdata==2026.5
+    # via python-dateutil
+urllib3==2.8.0
+    # via requests
+uvicorn==0.54.0
+    # via
+    #   amoorion
+    #   mcp
+wcwidth==0.9.4
+    # via prompt-toolkit
+zipp==4.1.2
+    # via importlib-metadata

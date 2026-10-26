@@ -1,0 +1,175 @@
+"""Methods: what amoorion can do, independent of who asks.
+
+A method has `Params` (a model, so every front-end can build its own
+arguments, request body or tool schema from it) and `run`, which returns
+models. Front-ends never talk to plugins directly.
+"""
+
+from typing import Any, ClassVar
+
+from pydantic import Field
+
+from amoorion.core import AmoorionError, Controller, Model, Registry, View
+from amoorion.inbox import Inbox
+from amoorion.models import Message, Post, Result
+from amoorion.plugins import FAILED, Capability, load_plugins, open_plugin
+from amoorion.vault import Vault, open_vault
+
+
+class NoParams(Model):
+    pass
+
+
+class Method(Controller):
+    Params: ClassVar[type[Model]] = NoParams
+    # True when the method changes nothing on any platform (agents may call it freely);
+    # keeping what it read in the local inbox doesn't count.
+    read_only: ClassVar[bool] = False
+
+    def __init__(self, vault: Vault | None = None, view: View | None = None, inbox: Inbox | None = None) -> None:
+        super().__init__(view)
+        self._vault = vault
+        self._inbox = inbox
+
+    @property
+    def vault(self) -> Vault:
+        if self._vault is None:
+            self._vault = open_vault()
+        return self._vault
+
+    @property
+    def inbox(self) -> Inbox:
+        if self._inbox is None:
+            self._inbox = Inbox()
+        return self._inbox
+
+    def run(self, params: Model) -> Model | list[Model]:
+        raise NotImplementedError
+
+    def __call__(self, **params: Any) -> Any:
+        return self.respond(self.run(self.Params(**params)))
+
+
+METHODS: Registry[type[Method]] = Registry("method")
+
+
+class PluginInfo(Model):
+    name: str
+    description: str
+    capabilities: list[Capability]
+    error: str | None = None
+
+
+@METHODS.register
+class Plugins(Method):
+    name: ClassVar[str] = "plugins"
+    description: ClassVar[str] = "List the platform plugins and what they can do"
+    read_only: ClassVar[bool] = True
+
+    def run(self, params: Model) -> list[PluginInfo]:
+        plugins = load_plugins()
+        return [
+            PluginInfo(name=plugin.name, description=plugin.description, capabilities=sorted(plugin.capabilities))
+            for plugin in map(plugins.get, plugins.names())
+        ] + [
+            PluginInfo(name=name, description="failed to load", capabilities=[], error=error)
+            for name, error in sorted(FAILED.items())
+        ]
+
+
+class AccountStatus(Model):
+    platform: str
+    ready: bool
+    missing: list[str] = []
+    error: str | None = None
+
+
+@METHODS.register
+class Accounts(Method):
+    name: ClassVar[str] = "accounts"
+    description: ClassVar[str] = "Which platforms have their secrets in the vault (values never shown)"
+    read_only: ClassVar[bool] = True
+
+    def run(self, params: Model) -> list[AccountStatus]:
+        statuses = []
+        plugins = load_plugins()
+        for plugin in map(plugins.get, plugins.names()):
+            missing, error = [], None
+            for key in plugin.secrets:
+                try:
+                    self.vault.get(f"{plugin.name}/{key}")
+                except AmoorionError as failure:
+                    missing.append(key)
+                    error = error or str(failure)
+            statuses.append(AccountStatus(platform=plugin.name, ready=not missing, missing=missing, error=error))
+        return statuses
+
+
+class PublishParams(Post):
+    to: list[str] = Field(min_length=1, description="platforms to publish on")
+
+
+@METHODS.register
+class Publish(Method):
+    name: ClassVar[str] = "publish"
+    description: ClassVar[str] = "Publish one post on several platforms; one result per platform"
+    Params: ClassVar[type[Model]] = PublishParams
+
+    def run(self, params: PublishParams) -> list[Result]:
+        post = Post.model_validate(params.model_dump(exclude={"to"}))
+        results = []
+        for platform in params.to:
+            try:
+                results.append(Result(platform=platform, ok=True, message=open_plugin(platform, self.vault).post(post)))
+            except Exception as error:  # one platform failing must not stop the others
+                results.append(Result(platform=platform, ok=False, error=str(error)))
+        return results
+
+
+class ReadParams(Model):
+    platform: str
+    limit: int = Field(20, ge=1, le=200)
+
+
+@METHODS.register
+class Read(Method):
+    name: ClassVar[str] = "read"
+    description: ClassVar[str] = "Read the latest messages of one platform (and keep them in the inbox)"
+    read_only: ClassVar[bool] = True
+    Params: ClassVar[type[Model]] = ReadParams
+
+    def run(self, params: ReadParams) -> list[Message]:
+        return self.inbox.keep(open_plugin(params.platform, self.vault).read(params.limit))
+
+
+class InboxParams(Model):
+    platform: str | None = Field(None, description="only this platform (a hook is hook:<name>)")
+    limit: int = Field(20, ge=1, le=1000)
+
+
+@METHODS.register
+class InboxMethod(Method):
+    name: ClassVar[str] = "inbox"
+    description: ClassVar[str] = "Messages received so far, of every platform and hook, newest first"
+    read_only: ClassVar[bool] = True
+    Params: ClassVar[type[Model]] = InboxParams
+
+    def run(self, params: InboxParams) -> list[Message]:
+        return self.inbox.list(params.platform, params.limit)
+
+
+class ReplyParams(Model):
+    platform: str
+    to: str = Field(description="id of the message to answer, as read or publish gave it")
+    text: str = Field(min_length=1)
+
+
+@METHODS.register
+class Reply(Method):
+    name: ClassVar[str] = "reply"
+    description: ClassVar[str] = "Answer one message on its platform"
+    Params: ClassVar[type[Model]] = ReplyParams
+
+    def run(self, params: ReplyParams) -> Message:
+        to = Message(platform=params.platform, text="", id=params.to)
+        return open_plugin(params.platform, self.vault).reply(to, params.text)

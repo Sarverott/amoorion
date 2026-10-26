@@ -1,0 +1,23 @@
+[project]
+name = "amoorion-blogger"
+version = "0.1.0"
+description = "Blogger plugin of amoorion: posting by mail to a blog's secret address"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+]
+
+[project.entry-points."amoorion.plugins"]
+blogger = "amoorion_blogger:Blogger"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"

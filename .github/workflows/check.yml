@@ -1,0 +1,26 @@
+# Runs the same static checks as `task check` locally.
+name: check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Full history: check:commits reads every commit since commitizen.
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install tools
+        run: uv sync --frozen
+
+      - name: Check
+        run: uv run --frozen task check

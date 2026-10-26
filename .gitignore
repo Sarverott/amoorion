@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[codz]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets: platform tokens stay out of the repository
+.env
+.env.*
+!example.env
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store

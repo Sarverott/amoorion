@@ -1,0 +1,23 @@
+[project]
+name = "amoorion-telegram"
+version = "0.1.0"
+description = "Telegram plugin of amoorion: a bot posts, reads and replies in one chat through the Bot API"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+]
+
+[project.entry-points."amoorion.plugins"]
+telegram = "amoorion_telegram:Telegram"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"
