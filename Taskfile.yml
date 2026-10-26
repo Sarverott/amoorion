@@ -24,6 +24,21 @@ tasks:
       - task --list
     silent: true
 
+  init:
+    desc: Set up a fresh checkout (tools, hooks, .env), then check it
+    # In order: check needs the tools that setup installs.
+    cmds:
+      - task: setup
+      - task: init:env
+      - task: check
+
+  init:env:
+    desc: Create .env from example.env (an existing .env is kept)
+    cmds:
+      - cp example.env .env
+    status:
+      - test -f .env
+
   setup:
     desc: Install the tools (uv sync) and git hooks (lefthook)
     cmds:
