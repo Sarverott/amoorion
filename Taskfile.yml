@@ -9,6 +9,11 @@ vars:
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
   SUBCOMMANDS: [accounts, inbox, plugins, publish, read, reply, api, mcp, daemon]
 
+includes:
+  docs:
+    taskfile: ./docs/Taskfile.yml
+    dir: ./docs
+
 tasks:
   help:
     desc: Show the help of amoorion and of every subcommand
@@ -74,7 +79,7 @@ tasks:
 
   check:
     desc: Run every static check (same as CI)
-    deps: [test:quiet, check:yaml, check:commits]
+    deps: [test:quiet, check:yaml, check:commits, docs:build, docs:check:requirements]
 
   check:yaml:
     desc: Lint YAML files

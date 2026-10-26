@@ -1,0 +1,23 @@
+# Docs of amoorion: Sphinx from the Markdown here, built on Read the Docs.
+# Included by the root Taskfile as `docs:` (run from docs/).
+
+version: '3'
+
+vars:
+  EXPORT: uv export --frozen --package amoorion-docs --no-dev --no-hashes --no-header
+
+tasks:
+  build:
+    desc: Build the docs into docs/_build/html (warnings are errors)
+    cmds:
+      - uv run --frozen --package amoorion-docs sphinx-build -W --keep-going -q -b html . _build/html
+
+  requirements:
+    desc: Write docs/requirements.txt for Read the Docs from uv.lock
+    cmds:
+      - '{{.EXPORT}} -o requirements.txt'
+
+  check:requirements:
+    desc: Check that docs/requirements.txt follows uv.lock
+    cmds:
+      - '{{.EXPORT}} | diff -u requirements.txt - || (echo "run: task docs:requirements" >&2; exit 1)'

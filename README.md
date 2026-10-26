@@ -82,11 +82,15 @@ Run locally first; a Dockerfile and compose come next (phase 6 of the plan).
 
 ```sh
 uv run task init               # tools, git hooks, .env, then check
-uv run task check              # tests, YAML, commit messages (= CI)
+uv run task check              # tests, YAML, commit messages, docs (= CI)
+uv run task docs:build         # the docs site into docs/_build/html
 uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform
 uv run task test:live -- bluesky mastodon    # one real test post on each platform named
 ```
 
+Examples of usage: Jupyter notebooks in [examples/](examples/). The docs
+(this README, the guides, the plan and an API reference generated from the
+code) are built by Sphinx from [docs/](docs/) for Read the Docs.
 Plan and open questions: [docs/devlog/](docs/devlog/). Guide for agents and
 contributors: [AGENTS.md](AGENTS.md).
 

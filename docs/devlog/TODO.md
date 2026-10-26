@@ -50,9 +50,9 @@ What is being worked on now. Vision and the plan of all phases:
 
 ## Phase 4: documentation, examples, releases
 
-- [ ] Sphinx docs from the Markdown in `docs/` (MyST), API reference from
+- [x] Sphinx docs from the Markdown in `docs/` (MyST), API reference from
       the code; Read the Docs config; `task docs:build` in `task check`
-- [ ] Jupyter notebooks in `examples/`, run by the tests, shown in the docs
+- [x] Jupyter notebooks in `examples/`, run by the tests, shown in the docs
 - [ ] marimo builds of the examples (`task examples:build`, gitignored)
 - [ ] Release on push to `master`: commitizen bump, tag, GitHub release
 - [ ] On a release: packages attached to it and published to PyPI

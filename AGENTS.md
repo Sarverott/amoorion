@@ -35,10 +35,12 @@ batches).
 ```sh
 uv run task init         # fresh checkout: tools, lefthook hooks, .env, check
 uv run task setup        # tools (uv sync) and lefthook git hooks
-uv run task check        # tests, YAML, commits (= CI)
+uv run task check        # tests, YAML, commits, docs build (= CI)
 uv run task test         # pytest only
 uv run task test:live -- <platform>…   # post for real (only with the author's go-ahead, Q13)
 uv run task help         # help of the CLI and every subcommand
+uv run task docs:build   # docs into docs/_build/html (Sphinx, warnings are errors)
+uv run task docs:requirements   # docs/requirements.txt for Read the Docs, after a uv.lock change
 uv run task plugin:new -- <platform> <Class> "<description>"   # start a plugin package
 uv run amoorion          # run the CLI
 ```
@@ -56,7 +58,9 @@ src/amoorion/<ns>/     models, vault, plugins, methods, inbox, hooks, cli, api, 
 packages/amoorion-<p>/  one package per platform (uv workspace); its README lists its secrets
 scripts/new-plugin.sh  starts such a package (task plugin:new)
 example.env            the link to the vault; copy to .env
-tests/                 pytest tests
+tests/                 pytest tests (also run every notebook of examples/)
+examples/              Jupyter notebooks of usage (dryrun and fakes only)
+docs/                  the docs site (Sphinx + MyST, conf.py, Taskfile.yml); API pages generated
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
 docs/.agents/          agent notes (see below)

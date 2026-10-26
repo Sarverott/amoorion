@@ -17,6 +17,9 @@ sphinx:
 # Optionally, but recommended,
 # declare the Python requirements required to build your documentation
 # See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+# Exported from uv.lock by `task docs:requirements` (task check fails when
+# it falls behind); its `-e ./…` lines install amoorion and the plugin
+# packages from this checkout.
 python:
   install:
     - requirements: docs/requirements.txt
