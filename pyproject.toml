@@ -42,6 +42,7 @@ dev = [
     "amoorion-discord",
     "amoorion-facebook",
     "amoorion-mastodon",
+    "amoorion-matrix",
     "amoorion-telegram",
     "amoorion-tumblr",
     "amoorion-x",
@@ -79,3 +80,4 @@ amoorion-blogger = { workspace = true }
 amoorion-facebook = { workspace = true }
 amoorion-discord = { workspace = true }
 amoorion-telegram = { workspace = true }
+amoorion-matrix = { workspace = true }

@@ -1,0 +1,102 @@
+"""matrix plugin: one room on a homeserver, through the client-server API.
+
+Secrets (`matrix/<key>`): `uri` (the homeserver), `token` (the account's
+access token), `room` (an id `!…:server` or an alias `#…:server`). Messages
+are plain `m.text` events; encrypted rooms are not supported yet.
+"""
+
+import json
+import uuid
+from datetime import UTC, datetime
+from typing import Any, ClassVar
+from urllib.parse import quote
+
+from amoorion.core import AmoorionError
+from amoorion.models import Account, Message, Post
+from amoorion.plugins import Capability, HttpPlugin
+
+API = "/_matrix/client/v3"
+ONLY_MESSAGES = json.dumps({"types": ["m.room.message"]})
+
+
+def compose(post: Post) -> str:
+    text = "\n\n".join(part for part in (post.title, post.text) if part)
+    if post.links:
+        text += "\n" + "\n".join(post.links)
+    if post.tags:
+        text += "\n" + " ".join("#" + tag.lstrip("#") for tag in post.tags)
+    return text
+
+
+def part(value: str) -> str:
+    """Ids like !room:server or $event go into paths quoted whole."""
+    return quote(value, safe="")
+
+
+class Matrix(HttpPlugin):
+    name: ClassVar[str] = "matrix"
+    description: ClassVar[str] = "Matrix room (client-server API): post, read, reply"
+    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    secrets: ClassVar[tuple[str, ...]] = ("uri", "token", "room")
+
+    _room: str | None = None
+    _me: str | None = None
+
+    def _call(self, method: str, path: str, **kwargs: Any) -> Any:
+        headers = {"Authorization": f"Bearer {self.secret('token')}"}
+        return self.request(method, f"{self.secret('uri').rstrip('/')}{API}{path}", headers=headers, **kwargs)
+
+    def _room_id(self) -> str:
+        if self._room is None:
+            room = self.secret("room")
+            if room.startswith("#"):
+                room = self._call("GET", f"/directory/room/{part(room)}")["room_id"]
+            self._room = room
+        return self._room
+
+    def _whoami(self) -> str:
+        if self._me is None:
+            self._me = self._call("GET", "/account/whoami")["user_id"]
+        return self._me
+
+    def _message(self, event: dict[str, Any]) -> Message:
+        content = event.get("content") or {}
+        reply = (content.get("m.relates_to") or {}).get("m.in_reply_to") or {}
+        stamp = event.get("origin_server_ts")
+        return Message(
+            platform=self.name,
+            text=content.get("body", ""),
+            id=event["event_id"],
+            url=f"https://matrix.to/#/{part(self._room_id())}/{part(event['event_id'])}",
+            author=Account(platform=self.name, handle=event.get("sender", "")),
+            reply_to=reply.get("event_id"),
+            created_at=datetime.fromtimestamp(stamp / 1000, UTC) if stamp else None,
+        )
+
+    def _send(self, text: str, reply_to: str | None = None) -> Message:
+        content: dict[str, Any] = {"msgtype": "m.text", "body": text}
+        if reply_to:
+            content["m.relates_to"] = {"m.in_reply_to": {"event_id": reply_to}}
+        # A transaction id of our own: a retried request makes the server send only once.
+        path = f"/rooms/{part(self._room_id())}/send/m.room.message/{uuid.uuid4().hex}"
+        sent = self._call("PUT", path, json=content)
+        event = {
+            "event_id": sent["event_id"],
+            "sender": self._whoami(),
+            "content": content,
+            "origin_server_ts": datetime.now(UTC).timestamp() * 1000,
+        }
+        return self._message(event)
+
+    def post(self, post: Post) -> Message:
+        return self._send(compose(post))
+
+    def read(self, limit: int = 20) -> list[Message]:
+        params = {"dir": "b", "limit": min(limit, 100), "filter": ONLY_MESSAGES}
+        chunk = self._call("GET", f"/rooms/{part(self._room_id())}/messages", params=params).get("chunk", [])
+        return [self._message(event) for event in chunk if event.get("type") == "m.room.message"]
+
+    def reply(self, to: Message, text: str) -> Message:
+        if not to.id:
+            raise AmoorionError("matrix needs the id of the event to reply to")
+        return self._send(text, reply_to=to.id)
