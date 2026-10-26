@@ -14,6 +14,7 @@ members = [
     "amoorion-discord",
     "amoorion-facebook",
     "amoorion-mastodon",
+    "amoorion-telegram",
     "amoorion-tumblr",
     "amoorion-x",
 ]
@@ -44,6 +45,7 @@ dev = [
     { name = "amoorion-discord" },
     { name = "amoorion-facebook" },
     { name = "amoorion-mastodon" },
+    { name = "amoorion-telegram" },
     { name = "amoorion-tumblr" },
     { name = "amoorion-x" },
     { name = "commitizen" },
@@ -75,6 +77,7 @@ dev = [
     { name = "amoorion-discord", editable = "packages/amoorion-discord" },
     { name = "amoorion-facebook", editable = "packages/amoorion-facebook" },
     { name = "amoorion-mastodon", editable = "packages/amoorion-mastodon" },
+    { name = "amoorion-telegram", editable = "packages/amoorion-telegram" },
     { name = "amoorion-tumblr", editable = "packages/amoorion-tumblr" },
     { name = "amoorion-x", editable = "packages/amoorion-x" },
     { name = "commitizen", specifier = ">=4.19.3" },
@@ -134,6 +137,17 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 name = "amoorion-mastodon"
 version = "0.1.0"
 source = { editable = "packages/amoorion-mastodon" }
+dependencies = [
+    { name = "amoorion" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "amoorion", editable = "." }]
+
+[[package]]
+name = "amoorion-telegram"
+version = "0.1.0"
+source = { editable = "packages/amoorion-telegram" }
 dependencies = [
     { name = "amoorion" },
 ]
