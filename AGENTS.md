@@ -37,6 +37,8 @@ uv run task init         # fresh checkout: tools, lefthook hooks, .env, check
 uv run task setup        # tools (uv sync) and lefthook git hooks
 uv run task check        # tests, YAML, commits, docs build (= CI)
 uv run task test         # pytest only
+uv run task flow:pull    # on development: pull master in, mark the next pre-release
+uv run task version      # the version of every package (released together)
 uv run task test:live -- <platform>…   # post for real (only with the author's go-ahead, Q13)
 uv run task help         # help of the CLI and every subcommand
 uv run task examples:build   # marimo builds of examples/ into examples/build/ (gitignored)
@@ -65,7 +67,8 @@ docs/                  the docs site (Sphinx + MyST, conf.py, Taskfile.yml); API
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
 docs/.agents/          agent notes (see below)
-.github/               community files, workflows: check (= task check), release, publish
+.github/               community files, workflows: check (= task check), flow, release, publish
+scripts/version.py     the versions of the release loop (mark, final)
 ```
 
 ## Rules for agents
@@ -92,9 +95,10 @@ docs/.agents/          agent notes (see below)
    packages in `packages/`, tested against fakes of their APIs, never real
    accounts.
 5. **Ask first** before tagging a release, publishing a package or posting
-   to any real platform account. Pushing `development` is allowed. A push
-   to `master` releases and publishes by itself
-   ([docs/releasing.md](docs/releasing.md)), so agents never push there.
+   to any real platform account. Pushing `development` is allowed; it
+   finalizes the version and opens the release pull request to `master`
+   (flow workflow). Merging it releases and publishes
+   ([docs/releasing.md](docs/releasing.md)), so agents never push `master`.
 6. **Branches:** BOS flow `master` → `development` → `revision` → `testing`
    → `releasing` → `master` via PR. Work on `development`.
 7. **Commits:** one per finished step, gated on `task check`, conventional

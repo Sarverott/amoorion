@@ -56,6 +56,9 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] marimo builds of the examples (`task examples:build`, gitignored)
 - [x] Release on push to `master`: commitizen bump of every package, tag, GitHub release
 - [x] On a release: packages attached to it and published to PyPI
-      (workflows ready; PyPI and GitHub set up by the author, Q15)
+      (PyPI by the `PYPI_TOKEN` of the `pypi` environment)
+- [x] The loop: pulling master marks the next pre-release (lefthook),
+      a push to development makes it final and opens the pull request to
+      master, its merge tags and releases; `__version__` from the package
 
 Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).

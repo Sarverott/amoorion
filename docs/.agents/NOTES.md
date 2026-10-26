@@ -2,6 +2,29 @@
 
 Newest on top.
 
+## 2026-10-27: release loop after the first release
+
+- The author merged development into master (PR #1): `release` bumped to
+  0.2.0, tagged, made the GitHub release, `publish` attached the packages;
+  PyPI failed with `invalid-publisher` (no trusted publisher). Now the
+  `PYPI_TOKEN` secret of the `pypi` environment; v0.2.0 is not on PyPI.
+- Docs vs package versions differed: `__version__` was hard-coded "0.1.0".
+  Now `importlib.metadata.version("amoorion")`.
+- Read gitrecon (`forge/redscope-technologies/gitrecon`: `.github/bos/flow.py`,
+  `bos.config.json`): every loop step dispatches the next with `gh workflow
+  run`, PRs skipped when they'd carry only merges and `bump:` commits. Taken
+  over: those two ideas; not the full revision/testing/releasing chain.
+- commitizen counts the next version from the tag of the *current*
+  version; a pre-release has none, so it counted every commit ever (any fix
+  → 0.3.0). `scripts/version.py` counts from the last release tag itself and
+  uses cz only to write the files (`bump <version> --files-only`) and render
+  the section (`changelog --dry-run --start-rev v<last>`).
+  `update_changelog_on_bump` is gone: it wrote sections for pre-releases.
+- The unmarking happens in the flow workflow, not in a pre-push hook: a
+  commit made in pre-push is not part of that push.
+- Repository setting `can_approve_pull_request_reviews` is false: the flow
+  workflow can't open the PR until the author allows it.
+
 ## 2026-10-26: the first inquiry (docs, examples, releases)
 
 - The author's docs member asked for Python >=3.13; the workspace is pinned
