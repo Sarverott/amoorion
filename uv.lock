@@ -12,6 +12,7 @@ members = [
     "amoorion-blogger",
     "amoorion-bluesky",
     "amoorion-discord",
+    "amoorion-docs",
     "amoorion-facebook",
     "amoorion-mastodon",
     "amoorion-matrix",
@@ -124,6 +125,11 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "amoorion", editable = "." }]
+
+[[package]]
+name = "amoorion-docs"
+version = "0.0.0"
+source = { virtual = "docs" }
 
 [[package]]
 name = "amoorion-facebook"

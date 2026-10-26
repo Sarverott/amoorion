@@ -71,7 +71,10 @@ markers = ["live: posts on a real platform account (task test:live -- <platform>
 
 # Platform plugins, one package each (decision Q10).
 [tool.uv.workspace]
-members = ["packages/*"]
+members = [
+    "packages/*",
+    "docs",
+]
 
 [tool.uv.sources]
 amoorion-bluesky = { workspace = true }
