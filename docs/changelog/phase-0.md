@@ -83,3 +83,13 @@ rs-tech-brandstyle?
 **Decision:** MIT as it is, with a link to https://sett.mit-license.org
 (years since 2024). Not tied to rs-tech: the zone is the first area of use,
 not the only one.
+
+## UNIXUSAT=1792984438330 · commit 8456800
+
+The orders carried out. `core.py` grew from the author's sketch into
+model, view, controller and a registry; every namespace has its `base.py`
+on it: models, vault (new: the link of Q3 needed a home), plugins with the
+`dryrun` platform, methods (`plugins`, `publish`, `read`), hooks with
+the token-guarded `generic` hook, cli, api (bearer token from the vault),
+mcp (tools from the methods), daemon. `docs/structure.md` lists them, VISION
+holds the plan of phases 0–5, the README tells what is known. Q6–Q8 opened.
