@@ -9,6 +9,7 @@ resolution-markers = [
 [manifest]
 members = [
     "amoorion",
+    "amoorion-blogger",
     "amoorion-bluesky",
     "amoorion-mastodon",
     "amoorion-tumblr",
@@ -36,6 +37,7 @@ keepassxc = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "amoorion-blogger" },
     { name = "amoorion-bluesky" },
     { name = "amoorion-mastodon" },
     { name = "amoorion-tumblr" },
@@ -64,6 +66,7 @@ provides-extras = ["keepassxc"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "amoorion-blogger", editable = "packages/amoorion-blogger" },
     { name = "amoorion-bluesky", editable = "packages/amoorion-bluesky" },
     { name = "amoorion-mastodon", editable = "packages/amoorion-mastodon" },
     { name = "amoorion-tumblr", editable = "packages/amoorion-tumblr" },
@@ -76,6 +79,17 @@ dev = [
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "yamllint", specifier = ">=1.38.0" },
 ]
+
+[[package]]
+name = "amoorion-blogger"
+version = "0.1.0"
+source = { editable = "packages/amoorion-blogger" }
+dependencies = [
+    { name = "amoorion" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-bluesky"
