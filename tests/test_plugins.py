@@ -2,7 +2,7 @@ import pytest
 
 from amoorion.core import AmoorionError
 from amoorion.models import Post
-from amoorion.plugins import PLUGINS, Capability, Plugin, Unsupported, open_plugin
+from amoorion.plugins import Capability, Plugin, Unsupported, load_plugins, open_plugin
 from amoorion.vault import VaultLink, open_vault
 
 
@@ -12,7 +12,17 @@ def vault():
 
 
 def test_dryrun_is_built_in():
-    assert "dryrun" in PLUGINS
+    assert "dryrun" in load_plugins()
+
+
+def test_plugin_package_imported_before_amoorion_plugins():
+    """A plugin package imports amoorion.plugins itself; loading must not catch it half-imported."""
+    import subprocess
+    import sys
+
+    code = "import amoorion_bluesky; from amoorion.plugins import FAILED, load_plugins; " \
+           "assert 'bluesky' in load_plugins(), FAILED"
+    subprocess.run([sys.executable, "-c", code], check=True)
 
 
 def test_dryrun_posts_reads_and_replies(vault):
