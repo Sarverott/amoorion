@@ -2,6 +2,21 @@
 
 Newest on top.
 
+## 2026-10-26: orders of phase 1 carried out
+
+- The author's `help` task called `task: run -- -h`, which Task reads as a
+  task name; it now passes `CLI_ARGS`. Their `test` / `test:quiet` split kept.
+- Vault backends are tested against fakes only: a fake `bw` script, a local
+  server shaped like Vault's KV v2, and a real `.kdbx` made by pykeepass.
+  `bw` flags used: `--nointeraction`, `status`, `list items --search`;
+  not yet run against a real `bw` (it isn't installed here).
+- Plugins and vault backends: only plugins use entry points (as ordered);
+  vault backends stay a plain registry.
+- Bluesky counts graphemes approximately (no `regex` dependency); the PDS
+  is the final judge and its error message is passed on.
+- `example.env` now starts from `bitwarden`; with no `.env` at all the
+  backend is still `env`, so a fresh checkout exposes nothing.
+
 ## 2026-10-26: orders of phase 0 carried out
 
 - Added the namespace `vault/` beside the author's directories: the vault

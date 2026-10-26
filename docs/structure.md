@@ -10,9 +10,9 @@ src/amoorion/
 ├── __init__.py      version, `main` (the `amoorion` command → cli)
 ├── core.py          Model, View, JsonView, Controller, Registry, AmoorionError
 ├── models/          data shared by all: Account, Post, Message, Result
-├── vault/           link to the secrets vault (.env) and its backends
-├── plugins/         one plugin per platform; dryrun/ for development
-├── methods/         operations over the platforms: plugins, publish, read
+├── vault/           link to the secrets vault (.env); one module per backend
+├── plugins/         one plugin per platform (entry points): bluesky/, dryrun/
+├── methods/         operations: accounts, plugins, publish, read, reply
 ├── hooks/           incoming webhooks → messages
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
@@ -62,24 +62,33 @@ tags), `Message` (something said on a platform: post, chat line, hook event),
 
 Secrets never live in the repository or in `.env` (Q3). `.env` holds only the
 link: `AMOORION_VAULT` (backend), `AMOORION_VAULT_ADDR`,
-`AMOORION_VAULT_TOKEN`; see `example.env`. Secrets are named
-`<platform>/<key>`. Backends: `env` (development:
-`AMOORION_SECRET_<PLATFORM>_<KEY>`); the first real vault is open (Q6).
+`AMOORION_VAULT_TOKEN`, `AMOORION_VAULT_PATH`; see `example.env`. Secrets are
+named `<platform>/<key>`; every backend keeps one entry per platform with a
+field per key. One module per backend (Q6):
+
+| Module | Kind | Where `bluesky/password` is |
+| ------ | ---- | --------------------------- |
+| `bw_cli.py` | `bitwarden` | item `amoorion/bluesky`, login password (other keys: custom fields) |
+| `http_vault.py` | `http` | KV v2 `secret/amoorion/bluesky`, key `password` |
+| `kpxc_db_file.py` | `keepassxc` | entry `bluesky` in group `amoorion`, password |
+| `default.py` | `env` | variable `AMOORION_SECRET_BLUESKY_PASSWORD` (development) |
 
 ### `plugins/`
 
-`Plugin` declares `capabilities` (`post`, `read`, `reply`) and implements
-them; anything else raises `Unsupported`. A plugin reads its secrets from
-the vault with `self.secret("<key>")`. One directory per platform:
-`plugins/<platform>/base.py`, registered in `PLUGINS`. How outside packages
-add plugins is open (Q7).
+`Plugin` declares `capabilities` (`post`, `read`, `reply`) and the vault keys
+it needs (`secrets`), and implements the calls; anything else raises
+`Unsupported`. Plugins are found through the entry point group
+`amoorion.plugins`, built in (`plugins/<platform>/base.py`) or from separate
+packages (Q7); one that fails to load is listed with its error. Built in:
+`bluesky`, `dryrun`. How to write one: [plugins.md](plugins.md).
 
 ### `methods/`
 
 `Method` has `Params` (a model) and `run(params)` returning models.
-`read_only` marks methods that change nothing. Built in: `plugins`,
-`publish` (one post to many platforms, one `Result` each, a failing
-platform doesn't stop the others), `read`.
+`read_only` marks methods that change nothing. Built in: `accounts` (which
+platforms have their secrets; values never shown), `plugins`, `publish` (one
+post to many platforms, one `Result` each, a failing platform doesn't stop
+the others), `read`, `reply`.
 
 ### `hooks/`
 

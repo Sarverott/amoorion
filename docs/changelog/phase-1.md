@@ -62,3 +62,14 @@ Depend on `python-dotenv` directly?
 *Lean:* yes.
 
 **Decision:** yes.
+
+## UNIXUSAT=1792986372873 · commit 2da4908
+
+The orders carried out. The author's `help` task made runnable.
+`python-dotenv` replaces the shim (Q8). The vault split into one module per
+backend (Q6): `bw_cli.py` (Bitwarden / Vaultwarden, the first), `http_vault.py`
+(HashiCorp Vault / OpenBao KV v2), `kpxc_db_file.py` (KeePassXC, extra
+`keepassxc`), `default.py` (the `.env` setup); the link gained
+`AMOORION_VAULT_PATH`. Plugins come through the `amoorion.plugins` entry
+points (Q7), guide in `docs/plugins.md`. New methods `accounts` and
+`reply`. Phase 2 began with the Bluesky plugin. Q9–Q10 opened.

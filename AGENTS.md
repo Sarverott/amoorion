@@ -12,7 +12,7 @@ they differ, this file wins for this repository.
 One tool to post to publication platforms (X, Bluesky, Tumblr, Blogger,
 Facebook), talk through communication platforms (Discord, Telegram, Matrix)
 and link them with the rest (e-mail, webhooks, ntfy, NATS). **Early stage:**
-the core works end to end with the `dryrun` platform; no real platform yet.
+the core works end to end; Bluesky is the first platform, tested only against a fake server.
 
 Read first:
 
@@ -21,6 +21,7 @@ Read first:
 3. [docs/devlog/BRAINSTORM.md](docs/devlog/BRAINSTORM.md): open questions `Q<n>`
 4. [docs/changelog/](docs/changelog/): how it got here, answered orders and decisions
 5. [docs/structure.md](docs/structure.md): the shape of `src/amoorion/`
+6. [docs/plugins.md](docs/plugins.md): how to write a platform plugin
 
 The author's answers come in [docs/devlog/ORDERS.md](docs/devlog/ORDERS.md)
 (empty between batches).
@@ -32,6 +33,7 @@ uv sync                  # tools from PyPI: task, commitizen, lefthook, yamllint
 uv run task setup        # + lefthook git hooks
 uv run task check        # tests, YAML, commits (= CI)
 uv run task test         # pytest only
+uv run task help         # help of the CLI and every subcommand
 uv run amoorion          # run the CLI
 ```
 
@@ -69,7 +71,9 @@ docs/.agents/          agent notes (see below)
 3. **Secrets only from the vault.** `.env` holds only the link to it; never
    commit tokens or passwords.
 4. **Everything is a method.** A new operation goes into `methods/`, not
-   into one front-end; CLI, API and MCP pick it up. Platforms are plugins.
+   into one front-end; CLI, API and MCP pick it up (add new subcommands to
+   `SUBCOMMANDS` in Taskfile.yml; a test checks it). Platforms are plugins,
+   tested against fakes of their APIs, never real accounts.
 5. **Ask first** before tagging a release, publishing a package or posting
    to any real platform account. Pushing `development` is allowed.
 6. **Branches:** BOS flow `master` → `development` → `revision` → `testing`

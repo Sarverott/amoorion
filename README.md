@@ -5,8 +5,9 @@ Universal tool for administration of chatting and communication platforms
 
 ## **EARLY STAGE OF PROJECT**
 
-The core works end to end with a `dryrun` platform that sends nothing; no
-real platform is connected yet. Plan: [docs/devlog/VISION.md](docs/devlog/VISION.md).
+The core works end to end. First platform: Bluesky (tested against a fake
+server, not yet against a real account); `dryrun` sends nothing, for trying.
+Plan: [docs/devlog/VISION.md](docs/devlog/VISION.md).
 
 ---
 
@@ -42,8 +43,11 @@ with the services around it.
 One core (model, view, controller) and namespaces on it: **plugins** (one
 per platform), **methods** (what amoorion can do), and the faces that expose
 the methods: **CLI**, **HTTP API**, **MCP** server for AI agents, and a
-**daemon** for long-running services. Secrets come only from a **vault**;
-`.env` holds just the link to it. Details: [docs/structure.md](docs/structure.md).
+**daemon** for long-running services. Secrets come only from a **vault**
+(Bitwarden / Vaultwarden, HashiCorp Vault / OpenBao, or a KeePassXC file);
+`.env` holds just the link to it. Plugins can also come from separate
+packages. Details: [docs/structure.md](docs/structure.md), writing a plugin:
+[docs/plugins.md](docs/plugins.md).
 
 ## Usage
 
@@ -52,8 +56,11 @@ uv sync
 cp example.env .env                          # the link to the vault
 
 uv run amoorion plugins                      # platforms and what they can do
-uv run amoorion publish --text "hello" --to dryrun
-uv run amoorion --json read --platform dryrun
+uv run amoorion accounts                     # which have their secrets in the vault
+uv run amoorion publish --text "hello" --to dryrun bluesky
+uv run amoorion --json read --platform bluesky
+uv run amoorion reply --platform bluesky --to "at://…" --text "thanks"
+uv run task help                             # help of every command
 
 uv run amoorion api                          # HTTP API on 127.0.0.1:8000
 uv run amoorion mcp                          # MCP server (stdio) for agents
@@ -62,8 +69,8 @@ uv run amoorion daemon                       # long-running services
 
 The API needs the secret `api/token` in the vault (sent as `Authorization:
 Bearer`), and every hook its own secret; without them they refuse calls.
-With the development `env` vault, secrets are environment variables:
-`api/token` is `AMOORION_SECRET_API_TOKEN`.
+Where each backend keeps a secret: [docs/structure.md](docs/structure.md#vault).
+Bluesky needs `bluesky/username` and `bluesky/password` (an app password).
 
 Run locally first; a Dockerfile and compose come next (phase 5 of the plan).
 
