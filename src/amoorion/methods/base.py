@@ -11,7 +11,7 @@ from pydantic import Field
 
 from amoorion.core import Controller, Model, Registry, View
 from amoorion.models import Message, Post, Result
-from amoorion.plugins import PLUGINS, Capability, open_plugin
+from amoorion.plugins import FAILED, PLUGINS, Capability, open_plugin
 from amoorion.vault import Vault, open_vault
 
 
@@ -48,6 +48,7 @@ class PluginInfo(Model):
     name: str
     description: str
     capabilities: list[Capability]
+    error: str | None = None
 
 
 @METHODS.register
@@ -60,6 +61,9 @@ class Plugins(Method):
         return [
             PluginInfo(name=plugin.name, description=plugin.description, capabilities=sorted(plugin.capabilities))
             for plugin in map(PLUGINS.get, PLUGINS.names())
+        ] + [
+            PluginInfo(name=name, description="failed to load", capabilities=[], error=error)
+            for name, error in sorted(FAILED.items())
         ]
 
 

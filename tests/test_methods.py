@@ -14,8 +14,8 @@ def test_built_in_methods():
 
 
 def test_plugins_lists_dryrun(vault):
-    assert {"name": "dryrun", "description": Plugins(vault)()[0]["description"],
-            "capabilities": ["post", "read", "reply"]} in Plugins(vault)()
+    dryrun = next(info for info in Plugins(vault)() if info["name"] == "dryrun")
+    assert dryrun["capabilities"] == ["post", "read", "reply"] and dryrun["error"] is None
 
 
 def test_publish_reports_per_platform(vault):

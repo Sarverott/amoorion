@@ -41,3 +41,45 @@ def test_plugin_secret_is_named_by_platform(vault, monkeypatch):
 def test_unknown_plugin(vault):
     with pytest.raises(AmoorionError):
         open_plugin("nope", vault)
+
+
+class FakeEntryPoint:
+    def __init__(self, name, target):
+        self.name, self.value, self._target = name, f"fake:{name}", target
+
+    def load(self):
+        if isinstance(self._target, Exception):
+            raise self._target
+        return self._target
+
+
+def test_dryrun_comes_from_an_entry_point():
+    from importlib.metadata import entry_points
+
+    from amoorion.plugins import ENTRY_POINTS
+
+    assert "dryrun" in {entry_point.name for entry_point in entry_points(group=ENTRY_POINTS)}
+
+
+def test_outside_plugins_load_and_failures_are_kept(monkeypatch):
+    from amoorion.plugins import base
+
+    class Outside(Plugin):
+        name = "outside"
+
+    monkeypatch.setattr(base, "PLUGINS", base.Registry("plugin"))
+    monkeypatch.setattr(base, "FAILED", {})
+    monkeypatch.setattr(
+        base,
+        "entry_points",
+        lambda group: [
+            FakeEntryPoint("outside", Outside),
+            FakeEntryPoint("broken", ImportError("no module named broken")),
+            FakeEntryPoint("notaplugin", object),
+            FakeEntryPoint("misnamed", Outside),
+        ],
+    )
+    base.load_plugins()
+    assert base.PLUGINS.names() == ["outside"]
+    assert set(base.FAILED) == {"broken", "notaplugin", "misnamed"}
+    assert "ImportError" in base.FAILED["broken"]

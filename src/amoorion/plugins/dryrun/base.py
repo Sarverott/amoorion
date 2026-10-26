@@ -5,10 +5,9 @@ from itertools import count
 from typing import ClassVar
 
 from amoorion.models import Message, Post
-from amoorion.plugins.base import PLUGINS, Capability, Plugin
+from amoorion.plugins.base import Capability, Plugin
 
 
-@PLUGINS.register
 class DryRun(Plugin):
     name: ClassVar[str] = "dryrun"
     description: ClassVar[str] = "sends nothing; remembers posts for the running process"

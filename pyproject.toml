@@ -22,6 +22,10 @@ dependencies = [
 [project.scripts]
 amoorion = "amoorion:main"
 
+# Platform plugins, found through this group; outside packages add theirs the same way.
+[project.entry-points."amoorion.plugins"]
+dryrun = "amoorion.plugins.dryrun:DryRun"
+
 [project.optional-dependencies]
 keepassxc = [
     "pykeepass>=4.2.0",
