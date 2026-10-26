@@ -49,3 +49,11 @@ def test_accounts_tells_what_is_missing_without_values(vault, monkeypatch):
     assert statuses["dryrun"]["ready"]
     assert statuses["needy"]["missing"] == ["user"] and not statuses["needy"]["ready"]
     assert "hidden-value" not in str(statuses)
+
+
+def test_reply_by_id(vault):
+    from amoorion.methods import Reply
+
+    [published] = Publish(vault)(text="question", to=["dryrun"])
+    answer = Reply(vault)(platform="dryrun", to=published["message"]["id"], text="answer")
+    assert answer["reply_to"] == published["message"]["id"]

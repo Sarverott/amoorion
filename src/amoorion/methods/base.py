@@ -129,3 +129,20 @@ class Read(Method):
 
     def run(self, params: ReadParams) -> list[Message]:
         return open_plugin(params.platform, self.vault).read(params.limit)
+
+
+class ReplyParams(Model):
+    platform: str
+    to: str = Field(description="id of the message to answer, as read or publish gave it")
+    text: str = Field(min_length=1)
+
+
+@METHODS.register
+class Reply(Method):
+    name: ClassVar[str] = "reply"
+    description: ClassVar[str] = "Answer one message on its platform"
+    Params: ClassVar[type[Model]] = ReplyParams
+
+    def run(self, params: ReplyParams) -> Message:
+        to = Message(platform=params.platform, text="", id=params.to)
+        return open_plugin(params.platform, self.vault).reply(to, params.text)
