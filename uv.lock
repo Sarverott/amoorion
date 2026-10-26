@@ -11,6 +11,7 @@ members = [
     "amoorion",
     "amoorion-bluesky",
     "amoorion-mastodon",
+    "amoorion-tumblr",
     "amoorion-x",
 ]
 
@@ -37,6 +38,7 @@ keepassxc = [
 dev = [
     { name = "amoorion-bluesky" },
     { name = "amoorion-mastodon" },
+    { name = "amoorion-tumblr" },
     { name = "amoorion-x" },
     { name = "commitizen" },
     { name = "go-task-bin" },
@@ -64,6 +66,7 @@ provides-extras = ["keepassxc"]
 dev = [
     { name = "amoorion-bluesky", editable = "packages/amoorion-bluesky" },
     { name = "amoorion-mastodon", editable = "packages/amoorion-mastodon" },
+    { name = "amoorion-tumblr", editable = "packages/amoorion-tumblr" },
     { name = "amoorion-x", editable = "packages/amoorion-x" },
     { name = "commitizen", specifier = ">=4.19.3" },
     { name = "go-task-bin", specifier = ">=3.54.0" },
@@ -95,6 +98,21 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "amoorion", editable = "." }]
+
+[[package]]
+name = "amoorion-tumblr"
+version = "0.1.0"
+source = { editable = "packages/amoorion-tumblr" }
+dependencies = [
+    { name = "amoorion" },
+    { name = "requests-oauthlib" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "amoorion", editable = "." },
+    { name = "requests-oauthlib", specifier = ">=2.0.0" },
+]
 
 [[package]]
 name = "amoorion-x"

@@ -39,6 +39,7 @@ build-backend = "uv_build"
 dev = [
     "amoorion-bluesky",
     "amoorion-mastodon",
+    "amoorion-tumblr",
     "amoorion-x",
     "commitizen>=4.19.3",
     "go-task-bin>=3.54.0",
@@ -69,3 +70,4 @@ members = ["packages/*"]
 amoorion-bluesky = { workspace = true }
 amoorion-mastodon = { workspace = true }
 amoorion-x = { workspace = true }
+amoorion-tumblr = { workspace = true }
