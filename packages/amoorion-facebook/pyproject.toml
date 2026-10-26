@@ -1,0 +1,23 @@
+[project]
+name = "amoorion-facebook"
+version = "0.1.0"
+description = "Facebook plugin of amoorion: post, read and comment on a Page through the Graph API"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+]
+
+[project.entry-points."amoorion.plugins"]
+facebook = "amoorion_facebook:Facebook"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"
