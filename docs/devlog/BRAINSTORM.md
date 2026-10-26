@@ -37,3 +37,21 @@ and a post sent by mistake can only be removed by hand on each platform.
 
 *Lean:* a `delete` capability and method; the live test then deletes its
 own test post and reply.
+
+## Q15: releases and packages
+
+The inquiry's release workflows are in place (docs/releasing.md); a few
+choices in them are the author's to confirm before the first merge to
+`master`:
+
+- "git package": the built wheels and source archives attached to each
+  GitHub release. GitHub Packages has no Python registry; a container
+  image on ghcr.io fits phase 6 (Dockerfile). Enough, or the image now?
+- one version for all packages (lock-step), bumped together; or each
+  plugin package versioned on its own (more work per release)?
+- the PyPI names `amoorion` and `amoorion-<platform>`, ten projects, each
+  with a trusted publisher; and the `pypi` environment with or without a
+  required reviewer.
+
+*Lean:* release assets now and the image in phase 6, lock-step versions,
+the `pypi` environment with the author as required reviewer.

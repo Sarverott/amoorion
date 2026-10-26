@@ -67,6 +67,20 @@ version_provider = "uv"
 tag_format = "v$version"
 update_changelog_on_bump = true
 major_version_zero = true
+# Every package of the workspace is released with the same version.
+version_files = [
+    "packages/amoorion-blogger/pyproject.toml:^version",
+    "packages/amoorion-bluesky/pyproject.toml:^version",
+    "packages/amoorion-discord/pyproject.toml:^version",
+    "packages/amoorion-facebook/pyproject.toml:^version",
+    "packages/amoorion-mastodon/pyproject.toml:^version",
+    "packages/amoorion-matrix/pyproject.toml:^version",
+    "packages/amoorion-telegram/pyproject.toml:^version",
+    "packages/amoorion-tumblr/pyproject.toml:^version",
+    "packages/amoorion-x/pyproject.toml:^version",
+]
+# uv.lock records the packages' versions too.
+pre_bump_hooks = ["uv lock"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "packages"]

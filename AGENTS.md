@@ -65,7 +65,7 @@ docs/                  the docs site (Sphinx + MyST, conf.py, Taskfile.yml); API
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
 docs/.agents/          agent notes (see below)
-.github/               community files, workflows (check = task check)
+.github/               community files, workflows: check (= task check), release, publish
 ```
 
 ## Rules for agents
@@ -92,7 +92,9 @@ docs/.agents/          agent notes (see below)
    packages in `packages/`, tested against fakes of their APIs, never real
    accounts.
 5. **Ask first** before tagging a release, publishing a package or posting
-   to any real platform account. Pushing `development` is allowed.
+   to any real platform account. Pushing `development` is allowed. A push
+   to `master` releases and publishes by itself
+   ([docs/releasing.md](docs/releasing.md)), so agents never push there.
 6. **Branches:** BOS flow `master` → `development` → `revision` → `testing`
    → `releasing` → `master` via PR. Work on `development`.
 7. **Commits:** one per finished step, gated on `task check`, conventional

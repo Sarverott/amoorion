@@ -1,0 +1,65 @@
+# A push to master (a merged pull request too) makes a release: commitizen
+# bumps every package to the next version from the conventional commits,
+# writes CHANGELOG.md, tags it and pushes; the tag becomes a GitHub release,
+# and the publish workflow builds and publishes the packages.
+name: release
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # The bump commit itself is pushed with the workflow's token, which starts
+    # no workflow; this is a second guard against releasing a release.
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump:') }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install tools
+        run: uv sync --frozen
+
+      - name: Check
+        run: uv run --frozen task check
+
+      - name: Bump the version
+        id: bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          before=$(uv run -q --frozen cz version --project)
+          # Nothing to release is no failure: 3, no commits since the last
+          # release; 21, none of them asks for a new version (docs only…).
+          uv run -q --frozen cz --no-raise 3,21 bump --yes
+          after=$(uv run -q --frozen cz version --project)
+          if [ "$before" != "$after" ]; then
+            echo "tag=v$after" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push the bump and its tag
+        if: steps.bump.outputs.tag
+        run: git push --atomic origin HEAD:master "${{ steps.bump.outputs.tag }}"
+
+      - name: Create the GitHub release
+        if: steps.bump.outputs.tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.bump.outputs.tag }}
+        run: |
+          uv run -q --frozen cz changelog "${TAG#v}" --dry-run > notes.md
+          gh release create "$TAG" --title "amoorion $TAG" --notes-file notes.md
+          # A release made with this token starts no workflow by itself.
+          gh workflow run publish.yml --ref "$TAG" -f tag="$TAG"

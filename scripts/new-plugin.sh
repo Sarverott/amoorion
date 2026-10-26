@@ -8,6 +8,8 @@ if [ $# -ne 3 ]; then
 fi
 platform=$1 class=$2 description=$3
 root=$(cd "$(dirname "$0")/.." && pwd)
+# Released with the same version as every package (lock-step).
+version=$(sed -n 's/^version = "\(.*\)"$/\1/p' "$root/pyproject.toml" | head -1)
 pkg=$root/packages/amoorion-$platform
 module=amoorion_${platform//-/_}
 if [ -e "$pkg" ]; then
@@ -18,7 +20,7 @@ mkdir -p "$pkg/src/$module" "$pkg/tests"
 cat > "$pkg/pyproject.toml" <<TOML
 [project]
 name = "amoorion-$platform"
-version = "0.1.0"
+version = "$version"
 description = "$description"
 readme = "README.md"
 license = "MIT"
@@ -79,6 +81,10 @@ text = open("pyproject.toml").read()
 line = f"amoorion-{platform} = {{ workspace = true }}\n"
 if line not in text:
     text = text.replace("[tool.uv.sources]\n", "[tool.uv.sources]\n" + line)
+# commitizen bumps its version with the others.
+entry = f'    "packages/amoorion-{platform}/pyproject.toml:^version",\n'
+if entry not in text:
+    text = text.replace("version_files = [\n", "version_files = [\n" + entry)
 open("pyproject.toml", "w").write(text)
 PYEDIT
 uv add --dev "amoorion-$platform"
