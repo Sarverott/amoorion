@@ -49,3 +49,17 @@ bot, post only); reading and replying need a bot token and the gateway.
 lighter `discord-webhook` way to post.
 
 **Decision:** both, the bot and the channel webhook, as options.
+
+## UNIXUSAT=1793003573783 · commit 5a1cd16
+
+The orders carried out. Messages received are kept in an inbox, a SQLite
+file set by `AMOORION_INBOX` in `.env`: `read` and the hooks fill it,
+the new `inbox` method lists it (Q11); rules on top come in phase 4.
+Discord is one package with both ways (Q12): `discord`, a bot that posts,
+reads and replies in a channel, and `discord-webhook`, which only posts;
+neither pings anyone. Telegram (a bot in one chat) and Matrix (one room)
+followed. Errors no longer show secrets that sit in URLs (Telegram's token,
+a webhook's). For each platform a live test is ready (`task test:live --
+<platform>…`): one marked post, read back and answered; it runs only for
+the platforms named and has not been run (Q13). Still open in phase 3:
+listening live through each platform's gateway or sync. Q14 opened.

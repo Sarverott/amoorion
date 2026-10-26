@@ -22,3 +22,18 @@ can, and prints the links (no plugin deletes yet, so deleting is by hand).
 It covers the communication platforms of phase 3 too: Discord (bot and
 webhook), Telegram, Matrix. The author can run it alone, or name the
 platforms the agent may run it for.
+
+## Q14: deleting posts
+
+No plugin can delete. The live tests (Q13) leave their test posts behind,
+and a post sent by mistake can only be removed by hand on each platform.
+
+- no deleting: amoorion only adds; mistakes are fixed by hand
+- a `delete` capability and method (`amoorion delete --platform x --id …`),
+  where the platform allows it (all but Blogger by mail and the Discord
+  webhook without its message id kept; Telegram only within 48 hours in
+  groups), not `read_only`, so agents get it only as a destructive tool
+- only inside the live tests, through each platform's API directly
+
+*Lean:* a `delete` capability and method; the live test then deletes its
+own test post and reply.
