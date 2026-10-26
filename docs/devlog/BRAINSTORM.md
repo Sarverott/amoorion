@@ -2,27 +2,32 @@
 
 Open questions. Each `Q<n>` gets a **Decision:** when the author answers it
 in [ORDERS.md](ORDERS.md); answered ones move to `docs/changelog/`.
+Q1–Q5 are answered: [../changelog/phase-0.md](../changelog/phase-0.md).
 
-## Q1: shape of the tool
+## Q6: which vault
 
-CLI only, a long-running daemon (bots, webhooks, NATS listeners), or both?
+Secrets come from a vault (Q3). Which one does amoorion talk to first?
 
-## Q2: adapter model
+- HashiCorp Vault / OpenBao, KV v2 over HTTP (`requests` is already a
+  dependency; a token or AppRole in `.env` establishes the link)
+- Bitwarden / Vaultwarden through the `bw` CLI (client-side decryption, so
+  no plain HTTP API)
+- KeePassXC database file
 
-One common interface for every platform (post, read, reply), with
-per-platform plugins; or loose per-platform modules first?
+*Lean:* OpenBao / HashiCorp Vault KV v2 first; the backend sits behind
+`amoorion.vault.base.Vault`, so others can follow.
 
-## Q3: secrets
+## Q7: per-platform plugins "with …"
 
-Where platform tokens live: environment / `.env`, `.BOS/setup/`, a
-vault (e.g. Vaultwarden of the zone)?
+The answer to Q2 ends in "adopt per-platform plugins with". With what?
 
-## Q4: deployment
+*Lean:* with Python entry points (group `amoorion.plugins`), so a platform
+can live in this repository (`src/amoorion/plugins/<platform>/`) or as a
+separate package, and one shared interface (`post`, `read`, `reply`).
 
-Run locally only, or as a container on the zone (`rs-tech-infra`, which
-already has ntfy)?
+## Q8: `dotenv` package
 
-## Q5: licence
+`pyproject.toml` has `dotenv`, a shim that only installs `python-dotenv`.
+Depend on `python-dotenv` directly?
 
-The repository carries MIT (2024). Keep it, or align with MPL-2.0 used by
-rs-tech-brandstyle?
+*Lean:* yes.
