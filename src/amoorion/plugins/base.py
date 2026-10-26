@@ -29,6 +29,8 @@ class Unsupported(AmoorionError):
 
 class Plugin(Controller):
     capabilities: ClassVar[frozenset[Capability]] = frozenset()
+    # Keys this plugin reads from the vault as `<platform>/<key>`.
+    secrets: ClassVar[tuple[str, ...]] = ()
 
     def __init__(self, vault: Vault, view: View | None = None) -> None:
         super().__init__(view)

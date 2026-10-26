@@ -10,7 +10,7 @@ def vault():
 
 
 def test_built_in_methods():
-    assert {"plugins", "publish", "read"} <= set(METHODS.names())
+    assert {"accounts", "plugins", "publish", "read"} <= set(METHODS.names())
 
 
 def test_plugins_lists_dryrun(vault):
@@ -32,3 +32,20 @@ def test_read_after_publish(vault):
 def test_params_are_validated(vault):
     with pytest.raises(ValueError):
         Publish(vault)(text="x", to=[])
+
+
+def test_accounts_tells_what_is_missing_without_values(vault, monkeypatch):
+    from amoorion.methods import Accounts
+    from amoorion.plugins import PLUGINS, Plugin
+
+    class Needy(Plugin):
+        name = "needy"
+        secrets = ("token", "user")
+
+    monkeypatch.setitem(PLUGINS._items, "needy", Needy)
+    monkeypatch.setenv("AMOORION_SECRET_NEEDY_TOKEN", "hidden-value")
+    monkeypatch.delenv("AMOORION_SECRET_NEEDY_USER", raising=False)
+    statuses = {status["platform"]: status for status in Accounts(vault)()}
+    assert statuses["dryrun"]["ready"]
+    assert statuses["needy"]["missing"] == ["user"] and not statuses["needy"]["ready"]
+    assert "hidden-value" not in str(statuses)

@@ -21,7 +21,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [ ] First real vault backend (Q6)
 - [ ] Plugin loading from outside packages (Q7)
 - [x] `dotenv` → `python-dotenv` (Q8)
-- [ ] `accounts` method: which platforms have their secrets in place
+- [x] `accounts` method: which platforms have their secrets in place
 - [ ] Default platforms for `publish`
 
 Phases 2–5 (platforms, linking, deployment): see [VISION.md](VISION.md).

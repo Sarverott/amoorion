@@ -9,7 +9,7 @@ from typing import Any, ClassVar
 
 from pydantic import Field
 
-from amoorion.core import Controller, Model, Registry, View
+from amoorion.core import AmoorionError, Controller, Model, Registry, View
 from amoorion.models import Message, Post, Result
 from amoorion.plugins import FAILED, PLUGINS, Capability, open_plugin
 from amoorion.vault import Vault, open_vault
@@ -65,6 +65,33 @@ class Plugins(Method):
             PluginInfo(name=name, description="failed to load", capabilities=[], error=error)
             for name, error in sorted(FAILED.items())
         ]
+
+
+class AccountStatus(Model):
+    platform: str
+    ready: bool
+    missing: list[str] = []
+    error: str | None = None
+
+
+@METHODS.register
+class Accounts(Method):
+    name: ClassVar[str] = "accounts"
+    description: ClassVar[str] = "Which platforms have their secrets in the vault (values never shown)"
+    read_only: ClassVar[bool] = True
+
+    def run(self, params: Model) -> list[AccountStatus]:
+        statuses = []
+        for plugin in map(PLUGINS.get, PLUGINS.names()):
+            missing, error = [], None
+            for key in plugin.secrets:
+                try:
+                    self.vault.get(f"{plugin.name}/{key}")
+                except AmoorionError as failure:
+                    missing.append(key)
+                    error = error or str(failure)
+            statuses.append(AccountStatus(platform=plugin.name, ready=not missing, missing=missing, error=error))
+        return statuses
 
 
 class PublishParams(Post):
