@@ -66,3 +66,11 @@ amoorion without accounts.
 Tests go in the package's `tests/`; `task check` runs them with the rest.
 Test against a fake of the platform's API (a local HTTP server, as in every
 package's tests), never against real accounts.
+
+Every plugin also gets a **live test** without writing one:
+`tests/live/test_live.py` runs for each installed platform, posts one marked
+test post through `publish`, looks for it with `read` and answers it with
+`reply`, as far as the plugin can. It runs only for the platforms named,
+with the author's go-ahead: `uv run task test:live -- <platform>…`. A
+platform that can read but never sees its own posts goes into
+`READS_ONLY_OTHERS` there.

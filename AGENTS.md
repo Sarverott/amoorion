@@ -34,6 +34,7 @@ uv run task init         # fresh checkout: tools, lefthook hooks, .env, check
 uv run task setup        # tools (uv sync) and lefthook git hooks
 uv run task check        # tests, YAML, commits (= CI)
 uv run task test         # pytest only
+uv run task test:live -- <platform>…   # post for real (only with the author's go-ahead, Q13)
 uv run task help         # help of the CLI and every subcommand
 uv run task plugin:new -- <platform> <Class> "<description>"   # start a plugin package
 uv run amoorion          # run the CLI

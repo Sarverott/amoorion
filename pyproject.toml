@@ -64,8 +64,10 @@ major_version_zero = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "packages"]
-# Test modules of several packages may share a name.
-addopts = ["--import-mode=importlib"]
+# Test modules of several packages may share a name. Live tests post for
+# real: left out unless asked for (task test:live).
+addopts = ["--import-mode=importlib", "-m", "not live"]
+markers = ["live: posts on a real platform account (task test:live -- <platform>…)"]
 
 # Platform plugins, one package each (decision Q10).
 [tool.uv.workspace]

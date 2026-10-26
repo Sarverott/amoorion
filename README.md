@@ -84,6 +84,7 @@ Run locally first; a Dockerfile and compose come next (phase 5 of the plan).
 uv run task init               # tools, git hooks, .env, then check
 uv run task check              # tests, YAML, commit messages (= CI)
 uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform
+uv run task test:live -- bluesky mastodon    # one real test post on each platform named
 ```
 
 Plan and open questions: [docs/devlog/](docs/devlog/). Guide for agents and

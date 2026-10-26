@@ -60,6 +60,13 @@ tasks:
     cmds:
       - uv run --frozen pytest
 
+  test:live:
+    desc: 'Post for real on the platforms named: task test:live -- <platform>… (needs the go-ahead)'
+    cmds:
+      - uv run --frozen pytest tests/live -m live -s -rA
+    env:
+      AMOORION_LIVE: '{{.CLI_ARGS}}'
+
   test:quiet:
     desc: Run the tests quietly
     cmds:
