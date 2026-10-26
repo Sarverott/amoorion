@@ -24,7 +24,7 @@ What is being worked on now. Vision and the plan of all phases:
       guide in `docs/plugins.md`
 - [x] `dotenv` → `python-dotenv` (Q8)
 - [x] `accounts` method: which platforms have their secrets in place
-- [ ] Default platforms for `publish` (Q9)
+- [x] Default platforms for `publish`: none, `--to` stays required (Q9)
 
 ## Phase 2: publication platforms
 
