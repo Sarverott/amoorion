@@ -1,32 +1,27 @@
 # TODO
 
-What is being worked on now. Vision: [VISION.md](VISION.md). Questions:
-[BRAINSTORM.md](BRAINSTORM.md). History: [../changelog/](../changelog/).
+What is being worked on now. Vision and the plan of all phases:
+[VISION.md](VISION.md). Questions: [BRAINSTORM.md](BRAINSTORM.md). History:
+[../changelog/](../changelog/).
 
-## Phase 0: the skeleton
+## Phase 0: skeleton and core
 
 - [x] BOS anatomy: AGENTS.md, CLAUDE.md, Taskfile.yml, src/, docs/, tests/, .github/
 - [x] Tooling of the recent projects: uv, go-task, commitizen, lefthook,
       yamllint, pytest; CI `task check`
-- [ ] Settle the core questions (Q1–Q4) before the first adapter
+- [x] Settle the core questions (Q1–Q5)
+- [x] `core.py`: model, view, controller, registry
+- [x] Namespaces on the core: models, vault, plugins (+ dryrun), methods,
+      hooks (+ generic), cli, api, mcp, daemon
+- [x] `docs/structure.md`
+- [x] README with all we know
 
-## Phase 1: publication platforms
+## Phase 1: real vault and plugin loading
 
-- [ ] X (twitter) posting by API
-- [ ] Bluesky posting
-- [ ] Tumblr posting by API
-- [ ] Blogger posting by mail
-- [ ] Facebook posting
+- [ ] First real vault backend (Q6)
+- [ ] Plugin loading from outside packages (Q7)
+- [ ] `dotenv` → `python-dotenv` (Q8)
+- [ ] `accounts` method: which platforms have their secrets in place
+- [ ] Default platforms for `publish`
 
-## Phase 2: communication platforms
-
-- [ ] Discord
-- [ ] Telegram
-- [ ] Matrix
-
-## Phase 3: linking
-
-- [ ] E-mail client
-- [ ] Webhooks: standard links with GitLab, GitHub, Discord…
-- [ ] ntfy notifications
-- [ ] NATS (nats.io)
+Phases 2–5 (platforms, linking, deployment): see [VISION.md](VISION.md).
