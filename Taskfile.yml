@@ -60,6 +60,11 @@ tasks:
     cmds:
       - scripts/new-plugin.sh {{.CLI_ARGS}}
 
+  examples:build:
+    desc: Build the example notebooks with marimo into examples/build/ (not committed)
+    cmds:
+      - scripts/build-examples.sh
+
   test:
     desc: Run the tests (pytest)
     cmds:

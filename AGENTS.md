@@ -39,6 +39,7 @@ uv run task check        # tests, YAML, commits, docs build (= CI)
 uv run task test         # pytest only
 uv run task test:live -- <platform>…   # post for real (only with the author's go-ahead, Q13)
 uv run task help         # help of the CLI and every subcommand
+uv run task examples:build   # marimo builds of examples/ into examples/build/ (gitignored)
 uv run task docs:build   # docs into docs/_build/html (Sphinx, warnings are errors)
 uv run task docs:requirements   # docs/requirements.txt for Read the Docs, after a uv.lock change
 uv run task plugin:new -- <platform> <Class> "<description>"   # start a plugin package

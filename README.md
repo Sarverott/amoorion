@@ -88,7 +88,8 @@ uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform
 uv run task test:live -- bluesky mastodon    # one real test post on each platform named
 ```
 
-Examples of usage: Jupyter notebooks in [examples/](examples/). The docs
+Examples of usage: Jupyter notebooks in [examples/](examples/)
+(`uv run task examples:build` makes marimo notebooks and pages of them). The docs
 (this README, the guides, the plan and an API reference generated from the
 code) are built by Sphinx from [docs/](docs/) for Read the Docs.
 Plan and open questions: [docs/devlog/](docs/devlog/). Guide for agents and
