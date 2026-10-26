@@ -2,6 +2,33 @@
 
 Newest on top.
 
+## 2026-10-26: the first inquiry (docs, examples, releases)
+
+- The author's docs member asked for Python >=3.13; the workspace is pinned
+  to 3.12, so `uv lock` failed. Now >=3.12; Read the Docs builds on 3.13.
+  `.readthedocs.yaml` reindented for yamllint; its `docs/requirements.txt`
+  is exported from uv.lock (`task docs:requirements`), with `-e ./…` lines
+  that pip resolves from the checkout root, as Read the Docs runs it.
+- The first docs build hung: autosummary imports every module, and
+  `amoorion/api/__main__.py` started the server on import. All `__main__`
+  modules are guarded now.
+- docs/conf.py rewrites relative links that leave docs/ (README → LICENSE,
+  packages/…) to GitHub at `READTHEDOCS_GIT_IDENTIFIER` (else `master`);
+  notebooks are copied from examples/ into docs/examples/ at build time.
+- Notebooks were written by a throwaway generator and saved with outputs;
+  `tests/test_examples.py` runs them. marimo (group `examples`) converts
+  and exports them in `task examples:build`; cell order held, since marimo
+  keeps notebook order among independent cells.
+- Release: `GITHUB_TOKEN` pushes and releases start no workflow, so
+  `release.yml` starts `publish.yml` by `workflow_dispatch` (the one event
+  that token may trigger). PyPI trusted publishing doesn't accept reusable
+  workflows, which is why publish is its own top-level workflow. cz exits
+  3 / 21 when nothing is to release; `--no-raise 3,21` (a global option,
+  before `bump`). Lock-step versions through `version_files`, `uv lock` as
+  pre-bump hook; tried in a throwaway clone (0.1.0 → 0.2.0, one commit).
+- Not tried for real: the workflows on GitHub (no push to master was made)
+  and the Read the Docs build.
+
 ## 2026-10-26: orders of phase 3 carried out
 
 - Inbox (Q11): `amoorion.inbox`, SQLite at `AMOORION_INBOX` (default
