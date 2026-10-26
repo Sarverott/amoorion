@@ -17,3 +17,22 @@ amoorion = "amoorion:main"
 [build-system]
 requires = ["uv_build>=0.12.20,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.19.3",
+    "go-task-bin>=3.54.0",
+    "lefthook>=2.2.2",
+    "pytest>=9.1.1",
+    "yamllint>=1.38.0",
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_provider = "uv"
+tag_format = "v$version"
+update_changelog_on_bump = true
+major_version_zero = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

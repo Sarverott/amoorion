@@ -1,0 +1,6 @@
+# https://lefthook.dev — git hooks, installed by `task setup`
+
+commit-msg:
+  commands:
+    commitizen:
+      run: uv run --frozen cz check --allow-abort --commit-msg-file {1}

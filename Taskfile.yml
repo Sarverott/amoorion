@@ -1,0 +1,44 @@
+# https://taskfile.dev — entry point of amoorion.
+# Run through uv (`uv run task <name>`) or any go-task v3 on PATH.
+
+version: '3'
+
+vars:
+  # Commits up to this one were made before commitizen was set up.
+  COMMITS_FROM: 743498f
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  setup:
+    desc: Install the tools (uv sync) and git hooks (lefthook)
+    cmds:
+      - uv sync --frozen
+      - uv run --frozen lefthook install
+
+  run:
+    desc: Run the amoorion CLI
+    cmds:
+      - uv run --frozen amoorion {{.CLI_ARGS}}
+
+  test:
+    desc: Run the tests (pytest)
+    cmds:
+      - uv run --frozen pytest -q
+
+  check:
+    desc: Run every static check (same as CI)
+    deps: [test, check:yaml, check:commits]
+
+  check:yaml:
+    desc: Lint YAML files
+    cmds:
+      - uv run --frozen yamllint --strict .
+
+  check:commits:
+    desc: Check that commit messages follow commitizen
+    cmds:
+      - uv run --frozen cz check --rev-range {{.COMMITS_FROM}}..HEAD
