@@ -22,6 +22,11 @@ dependencies = [
 [project.scripts]
 amoorion = "amoorion:main"
 
+[project.optional-dependencies]
+keepassxc = [
+    "pykeepass>=4.2.0",
+]
+
 [build-system]
 requires = ["uv_build>=0.12.20,<0.13.0"]
 build-backend = "uv_build"
@@ -32,6 +37,7 @@ dev = [
     "go-task-bin>=3.54.0",
     "httpx>=0.28.1",
     "lefthook>=2.2.2",
+    "pykeepass>=4.2.0",
     "pytest>=9.1.1",
     "yamllint>=1.38.0",
 ]
