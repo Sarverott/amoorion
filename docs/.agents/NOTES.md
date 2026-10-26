@@ -2,6 +2,26 @@
 
 Newest on top.
 
+## 2026-10-26: orders of phase 2 carried out
+
+- The author's `init` task had `deps: [setup, check, init:env]`: deps run
+  in parallel, and `cp example.env .env` would overwrite a filled-in `.env`.
+  Now sequential cmds, and `init:env` has `status: test -f .env`.
+- Bug found while writing X: `amoorion.plugins` loaded entry points on
+  import; a plugin package imported first was loaded half-imported, failed
+  silently into FAILED. Plugins now load on first use (`load_plugins()`),
+  regression test in `tests/test_plugins.py`.
+- Assumptions to check against the real APIs (Q13):
+  - Facebook: token sent as `Authorization: Bearer` (never in URLs);
+    default Graph version `v24.0`, overridable by `facebook/uri`.
+  - X: reading timelines needs a paid access tier; posting works on free.
+  - X weights and Bluesky graphemes are approximations; the servers decide.
+  - Tumblr returns the new post's id as `id` or `id_string`; both handled.
+- Blogger keeps its own SMTP secrets (`blogger/smtp-*`); the e-mail client
+  of phase 4 may want shared `mail/*` keys later.
+- pytest runs with `--import-mode=importlib` so packages' test modules may
+  share names.
+
 ## 2026-10-26: orders of phase 1 carried out
 
 - The author's `help` task called `task: run -- -h`, which Task reads as a

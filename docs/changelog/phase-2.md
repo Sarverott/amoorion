@@ -51,3 +51,14 @@ phases 2–4 be
 cheap, since both use the same entry point.
 
 **Decision:** one package each, as a uv workspace in this repository.
+
+## UNIXUSAT=1792988670459 · commit 200c81f
+
+The orders carried out. The author's `init` task runs its steps in order
+and keeps an existing `.env`. `--to` stays required (Q9). The repository
+is a uv workspace: every platform is its own package in `packages/` (Q10),
+Bluesky moved there; new: Mastodon (ordered), X, Tumblr, Blogger by mail,
+Facebook, all on a shared `HttpPlugin` (except Blogger, SMTP), all tested
+against fakes of their APIs only. `task plugin:new` starts a package.
+Plugins now load on first use: imported before `amoorion.plugins`, a
+plugin package was loaded half-imported and went missing. Q11–Q13 opened.
