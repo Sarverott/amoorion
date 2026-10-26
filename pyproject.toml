@@ -9,7 +9,13 @@ authors = [
     { name = "Sett Sarverott", email = "sett@sarverott.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastapi>=0.162.0",
+    "mcp[cli]>=2.3.0",
+    "requests>=2.34.2",
+    "rich>=15.0.0",
+]
 
 [project.scripts]
 amoorion = "amoorion:main"
