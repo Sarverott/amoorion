@@ -6,8 +6,19 @@ version: '3'
 vars:
   # Commits up to this one were made before commitizen was set up.
   COMMITS_FROM: 743498f
+  # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
+  SUBCOMMANDS: [plugins, publish, read, api, mcp, daemon]
 
 tasks:
+  help:
+    desc: Show the help of amoorion and of every subcommand
+    cmds:
+      - task: run
+        vars: {CLI_ARGS: -h}
+      - for: {var: SUBCOMMANDS}
+        task: run
+        vars: {CLI_ARGS: '{{.ITEM}} -h'}
+
   default:
     cmds:
       - task --list
@@ -27,11 +38,16 @@ tasks:
   test:
     desc: Run the tests (pytest)
     cmds:
+      - uv run --frozen pytest
+
+  test:quiet:
+    desc: Run the tests quietly
+    cmds:
       - uv run --frozen pytest -q
 
   check:
     desc: Run every static check (same as CI)
-    deps: [test, check:yaml, check:commits]
+    deps: [test:quiet, check:yaml, check:commits]
 
   check:yaml:
     desc: Lint YAML files
