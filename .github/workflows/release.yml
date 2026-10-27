@@ -39,7 +39,7 @@ jobs:
       - name: Is there a release to make?
         id: version
         run: |
-          version=$(uv run -q --frozen python scripts/version.py current)
+          version=$(uv run -q --frozen amoorion-dev version current)
           if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
             echo "v$version is released already"
           elif [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then

@@ -12,4 +12,4 @@ post-merge:
     pre-release:
       run: |
         [ "$(git branch --show-current)" = development ] || exit 0
-        uv run --frozen python scripts/version.py mark
+        uv run --frozen amoorion-dev version mark

@@ -1,5 +1,5 @@
 # A push to development readies the next release and proposes it:
-#   1. scripts/version.py final: the pre-release X.Y.Za0 becomes the version
+#   1. amoorion-dev version final: the pre-release X.Y.Za0 becomes the version
 #      the commits since the last release ask for, with its CHANGELOG.md
 #      section, committed as "bump: ..." and pushed back to development;
 #   2. the pull request development → master is opened (or kept up to date),
@@ -50,12 +50,12 @@ jobs:
           git config user.name "mr. Cravley, the git bot"
           git config user.email "mr.cravley@apokryf.online"
           before=$(git rev-parse HEAD)
-          uv run --frozen python scripts/version.py final
+          uv run --frozen amoorion-dev version final
           if [ "$(git rev-parse HEAD)" != "$before" ]; then
             git push origin HEAD:development
             echo "bumped=true" >> "$GITHUB_OUTPUT"
           fi
-          echo "version=$(uv run -q --frozen python scripts/version.py current)" >> "$GITHUB_OUTPUT"
+          echo "version=$(uv run -q --frozen amoorion-dev version current)" >> "$GITHUB_OUTPUT"
 
       - name: Check the bump commit
         # Pushed with this workflow's token, it starts no check by itself.

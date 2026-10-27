@@ -68,7 +68,7 @@ docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
 docs/.agents/          agent notes (see below)
 .github/               community files, workflows: check (= task check), flow, release, publish
-scripts/version.py     the versions of the release loop (mark, final)
+tools/amoorion-dev/     development tools: state, versions, phases, release notes, web page (task state)
 ```
 
 ## Rules for agents

@@ -61,12 +61,17 @@ tasks:
       - test "$(git branch --show-current)" = development
       - git pull --no-rebase --no-edit origin master
       # lefthook marks the pre-release; when hooks are off, mark here (it changes nothing twice).
-      - uv run --frozen python scripts/version.py mark
+      - uv run --frozen amoorion-dev version mark
 
   version:
     desc: Show the version of every package (released together)
     cmds:
-      - uv run --frozen python scripts/version.py current
+      - uv run --frozen amoorion-dev version current
+
+  state:
+    desc: 'The state of development (task state -- --online: also GitHub and PyPI)'
+    cmds:
+      - uv run --frozen amoorion-dev state {{.CLI_ARGS}}
 
   plugin:new:
     desc: 'Start a plugin package: task plugin:new -- <platform> <ClassName> "<description>"'

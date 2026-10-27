@@ -1,0 +1,26 @@
+# Settings of the release loop (docs/releasing.md), read by amoorion-dev.
+
+[repository]
+slug = "Sarverott/amoorion"
+docs = "https://amoorion.readthedocs.io/"
+
+# Who commits and tags in the workflows.
+[bot]
+name = "mr. Cravley, the git bot"
+email = "mr.cravley@apokryf.online"
+
+[branches]
+work = "development"
+release = "master"
+pages = "github-pages"
+
+[release]
+# A phase of TODO.md whose last item was ticked since the last release
+# releases by itself: the flow merges the release pull request after the
+# checks. Such a release raises at least the minor version.
+automerge_completed_phase = true
+
+[pypi]
+# PyPI creates only a few new projects an hour for an account.
+tries = 12
+pause = 900

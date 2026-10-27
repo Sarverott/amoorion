@@ -30,7 +30,7 @@ read from the installed package's metadata.
    (`.github/workflows/flow.yml`):
    - does nothing if development has only merges and `bump:` commits that
      master hasn't got (the pre-release mark alone is no release);
-   - otherwise runs `scripts/version.py final`: the version becomes the one
+   - otherwise runs `amoorion-dev version final`: the version becomes the one
      the commits since the last release tag ask for (breaking or `feat` →
      minor while `0.x`, anything else → patch), all packages and `uv.lock`
      follow, and `CHANGELOG.md` gets its section; committed as
