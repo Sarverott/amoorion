@@ -3,6 +3,8 @@ name: check
 
 on:
   push:
+    # The web page's branch holds built files only.
+    branches-ignore: [github-pages]
   pull_request:
   # Started by flow.yml for the commits it pushes (its token starts nothing by itself).
   workflow_dispatch:

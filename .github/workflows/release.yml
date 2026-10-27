@@ -1,9 +1,11 @@
-# A push to master (the merged pull request from development) releases the
-# version it carries: development made it final (flow.yml) and wrote its
-# CHANGELOG.md section, so nothing is committed here. The version is tagged
-# v<version>, the GitHub release gets that section as notes, and the publish
-# workflow builds and publishes the packages. Then pull master into
-# development (task flow:pull), which marks the next pre-release.
+# A push to master (the merged pull request from development, or the flow
+# merging a completed phase) releases the version it carries: development
+# made it final (flow.yml) and wrote its CHANGELOG.md section, so nothing is
+# committed here. The version is tagged v<version> by the bot; the GitHub
+# release gets notes of the commits (CHANGELOG.md) and of the story added
+# to docs/changelog/ since the last release (amoorion-dev notes); then the
+# packages are published (publish.yml) and the web page is built
+# (gh-pages.yml). Pull master into development after it (task flow:pull).
 name: release
 
 on:
@@ -55,10 +57,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         run: |
+          dev="uv run -q --frozen amoorion-dev"
+          $dev identity
           git tag "$TAG"
+          title=$($dev notes "$TAG" --title)
+          $dev notes "$TAG" > notes.md
+          git tag -f -a "$TAG" -m "$title"
           git push origin "$TAG"
-          # Its section of CHANGELOG.md: from its heading to the next one.
-          awk -v head="## $TAG " 'index($0, head) == 1 {on = 1; next} /^## v/ {on = 0} on' CHANGELOG.md > notes.md
-          gh release create "$TAG" --title "amoorion $TAG" --notes-file notes.md --verify-tag
-          # A release made with this token starts no workflow by itself.
+          gh release create "$TAG" --title "$title" --notes-file notes.md --verify-tag
+
+      - name: Publish the packages and build the web page
+        if: steps.version.outputs.tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        # A release made with this token starts no workflow by itself.
+        run: |
           gh workflow run publish.yml --ref "$TAG" -f tag="$TAG"
+          gh workflow run gh-pages.yml --ref "$TAG" -f tag="$TAG"

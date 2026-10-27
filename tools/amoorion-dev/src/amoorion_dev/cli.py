@@ -95,7 +95,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     notes.add_argument("tag")
     notes.add_argument("--title", action="store_true", help="only the release's title")
 
-    commands.add_parser("packages", help="the published packages, as JSON (for the publish workflow)")
+    packages = commands.add_parser("packages", help="the published packages, as JSON (for the publish workflow)")
+    packages.add_argument("--only", default="", help="only these, comma-separated (empty: all)")
+
+    setting = commands.add_parser("setting", help="a value of .github/flow.toml, e.g. pypi.tries")
+    setting.add_argument("key")
 
     site = commands.add_parser("site", help="build the web page")
     site.add_argument("--out", type=Path, default=Path("site"))
@@ -132,7 +136,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.command == "notes":
         print(release_notes.title(repo, args.tag) if args.title else release_notes.notes(repo, args.tag), end="\n" if args.title else "")
     elif args.command == "packages":
-        print(json.dumps(published(repo)))
+        only = {name.strip() for name in args.only.split(",") if name.strip()}
+        print(json.dumps([package for package in published(repo) if not only or package["name"] in only]))
+    elif args.command == "setting":
+        value: object = repo.settings()
+        for part in args.key.split("."):
+            if not isinstance(value, dict) or part not in value:
+                print(f"no {args.key} in .github/flow.toml", file=sys.stderr)
+                return 1
+            value = value[part]
+        print(json.dumps(value) if isinstance(value, bool) else value)
     elif args.command == "site":
         for path in web.build(repo, args.out, args.examples):
             console.print(f"wrote {path}")
