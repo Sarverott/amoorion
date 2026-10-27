@@ -26,3 +26,4 @@ site/
 
 # The posts of every profile (amoorion's dataset, Q14)
 dataset/
+!src/amoorion/dataset/
