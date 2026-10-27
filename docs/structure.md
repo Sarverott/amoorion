@@ -27,7 +27,7 @@ packages/            one package per platform, a uv workspace (Q10)
 
 | Package | Platform | Can | Through |
 | ------- | -------- | --- | ------- |
-| `amoorion-bluesky` | Bluesky | post, read, reply | AT Protocol (XRPC), app password |
+| `amoorion-bluesky` | Bluesky | post, read, reply, delete | AT Protocol (XRPC), app password |
 | `amoorion-mastodon` | Mastodon | post, read, reply | REST API, access token |
 | `amoorion-x` | X (twitter) | post, read, reply | API v2, OAuth 1.0a |
 | `amoorion-tumblr` | Tumblr | post, read | API v2 (Neue Post Format), OAuth 1.0a |

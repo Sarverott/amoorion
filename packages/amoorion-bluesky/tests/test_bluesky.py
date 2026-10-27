@@ -42,6 +42,10 @@ class FakePds(BaseHTTPRequestHandler):
             uri = f"at://{DID}/app.bsky.feed.post/rkey{len(self.records) + 1}"
             self.records.append({"uri": uri, "cid": f"cid{len(self.records) + 1}", "record": body["record"]})
             return self._send(200, {"uri": uri, "cid": self.records[-1]["cid"]})
+        if self.path == "/xrpc/com.atproto.repo.deleteRecord" and self._authorized():
+            uri = f"at://{body['repo']}/{body['collection']}/{body['rkey']}"
+            FakePds.records = [r for r in self.records if r["uri"] != uri]
+            return self._send(200, {})
 
     def do_GET(self):
         url = urlparse(self.path)
@@ -116,3 +120,18 @@ def test_wrong_password(bluesky, monkeypatch):
 def test_graphemes_and_plain_compose():
     assert graphemes("é") == 1 and graphemes("👍🏽") == 1
     assert compose(Post(text="plain")) == ("plain", [])
+
+
+def test_delete_removes_the_record(bluesky):
+    message = bluesky.post(Post(text="oops"))
+    kept = bluesky.post(Post(text="fine"))
+    bluesky.delete(message)
+    assert [m.id for m in bluesky.read()] == [kept.id]
+    assert bluesky.profile() == "me.bsky.social"
+
+
+def test_delete_only_own_posts(bluesky):
+    from amoorion.models import Message
+
+    with pytest.raises(AmoorionError, match="only posts of"):
+        bluesky.delete(Message(platform="bluesky", text="", id="at://did:plc:other/app.bsky.feed.post/x"))
