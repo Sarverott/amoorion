@@ -71,6 +71,8 @@ version_provider = "uv"
 tag_format = "v$version"
 # CHANGELOG.md is written by `amoorion-dev version final`, not on every bump.
 major_version_zero = true
+# The flow merges release pull requests as "Release v<version>…" (Q15).
+allowed_prefixes = ["Merge", "Revert", "Pull request", "fixup!", "squash!", "amend!", "Release v"]
 # Every package has its own version, written by `amoorion-dev version` (Q15).
 
 [tool.pytest.ini_options]
