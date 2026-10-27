@@ -1,7 +1,7 @@
 # amoorion-matrix
 
-Matrix plugin of [amoorion](../../README.md): posts, reads and replies in
-one room through the client-server API of any homeserver.
+Matrix plugin of [amoorion](../../README.md): posts, reads, replies and
+deletes (redacts) in one room through the client-server API of any homeserver.
 
 Secrets in amoorion's vault: `matrix/uri` (the homeserver, e.g.
 https://matrix.org), `matrix/token` (an access token of the account, e.g.
