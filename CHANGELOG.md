@@ -1,3 +1,8 @@
+## v0.3.5 (2026-10-27)
+
+**Packages:** amoorion 0.3.5
+
+
 ## v0.3.4 (2026-10-27)
 
 **Packages:** amoorion 0.3.4
