@@ -6,6 +6,10 @@
 
 - **dev**: a version per package (Q15): Z bumps amoorion and the packages changed since the last release, Y (a phase) and X (the last phase) all; packages --released lists what a release bumped
 
+### Fix
+
+- **commits**: the flow's merges of release pull requests ("Release v…") pass commitizen's check
+
 ## v0.3.1 (2026-10-27)
 
 ### Fix
