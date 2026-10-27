@@ -47,8 +47,11 @@ read from the installed package's metadata.
    committed on `master`, so it never moves ahead of development.
 5. Back to 1.
 
-A release made by hand on GitHub publishes too; a version already on PyPI
-is skipped.
+A release made by hand on GitHub publishes too. PyPI gets one package at a
+time, and files already there are skipped, so starting `publish` again
+for a tag goes on where it stopped. PyPI lets an account create only a few
+new projects an hour (`429 Too many new projects created`): the first
+release of new packages waits out that limit, 15 minutes at a time.
 
 The full BOS flow goes through `revision`, `testing` and `releasing`
 between development and master; this repository takes the short way,

@@ -22,6 +22,10 @@ Newest on top.
   `update_changelog_on_bump` is gone: it wrote sections for pre-releases.
 - The unmarking happens in the flow workflow, not in a pre-push hook: a
   commit made in pre-push is not part of that push.
+- v0.2.1 publish: PyPI answered `429 Too many new projects created` after
+  four new projects (amoorion, -blogger, -bluesky, -discord; wheels only).
+  The pypi job now uploads per package with `uv publish --check-url`
+  (skips what is there) and waits 15 min on a 429, up to 12 times.
 - Repository setting `can_approve_pull_request_reviews` is false: the flow
   workflow can't open the PR until the author allows it.
 

@@ -55,6 +55,9 @@ jobs:
   pypi:
     needs: build
     runs-on: ubuntu-latest
+    # PyPI lets an account create only a few new projects an hour; the first
+    # release of every package waits out that limit here.
+    timeout-minutes: 240
     environment:
       name: pypi
       url: https://pypi.org/project/amoorion/
@@ -64,8 +67,30 @@ jobs:
           name: dist
           path: dist/
 
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
-          # A package already on PyPI in this version (a release published again) is left as it is.
-          skip-existing: true
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Upload to PyPI, one package at a time
+        # bash with pipefail: a failing upload is not hidden by `tee`.
+        shell: bash
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          # Files already on PyPI are skipped, so a run started again goes on where one stopped.
+          CHECK_URL: https://pypi.org/simple/
+          TRIES: 12
+          PAUSE: 900
+        run: |
+          packages=$(ls dist | sed -E 's/-[0-9][^-]*(-py3-none-any\.whl|\.tar\.gz)$//' | sort -u)
+          for package in $packages; do
+            for try in $(seq "$TRIES"); do
+              files=(dist/"$package"-[0-9]*)
+              if uv publish --trusted-publishing never --check-url "$CHECK_URL" "${files[@]}" 2>&1 | tee log; then
+                break
+              fi
+              if ! grep -q "429" log || [ "$try" = "$TRIES" ]; then
+                echo "::error::$package was not uploaded"
+                exit 1
+              fi
+              echo "PyPI: too many new projects for now; $package again in $PAUSE s ($try/$TRIES)"
+              sleep "$PAUSE"
+            done
+          done
