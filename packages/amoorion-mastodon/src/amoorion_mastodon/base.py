@@ -10,6 +10,7 @@ before sending; links count as 23 characters, as Mastodon counts them.
 import uuid
 from html.parser import HTMLParser
 from typing import Any, ClassVar
+from urllib.parse import urlparse
 
 from amoorion.core import AmoorionError
 from amoorion.models import Account, Message, Post
@@ -60,8 +61,8 @@ def length(text: str, links: list[str]) -> int:
 
 class Mastodon(HttpPlugin):
     name: ClassVar[str] = "mastodon"
-    description: ClassVar[str] = "Mastodon (REST API): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
+    description: ClassVar[str] = "Mastodon (REST API): post, read, reply, delete"
+    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("uri", "token")
 
     _account: dict[str, Any] | None = None
@@ -119,3 +120,11 @@ class Mastodon(HttpPlugin):
         if not to.id:
             raise AmoorionError("mastodon needs the id of the status to reply to")
         return self._status(text, [], reply_to=to.id)
+
+    def delete(self, message: Message) -> None:
+        if not message.id:
+            raise AmoorionError("mastodon needs the id of the status to delete")
+        self._call("DELETE", f"/api/v1/statuses/{message.id}")
+
+    def profile(self) -> str:
+        return f"{self._me()['acct']}@{urlparse(self.secret('uri')).hostname}"

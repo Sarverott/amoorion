@@ -64,6 +64,16 @@ class FakeMastodon(BaseHTTPRequestHandler):
         self.statuses.append(status)
         self._send(200, status)
 
+    def do_DELETE(self):
+        if not self._authorized():
+            return
+        number = self.path.rsplit("/", 1)[-1]
+        found = [s for s in self.statuses if s["id"] == number]
+        if not self.path.startswith("/api/v1/statuses/") or not found:
+            return self._send(404, {"error": "Record not found"})
+        FakeMastodon.statuses = [s for s in self.statuses if s["id"] != number]
+        self._send(200, found[0] | {"text": "source"})
+
     def log_message(self, *args):
         pass
 
@@ -108,3 +118,13 @@ def test_text_helpers():
     assert to_text("<p>one<br />two</p><p>three</p>") == "one\ntwo\n\nthree"
     assert compose(Post(text="t", links=["https://a"], tags=["#x", "y"])) == "t\nhttps://a\n#x #y"
     assert length("see https://example.org/long", ["https://example.org/long"]) == 4 + 23
+
+
+def test_delete_a_status(mastodon):
+    gone = mastodon.post(Post(text="oops"))
+    kept = mastodon.post(Post(text="fine"))
+    mastodon.delete(gone)
+    assert [m.id for m in mastodon.read()] == [kept.id]
+    with pytest.raises(AmoorionError, match="404: Record not found"):
+        mastodon.delete(gone)
+    assert mastodon.profile() == "me@127.0.0.1"
