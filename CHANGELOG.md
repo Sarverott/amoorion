@@ -1,3 +1,11 @@
+## v0.3.3 (2026-10-27)
+
+**Packages:** amoorion 0.3.3
+
+### Fix
+
+- **dev**: a final that only renews the changelog commits as "bump: changelog of X", not "X → X"
+
 ## v0.3.2 (2026-10-27)
 
 **Packages:** amoorion 0.3.2
