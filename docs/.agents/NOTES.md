@@ -2,6 +2,28 @@
 
 Newest on top.
 
+## 2026-10-27: tools, phase releases, split publishing, web page, guided CLI
+
+- The author's inquiry ("github pages should contain builded examples")
+  landed in INQUIRIES.md while working and went into the plan commit
+  d369985 through `git add -A`; carried out with the web page.
+- `scripts/version.py` → `amoorion-dev version`; its tests moved to
+  `tools/amoorion-dev/tests/`. `amoorion-dev` is a workspace member, in
+  the dev group and the docs' dependencies, never in `packages`.
+- Phase release rule: complete now and not complete at the last release
+  tag. Phase 4 was complete at v0.2.1 (6/6), reopened with 7 items and
+  closed again, so it does not auto-release; the author decides PR #3.
+- `gh-pages.yml` deploys with actions/deploy-pages; Pages is not enabled
+  on the repository yet (API 404), so it fails until the author enables
+  it (Source: GitHub Actions).
+- Workflows untried on GitHub: the split publish, the phase merge, the
+  release notes in a real release, gh-pages. Tried locally: notes for
+  v0.2.1, the site with examples, all amoorion-dev commands.
+- PyPI after v0.2.1: 4 projects with wheels only; the rest comes with the
+  next publish (waiting out the 429 limit).
+- Killing a hung process with `pkill -f <pattern>` ended my own shell
+  twice (the pattern was in its command line): look the PID up first.
+
 ## 2026-10-27: release loop after the first release
 
 - The author merged development into master (PR #1): `release` bumped to

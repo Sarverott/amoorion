@@ -65,3 +65,30 @@ okidoki then. split our workflow and make each package publishing as internal ac
 
 Drawn into phase 4 (VISION.md items 5–8, TODO.md). The bot's identity in
 the workflows is the author's: mr. Cravley, the git bot.
+
+## UNIXUSAT=1793062999168 · commit e86848f
+
+The author's second inquiry (docs/devlog/INQUIRIES.md), word for word:
+
+````markdown
+--
+
+### github pages should contain builded examples
+````
+
+The order and the inquiry carried out. `tools/amoorion-dev`, a workspace
+package never published, holds the development tools behind one rich CLI:
+the state of development (also a page of the docs, made at every build),
+the versions of the loop (moved from scripts/version.py), the phases,
+release notes and the web page; the loop's settings are in
+`.github/flow.toml`. Releases now carry the commits and the story of
+`docs/changelog/` since the last release. A phase whose last item is ticked
+since the last release releases by itself (the flow merges its pull
+request). Publishing runs one job per package through the local action
+`.github/actions/publish-package`; every workflow can be started by hand;
+`gh-pages.yml` builds the web page with the marimo builds of the examples
+into the `github-pages` branch and GitHub Pages. `amoorion` alone asks step
+by step. The docs gather the devlog under one Development section, with
+`docs/.agents/MAP.md` and `GUIDE.md`, the map and the working guide for
+agents. Phase 4 is complete; it was complete at v0.2.1 already, so it
+doesn't release itself this time.
