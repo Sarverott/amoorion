@@ -10,6 +10,9 @@ inputs:
   package:
     description: name of the package, e.g. amoorion-bluesky
     required: true
+  version:
+    description: the version it must be built as (its own, Q15)
+    required: true
   tag:
     description: the release, e.g. v0.3.0
     required: true
@@ -38,12 +41,12 @@ runs:
       shell: bash
       env:
         PACKAGE: ${{ inputs.package }}
-        TAG: ${{ inputs.tag }}
+        VERSION: ${{ inputs.version }}
       run: |
         uv build --package "$PACKAGE" -o "dist/$PACKAGE"
-        # The files must carry the release's version.
-        if ! ls "dist/$PACKAGE" | grep -q -- "-${TAG#v}[-.]"; then
-          echo "::error::$PACKAGE was not built as ${TAG#v}"
+        # The files must carry the package's version.
+        if ! ls "dist/$PACKAGE" | grep -q -- "-${VERSION}[-.]"; then
+          echo "::error::$PACKAGE was not built as $VERSION"
           exit 1
         fi
 

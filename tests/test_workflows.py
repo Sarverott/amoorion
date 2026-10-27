@@ -32,3 +32,12 @@ def test_every_package_is_published_by_the_local_action():
 def test_the_bot_commits_as_set_in_flow_toml():
     for path in WORKFLOWS:
         assert "git config user." not in path.read_text(), f"{path.name}: use `amoorion-dev identity`"
+
+
+def test_a_release_merges_back_after_publishing_and_the_page():
+    jobs = load(GITHUB / "workflows" / "release.yml")["jobs"]
+    assert jobs["publish"]["uses"] == "./.github/workflows/publish.yml"
+    assert jobs["pages"]["uses"] == "./.github/workflows/gh-pages.yml"
+    assert set(jobs["back"]["needs"]) == {"release", "publish", "pages"}
+    for called in ("publish", "gh-pages"):
+        assert "workflow_call" in load(GITHUB / "workflows" / f"{called}.yml")["on"]

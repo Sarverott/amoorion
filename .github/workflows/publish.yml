@@ -1,20 +1,26 @@
-# A release publishes every package of the workspace, one job each, by the
-# local action .github/actions/publish-package: built, attached to the
-# GitHub release, uploaded to PyPI with the PYPI_TOKEN of the `pypi`
-# environment. Started by the release workflow, by a release made by hand,
-# or by hand for a tag (optionally only some packages).
+# A release publishes the packages it bumped (a Z release: amoorion and
+# the changed ones; X or Y: all), one job each, by the local action
+# .github/actions/publish-package: built, attached to the GitHub release,
+# uploaded to PyPI with the PYPI_TOKEN of the `pypi` environment. Called by
+# the release workflow; started by a release made by hand, or by hand for a
+# tag (optionally other packages).
 name: publish
 
 on:
   release:
     types: [published]
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
   workflow_dispatch:
     inputs:
       tag:
         description: tag of the release to publish, e.g. v0.3.0
         required: true
       packages:
-        description: only these packages, comma-separated (empty = all)
+        description: these packages, comma-separated (empty = the ones the release bumped, all = every one)
         required: false
         default: ''
 
@@ -35,6 +41,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           ref: ${{ env.TAG }}
+          fetch-depth: 0
 
       - uses: astral-sh/setup-uv@v6
 
@@ -44,7 +51,11 @@ jobs:
           ONLY: ${{ inputs.packages }}
         run: |
           dev="uv run -q --frozen --package amoorion-dev amoorion-dev"
-          list=$($dev packages --only "$ONLY")
+          case "$ONLY" in
+            all) list=$($dev packages) ;;
+            "") list=$($dev packages --released "$TAG") ;;
+            *) list=$($dev packages --only "$ONLY") ;;
+          esac
           echo "$list"
           echo "list=$list" >> "$GITHUB_OUTPUT"
           echo "tries=$($dev setting pypi.tries)" >> "$GITHUB_OUTPUT"
@@ -74,6 +85,7 @@ jobs:
       - uses: ./.github/actions/publish-package
         with:
           package: ${{ matrix.package.name }}
+          version: ${{ matrix.package.version }}
           tag: ${{ env.TAG }}
           github-token: ${{ github.token }}
           pypi-token: ${{ secrets.PYPI_TOKEN }}

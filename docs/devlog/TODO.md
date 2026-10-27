@@ -83,10 +83,10 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] A map and a working guide for agents in `docs/.agents/`
 - [x] A contributors guide in the docs' Development section: pulling the
       current state, pushing changes, versioning, what the loop does with them
-- [ ] Versions per package (Q15): only changed packages bumped, `amoorion`
+- [x] Versions per package (Q15): only changed packages bumped, `amoorion`
       always; every push a `Z` release merged by itself, a phase `Y`, all
       phases `X`; a `Z` release publishes only the bumped packages
-- [ ] After all workflows of a release: master merged back into development
+- [x] After all workflows of a release: master merged back into development
 - [ ] The web page: `amoorion-website` built, with the marimo examples and
       manifest files, in the `github-pages` branch (served from it)
 - [ ] The docs styled after the web page and `resources/`; the README

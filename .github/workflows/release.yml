@@ -4,8 +4,10 @@
 # committed here. The version is tagged v<version> by the bot; the GitHub
 # release gets notes of the commits (CHANGELOG.md) and of the story added
 # to docs/changelog/ since the last release (amoorion-dev notes); then the
-# packages are published (publish.yml) and the web page is built
-# (gh-pages.yml). Pull master into development after it (task flow:pull).
+# packages it bumped are published (publish.yml) and the web page is built
+# (gh-pages.yml), both called from here. When they have ended, master is
+# merged back into development and the next pre-release marked; pull it
+# (git pull origin development).
 name: release
 
 on:
@@ -24,6 +26,8 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -66,12 +70,46 @@ jobs:
           git push origin "$TAG"
           gh release create "$TAG" --title "$title" --notes-file notes.md --verify-tag
 
-      - name: Publish the packages and build the web page
-        if: steps.version.outputs.tag
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.version.outputs.tag }}
-        # A release made with this token starts no workflow by itself.
+  publish:
+    needs: release
+    if: needs.release.outputs.tag
+    uses: ./.github/workflows/publish.yml
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+    secrets: inherit
+    permissions:
+      contents: write
+
+  pages:
+    needs: release
+    if: needs.release.outputs.tag
+    uses: ./.github/workflows/gh-pages.yml
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+    permissions:
+      contents: write
+
+  back:
+    # After every workflow of the release, whatever they ended with.
+    needs: [release, publish, pages]
+    if: ${{ !cancelled() && needs.release.outputs.tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: development
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install tools
+        run: uv sync --frozen
+
+      - name: Master back into development, the next pre-release marked
+        # Pushed with this workflow's token, it starts no flow.
         run: |
-          gh workflow run publish.yml --ref "$TAG" -f tag="$TAG"
-          gh workflow run gh-pages.yml --ref "$TAG" -f tag="$TAG"
+          uv run -q --frozen amoorion-dev identity
+          branch=$(uv run -q --frozen amoorion-dev setting branches.work)
+          git merge --no-edit origin/master
+          uv run --frozen amoorion-dev version mark
+          git push origin "HEAD:$branch"

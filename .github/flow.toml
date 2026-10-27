@@ -15,10 +15,16 @@ release = "master"
 pages = "github-pages"
 
 [release]
-# A phase of TODO.md whose last item was ticked since the last release
-# releases by itself: the flow merges the release pull request after the
-# checks. Such a release raises at least the minor version.
-automerge_completed_phase = true
+# Which pushes to development release by themselves (the flow merges the
+# release pull request after the checks): "always" (every step, Q15),
+# "phase" (only when a phase of TODO.md got its last item ticked since the
+# last release), "never" (the author merges).
+automerge = "always"
+# Every release is a Z (patch) bump of amoorion and of the packages that
+# changed; a completed phase is a Y (minor) bump of all packages; when this
+# phase, the last of the plan (VISION.md), is complete, all phases are
+# done: X (major).
+major_after_phase = 6
 
 [pypi]
 # PyPI creates only a few new projects an hour for an account.
