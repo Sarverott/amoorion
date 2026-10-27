@@ -34,7 +34,7 @@ packages/            one package per platform, a uv workspace (Q10)
 | `amoorion-blogger` | Blogger | post | e-mail to the blog's secret address (SMTP, TLS) |
 | `amoorion-facebook` | Facebook Page | post, read, reply (comments), delete | Graph API, Page token |
 | `amoorion-discord` | Discord | `discord`: post, read, reply, delete; `discord-webhook`: post, delete | bot token (REST API); channel webhook (Q12) |
-| `amoorion-telegram` | Telegram | post, read, reply | Bot API, bot token |
+| `amoorion-telegram` | Telegram | post, read, reply, delete | Bot API, bot token |
 | `amoorion-matrix` | Matrix | post, read, reply | client-server API, access token |
 
 Every package's README lists its secrets. Each is tested against a fake of
