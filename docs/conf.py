@@ -30,6 +30,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinxcontrib.mermaid",
+    "sphinx_llm.txt",
+    "notfound.extension",
 ]
 exclude_patterns = ["_build", ".agents", "Taskfile.yml", "README.md", "**/.ipynb_checkpoints"]
 
@@ -54,6 +56,29 @@ GRAPHICS = ROOT / "resources" / "images"
 html_logo = str(GRAPHICS / "Amoorion rose-gold gothic wordmark.png")
 html_favicon = str(GRAPHICS / "Amoorion\u2019s Cupid Bot Sends Heart Messages-2-mini.png")
 html_static_path = ["_static"]
+# robots.txt at the root (Read the Docs serves it from the default version).
+html_extra_path = ["_extra"]
+
+# For machines: llms.txt (the index of pages) and the Markdown of every page
+# (<page>.md) by sphinx-llm; Read the Docs also answers `Accept:
+# text/markdown` by itself. The agent skill of skills/ goes to /skills/.
+llms_txt_description = (
+    "amoorion: one tool to publish, read and reply on chatting and communication platforms "
+    "(Bluesky, Mastodon, X, Tumblr, Blogger, Facebook, Discord, Telegram, Matrix), with a CLI, "
+    "an HTTP API and an MCP server; secrets from a vault. Agent skill: /skills/amoorion/SKILL.md"
+)
+llms_txt_full_build = True
+llms_txt_suppress_unknown_node_warnings = True
+
+# The 404 page, in the theme (sphinx-notfound-page).
+notfound_context = {
+    "title": "Not found",
+    "body": (
+        "<h1>Lost between platforms</h1>"
+        "<p>This page isn't here: it may have moved, or never was. "
+        "Start again from <a href='/'>the docs' front page</a>, or search them.</p>"
+    ),
+}
 html_css_files = ["amoorion.css"]
 _FONT = '"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif'
 html_theme_options = {
@@ -142,7 +167,14 @@ def _state(app) -> None:
     (DOCS / "devlog" / "STATE.md").write_text(markdown(read(Repo(ROOT), online=online)))
 
 
+def _skills(app, exception) -> None:
+    """skills/ of the repository into the built site, as /skills/<name>/SKILL.md."""
+    if exception is None and app.builder.format == "html":
+        shutil.copytree(ROOT / "skills", Path(app.outdir) / "skills", dirs_exist_ok=True)
+
+
 def setup(app) -> None:
+    app.connect("build-finished", _skills)
     app.connect("builder-inited", _examples)
     app.connect("builder-inited", _state)
     app.connect("source-read", _source_read)

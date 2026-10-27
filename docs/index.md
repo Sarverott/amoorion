@@ -1,3 +1,9 @@
+---
+myst:
+  html_meta:
+    description: "amoorion: one tool to publish, read and reply on chatting and communication platforms, with a CLI, an HTTP API and an MCP server."
+---
+
 ```{include} ../README.md
 :relative-docs: docs/
 :relative-images:

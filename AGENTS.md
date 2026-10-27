@@ -73,6 +73,8 @@ docs/                  the docs site (Sphinx + MyST, conf.py, Taskfile.yml); API
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
 docs/.agents/          agent notes (see below)
+skills/                agent skills for using amoorion (SKILL.md), served by the docs
+resources/             the author's graphics (logo, mockup), used by the docs and the web page
 .github/               community files, workflows: check (= task check), flow, release, publish
 tools/amoorion-dev/     development tools: state, versions, phases, release notes, web page (task state)
 ```

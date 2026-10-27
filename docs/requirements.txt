@@ -86,6 +86,7 @@ docutils==0.22.4
     # via
     #   myst-parser
     #   sphinx
+    #   sphinx-markdown-builder
 executing==2.3.0
     # via stack-data
 fastapi==0.162.0
@@ -154,6 +155,7 @@ markdown-it-py==4.2.0
     #   mdit-py-plugins
     #   myst-parser
     #   rich
+    #   sphinx-llm
 markupsafe==3.0.4
     # via jinja2
 matplotlib-inline==0.2.2
@@ -286,6 +288,9 @@ sphinx==9.1.1 ; python_full_version < '3.13'
     #   myst-nb
     #   myst-parser
     #   sphinx-basic-ng
+    #   sphinx-llm
+    #   sphinx-markdown-builder
+    #   sphinx-notfound-page
     #   sphinxcontrib-mermaid
 sphinx==9.2.0 ; python_full_version >= '3.13'
     # via
@@ -294,9 +299,18 @@ sphinx==9.2.0 ; python_full_version >= '3.13'
     #   myst-nb
     #   myst-parser
     #   sphinx-basic-ng
+    #   sphinx-llm
+    #   sphinx-markdown-builder
+    #   sphinx-notfound-page
     #   sphinxcontrib-mermaid
 sphinx-basic-ng==1.0.0b2
     # via furo
+sphinx-llm==1.1.0
+    # via amoorion-docs
+sphinx-markdown-builder==0.6.11
+    # via sphinx-llm
+sphinx-notfound-page==1.1.0
+    # via amoorion-docs
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
 sphinxcontrib-devhelp==2.0.0
@@ -323,7 +337,9 @@ starlette==1.10.0
     #   mcp
     #   sse-starlette
 tabulate==0.10.0
-    # via jupyter-cache
+    # via
+    #   jupyter-cache
+    #   sphinx-markdown-builder
 tornado==6.6
     # via
     #   ipykernel
