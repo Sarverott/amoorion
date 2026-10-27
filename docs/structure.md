@@ -129,7 +129,10 @@ whose secret is missing from the vault refuses everything. Built in:
 
 ### `cli/`
 
-`amoorion <method> --<param> …`, `--json` for machine output; `amoorion api`,
+`amoorion <method> --<param> …`, `--json` for machine output; `amoorion`
+alone in a terminal (or `-i`) asks step by step: the method from a table,
+each parameter, platforms offered by what they can do, a confirmation
+before anything changes on a platform (`cli/guide.py`); `amoorion api`,
 `amoorion mcp`, `amoorion daemon` start the servers.
 
 ### `api/`

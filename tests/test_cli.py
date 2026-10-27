@@ -31,3 +31,9 @@ def test_plugins_as_table(capsys):
 def test_bad_params_fail_cleanly(capsys):
     assert main(["read", "--platform", "dryrun", "--limit", "0"]) == 1
     assert capsys.readouterr().err.startswith("amoorion:")
+
+
+def test_a_message_in_a_result_shows_its_text(capsys):
+    assert main(["publish", "--text", "shown plainly", "--to", "dryrun"]) == 0
+    out = capsys.readouterr().out
+    assert "shown plainly" in out and '"platform"' not in out
