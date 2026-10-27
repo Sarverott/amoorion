@@ -91,7 +91,7 @@ What is being worked on now. Vision and the plan of all phases:
       manifest files, in the `github-pages` branch (served from it)
 - [x] The docs styled after the web page and `resources/`; the README
       presenting the project
-- [ ] `llms.txt` (sphinx-llm), Markdown for agents, agent skills,
+- [x] `llms.txt` (sphinx-llm), Markdown for agents, agent skills,
       `robots.txt`, a 404 page
 
 Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).

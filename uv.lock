@@ -46,7 +46,7 @@ wheels = [
 
 [[package]]
 name = "amoorion"
-version = "0.3.5"
+version = "0.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
@@ -136,7 +136,7 @@ examples = [{ name = "marimo", specifier = ">=0.25.2" }]
 
 [[package]]
 name = "amoorion-blogger"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-blogger" }
 dependencies = [
     { name = "amoorion" },
@@ -147,7 +147,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-bluesky"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-bluesky" }
 dependencies = [
     { name = "amoorion" },
@@ -173,7 +173,7 @@ requires-dist = [
 
 [[package]]
 name = "amoorion-discord"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-discord" }
 dependencies = [
     { name = "amoorion" },
@@ -202,6 +202,8 @@ dependencies = [
     { name = "myst-nb" },
     { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
     { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "sphinx-llm" },
+    { name = "sphinx-notfound-page" },
     { name = "sphinxcontrib-mermaid" },
 ]
 
@@ -221,12 +223,14 @@ requires-dist = [
     { name = "furo", specifier = ">=2025.12.19" },
     { name = "myst-nb", specifier = ">=1.4.0" },
     { name = "sphinx", specifier = ">=9.1.1" },
+    { name = "sphinx-llm", specifier = ">=1.1.0" },
+    { name = "sphinx-notfound-page", specifier = ">=1.1.0" },
     { name = "sphinxcontrib-mermaid", specifier = ">=2.1.1" },
 ]
 
 [[package]]
 name = "amoorion-facebook"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-facebook" }
 dependencies = [
     { name = "amoorion" },
@@ -237,7 +241,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-mastodon"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-mastodon" }
 dependencies = [
     { name = "amoorion" },
@@ -248,7 +252,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-matrix"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-matrix" }
 dependencies = [
     { name = "amoorion" },
@@ -259,7 +263,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-telegram"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-telegram" }
 dependencies = [
     { name = "amoorion" },
@@ -270,7 +274,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-tumblr"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-tumblr" }
 dependencies = [
     { name = "amoorion" },
@@ -285,7 +289,7 @@ requires-dist = [
 
 [[package]]
 name = "amoorion-x"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "packages/amoorion-x" }
 dependencies = [
     { name = "amoorion" },
@@ -2845,6 +2849,49 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/98/0b/a866924ded68efec7a1759587a4e478aec7559d8165fac8b2ad1c0e774d6/sphinx_basic_ng-1.0.0b2.tar.gz", hash = "sha256:9ec55a47c90c8c002b5960c57492ec3021f5193cb26cebc2dc4ea226848651c9", size = 20736, upload-time = "2023-07-08T18:40:54.166Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3c/dd/018ce05c532a22007ac58d4f45232514cd9d6dd0ee1dc374e309db830983/sphinx_basic_ng-1.0.0b2-py3-none-any.whl", hash = "sha256:eb09aedbabfb650607e9b4b68c9d240b90b1e1be221d6ad71d61c52e29f7932b", size = 22496, upload-time = "2023-07-08T18:40:52.659Z" },
+]
+
+[[package]]
+name = "sphinx-llm"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "markdown-it-py" },
+    { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
+    { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "sphinx-markdown-builder" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9b/2b/2529cb0b1acb85489167904649387ea7b17e3172ac3286fc0c8af2887bc5/sphinx_llm-1.1.0.tar.gz", hash = "sha256:5f3b41c0d7888c75a6fe9f92b1a965c50ee233eaf38673c0ef3501072599c617", size = 408770, upload-time = "2026-09-21T10:15:26.81Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cb/06/8db70029d13ae3b5ef4dabd7496e15941f0f700b9e2f1fb77859bef97263/sphinx_llm-1.1.0-py3-none-any.whl", hash = "sha256:40cfadbfeb4483f4fd5b6c1c0b1a48152847f30febfa94fc413bbbe09c137953", size = 85878, upload-time = "2026-09-21T10:15:25.627Z" },
+]
+
+[[package]]
+name = "sphinx-markdown-builder"
+version = "0.6.11"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "docutils" },
+    { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
+    { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "tabulate" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ad/13/102d7134743120db25e636ffb57a30818e95a416583dca83aadac9c5dd87/sphinx_markdown_builder-0.6.11.tar.gz", hash = "sha256:ba3bf33e0e42ff30ae686ac73957a95e6d045790dcfbaca012dd8ae01794e577", size = 24020, upload-time = "2026-08-16T06:51:38.158Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c9/71/06b415631c2e494c80546073b46013d1715dceb3abe30bd63b34b4e7d9ca/sphinx_markdown_builder-0.6.11-py3-none-any.whl", hash = "sha256:acfb94d6ee66c7a47da0ca0420578fa16f115812af25b8fd21755d5909aacf51", size = 18088, upload-time = "2026-08-16T06:51:36.81Z" },
+]
+
+[[package]]
+name = "sphinx-notfound-page"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
+    { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6a/b2/67603444a8ee97b4a8ea71b0a9d6bab1727ed65e362c87e02f818ee57b8a/sphinx_notfound_page-1.1.0.tar.gz", hash = "sha256:913e1754370bb3db201d9300d458a8b8b5fb22e9246a816643a819a9ea2b8067", size = 7392, upload-time = "2025-01-28T18:45:02.871Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cd/d4/019fe439c840a7966012bbb95ccbdd81c5c10271749706793b43beb05145/sphinx_notfound_page-1.1.0-py3-none-any.whl", hash = "sha256:835dc76ff7914577a1f58d80a2c8418fb6138c0932c8da8adce4d9096fbcd389", size = 8167, upload-time = "2025-01-28T18:45:00.465Z" },
 ]
 
 [[package]]

@@ -1,3 +1,11 @@
+## v0.4.0 (2026-10-27)
+
+**Packages:** amoorion 0.4.0, amoorion-blogger 0.4.0, amoorion-bluesky 0.4.0, amoorion-discord 0.4.0, amoorion-facebook 0.4.0, amoorion-mastodon 0.4.0, amoorion-matrix 0.4.0, amoorion-telegram 0.4.0, amoorion-tumblr 0.4.0, amoorion-x 0.4.0
+
+### Feat
+
+- **site**: the web page gets a 404 page, robots.txt and llms.txt
+
 ## v0.3.5 (2026-10-27)
 
 **Packages:** amoorion 0.3.5
