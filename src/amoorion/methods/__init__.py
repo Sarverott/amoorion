@@ -4,6 +4,7 @@ from amoorion.methods.base import (
     METHODS,
     AccountStatus,
     Accounts,
+    Delete,
     InboxMethod,
     Method,
     PluginInfo,
@@ -11,12 +12,15 @@ from amoorion.methods.base import (
     Publish,
     Read,
     Reply,
+    Snapshot,
+    SnapshotMethod,
 )
 
 __all__ = [
     "METHODS",
     "AccountStatus",
     "Accounts",
+    "Delete",
     "InboxMethod",
     "Method",
     "PluginInfo",
@@ -24,4 +28,6 @@ __all__ = [
     "Publish",
     "Read",
     "Reply",
+    "Snapshot",
+    "SnapshotMethod",
 ]

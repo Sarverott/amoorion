@@ -21,7 +21,13 @@ from amoorion.methods import METHODS, Method
 from amoorion.plugins import Capability, load_plugins
 
 # What a method needs a platform to be able to do.
-NEEDS = {"publish": Capability.POST, "read": Capability.READ, "reply": Capability.REPLY}
+NEEDS = {
+    "publish": Capability.POST,
+    "read": Capability.READ,
+    "snapshot": Capability.READ,
+    "reply": Capability.REPLY,
+    "delete": Capability.DELETE,
+}
 PLATFORM_FIELDS = ("platform", "to")
 QUIT = ("q", "quit", "exit")
 

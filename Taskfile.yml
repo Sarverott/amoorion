@@ -7,7 +7,7 @@ vars:
   # Commits up to this one were made before commitizen was set up.
   COMMITS_FROM: 743498f
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
-  SUBCOMMANDS: [accounts, inbox, plugins, publish, read, reply, api, mcp, daemon]
+  SUBCOMMANDS: [accounts, delete, inbox, plugins, publish, read, reply, snapshot, api, mcp, daemon]
 
 includes:
   # ./tests/Taskfile.yml

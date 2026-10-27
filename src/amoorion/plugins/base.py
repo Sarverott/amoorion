@@ -1,7 +1,8 @@
 """What every platform plugin is: a controller speaking to one platform.
 
 A plugin declares its `capabilities` and implements the matching calls;
-the rest raise `Unsupported`. Its secrets come from the vault, named
+the rest raise `Unsupported`. `profile()` names who or where it speaks
+(the dataset keeps posts by it). Its secrets come from the vault, named
 `<platform>/<key>`. Every plugin, built in or from a separate package, is found
 through the Python entry point group `amoorion.plugins` (name = platform,
 value = `module:PluginClass`) and loaded into PLUGINS by `load_plugins()`, on first use rather than on
@@ -23,6 +24,7 @@ class Capability(StrEnum):
     POST = "post"
     READ = "read"
     REPLY = "reply"
+    DELETE = "delete"
 
 
 class Unsupported(AmoorionError):
@@ -52,6 +54,18 @@ class Plugin(Controller):
 
     def reply(self, to: Message, text: str) -> Message:
         raise self._unsupported(Capability.REPLY)
+
+    def delete(self, message: Message) -> None:
+        """Remove one message of this platform (amoorion's `delete` keeps a copy first)."""
+        raise self._unsupported(Capability.DELETE)
+
+    def profile(self) -> str:
+        """Who or where this plugin speaks: the account, page, blog, channel or room.
+
+        Names its directory in the dataset; never a secret. Plugins with
+        one natural name override it.
+        """
+        return "default"
 
 
 ENTRY_POINTS = "amoorion.plugins"

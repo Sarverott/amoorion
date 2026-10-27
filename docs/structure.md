@@ -12,8 +12,9 @@ src/amoorion/
 ├── models/          data shared by all: Account, Post, Message, Result
 ├── vault/           link to the secrets vault (.env); one module per backend
 ├── plugins/         plugin interface, HttpPlugin, entry point loading; dryrun/
-├── methods/         operations: accounts, inbox, plugins, publish, read, reply
+├── methods/         operations: accounts, delete, inbox, plugins, publish, read, reply, snapshot
 ├── inbox/           received messages of every platform, SQLite (Q11)
+├── dataset/         the posts of every profile on every platform, JSON files (Q14)
 ├── hooks/           incoming webhooks → messages
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
@@ -110,7 +111,27 @@ with its error. The platforms are packages in `packages/` (above); only
 `read_only` marks methods that change nothing. Built in: `accounts` (which
 platforms have their secrets; values never shown), `plugins`, `publish` (one
 post to many platforms, one `Result` each, a failing platform doesn't stop
-the others), `read` (keeps what it read in the inbox), `reply`, `inbox`.
+the others), `read` (keeps what it read in the inbox and the dataset),
+`reply`, `inbox`, `snapshot` (reads a profile's posts into the dataset; when
+it got fewer than it asked for, it read them all, and the ones not seen any
+more are marked `gone`), `delete` (keeps a copy in the dataset, then
+deletes on the platform; not read-only).
+
+### `dataset/`
+
+What amoorion knows of the posts on each platform (Q14), as JSON files,
+one directory per profile (the account, page, blog, channel or room a
+plugin speaks as or in: `Plugin.profile()`):
+
+```
+dataset/<platform>/<profile>/index.json        every post known: id, url, time, state, a bit of text
+dataset/<platform>/<profile>/posts/<id>.json   each post as last read
+dataset/<platform>/<profile>/deleted/<id>.json what `delete` removed, kept before it went
+```
+
+A post is `present`, `gone` (no longer there when a read covered all) or
+`deleted` (by amoorion). Where: `AMOORION_DATASET` in `.env`, default
+`./dataset` (ignored by git). Ids become file names readable and unique.
 
 ### `inbox/`
 

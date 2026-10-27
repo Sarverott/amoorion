@@ -117,6 +117,8 @@ uv run amoorion publish --text "hello" --to dryrun bluesky
 uv run amoorion --json read --platform bluesky
 uv run amoorion reply --platform bluesky --to "at://…" --text "thanks"
 uv run amoorion inbox                        # everything read or received so far
+uv run amoorion snapshot --platform bluesky  # its posts into dataset/bluesky/<profile>/ (JSON, indexed)
+uv run amoorion delete --platform bluesky --id "at://…"   # keeps a copy in the dataset first
 uv run task help                             # help of every command
 
 uv run amoorion api                          # HTTP API on 127.0.0.1:8000

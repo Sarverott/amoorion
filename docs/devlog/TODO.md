@@ -37,7 +37,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Facebook Page: post, read, replies as comments
 - [ ] The vault reached by `bw` from `tools/` (npm); a task initializes
       its session into `.env` (Q13)
-- [ ] `dataset/` (gitignored): every profile's posts read into JSON files
+- [x] `dataset/` (gitignored): every profile's posts read into JSON files
       with an index, `dataset/<platform>/<profile>/` (Q14)
 - [ ] `delete` capability and method, storing what it deletes in the
       dataset first (Q14)
