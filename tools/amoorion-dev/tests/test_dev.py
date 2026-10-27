@@ -124,6 +124,8 @@ def test_state_reads_offline(repo):
     assert read.version == "0.2.0" and read.stage == "released" and read.next_release == "0.2.1"
     assert [p["number"] for p in read.phases] == [0, 1] and read.remote == {}
     assert "| 1: platforms | 1/2 | in progress |" in state.markdown(read)
+    assert read.packages["amoorion-a"] == {"version": "0.2.0", "next": "0.2.0"} and read.release_kind == "patch"
+    assert "| `amoorion` | `0.2.0` | 0.2.1 |" in state.markdown(read) and "(Z: a step)" in state.markdown(read)
 
 
 def test_a_patch_bumps_amoorion_and_the_changed_packages_only(repo):

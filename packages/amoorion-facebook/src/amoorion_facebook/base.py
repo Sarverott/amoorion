@@ -25,7 +25,7 @@ def compose(post: Post) -> str:
 
 class Facebook(HttpPlugin):
     name: ClassVar[str] = "facebook"
-    description: ClassVar[str] = "Facebook Page (Graph API): post, read, reply as comment"
+    description: ClassVar[str] = "Facebook Page (Graph API): post, read, reply as comment, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("page-id", "page-token")
 
@@ -84,3 +84,13 @@ class Facebook(HttpPlugin):
             reply_to=to.id,
             created_at=datetime.now(UTC),
         )
+
+    def delete(self, message: Message) -> None:
+        """A post of the page or a comment: both are deleted by their id."""
+        if not message.id:
+            raise AmoorionError("facebook needs the id of the post or comment to delete")
+        if not self._call("DELETE", message.id).get("success"):
+            raise AmoorionError(f"facebook did not delete {message.id}")
+
+    def profile(self) -> str:
+        return self.secret("page-id")

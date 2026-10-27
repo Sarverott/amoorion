@@ -28,7 +28,10 @@ def show_state(state: development.State) -> None:
     summary.add_row("Branch", state.branch + (f"  [yellow]{state.changed_files} files changed[/]" if state.changed_files else ""))
     summary.add_row("Version", f"{state.version}  [dim]{state.stage}[/]")
     summary.add_row("Last release", f"v{state.last_release}" if state.last_release else "none yet")
-    summary.add_row("Next release", f"v{state.next_release}  [dim]{len(state.news)} commits since the last[/]")
+    summary.add_row(
+        "Next release",
+        f"v{state.next_release}  [dim]{development.KINDS[state.release_kind]}, {len(state.news)} commits since the last[/]",
+    )
     if state.ahead_of_master is not None:
         summary.add_row("Against master", f"{state.ahead_of_master} ahead, {state.behind_master} behind")
     if state.phase_release:
@@ -50,6 +53,12 @@ def show_state(state: development.State) -> None:
                 found.get("tag") or found.get("version") or f"[red]{found.get('error')}[/]",
             )
     console.print(Panel(summary, title="amoorion: state of development", expand=False))
+
+    packages = Table("Package", "Version", "Next release", title="Packages (a version each)", title_justify="left")
+    for name, found in state.packages.items():
+        coming = found["next"] if found["next"] != found["version"] else "[dim]unchanged[/]"
+        packages.add_row(name, found["version"], coming)
+    console.print(packages)
 
     phases = Table("Phase", "Done", title="Phases (docs/devlog/TODO.md)", title_justify="left")
     for phase in state.phases:

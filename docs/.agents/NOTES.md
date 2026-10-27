@@ -2,6 +2,34 @@
 
 Newest on top.
 
+## 2026-10-27: orders Q13–Q15, the third inquiry, a release per push
+
+- Read Q13's "initializing our credentials been placed in .env - place them
+  there" as: the vault's access (the bw session) goes into `.env`, the
+  platforms' secrets stay in the vault (rule 3). If the author meant the
+  platforms' secrets in `.env` (the `env` backend), that is one line of
+  `.env` away, but against AGENTS.md rule 3; to confirm.
+- `X` = when phase `release.major_after_phase` (6, the last of VISION.md)
+  and all before it are complete; TODO.md lists phases only up to 4, so it
+  can't happen early.
+- On `Y` all packages get `amoorion`'s version, so diverged patch versions
+  meet again at every phase.
+- Untried: the merge back after a failed publish or page (it runs on
+  `!cancelled()`), a release while another is still publishing (the
+  `release` concurrency group queues it), `task vault:login` against the
+  real Bitwarden server (tried against a fake `bw`), every plugin's
+  `delete` against a real platform.
+- `git pull --rebase` leaves release tags behind; the local tools then
+  count from an old release. Documented pulls use `--tags`.
+- Tests wrote `read`'s messages into the user's real inbox (no isolation);
+  a root `conftest.py` now points the inbox and the dataset at `tmp_path`
+  for every test but the live ones.
+- The `publish` and `gh-pages` badges of the README show the last run of
+  those workflows started on their own (v0.3.1, failed); called from
+  `release` now, their runs count as `release`'s. Left as the author made
+  them.
+- The website repository's issues are in `~/__WORKSHOP/forge/NOTES-for-repositories.md`.
+
 ## 2026-10-27: after v0.3.0, a contributors guide
 
 - v0.3.0 was released by merging PR #3. The tag, the GitHub release and

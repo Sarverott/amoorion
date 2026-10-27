@@ -23,3 +23,6 @@ node_modules
 # The web page's builds (task site)
 website/
 site/
+
+# The posts of every profile (amoorion's dataset, Q14)
+dataset/

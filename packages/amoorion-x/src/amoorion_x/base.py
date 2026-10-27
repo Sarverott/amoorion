@@ -39,7 +39,7 @@ def compose(post: Post) -> str:
 
 class X(HttpPlugin):
     name: ClassVar[str] = "x"
-    description: ClassVar[str] = "X (twitter) API v2: post, read, reply"
+    description: ClassVar[str] = "X (twitter) API v2: post, read, reply, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("api-key", "api-secret", "access-token", "access-secret")
 
@@ -119,3 +119,12 @@ class X(HttpPlugin):
         if not to.id:
             raise AmoorionError("x needs the id of the post to reply to")
         return self._tweet(text, [], reply_to=to.id)
+
+    def delete(self, message: Message) -> None:
+        if not message.id:
+            raise AmoorionError("x needs the id of the post to delete")
+        if not self._call("DELETE", f"/2/tweets/{message.id}").get("data", {}).get("deleted"):
+            raise AmoorionError(f"x did not delete {message.id}")
+
+    def profile(self) -> str:
+        return self._user()["username"]

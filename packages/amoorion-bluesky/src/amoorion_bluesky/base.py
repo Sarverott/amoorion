@@ -53,7 +53,7 @@ def compose(post: Post) -> tuple[str, list[dict[str, Any]]]:
 
 class Bluesky(HttpPlugin):
     name: ClassVar[str] = "bluesky"
-    description: ClassVar[str] = "Bluesky (AT Protocol): post, read, reply"
+    description: ClassVar[str] = "Bluesky (AT Protocol): post, read, reply, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("username", "password")
 
@@ -135,3 +135,15 @@ class Bluesky(HttpPlugin):
         parent = {"uri": posts[0]["uri"], "cid": posts[0]["cid"]}
         root = posts[0].get("record", {}).get("reply", {}).get("root", parent)
         return self._create({"text": text, "reply": {"root": root, "parent": parent}})
+
+    def delete(self, message: Message) -> None:
+        if not message.id or not message.id.startswith("at://"):
+            raise AmoorionError("bluesky needs the id (at:// URI) of the post to delete")
+        session = self._login()
+        repo, collection, rkey = message.id.removeprefix("at://").split("/", 2)
+        if repo not in (session["did"], session["handle"]):
+            raise AmoorionError(f"bluesky deletes only posts of {session['handle']}")
+        self._call("POST", "com.atproto.repo.deleteRecord", json={"repo": session["did"], "collection": collection, "rkey": rkey})
+
+    def profile(self) -> str:
+        return self._login()["handle"]

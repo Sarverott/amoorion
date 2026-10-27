@@ -10,9 +10,10 @@ from typing import Any, ClassVar
 from pydantic import Field
 
 from amoorion.core import AmoorionError, Controller, Model, Registry, View
+from amoorion.dataset import Dataset
 from amoorion.inbox import Inbox
 from amoorion.models import Message, Post, Result
-from amoorion.plugins import FAILED, Capability, load_plugins, open_plugin
+from amoorion.plugins import FAILED, Capability, Plugin, load_plugins, open_plugin
 from amoorion.vault import Vault, open_vault
 
 
@@ -26,10 +27,13 @@ class Method(Controller):
     # keeping what it read in the local inbox doesn't count.
     read_only: ClassVar[bool] = False
 
-    def __init__(self, vault: Vault | None = None, view: View | None = None, inbox: Inbox | None = None) -> None:
+    def __init__(
+        self, vault: Vault | None = None, view: View | None = None, inbox: Inbox | None = None, dataset: Dataset | None = None
+    ) -> None:
         super().__init__(view)
         self._vault = vault
         self._inbox = inbox
+        self._dataset = dataset
 
     @property
     def vault(self) -> Vault:
@@ -43,6 +47,12 @@ class Method(Controller):
             self._inbox = Inbox()
         return self._inbox
 
+    @property
+    def dataset(self) -> Dataset:
+        if self._dataset is None:
+            self._dataset = Dataset()
+        return self._dataset
+
     def run(self, params: Model) -> Model | list[Model]:
         raise NotImplementedError
 
@@ -51,6 +61,14 @@ class Method(Controller):
 
 
 METHODS: Registry[type[Method]] = Registry("method")
+
+
+def profile_of(plugin: Plugin) -> str:
+    """The plugin's profile; "default" when the platform can't tell it now."""
+    try:
+        return plugin.profile() or "default"
+    except AmoorionError:
+        return "default"
 
 
 class PluginInfo(Model):
@@ -134,12 +152,58 @@ class ReadParams(Model):
 @METHODS.register
 class Read(Method):
     name: ClassVar[str] = "read"
-    description: ClassVar[str] = "Read the latest messages of one platform (and keep them in the inbox)"
+    description: ClassVar[str] = "Read the latest messages of one platform (and keep them in the inbox and the dataset)"
     read_only: ClassVar[bool] = True
     Params: ClassVar[type[Model]] = ReadParams
 
     def run(self, params: ReadParams) -> list[Message]:
-        return self.inbox.keep(open_plugin(params.platform, self.vault).read(params.limit))
+        plugin = open_plugin(params.platform, self.vault)
+        messages = self.inbox.keep(plugin.read(params.limit))
+        self.dataset.record(plugin.name, profile_of(plugin), messages)
+        return messages
+
+
+class SnapshotParams(Model):
+    platform: str
+    limit: int = Field(100, ge=1, le=200, description="at most this many posts; fewer read means all were read")
+
+
+class Snapshot(Model):
+    platform: str
+    profile: str
+    path: str
+    read: int
+    complete: bool
+    present: int
+    gone: int
+    deleted: int
+
+
+@METHODS.register
+class SnapshotMethod(Method):
+    name: ClassVar[str] = "snapshot"
+    description: ClassVar[str] = "Read the posts of one platform's profile into the dataset (JSON files with an index)"
+    read_only: ClassVar[bool] = True
+    Params: ClassVar[type[Model]] = SnapshotParams
+
+    def run(self, params: SnapshotParams) -> Snapshot:
+        plugin = open_plugin(params.platform, self.vault)
+        profile = profile_of(plugin)
+        messages = plugin.read(params.limit)
+        # Fewer than asked for: the platform gave all it has, so what wasn't seen is gone.
+        complete = len(messages) < params.limit
+        self.dataset.record(plugin.name, profile, self.inbox.keep(messages), complete=complete)
+        states = [entry.state for entry in self.dataset.index(plugin.name, profile).values()]
+        return Snapshot(
+            platform=plugin.name,
+            profile=profile,
+            path=str(self.dataset.profile_dir(plugin.name, profile)),
+            read=len(messages),
+            complete=complete,
+            present=states.count("present"),
+            gone=states.count("gone"),
+            deleted=states.count("deleted"),
+        )
 
 
 class InboxParams(Model):
@@ -173,3 +237,39 @@ class Reply(Method):
     def run(self, params: ReplyParams) -> Message:
         to = Message(platform=params.platform, text="", id=params.to)
         return open_plugin(params.platform, self.vault).reply(to, params.text)
+
+
+class DeleteParams(Model):
+    platform: str
+    id: str = Field(description="id of the message to delete, as read or publish gave it")
+
+
+@METHODS.register
+class Delete(Method):
+    name: ClassVar[str] = "delete"
+    description: ClassVar[str] = "Delete one message on its platform, keeping a copy in the dataset first"
+    Params: ClassVar[type[Model]] = DeleteParams
+
+    def _known(self, plugin: Plugin, profile: str, id: str) -> Message:
+        """What is known of the message: from the dataset, else from a read, else only its id."""
+        found = self.dataset.find(plugin.name, profile, id)
+        if found is None and Capability.READ in plugin.capabilities:
+            try:
+                found = next((message for message in plugin.read(100) if message.id == id), None)
+            except AmoorionError:
+                found = None
+        return found or Message(platform=plugin.name, text="", id=id)
+
+    def run(self, params: DeleteParams) -> Result:
+        plugin = open_plugin(params.platform, self.vault)
+        if Capability.DELETE not in plugin.capabilities:
+            return Result(platform=plugin.name, ok=False, error=f"{plugin.name} can't delete")
+        profile = profile_of(plugin)
+        message = self._known(plugin, profile, params.id)
+        self.dataset.keep_deleted(plugin.name, profile, message)
+        try:
+            plugin.delete(message)
+        except AmoorionError as error:
+            return Result(platform=plugin.name, ok=False, message=message, error=str(error))
+        self.dataset.deleted(plugin.name, profile, message)
+        return Result(platform=plugin.name, ok=True, message=message)

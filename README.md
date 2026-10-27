@@ -75,20 +75,22 @@ amoorion publish --text "hello" --to dryrun  # dryrun sends nothing: try it firs
 
 - **Publish:** write once, post to every platform you name.
 - **Read & reply:** read what came in, in one inbox, and answer from there.
+- **Keep:** every profile's posts as JSON files in `dataset/`; `delete`
+  keeps a copy of what it removes.
 - **Connect:** link the platforms with each other and with the services
   around them (webhooks, ntfy, NATS, e-mail: phase 5 of the plan).
 
-| Platform | Package | Post | Read | Reply |
-| -------- | ------- | :--: | :--: | :---: |
-| Bluesky | `amoorion-bluesky` | ✓ | ✓ | ✓ |
-| Mastodon | `amoorion-mastodon` | ✓ | ✓ | ✓ |
-| X (twitter) | `amoorion-x` | ✓ | ✓ | ✓ |
-| Tumblr | `amoorion-tumblr` | ✓ | ✓ | |
-| Blogger (by mail) | `amoorion-blogger` | ✓ | | |
-| Facebook Page | `amoorion-facebook` | ✓ | ✓ | ✓ (comment) |
-| Discord bot / webhook | `amoorion-discord` | ✓ | ✓ (bot) | ✓ (bot) |
-| Telegram bot | `amoorion-telegram` | ✓ | ✓ | ✓ |
-| Matrix room | `amoorion-matrix` | ✓ | ✓ | ✓ |
+| Platform | Package | Post | Read | Reply | Delete |
+| -------- | ------- | :--: | :--: | :---: | :----: |
+| Bluesky | `amoorion-bluesky` | ✓ | ✓ | ✓ | ✓ |
+| Mastodon | `amoorion-mastodon` | ✓ | ✓ | ✓ | ✓ |
+| X (twitter) | `amoorion-x` | ✓ | ✓ | ✓ | ✓ |
+| Tumblr | `amoorion-tumblr` | ✓ | ✓ | | ✓ |
+| Blogger (by mail) | `amoorion-blogger` | ✓ | | | |
+| Facebook Page | `amoorion-facebook` | ✓ | ✓ | ✓ (comment) | ✓ |
+| Discord bot / webhook | `amoorion-discord` | ✓ | ✓ (bot) | ✓ (bot) | ✓ |
+| Telegram bot | `amoorion-telegram` | ✓ | ✓ | ✓ | ✓ |
+| Matrix room | `amoorion-matrix` | ✓ | ✓ | ✓ | ✓ (redact) |
 
 **Early stage:** every platform is tested against fakes of its API; trying
 them against real accounts is under way.
@@ -117,6 +119,8 @@ uv run amoorion publish --text "hello" --to dryrun bluesky
 uv run amoorion --json read --platform bluesky
 uv run amoorion reply --platform bluesky --to "at://…" --text "thanks"
 uv run amoorion inbox                        # everything read or received so far
+uv run amoorion snapshot --platform bluesky  # its posts into dataset/bluesky/<profile>/ (JSON, indexed)
+uv run amoorion delete --platform bluesky --id "at://…"   # keeps a copy in the dataset first
 uv run task help                             # help of every command
 
 uv run amoorion api                          # HTTP API on 127.0.0.1:8000
@@ -136,10 +140,14 @@ Run locally first; a Dockerfile and compose come next (phase 6 of the plan).
 
 ```sh
 uv run task init               # tools, git hooks, .env, then check
+uv run task vault:tools        # the Bitwarden CLI, by npm into tools/
+uv run task vault:login        # log in and unlock; the session goes into .env
+uv run task vault:status       # bw's state, and which platforms have their secrets
 uv run task check              # tests, YAML, commit messages, docs (= CI)
 uv run task docs:build         # the docs site into docs/_build/html
 uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform
-uv run task test:live -- bluesky mastodon    # one real test post on each platform named
+uv run task test:connect       # read-only: log in to every platform with its secrets, read a few posts
+uv run task test:live          # a real test post on each (or: -- bluesky mastodon), read, replied, deleted
 ```
 
 Examples of usage: Jupyter notebooks in [examples/](examples/)

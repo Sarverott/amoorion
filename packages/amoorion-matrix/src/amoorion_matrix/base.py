@@ -35,7 +35,7 @@ def part(value: str) -> str:
 
 class Matrix(HttpPlugin):
     name: ClassVar[str] = "matrix"
-    description: ClassVar[str] = "Matrix room (client-server API): post, read, reply"
+    description: ClassVar[str] = "Matrix room (client-server API): post, read, reply, delete (redact)"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("uri", "token", "room")
 
@@ -94,9 +94,21 @@ class Matrix(HttpPlugin):
     def read(self, limit: int = 20) -> list[Message]:
         params = {"dir": "b", "limit": min(limit, 100), "filter": ONLY_MESSAGES}
         chunk = self._call("GET", f"/rooms/{part(self._room_id())}/messages", params=params).get("chunk", [])
-        return [self._message(event) for event in chunk if event.get("type") == "m.room.message"]
+        # A redacted (deleted) message stays in the timeline without its content.
+        said = [event for event in chunk if event.get("type") == "m.room.message" and "body" in (event.get("content") or {})]
+        return [self._message(event) for event in said]
 
     def reply(self, to: Message, text: str) -> Message:
         if not to.id:
             raise AmoorionError("matrix needs the id of the event to reply to")
         return self._send(text, reply_to=to.id)
+
+    def delete(self, message: Message) -> None:
+        """Redacts the event: its content is removed for everyone, the event stays as a gap."""
+        if not message.id:
+            raise AmoorionError("matrix needs the id of the event to delete")
+        path = f"/rooms/{part(self._room_id())}/redact/{part(message.id)}/{uuid.uuid4().hex}"
+        self._call("PUT", path, json={"reason": "deleted by amoorion"})
+
+    def profile(self) -> str:
+        return self.secret("room")

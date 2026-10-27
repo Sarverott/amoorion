@@ -12,7 +12,7 @@ result later, so every step must be findable, checked and told.
    stage, open pull request, waiting orders or inquiries, phases.
 3. `git status`: anything changed that you didn't make is the author's.
 4. Be on `development`, up to date with origin
-   (`git pull --rebase origin development`; the release merges master
+   (`git pull --rebase --tags origin development`; the release merges master
    back by itself, `task flow:pull` only if it didn't).
 
 ## 2. Take in what the author left

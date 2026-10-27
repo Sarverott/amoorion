@@ -1,7 +1,7 @@
 # amoorion-telegram
 
-Telegram plugin of [amoorion](../../README.md): a bot posts, reads and
-replies in one chat (a group, a channel or a private chat) through the Bot
+Telegram plugin of [amoorion](../../README.md): a bot posts, reads, replies
+and deletes in one chat (a group, a channel or a private chat) through the Bot
 API.
 
 Secrets in amoorion's vault: `telegram/token` (the bot's token from
@@ -10,6 +10,8 @@ a public chat's `@username`); optional `telegram/uri` (default
 https://api.telegram.org). The bot has to be a member of the chat, an
 admin in a channel; in a group it sees messages of others only with
 privacy mode off (@BotFather → /setprivacy) or when they mention it.
+It deletes its own messages; others' only as an admin, and in groups only
+within 48 hours of their sending.
 
 Reading asks `getUpdates`: it sees what the chat said in the last 24 hours,
 never the bot's own messages, and not at all while a webhook is set for the

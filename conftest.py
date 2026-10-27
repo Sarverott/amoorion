@@ -1,9 +1,10 @@
-"""Shared by the tests of amoorion and of every plugin package."""
+"""For every test but the live ones: the inbox and the dataset in a temporary place, never the user's."""
 
 import pytest
 
 
 @pytest.fixture(autouse=True)
-def inbox_in_tmp(tmp_path, monkeypatch):
-    """No test writes into the real inbox."""
-    monkeypatch.setenv("AMOORION_INBOX", str(tmp_path / "inbox.sqlite3"))
+def _local_data(request, tmp_path, monkeypatch):
+    if request.node.get_closest_marker("live") is None:
+        monkeypatch.setenv("AMOORION_INBOX", str(tmp_path / "inbox.sqlite3"))
+        monkeypatch.setenv("AMOORION_DATASET", str(tmp_path / "dataset"))

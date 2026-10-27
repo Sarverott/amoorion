@@ -7,7 +7,7 @@ vars:
   # Commits up to this one were made before commitizen was set up.
   COMMITS_FROM: 743498f
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
-  SUBCOMMANDS: [accounts, inbox, plugins, publish, read, reply, api, mcp, daemon]
+  SUBCOMMANDS: [accounts, delete, inbox, plugins, publish, read, reply, snapshot, api, mcp, daemon]
 
 includes:
   # ./tests/Taskfile.yml
@@ -53,6 +53,28 @@ tasks:
     cmds:
       - uv sync --frozen
       - uv run --frozen lefthook install
+
+  vault:tools:
+    desc: Install the Bitwarden CLI (bw) by npm into tools/ (tools/package.json)
+    cmds:
+      - npm ci --prefix tools --no-audit --no-fund --loglevel=error
+
+  vault:login:
+    desc: Log in to and unlock the Bitwarden vault; its session goes into .env (AMOORION_VAULT_TOKEN)
+    interactive: true
+    cmds:
+      - scripts/vault.sh login
+
+  vault:lock:
+    desc: Lock the Bitwarden vault and empty its session in .env
+    cmds:
+      - scripts/vault.sh lock
+
+  vault:status:
+    desc: 'The vault: bw and its state, then which platforms have their secrets'
+    cmds:
+      - scripts/vault.sh status
+      - uv run --frozen amoorion accounts
 
   run:
     desc: Run the amoorion CLI
@@ -104,9 +126,16 @@ tasks:
       - uv run --frozen pytest
 
   test:live:
-    desc: 'Post for real on the platforms named: task test:live -- <platform>… (needs the go-ahead)'
+    desc: 'For real: post, read, reply, delete on every platform with its secrets (or: task test:live -- <platform>…)'
     cmds:
       - uv run --frozen pytest tests/live -m live -s -rA
+    env:
+      AMOORION_LIVE: '{{.CLI_ARGS}}'
+
+  test:connect:
+    desc: 'Read-only: log in to every platform with its secrets (or those named), its profile, a few posts'
+    cmds:
+      - uv run --frozen pytest tests/live -m live -k test_connect -s -rA
     env:
       AMOORION_LIVE: '{{.CLI_ARGS}}'
 

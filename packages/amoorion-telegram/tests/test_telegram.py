@@ -33,6 +33,11 @@ class FakeTelegram(BaseHTTPRequestHandler):
             return self._send(401, {"ok": False, "error_code": 401, "description": "Unauthorized"})
         if method == "getUpdates":
             return self._send(200, {"ok": True, "result": self.updates})
+        if method == "deleteMessage":
+            if not any(m["message_id"] == body["message_id"] for m in self.sent):
+                return self._send(400, {"ok": False, "error_code": 400, "description": "Bad Request: message to delete not found"})
+            FakeTelegram.sent = [m for m in self.sent if m["message_id"] != body["message_id"]]
+            return self._send(200, {"ok": True, "result": True})
         if method != "sendMessage":
             return self._send(404, {"ok": False, "error_code": 404, "description": "Not Found"})
         if str(body["chat_id"]) != "-1009":
@@ -107,3 +112,12 @@ def test_helpers():
     assert link({"username": "chan"}, 5) == "https://t.me/chan/5"
     assert link({"id": 42}, 5) is None
     assert compose(Post(text="t", links=["https://a"])) == "t\nhttps://a"
+
+
+def test_delete_a_message(telegram):
+    gone = telegram.post(Post(text="oops"))
+    telegram.delete(gone)
+    assert FakeTelegram.sent == []
+    with pytest.raises(AmoorionError, match="message to delete not found"):
+        telegram.delete(gone)
+    assert telegram.profile() == "chat-1009"

@@ -35,13 +35,13 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Tumblr: post (Neue Post Format, tags), read
 - [x] Blogger by mail: post, TLS only
 - [x] Facebook Page: post, read, replies as comments
-- [ ] The vault reached by `bw` from `tools/` (npm); a task initializes
+- [x] The vault reached by `bw` from `tools/` (npm); a task initializes
       its session into `.env` (Q13)
-- [ ] `dataset/` (gitignored): every profile's posts read into JSON files
+- [x] `dataset/` (gitignored): every profile's posts read into JSON files
       with an index, `dataset/<platform>/<profile>/` (Q14)
-- [ ] `delete` capability and method, storing what it deletes in the
+- [x] `delete` capability and method, storing what it deletes in the
       dataset first (Q14)
-- [ ] One command for the live tests of all platforms (Q13)
+- [x] One command for the live tests of all platforms (Q13)
 - [ ] Every platform tried against a real account (needs the author's
       accounts and go-ahead, Q13; ready: `task test:live -- <platform>…`)
 

@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from itertools import count
 from typing import ClassVar
 
+from amoorion.core import AmoorionError
 from amoorion.models import Message, Post
 from amoorion.plugins.base import Capability, Plugin
 
@@ -36,3 +37,9 @@ class DryRun(Plugin):
 
     def reply(self, to: Message, text: str) -> Message:
         return self._say(text, reply_to=to.id)
+
+    def delete(self, message: Message) -> None:
+        kept = [m for m in self._messages if m.id != message.id]
+        if len(kept) == len(self._messages):
+            raise AmoorionError(f"dryrun has no message {message.id}")
+        self._messages[:] = kept

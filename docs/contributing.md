@@ -40,7 +40,7 @@ Every session starts the same way:
 
 ```sh
 git switch development
-git pull --rebase origin development   # others' work and the bot's version commits
+git pull --rebase --tags origin development   # others' work and the bot's version commits
 uv run task flow:pull                  # only if master isn't merged back yet
 uv run task state                      # where it stands (-- --online: also GitHub and PyPI)
 git status                             # anything changed you didn't make is someone else's work
@@ -93,7 +93,7 @@ The type no longer decides the version (Q15): what the step finished does.
 
 ```sh
 uv run task check
-git pull --rebase origin development   # if the bot pushed meanwhile, your push would be refused
+git pull --rebase --tags origin development   # if the bot pushed meanwhile, your push would be refused
 git push origin development
 ```
 
@@ -114,7 +114,7 @@ git push origin development
 
    ```sh
    gh run watch "$(gh run list -w release -L 1 --json databaseId -q '.[0].databaseId')"
-   git pull --rebase origin development
+   git pull --rebase --tags origin development
    ```
 
 Watch it with `gh run list` or `uv run task state -- --online`.

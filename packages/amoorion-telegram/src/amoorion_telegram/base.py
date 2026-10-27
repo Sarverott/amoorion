@@ -39,7 +39,7 @@ def link(chat: dict[str, Any], number: int) -> str | None:
 
 class Telegram(HttpPlugin):
     name: ClassVar[str] = "telegram"
-    description: ClassVar[str] = "Telegram bot in one chat (Bot API): post, read, reply"
+    description: ClassVar[str] = "Telegram bot in one chat (Bot API): post, read, reply, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("token", "chat")
 
@@ -103,3 +103,12 @@ class Telegram(HttpPlugin):
         if not to.id or not to.id.isdigit():
             raise AmoorionError("telegram needs the number of the message to reply to")
         return self._send(text, reply_to=to.id)
+
+    def delete(self, message: Message) -> None:
+        """Its own messages always; others' as a group admin, and in groups only within 48 hours."""
+        if not message.id or not message.id.isdigit():
+            raise AmoorionError("telegram needs the number of the message to delete")
+        self._call("deleteMessage", chat_id=self.secret("chat"), message_id=int(message.id))
+
+    def profile(self) -> str:
+        return f"chat{self.secret('chat')}"

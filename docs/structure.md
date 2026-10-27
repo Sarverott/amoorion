@@ -12,8 +12,9 @@ src/amoorion/
 ├── models/          data shared by all: Account, Post, Message, Result
 ├── vault/           link to the secrets vault (.env); one module per backend
 ├── plugins/         plugin interface, HttpPlugin, entry point loading; dryrun/
-├── methods/         operations: accounts, inbox, plugins, publish, read, reply
+├── methods/         operations: accounts, delete, inbox, plugins, publish, read, reply, snapshot
 ├── inbox/           received messages of every platform, SQLite (Q11)
+├── dataset/         the posts of every profile on every platform, JSON files (Q14)
 ├── hooks/           incoming webhooks → messages
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
@@ -26,19 +27,20 @@ packages/            one package per platform, a uv workspace (Q10)
 
 | Package | Platform | Can | Through |
 | ------- | -------- | --- | ------- |
-| `amoorion-bluesky` | Bluesky | post, read, reply | AT Protocol (XRPC), app password |
-| `amoorion-mastodon` | Mastodon | post, read, reply | REST API, access token |
-| `amoorion-x` | X (twitter) | post, read, reply | API v2, OAuth 1.0a |
-| `amoorion-tumblr` | Tumblr | post, read | API v2 (Neue Post Format), OAuth 1.0a |
+| `amoorion-bluesky` | Bluesky | post, read, reply, delete | AT Protocol (XRPC), app password |
+| `amoorion-mastodon` | Mastodon | post, read, reply, delete | REST API, access token |
+| `amoorion-x` | X (twitter) | post, read, reply, delete | API v2, OAuth 1.0a |
+| `amoorion-tumblr` | Tumblr | post, read, delete | API v2 (Neue Post Format), OAuth 1.0a |
 | `amoorion-blogger` | Blogger | post | e-mail to the blog's secret address (SMTP, TLS) |
-| `amoorion-facebook` | Facebook Page | post, read, reply (comments) | Graph API, Page token |
-| `amoorion-discord` | Discord | `discord`: post, read, reply; `discord-webhook`: post | bot token (REST API); channel webhook (Q12) |
-| `amoorion-telegram` | Telegram | post, read, reply | Bot API, bot token |
-| `amoorion-matrix` | Matrix | post, read, reply | client-server API, access token |
+| `amoorion-facebook` | Facebook Page | post, read, reply (comments), delete | Graph API, Page token |
+| `amoorion-discord` | Discord | `discord`: post, read, reply, delete; `discord-webhook`: post, delete | bot token (REST API); channel webhook (Q12) |
+| `amoorion-telegram` | Telegram | post, read, reply, delete | Bot API, bot token |
+| `amoorion-matrix` | Matrix | post, read, reply, delete (redact) | client-server API, access token |
 
 Every package's README lists its secrets. Each is tested against a fake of
 its API; `tests/live/` tries each against its real account, only when asked
-(`task test:live -- <platform>…`, Q13).
+(`task test:connect`, read-only, and `task test:live`, posting; every platform
+with its secrets, or those named, Q13).
 
 ## How they depend on each other
 
@@ -110,7 +112,27 @@ with its error. The platforms are packages in `packages/` (above); only
 `read_only` marks methods that change nothing. Built in: `accounts` (which
 platforms have their secrets; values never shown), `plugins`, `publish` (one
 post to many platforms, one `Result` each, a failing platform doesn't stop
-the others), `read` (keeps what it read in the inbox), `reply`, `inbox`.
+the others), `read` (keeps what it read in the inbox and the dataset),
+`reply`, `inbox`, `snapshot` (reads a profile's posts into the dataset; when
+it got fewer than it asked for, it read them all, and the ones not seen any
+more are marked `gone`), `delete` (keeps a copy in the dataset, then
+deletes on the platform; not read-only).
+
+### `dataset/`
+
+What amoorion knows of the posts on each platform (Q14), as JSON files,
+one directory per profile (the account, page, blog, channel or room a
+plugin speaks as or in: `Plugin.profile()`):
+
+```
+dataset/<platform>/<profile>/index.json        every post known: id, url, time, state, a bit of text
+dataset/<platform>/<profile>/posts/<id>.json   each post as last read
+dataset/<platform>/<profile>/deleted/<id>.json what `delete` removed, kept before it went
+```
+
+A post is `present`, `gone` (no longer there when a read covered all) or
+`deleted` (by amoorion). Where: `AMOORION_DATASET` in `.env`, default
+`./dataset` (ignored by git). Ids become file names readable and unique.
 
 ### `inbox/`
 

@@ -53,6 +53,14 @@ class FakeHomeserver(BaseHTTPRequestHandler):
         content = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         if not self._authorized():
             return
+        redact = f"{API}/rooms/{ROOM}/redact/"
+        if path.startswith(redact):
+            event_id = path.removeprefix(redact).split("/")[0]
+            found = [e for e in self.events if e["event_id"] == event_id]
+            if not found:
+                return self._send(404, {"errcode": "M_NOT_FOUND", "error": "Event not found."})
+            found[0]["content"] = {}
+            return self._send(200, {"event_id": "$redaction"})
         prefix = f"{API}/rooms/{ROOM}/send/m.room.message/"
         if not path.startswith(prefix):
             return self._send(403, {"errcode": "M_FORBIDDEN", "error": "You are not in this room."})
@@ -108,3 +116,12 @@ def test_errors(matrix, monkeypatch):
 
 def test_compose():
     assert compose(Post(text="t", links=["https://a"])) == "t\nhttps://a"
+
+
+def test_delete_redacts(matrix):
+    gone = matrix.post(Post(text="oops"))
+    kept = matrix.post(Post(text="fine"))
+    matrix.delete(gone)
+    assert [m.id for m in matrix.read()] == [kept.id]
+    with pytest.raises(AmoorionError, match="Event not found"):
+        matrix.delete(gone.model_copy(update={"id": "$nope"}))

@@ -22,6 +22,7 @@ from amoorion_dev.repo import Repo
 QUESTION = re.compile(r"^## (Q\d+): (.+)$", re.MULTILINE)
 WAITING = {"orders": "docs/devlog/ORDERS.md", "inquiries": "docs/devlog/INQUIRIES.md"}
 TIMEOUT = 5
+KINDS = {"patch": "Z: a step", "minor": "Y: a phase completed", "major": "X: all phases done"}
 
 
 @dataclass
@@ -39,6 +40,9 @@ class State:
     phase_release: list[str]
     questions: list[str]
     waiting: dict[str, bool]
+    # name -> {"version": now, "next": in the next release} (Q15: a version each)
+    packages: dict[str, dict[str, str]] = field(default_factory=dict)
+    release_kind: str = "patch"
     remote: dict[str, Any] = field(default_factory=dict)
 
 
@@ -122,6 +126,7 @@ def read(repo: Repo, online: bool = False) -> State:
     last = versions.last_release(repo)
     master = repo.settings().get("branches", {}).get("release", "master")
     ahead, behind = counts(repo, f"origin/{master}")
+    coming = versions.plan(repo, last)
     return State(
         branch=repo.git("branch", "--show-current") or "(detached)",
         version=version,
@@ -139,6 +144,11 @@ def read(repo: Repo, online: bool = False) -> State:
         ],
         questions=[f"{number}: {title}" for number, title in QUESTION.findall(repo.read("docs/devlog/BRAINSTORM.md"))],
         waiting={name: waiting(repo, path) for name, path in WAITING.items()},
+        packages={
+            package.name: {"version": package.version(repo) or "", "next": coming.get(package.name, "")}
+            for package in versions.packages(repo)
+        },
+        release_kind=versions.kind(repo, last),
         remote=remote(repo) if online else {},
     )
 
@@ -154,7 +164,7 @@ def markdown(state: State) -> str:
         "| --- | --- |",
         f"| Version | `{state.version}` ({state.stage}) |",
         f"| Last release | {f'`v{state.last_release}`' if state.last_release else 'none yet'} |",
-        f"| Next release | `v{state.next_release}` |",
+        f"| Next release | `v{state.next_release}` ({KINDS[state.release_kind]}) |",
         f"| Commits since the last release | {len(state.news)} |",
     ]
     if state.phase_release:
@@ -165,6 +175,10 @@ def markdown(state: State) -> str:
         lines.append(f"| Release pull request | [#{pr['number']} {pr['title']}]({pr['url']}) |")
     if isinstance(remote.get("pypi"), dict) and "version" in remote["pypi"]:
         lines.append(f"| On PyPI | `{remote['pypi']['version']}` |")
+    lines += ["", "## Packages", "", "| Package | Version | In the next release |", "| --- | --- | --- |"]
+    for name, found in state.packages.items():
+        coming = found["next"] if found["next"] != found["version"] else "unchanged"
+        lines.append(f"| `{name}` | `{found['version']}` | {coming} |")
     lines += ["", "## Phases", "", "| Phase | Done | |", "| --- | --- | --- |"]
     for phase in state.phases:
         mark = "complete" if phase["complete"] else "in progress" if phase["done"] else "not started"

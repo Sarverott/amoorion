@@ -63,7 +63,7 @@ and publishes only the packages it bumped (fewer calls to PyPI); `X` and
    merges master back into development on origin and marks the next
    pre-release, `0.3.3a0`. Nothing is committed on `master`, so it never
    moves ahead of development.
-5. **Pull** (`git pull --rebase origin development`) and go on: back to 1.
+5. **Pull** (`git pull --rebase --tags origin development`) and go on: back to 1.
 
 A release merged by hand (with `release.automerge` at `phase` or `never`)
 merges back the same way. `task flow:pull` does the merge back locally,

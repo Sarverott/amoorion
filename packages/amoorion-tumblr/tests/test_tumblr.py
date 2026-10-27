@@ -38,6 +38,12 @@ class FakeTumblr(BaseHTTPRequestHandler):
         body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         if not self._authorized():
             return
+        if urlparse(self.path).path == f"/v2/blog/{BLOG}/post/delete":
+            found = [p for p in self.posts if p["id_string"] == body["id"]]
+            if not found:
+                return self._send(404, {"meta": {"status": 404, "msg": "Not Found"}, "response": []})
+            FakeTumblr.posts = [p for p in self.posts if p["id_string"] != body["id"]]
+            return self._send(200, {"meta": {"status": 200, "msg": "OK"}, "response": {"id": int(body["id"])}})
         assert urlparse(self.path).path == f"/v2/blog/{BLOG}/posts"
         self.bodies.append(body)
         post_id = str(7000 + len(self.posts))
@@ -94,3 +100,13 @@ def test_blocks_round_trip():
     content = blocks(Post(title="T", text="a\n\nb", links=["https://l"]))
     assert [block.get("subtype") for block in content] == ["heading1", None, None, None]
     assert text_of(content) == "T\n\na\n\nb\n\nhttps://l"
+
+
+def test_delete_a_post(tumblr):
+    gone = tumblr.post(Post(text="oops"))
+    kept = tumblr.post(Post(text="fine"))
+    tumblr.delete(gone)
+    assert [m.id for m in tumblr.read()] == [kept.id]
+    with pytest.raises(AmoorionError, match="Not Found"):
+        tumblr.delete(gone)
+    assert tumblr.profile() == BLOG.removesuffix(".tumblr.com")

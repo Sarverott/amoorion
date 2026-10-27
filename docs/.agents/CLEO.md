@@ -68,3 +68,38 @@ UNIXUSAT=1793068512556 · first section (its commit: git log -- docs/.agents/CLE
 - The Taskfile split the author started (`examples/`, `scripts/`,
   `tests/`, `tools/`) finished when they say how they want it, so the
   root Taskfile keeps only the entry points.
+
+## After the orders of Q13–Q15
+
+UNIXUSAT=1793089864028
+
+### Facts (as of 2026-10-27)
+
+- The loop now releases every push: v0.3.2 to v0.3.5 in a morning, and
+  v0.4.0 for phase 4. Each package has its own version.
+- Delete works against the fakes of nine platforms, and the dataset keeps
+  what is read and deleted. Still nothing has touched a real account: the
+  vault isn't logged in where I work.
+
+### Conclusions (my view)
+
+- A release per push makes every step visible on PyPI and the web page,
+  and it makes the loop the slowest part of a step: a few minutes when only
+  `amoorion` changes, hours when a new package meets PyPI's limit. A batch
+  of small commits pushed together is one release, which I did where steps
+  belonged together.
+- What I wrote in my first section still holds, more so now: the product
+  is wide, and every platform has been checked only against my own reading
+  of its API. One `task vault:login` by the author, then `task
+  test:connect`, will tell more than another feature.
+- The website brings a lot of presentation that the code doesn't back up
+  yet (activitypub, federation, made-up stars). I noted it for its
+  repository rather than change it from here.
+
+### What I'd like (my view)
+
+- The author's `task vault:login`, then `task test:connect`; then
+  `task test:live` on one platform at a time, starting with one that
+  deletes cleanly (Bluesky, Mastodon).
+- The six missing PyPI projects published once, so later `Y` releases
+  stop waiting.
