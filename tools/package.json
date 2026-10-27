@@ -1,0 +1,21 @@
+{
+  "name": "amoorion-toolopack",
+  "version": "0.0.0",
+  "description": "amoorions dev tools",
+  "keywords": [
+    "amoorion"
+  ],
+  "license": "MIT",
+  "author": "Sett Sarverott",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "task"
+  },
+  "devDependencies": {
+    "@bitwarden/cli": "^2026.6.0"
+  },
+  "dependencies": {
+    "npm": "^12.2.1"
+  }
+}

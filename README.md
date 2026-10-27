@@ -1,8 +1,11 @@
 # amoorion
+
+[![check](https://github.com/Sarverott/amoorion/actions/workflows/check.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/check.yml) [![release](https://github.com/Sarverott/amoorion/actions/workflows/release.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/release.yml) [![publish](https://github.com/Sarverott/amoorion/actions/workflows/publish.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/publish.yml) [![gh-pages](https://github.com/Sarverott/amoorion/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/gh-pages.yml) 
+
 Universal tool for administration of chatting and communication platforms
 
 ---
-
+<!--
 ## **EARLY STAGE OF PROJECT**
 
 The core works end to end, with plugins for Bluesky, Mastodon, X, Tumblr,
@@ -40,6 +43,12 @@ with the services around it.
 - ntfy notifications
 - nats.io
 
+-->
+
+## Getting started
+
+#### documentation: https://amoorion.readthedocs.io
+
 ## How it is built
 
 One core (model, view, controller) and namespaces on it: **plugins** (one
@@ -50,6 +59,8 @@ the methods: **CLI**, **HTTP API**, **MCP** server for AI agents, and a
 `.env` holds just the link to it. Each platform is its own package in
 `packages/` (a uv workspace). Details: [docs/structure.md](docs/structure.md), writing a plugin:
 [docs/plugins.md](docs/plugins.md).
+
+
 
 ## Usage
 
@@ -95,6 +106,16 @@ Examples of usage: Jupyter notebooks in [examples/](examples/)
 code) are built by Sphinx from [docs/](docs/) for Read the Docs.
 Plan and open questions: [docs/devlog/](docs/devlog/). Guide for agents and
 contributors: [AGENTS.md](AGENTS.md).
+
+## Reference
+
+- https://pl.wikipedia.org/wiki/(1221)_Amor
+- https://github.com/sarverott/amoorion/
+- https://amoorion.readthedocs.io
+- https://pypi.org/project/amoorion/
+- https://sarverott.github.io/amoorion
+- https://sarverott.tumblr.com/post/831595954743459840/github-sarverottamoorion-universal-tool-for
+- https://x.com/sarverott/status/2114859609823301649
 
 ## License
 
