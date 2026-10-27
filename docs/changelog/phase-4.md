@@ -92,3 +92,15 @@ by step. The docs gather the devlog under one Development section, with
 `docs/.agents/MAP.md` and `GUIDE.md`, the map and the working guide for
 agents. Phase 4 is complete; it was complete at v0.2.1 already, so it
 doesn't release itself this time.
+
+## UNIXUSAT=1793068385753 · commit dcc5db5
+
+After v0.3.0 was released, the author's order in the chat, word for word:
+
+````markdown
+great work Cleo! looks great my friend! feel free to write own thoughts in docs/.agents/ like you did that in previous projects. we need to make some stuff related with pull the current state of project, pushing changes, versioning and all that guidance should be written into contributors guide in developement pages on readthedocs
+````
+
+Drawn into phase 4 (TODO.md): a contributors guide in the docs'
+Development section. The thoughts go to `docs/.agents/CLEO.md`, as in
+rs-tech-infra.
