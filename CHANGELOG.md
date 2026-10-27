@@ -1,3 +1,11 @@
+## v0.3.2 (2026-10-27)
+
+**Packages:** amoorion 0.3.2
+
+### Feat
+
+- **dev**: a version per package (Q15): Z bumps amoorion and the packages changed since the last release, Y (a phase) and X (the last phase) all; packages --released lists what a release bumped
+
 ## v0.3.1 (2026-10-27)
 
 ### Fix

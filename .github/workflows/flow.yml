@@ -4,9 +4,10 @@
 #      section, committed as "bump: ..." and pushed back to development;
 #   2. the pull request development → master is opened (or kept up to date),
 #      and the checks run on what it carries;
-#   3. when a phase of TODO.md got its last item ticked since the last
-#      release, the flow merges the pull request itself after `task check`
-#      (release.automerge_completed_phase in .github/flow.toml).
+#   3. the flow merges the pull request itself after `task check`: on every
+#      push, or only when a phase of TODO.md got its last item ticked since
+#      the last release (release.automerge in .github/flow.toml: always,
+#      phase, never).
 # Merging it releases (release.yml). docs/releasing.md has the whole loop.
 name: flow
 
@@ -86,22 +87,22 @@ jobs:
             echo "number=${url##*/}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: A completed phase releases by itself
+      - name: Release by itself
         if: steps.pr.outputs.number
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ steps.pr.outputs.number }}
         run: |
           dev="uv run -q --frozen amoorion-dev"
+          mode=$($dev setting release.automerge)
           completed=$($dev phases --completed)
-          if [ -z "$completed" ]; then
-            echo "no phase completed since the last release; the pull request waits for the author"
-          elif [ "$($dev setting release.automerge_completed_phase)" != true ]; then
-            echo "completed: $completed; automerge_completed_phase is off, the pull request waits"
-          else
-            echo "completed: $completed; checking, then merging #$PR"
+          subject="Release v$($dev version current)${completed:+: phase $completed}"
+          if [ "$mode" = always ] || { [ "$mode" = phase ] && [ -n "$completed" ]; }; then
+            echo "automerge $mode${completed:+, completed: $completed}; checking, then merging #$PR"
             uv run --frozen task check
-            gh pr merge "$PR" --merge --subject "Release v$($dev version current): phase $completed"
+            gh pr merge "$PR" --merge --subject "$subject"
             # The merge made with this token starts no workflow by itself.
             gh workflow run release.yml --ref master
+          else
+            echo "automerge $mode; the pull request waits for the author"
           fi

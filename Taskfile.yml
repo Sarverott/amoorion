@@ -70,7 +70,7 @@ tasks:
   version:
     desc: Show the version of every package (released together)
     cmds:
-      - uv run --frozen amoorion-dev version current
+      - uv run --frozen amoorion-dev version list
 
   state:
     desc: 'The state of development (task state -- --online: also GitHub and PyPI)'

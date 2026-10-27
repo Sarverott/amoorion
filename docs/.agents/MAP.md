@@ -29,40 +29,43 @@ structure, a workflow or a tool updates this map in the same commit.
 
 ```mermaid
 flowchart LR
-    M[master<br/>v0.3.0 tagged] -- task flow:pull<br/>post-merge: version mark --> D1[development<br/>0.3.1a0]
-    D1 -- work, push --> F{flow.yml}
+    D1[development<br/>0.3.2a0] -- a step, push --> F{flow.yml}
     F -- only merges and bumps --> D1
-    F -- version final<br/>CHANGELOG section --> D2[development<br/>0.3.1 or 0.4.0]
-    D2 -- pull request<br/>Release v… --> PR((PR))
-    PR -- the author merges,<br/>or a completed phase --> R{release.yml}
+    F -- version final: Z, or Y for a phase<br/>CHANGELOG section --> D2[development<br/>0.3.2]
+    D2 -- pull request Release v…<br/>merged by the flow --> R{release.yml}
     R -- tag, notes --> GR[GitHub release]
-    GR --> P{publish.yml}
-    GR --> G{gh-pages.yml}
-    P -- one job per package<br/>actions/publish-package --> PyPI[(PyPI + release assets)]
+    R -- calls --> P{publish.yml}
+    R -- calls --> G{gh-pages.yml}
+    P -- the bumped packages<br/>actions/publish-package --> PyPI[(PyPI + release assets)]
     G -- site + examples --> GP[github-pages branch<br/>GitHub Pages]
-    R --> M
+    P --> B[merge back<br/>version mark]
+    G --> B
+    B --> D1
 ```
 
-Version stages (`amoorion-dev version`, `task state`):
+Every package has its own version (`amoorion-dev version`, `task version`):
 
-| Stage | Example | Where |
-| ----- | ------- | ----- |
-| released | `0.3.0`, tag `v0.3.0` | master; development right after the pull |
-| pre-release | `0.3.1a0` | development, being made |
-| final | `0.4.0`, no tag | development and its pull request, ready |
+| Release | When | Bumped |
+| ------- | ---- | ------ |
+| `Z` | every push | `amoorion`, and the packages changed since the last release |
+| `Y` | a phase completed since the last release | all, to `amoorion`'s version |
+| `X` | `release.major_after_phase` completed | all |
 
-The next version counts from the last release tag: breaking or `feat` →
-minor (while `0.x`), a phase completed since → at least minor, else patch.
+| Stage of `amoorion` | Example | Where |
+| ------------------- | ------- | ----- |
+| released | `0.3.1`, tag `v0.3.1` | master; development after the merge back |
+| pre-release | `0.3.2a0` | development, being made |
+| final | `0.3.2`, no tag | development, while the flow releases it |
 
 ## Workflows
 
 | Workflow | Starts on | Does | Starts |
 | -------- | --------- | ---- | ------ |
 | `check.yml` | push (not `github-pages`), pull request, by hand, by flow | `task check` | — |
-| `flow.yml` | push to development, by hand | version final, pull request to master, phase auto-merge | check, release |
-| `release.yml` | push to master, by hand, by flow | `task check`, tag, GitHub release with notes | publish, gh-pages |
-| `publish.yml` | release, by hand (tag, packages) | one job per package → `actions/publish-package` | — |
-| `gh-pages.yml` | release, by hand (tag) | examples (marimo) + `amoorion-dev site` → `github-pages` → Pages | — |
+| `flow.yml` | push to development, by hand | version final, pull request to master, its merge (`release.automerge`) | check, release |
+| `release.yml` | push to master, by hand, by flow | `task check`, tag, GitHub release with notes; calls publish and gh-pages; then the merge back into development | — |
+| `publish.yml` | called by release, by hand (tag, packages) | one job per bumped package → `actions/publish-package` | — |
+| `gh-pages.yml` | called by release, by hand (tag) | examples (marimo) + `amoorion-dev site` → `github-pages`, served by Pages | — |
 
 Pushes, merges and releases made with the workflows' token start no
 workflow, so each workflow starts the next with `gh workflow run`.
@@ -72,10 +75,10 @@ workflow, so each workflow starts the next with `gh workflow run`.
 | Command | Task | For |
 | ------- | ---- | --- |
 | `amoorion-dev state [--online]` | `task state` | where development stands |
-| `amoorion-dev version current\|next\|mark\|final` | `task version`, `task flow:pull` | the loop |
+| `amoorion-dev version current\|list\|next\|mark\|final` | `task version`, `task flow:pull` | the loop |
 | `amoorion-dev phases [--completed]` | | the plan; what a release completes |
 | `amoorion-dev notes <tag> [--title]` | | release notes |
-| `amoorion-dev packages [--only]`, `setting <key>` | | the workflows |
+| `amoorion-dev packages [--only] [--released <tag>]`, `setting <key>` | | the workflows |
 | `amoorion-dev site` | | the web page |
 | `amoorion-dev identity` | | the bot as git user |
 | `amoorion …` | `task run` | the product's CLI; alone it asks step by step |

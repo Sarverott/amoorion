@@ -15,6 +15,7 @@ htmlcov/
 !example.env
 
 # Editors and OS
-.vscode/
+#.vscode/
 .idea/
 .DS_Store
+node_modules

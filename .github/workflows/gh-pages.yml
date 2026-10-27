@@ -1,13 +1,18 @@
-# The project's web page, made at every release (started by release.yml; by
+# The project's web page, made at every release (called by release.yml; by
 # a release made by hand; or by hand for a tag): the page of amoorion-dev
 # site with the examples built by marimo, committed by the bot onto the
 # release's commit and force-pushed to the github-pages branch (as
-# redscope.pl keeps its release branch), then deployed to GitHub Pages.
+# redscope.pl keeps its release branch). GitHub Pages serves that branch.
 name: gh-pages
 
 on:
   release:
     types: [published]
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
   workflow_dispatch:
     inputs:
       tag:
@@ -17,8 +22,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -27,9 +30,6 @@ concurrency:
 jobs:
   page:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Which release
         id: release
@@ -62,17 +62,8 @@ jobs:
         run: |
           uv run -q --frozen amoorion-dev identity
           branch=$(uv run -q --frozen amoorion-dev setting branches.pages)
+          # Served as it is, not through Jekyll.
+          touch site/.nojekyll
           git --work-tree site add --all
           git commit -q -m "web page of $TAG, UNIXUSAT=$(date +%s%3N)"
           git push origin "HEAD:$branch" --force
-
-      # Only now: the branch above is kept even while Pages is off.
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

@@ -11,8 +11,9 @@ result later, so every step must be findable, checked and told.
 2. `uv run task state` (`-- --online` when GitHub matters): branch, version
    stage, open pull request, waiting orders or inquiries, phases.
 3. `git status`: anything changed that you didn't make is the author's.
-4. Be on `development`, up to date with origin. After a release:
-   `uv run task flow:pull`.
+4. Be on `development`, up to date with origin
+   (`git pull --rebase origin development`; the release merges master
+   back by itself, `task flow:pull` only if it didn't).
 
 ## 2. Take in what the author left
 
@@ -42,6 +43,8 @@ For every item:
 5. Commit: conventional message, why in the body when not obvious, ending
    with your `Co-Authored-By:` line. Tick the TODO item in the commit that
    finishes it.
+6. Push it: every push is a `Z` release (Q15). Wait for the `release` run
+   to end (`gh run watch`), pull the merge back, then the next step.
 
 Try things that can't run here (workflows, releases) in a throwaway clone
 in your scratch space, never on the real branches.
@@ -62,8 +65,7 @@ in your scratch space, never on the real branches.
 ## Never
 
 - push or commit to `master`, merge pull requests, tag, release or publish
-  by hand; the loop does it (a completed phase merges itself only when
-  `.github/flow.toml` allows);
+  by hand; the loop does it (`release.automerge` in `.github/flow.toml`);
 - post to a real platform account, or run `task test:live`, without the
   author's go-ahead;
 - rewrite a changelog section; settle a `Q<n>` in code;

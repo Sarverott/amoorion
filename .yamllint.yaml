@@ -3,6 +3,7 @@ extends: default
 ignore: |
   .venv/
   dist/
+  node_modules/
 
 rules:
   document-start: disable
