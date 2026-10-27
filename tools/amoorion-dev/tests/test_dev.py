@@ -176,6 +176,9 @@ def test_the_site_puts_the_presentation_page_at_its_root(repo, tmp_path):
     manifest = json.loads((out / "manifest.json").read_text())
     assert manifest["packages"] == {"amoorion": "0.2.0", "amoorion-a": "0.2.0", "amoorion-b": "0.2.0"}
     assert "project.html" in manifest["pages"] and (out / "site.webmanifest").is_file() and (out / ".nojekyll").is_file()
+    assert "Lost between platforms" in (out / "404.html").read_text()
+    assert "Allow: /" in (out / "robots.txt").read_text()
+    assert "examples/01-first-steps.html" in (out / "llms.txt").read_text()
 
 
 def test_without_the_presentation_page_the_project_page_is_the_root(repo, tmp_path):
