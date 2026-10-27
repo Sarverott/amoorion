@@ -268,3 +268,52 @@ items 6–8 and phase 4 items 9–11, TODO.md phases 2 and 4. The author's
 order in the chat with it: "adopt all these you will find around and
 update all according to new information. proceede new guidelines and
 commit on every small step you does."
+
+## UNIXUSAT=1793089864028 · commit 3585206
+
+The answers to Q13–Q15 and the third inquiry carried out, a commit per
+step, and from the new loop on, a release per push.
+
+**Versions per package (Q15).** `amoorion-dev version` bumps `amoorion` at
+every release and a package only when a commit since the last release
+touched it; a completed phase bumps every package to the same minor, the
+last phase of the plan (`release.major_after_phase = 6`) to the major.
+commitizen only renders the changelog now. Every push to development
+releases itself (`release.automerge = always`): the flow merges the
+release pull request after the checks, `release.yml` tags, makes the
+GitHub release, calls `publish` (only the bumped packages) and `gh-pages`,
+and when both have ended, merges master back into development and marks
+the next pre-release. v0.3.2 to v0.3.5 went through it whole; the first
+stopped at the merge's subject ("Release v…" was no conventional commit,
+now allowed). Ticking phase 4's last item made v0.4.0, the first `Y`:
+all ten packages, the six PyPI never had among them, which wait out its
+limit on new projects.
+
+**The presentation page.** The web page is the build of
+`amoorion-website` (vite, under `/amoorion/`, its root-absolute pictures
+moved along), with the marimo examples, project and releases pages in its
+style, `manifest.json`, `site.webmanifest`, a 404 page, `robots.txt` and
+`llms.txt`; GitHub Pages serves the `github-pages` branch as it is. The
+docs took the same look: the wordmark as logo, the cupid as favicon, night,
+rose and gold, its fonts. The README presents the project: the wordmark,
+the tagline, links, getting started, what it does, the platforms table.
+
+**For machines.** sphinx-llm writes `llms.txt`, `llms-full.txt` and the
+Markdown of every page; `robots.txt`, a 404 page in the theme
+(sphinx-notfound-page), and an agent skill, `skills/amoorion/SKILL.md`,
+served at `/skills/`. Read the Docs answers `Accept: text/markdown` by
+itself.
+
+**The dataset and deleting (Q14).** `dataset/<platform>/<profile>/` holds
+`index.json`, `posts/` and `deleted/`; `read` keeps what it saw,
+`snapshot` reads a profile's posts and marks what is gone, `delete` keeps
+a copy before deleting. Every platform that allows it deletes: Bluesky,
+Mastodon, X, Tumblr, Facebook, Discord (bot and webhook), Telegram, Matrix
+(redact); Blogger by mail can't.
+
+**Real accounts (Q13).** `bw` comes from `tools/` (npm); `task
+vault:login` logs in, unlocks and writes the session into `.env`;
+`task test:connect` (read-only) and `task test:live` (post, read, reply,
+delete) try every platform with its secrets in one command. Tried here:
+the vault is not logged in on this machine, so every platform was skipped;
+the first real connection waits for the author's `task vault:login`.
