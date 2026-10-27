@@ -27,11 +27,5 @@ api
 :maxdepth: 1
 :hidden:
 
-releasing
-devlog/VISION
-devlog/TODO
-devlog/BRAINSTORM
-devlog/ORDERS
-devlog/INQUIRIES
-changelog
+development
 ```

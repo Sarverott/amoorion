@@ -97,7 +97,20 @@ def _examples(app) -> None:
         shutil.copy(notebook, target / notebook.name)
 
 
+def _state(app) -> None:
+    """docs/devlog/STATE.md (ignored by git): the state of development at this build.
+
+    On Read the Docs it also asks GitHub and PyPI; local builds stay offline.
+    """
+    from amoorion_dev.repo import Repo
+    from amoorion_dev.state import markdown, read
+
+    online = os.environ.get("READTHEDOCS") == "True"
+    (DOCS / "devlog" / "STATE.md").write_text(markdown(read(Repo(ROOT), online=online)))
+
+
 def setup(app) -> None:
     app.connect("builder-inited", _examples)
+    app.connect("builder-inited", _state)
     app.connect("source-read", _source_read)
     app.connect("include-read", _include_read)

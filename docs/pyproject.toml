@@ -6,6 +6,7 @@ dependencies = [
     "amoorion",
     "amoorion-blogger",
     "amoorion-bluesky",
+    "amoorion-dev",
     "amoorion-discord",
     "amoorion-facebook",
     "amoorion-mastodon",
@@ -30,3 +31,4 @@ amoorion-facebook = { workspace = true }
 amoorion-discord = { workspace = true }
 amoorion-telegram = { workspace = true }
 amoorion-matrix = { workspace = true }
+amoorion-dev = { workspace = true }

@@ -18,6 +18,10 @@ fakes of their APIs, and an inbox of received messages.
 
 Read first:
 
+0. [docs/.agents/GUIDE.md](docs/.agents/GUIDE.md): how an iteration goes
+   (begin, take in, work, finish, never), and
+   [docs/.agents/MAP.md](docs/.agents/MAP.md): every place, the release
+   loop, workflows and tools; `uv run task state` for where it stands now
 1. [docs/devlog/VISION.md](docs/devlog/VISION.md): the idea
 2. [docs/devlog/TODO.md](docs/devlog/TODO.md): what is being worked on now
 3. [docs/devlog/BRAINSTORM.md](docs/devlog/BRAINSTORM.md): open questions `Q<n>`
@@ -109,8 +113,12 @@ tools/amoorion-dev/     development tools: state, versions, phases, release note
 
 The author reads this directory **read-only**:
 
+- `docs/.agents/GUIDE.md`: the working guide, strict steps of an iteration.
+- `docs/.agents/MAP.md`: the map; updated with every structural change.
 - `docs/.agents/NOTES.md`: findings, decisions taken with the user. Newest
   on top, dated.
+
+Both GUIDE and MAP are also pages of the docs (Development → For agents).
 
 ## BOS context
 
