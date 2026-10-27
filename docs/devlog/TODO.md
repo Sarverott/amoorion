@@ -35,7 +35,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Tumblr: post (Neue Post Format, tags), read
 - [x] Blogger by mail: post, TLS only
 - [x] Facebook Page: post, read, replies as comments
-- [ ] The vault reached by `bw` from `tools/` (npm); a task initializes
+- [x] The vault reached by `bw` from `tools/` (npm); a task initializes
       its session into `.env` (Q13)
 - [x] `dataset/` (gitignored): every profile's posts read into JSON files
       with an index, `dataset/<platform>/<profile>/` (Q14)

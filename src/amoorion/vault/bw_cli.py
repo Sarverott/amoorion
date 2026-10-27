@@ -1,12 +1,15 @@
 """bitwarden backend: Bitwarden / Vaultwarden through the `bw` CLI.
 
 Bitwarden decrypts on the client, so amoorion asks `bw`, logged in and
-unlocked beforehand (`bw login`, then `bw unlock --raw` gives the session):
+unlocked beforehand (`task vault:login`: `bw login`, then `bw unlock --raw`
+gives the session, written into .env; bw itself by npm into tools/,
+`task vault:tools`):
 
     AMOORION_VAULT=bitwarden
     AMOORION_VAULT_TOKEN=<session from bw unlock --raw>
     AMOORION_VAULT_ADDR=<server URL>    optional: refuse if bw talks to another
     AMOORION_VAULT_PATH=<prefix>        optional: item names, default `amoorion`
+    AMOORION_BW=<path of bw>            optional: else bw on PATH, else tools/'s
 
 Secret `bluesky/password` is the item named `amoorion/bluesky`: keys
 `username`, `password`, `totp`, `uri` and `notes` come from the item's login
@@ -18,12 +21,24 @@ import json
 import os
 import shutil
 import subprocess
+from pathlib import Path
 from typing import Any, ClassVar
 
 from amoorion.core import AmoorionError
 from amoorion.vault.base import BACKENDS, PREFIX, Vault, VaultLink
 
 LOGIN_KEYS = ("username", "password", "totp")
+# Where `task vault:tools` (npm, tools/package.json) puts bw in a checkout.
+NPM_BW = Path("tools") / "node_modules" / ".bin" / "bw"
+
+
+def find_bw() -> str | None:
+    if binary := os.environ.get("AMOORION_BW"):
+        return binary
+    if binary := shutil.which("bw"):
+        return binary
+    local = Path.cwd() / NPM_BW
+    return str(local) if local.is_file() else None
 
 
 @BACKENDS.register
@@ -38,9 +53,9 @@ class BitwardenVault(Vault):
         self._checked = False
 
     def _bw(self, *args: str) -> Any:
-        binary = shutil.which("bw")
+        binary = find_bw()
         if binary is None:
-            raise AmoorionError("the Bitwarden CLI `bw` is not on PATH")
+            raise AmoorionError("the Bitwarden CLI `bw` is not on PATH (nor AMOORION_BW, nor tools/node_modules/.bin/bw)")
         env = dict(os.environ)
         if self.link.token:
             env["BW_SESSION"] = self.link.token

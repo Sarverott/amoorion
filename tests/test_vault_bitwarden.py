@@ -93,5 +93,20 @@ def test_custom_prefix(fake_bw):
 
 def test_no_bw_on_path(tmp_path, monkeypatch):
     monkeypatch.setenv("PATH", str(tmp_path))
+    monkeypatch.delenv("AMOORION_BW", raising=False)
+    monkeypatch.chdir(tmp_path)  # no tools/node_modules/.bin/bw here
     with pytest.raises(AmoorionError, match="not on PATH"):
         vault().get("bluesky/password")
+
+
+def test_bw_from_npm_in_tools(tmp_path, monkeypatch):
+    from amoorion.vault.bw_cli import NPM_BW, find_bw
+
+    monkeypatch.setenv("PATH", str(tmp_path / "empty"))
+    monkeypatch.delenv("AMOORION_BW", raising=False)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / NPM_BW).parent.mkdir(parents=True)
+    (tmp_path / NPM_BW).write_text("#!/bin/sh\n")
+    assert find_bw() == str(tmp_path / NPM_BW)
+    monkeypatch.setenv("AMOORION_BW", "/opt/bw")
+    assert find_bw() == "/opt/bw"

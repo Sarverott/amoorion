@@ -54,6 +54,28 @@ tasks:
       - uv sync --frozen
       - uv run --frozen lefthook install
 
+  vault:tools:
+    desc: Install the Bitwarden CLI (bw) by npm into tools/ (tools/package.json)
+    cmds:
+      - npm ci --prefix tools --no-audit --no-fund --loglevel=error
+
+  vault:login:
+    desc: Log in to and unlock the Bitwarden vault; its session goes into .env (AMOORION_VAULT_TOKEN)
+    interactive: true
+    cmds:
+      - scripts/vault.sh login
+
+  vault:lock:
+    desc: Lock the Bitwarden vault and empty its session in .env
+    cmds:
+      - scripts/vault.sh lock
+
+  vault:status:
+    desc: 'The vault: bw and its state, then which platforms have their secrets'
+    cmds:
+      - scripts/vault.sh status
+      - uv run --frozen amoorion accounts
+
   run:
     desc: Run the amoorion CLI
     cmds:
