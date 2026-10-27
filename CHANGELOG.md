@@ -1,3 +1,29 @@
+## v0.4.1 (2026-10-27)
+
+**Packages:** amoorion 0.4.1, amoorion-bluesky 0.4.1, amoorion-discord 0.4.1, amoorion-facebook 0.4.1, amoorion-mastodon 0.4.1, amoorion-matrix 0.4.1, amoorion-telegram 0.4.1, amoorion-tumblr 0.4.1, amoorion-x 0.4.1
+
+### Feat
+
+- **dev**: the state shows every package with its version now and in the next release, and what kind the next release is (Z, Y or X)
+- **vault**: the Bitwarden vault through bw from tools/ (npm); task vault:login logs in, unlocks and writes the session into .env (Q13), vault:lock empties it, vault:status shows it
+- **matrix**: delete by redacting the event; read skips redacted events; its profile is the room
+- **telegram**: delete a message in its chat; its profile is chat<id>
+- **discord**: the bot deletes messages in its channel, the webhook deletes what it posted; profiles channel-<id> and webhook-<id>
+- **facebook**: delete a post or comment of the page; its profile is the page id
+- **tumblr**: delete a post; its profile is the blog
+- **x**: delete a post; its profile is the username
+- **mastodon**: delete a status; its profile is acct@server
+- **bluesky**: delete its own posts (com.atproto.repo.deleteRecord); its profile is the handle
+- **dataset**: the posts of every profile on every platform as JSON files with an index, dataset/<platform>/<profile>/ (Q14); snapshot reads them, read keeps what it saw, delete keeps a copy before deleting
+
+### Fix
+
+- **live**: a platform skipped for missing secrets tells the vault's reason; a locked vault points to task vault:login
+
+### Refactor
+
+- **plugins**: every plugin names its capabilities, so a new capability is never claimed by accident
+
 ## v0.4.0 (2026-10-27)
 
 **Packages:** amoorion 0.4.0, amoorion-blogger 0.4.0, amoorion-bluesky 0.4.0, amoorion-discord 0.4.0, amoorion-facebook 0.4.0, amoorion-mastodon 0.4.0, amoorion-matrix 0.4.0, amoorion-telegram 0.4.0, amoorion-tumblr 0.4.0, amoorion-x 0.4.0
