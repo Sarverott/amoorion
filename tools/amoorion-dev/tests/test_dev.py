@@ -3,7 +3,9 @@
 import subprocess
 
 import pytest
-from amoorion_dev import notes, phases, state, version
+import json
+
+from amoorion_dev import notes, phases, site, state, version
 from amoorion_dev.repo import Repo
 
 TODO = """# TODO
@@ -155,3 +157,29 @@ def test_a_release_publishes_what_it_bumped(repo):
     git("tag", "v0.2.1")
     assert version.changed_in(found, "v0.2.1") == ["amoorion", "amoorion-b"]
     assert version.last_release(found, "v0.2.1") == "0.2.0"
+
+
+def test_the_site_puts_the_presentation_page_at_its_root(repo, tmp_path):
+    found, commit, _ = repo
+    commit("docs: readme", {"README.md": "# amoorion\n\nbadges\n\n---\n\nWhat it is.\n"})
+    website = tmp_path / "website"
+    (website / "assets").mkdir(parents=True)
+    (website / "index.html").write_text("<html>presentation</html>")
+    examples = tmp_path / "examples"
+    examples.mkdir()
+    (examples / "01-first-steps.html").write_text("<html>example</html>")
+    out = tmp_path / "site"
+    site.build(found, out, examples, website)
+    assert (out / "index.html").read_text() == "<html>presentation</html>"
+    assert "What it is." in (out / "project.html").read_text() and "badges" not in (out / "project.html").read_text()
+    assert 'href="01-first-steps.html"' in (out / "examples" / "index.html").read_text()
+    manifest = json.loads((out / "manifest.json").read_text())
+    assert manifest["packages"] == {"amoorion": "0.2.0", "amoorion-a": "0.2.0", "amoorion-b": "0.2.0"}
+    assert "project.html" in manifest["pages"] and (out / "site.webmanifest").is_file() and (out / ".nojekyll").is_file()
+
+
+def test_without_the_presentation_page_the_project_page_is_the_root(repo, tmp_path):
+    found, _, _ = repo
+    site.build(found, tmp_path / "site")
+    assert "Universal tool" in (tmp_path / "site" / "index.html").read_text()
+    assert not (tmp_path / "site" / "project.html").exists()

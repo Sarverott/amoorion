@@ -54,7 +54,9 @@ and publishes only the packages it bumped (fewer calls to PyPI); `X` and
      action `.github/actions/publish-package`: build, attach to the
      release (the git package), upload to PyPI with the secret
      `PYPI_TOKEN` of the `pypi` environment;
-   - `gh-pages`: the project's web page (`amoorion-dev site`), kept in the
+   - `gh-pages`: the project's web page (`task site`: the presentation
+     page built from amoorion-website at its root, the marimo examples,
+     the project and releases pages, `manifest.json`), kept in the
      `github-pages` branch (committed by the bot onto the release's
      commit, force-pushed), which GitHub Pages serves.
 4. **When both have ended** (whatever they ended with), its last job

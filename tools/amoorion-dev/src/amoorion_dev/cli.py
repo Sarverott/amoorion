@@ -104,6 +104,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     site = commands.add_parser("site", help="build the web page")
     site.add_argument("--out", type=Path, default=Path("site"))
     site.add_argument("--examples", type=Path, default=Path("examples/build"))
+    site.add_argument("--website", type=Path, help="the built presentation page (website/dist), put at the root")
 
     commands.add_parser("identity", help="set git's user to the bot of .github/flow.toml")
 
@@ -157,7 +158,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             value = value[part]
         print(json.dumps(value) if isinstance(value, bool) else value)
     elif args.command == "site":
-        for path in web.build(repo, args.out, args.examples):
+        for path in web.build(repo, args.out, args.examples, args.website):
             console.print(f"wrote {path}")
     elif args.command == "identity":
         bot = repo.settings().get("bot", {})

@@ -9,6 +9,12 @@ docs = "https://amoorion.readthedocs.io/"
 name = "mr. Cravley, the git bot"
 email = "mr.cravley@apokryf.online"
 
+# The web page (gh-pages.yml): the presentation page is built from this
+# repository's source (scripts/build-website.sh).
+[pages]
+website = "Sarverott/amoorion-website"
+website_ref = "main"
+
 [branches]
 work = "development"
 release = "master"
