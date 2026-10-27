@@ -67,6 +67,14 @@ class FakeX(BaseHTTPRequestHandler):
         self.tweets.append(tweet)
         self._send(201, {"data": {"id": tweet["id"], "text": tweet["text"]}})
 
+    def do_DELETE(self):
+        if not self._signed("DELETE"):
+            return self._send(401, {"title": "Unauthorized", "detail": "Unauthorized", "status": 401})
+        number = urlparse(self.path).path.rsplit("/", 1)[-1]
+        found = any(t["id"] == number for t in self.tweets)
+        FakeX.tweets = [t for t in self.tweets if t["id"] != number]
+        self._send(200, {"data": {"deleted": found}})
+
     def log_message(self, *args):
         pass
 
@@ -115,3 +123,13 @@ def test_weight_and_compose():
     link = "https://example.org/" + "a" * 50
     assert weight(f"see {link}", [link]) == 4 + 23
     assert compose(Post(title="T", text="b", links=["https://a"])) == "T\n\nb\nhttps://a"
+
+
+def test_delete_a_post(x):
+    gone = x.post(Post(text="oops"))
+    kept = x.post(Post(text="fine"))
+    x.delete(gone)
+    assert [m.id for m in x.read()] == [kept.id]
+    with pytest.raises(AmoorionError, match="did not delete"):
+        x.delete(gone)
+    assert x.profile() == USER["username"]

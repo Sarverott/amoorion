@@ -1,7 +1,7 @@
 # amoorion-x
 
-X (twitter) plugin of [amoorion](../../README.md): post, read and reply through
-the X API v2, signed with OAuth 1.0a for the account itself.
+X (twitter) plugin of [amoorion](../../README.md): post, read, reply and delete
+through the X API v2, signed with OAuth 1.0a for the account itself.
 
 Secrets in amoorion's vault, from an app of the
 [developer portal](https://developer.x.com) with read and write permission:
