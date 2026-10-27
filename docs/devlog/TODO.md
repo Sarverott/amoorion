@@ -87,7 +87,7 @@ What is being worked on now. Vision and the plan of all phases:
       always; every push a `Z` release merged by itself, a phase `Y`, all
       phases `X`; a `Z` release publishes only the bumped packages
 - [x] After all workflows of a release: master merged back into development
-- [ ] The web page: `amoorion-website` built, with the marimo examples and
+- [x] The web page: `amoorion-website` built, with the marimo examples and
       manifest files, in the `github-pages` branch (served from it)
 - [ ] The docs styled after the web page and `resources/`; the README
       presenting the project

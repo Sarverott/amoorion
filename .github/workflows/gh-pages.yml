@@ -1,6 +1,7 @@
 # The project's web page, made at every release (called by release.yml; by
-# a release made by hand; or by hand for a tag): the page of amoorion-dev
-# site with the examples built by marimo, committed by the bot onto the
+# a release made by hand; or by hand for a tag): the presentation page built
+# from amoorion-website at its root, with the examples built by marimo, the
+# project pages and manifest files of amoorion-dev site, committed by the bot onto the
 # release's commit and force-pushed to the github-pages branch (as
 # redscope.pl keeps its release branch). GitHub Pages serves that branch.
 name: gh-pages
@@ -53,8 +54,15 @@ jobs:
       - name: Build the examples with marimo
         run: uv run --frozen task examples:build
 
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Build the presentation page (amoorion-website)
+        run: uv run --frozen task site:website
+
       - name: Build the page
-        run: uv run --frozen amoorion-dev site --out site --examples examples/build
+        run: uv run --frozen amoorion-dev site --out site --examples examples/build --website website/dist
 
       - name: Keep it in the github-pages branch
         env:

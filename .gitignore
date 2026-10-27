@@ -19,3 +19,7 @@ htmlcov/
 .idea/
 .DS_Store
 node_modules
+
+# The web page's builds (task site)
+website/
+site/

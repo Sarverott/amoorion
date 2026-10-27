@@ -87,6 +87,17 @@ tasks:
     cmds:
       - scripts/build-examples.sh
 
+  site:website:
+    desc: Build the presentation page (amoorion-website, by npm and vite) into website/dist/ (not committed)
+    cmds:
+      - scripts/build-website.sh
+
+  site:
+    desc: 'The whole web page into site/ (not committed): the presentation page, examples, project pages'
+    deps: [examples:build, site:website]
+    cmds:
+      - uv run --frozen amoorion-dev site --out site --examples examples/build --website website/dist
+
   test:
     desc: Run the tests (pytest)
     cmds:
