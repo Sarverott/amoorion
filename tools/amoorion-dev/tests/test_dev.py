@@ -42,7 +42,9 @@ def repo(tmp_path):
     commit(
         "feat: first",
         {
-            "pyproject.toml": '[project]\nname = "x"\nversion = "0.2.0"\n',
+            "pyproject.toml": '[project]\nname = "amoorion"\nversion = "0.2.0"\n',
+            "packages/amoorion-a/pyproject.toml": '[project]\nname = "amoorion-a"\nversion = "0.2.0"\n',
+            "packages/amoorion-b/pyproject.toml": '[project]\nname = "amoorion-b"\nversion = "0.2.0"\n',
             "docs/devlog/TODO.md": TODO,
             "docs/changelog/phase-0.md": "# Phase 0: core\n\nAppend-only.\n\n## one\n\nthe start\n",
             "CHANGELOG.md": "## v0.2.0 (2026-10-26)\n\n### Feat\n\n- first\n",
@@ -62,9 +64,9 @@ def test_phases_parse_items_and_stop_at_the_list_end():
     [
         ([], "0.2.1"),  # a loop without news still releases a patch
         (["docs: d", "fix: f"], "0.2.1"),
-        (["fix: f", "feat(cli): x"], "0.3.0"),
-        (["feat!: x"], "0.3.0"),  # breaking raises the minor while 0.x
-        (["fix: f\n\nBREAKING CHANGE: gone"], "0.3.0"),
+        (["fix: f", "feat(cli): x"], "0.2.1"),  # every step is a Z (Q15)
+        (["feat!: x"], "0.2.1"),
+        (["fix: f\n\nBREAKING CHANGE: gone"], "0.2.1"),
     ],
 )
 def test_next_release(repo, messages, expected):
@@ -120,3 +122,36 @@ def test_state_reads_offline(repo):
     assert read.version == "0.2.0" and read.stage == "released" and read.next_release == "0.2.1"
     assert [p["number"] for p in read.phases] == [0, 1] and read.remote == {}
     assert "| 1: platforms | 1/2 | in progress |" in state.markdown(read)
+
+
+def test_a_patch_bumps_amoorion_and_the_changed_packages_only(repo):
+    found, commit, _ = repo
+    commit("fix(a): f", {"packages/amoorion-a/x.py": "x = 1\n"})
+    assert version.plan(found, "0.2.0") == {"amoorion": "0.2.1", "amoorion-a": "0.2.1", "amoorion-b": "0.2.0"}
+
+
+def test_a_phase_bumps_every_package_to_the_minor(repo):
+    found, commit, _ = repo
+    commit("fix(a): f", {"packages/amoorion-a/x.py": "x = 1\n"})
+    commit("docs: phase 1 done", {"docs/devlog/TODO.md": TODO.replace("- [ ] four", "- [x] four")})
+    assert set(version.plan(found, "0.2.0").values()) == {"0.3.0"}
+
+
+def test_the_last_phase_of_the_plan_is_the_major(repo):
+    found, commit, _ = repo
+    commit("chore: plan", {".github/flow.toml": "[release]\nmajor_after_phase = 1\n"})
+    commit("docs: phase 1 done", {"docs/devlog/TODO.md": TODO.replace("- [ ] four", "- [x] four")})
+    assert version.kind(found, "0.2.0") == "major" and set(version.plan(found, "0.2.0").values()) == {"1.0.0"}
+
+
+def test_a_release_publishes_what_it_bumped(repo):
+    found, commit, git = repo
+    commit("fix(b): f", {"packages/amoorion-b/x.py": "x = 1\n"})
+    for package in version.packages(found):
+        if package.name in ("amoorion", "amoorion-b"):
+            file = found.root / package.pyproject
+            file.write_text(file.read_text().replace("0.2.0", "0.2.1"))
+    commit("bump: version 0.2.0 → 0.2.1")
+    git("tag", "v0.2.1")
+    assert version.changed_in(found, "v0.2.1") == ["amoorion", "amoorion-b"]
+    assert version.last_release(found, "v0.2.1") == "0.2.0"

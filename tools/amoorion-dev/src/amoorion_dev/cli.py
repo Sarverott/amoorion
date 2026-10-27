@@ -3,7 +3,6 @@
 import argparse
 import json
 import sys
-import tomllib
 from collections.abc import Sequence
 from dataclasses import asdict
 from pathlib import Path
@@ -68,12 +67,12 @@ def show_state(state: development.State) -> None:
         console.print(table)
 
 
-def published(repo: Repo) -> list[dict[str, str]]:
-    """The packages released and published together: amoorion and every one in packages/."""
-    found = [{"name": "amoorion", "path": "."}]
-    for pyproject in sorted((repo.root / "packages").glob("*/pyproject.toml")):
-        found.append({"name": tomllib.loads(pyproject.read_text())["project"]["name"], "path": str(pyproject.parent.relative_to(repo.root))})
-    return found
+def published(repo: Repo, revision: str | None = None) -> list[dict[str, str]]:
+    """The packages of the workspace, with their versions (at `revision`): amoorion and every one in packages/."""
+    return [
+        {"name": package.name, "path": package.path, "version": package.version(repo, revision) or ""}
+        for package in versions.packages(repo)
+    ]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -86,7 +85,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     state.add_argument("--markdown", action="store_true", help="as the docs page")
 
     version = commands.add_parser("version", help="versions of the release loop")
-    version.add_argument("action", choices=["current", "next", "mark", "final"])
+    version.add_argument("action", choices=["current", "list", "next", "mark", "final"])
 
     phases = commands.add_parser("phases", help="the phases of TODO.md")
     phases.add_argument("--completed", action="store_true", help="only those a release would complete (for the flow)")
@@ -95,8 +94,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     notes.add_argument("tag")
     notes.add_argument("--title", action="store_true", help="only the release's title")
 
-    packages = commands.add_parser("packages", help="the published packages, as JSON (for the publish workflow)")
+    packages = commands.add_parser("packages", help="the packages and their versions, as JSON (for the publish workflow)")
     packages.add_argument("--only", default="", help="only these, comma-separated (empty: all)")
+    packages.add_argument("--released", metavar="TAG", help="only those the release TAG bumped, at their version there")
 
     setting = commands.add_parser("setting", help="a value of .github/flow.toml, e.g. pypi.tries")
     setting.add_argument("key")
@@ -121,6 +121,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.command == "version":
         if args.action == "current":
             print(versions.current(repo))
+        elif args.action == "list":
+            table = Table("Package", "Version", "Next release")
+            coming = versions.plan(repo, versions.last_release(repo))
+            for package in published(repo):
+                table.add_row(package["name"], package["version"], coming.get(package["name"], ""))
+            console.print(table)
         elif args.action == "next":
             print(versions.next_release(repo, versions.last_release(repo)))
         else:
@@ -137,7 +143,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(release_notes.title(repo, args.tag) if args.title else release_notes.notes(repo, args.tag), end="\n" if args.title else "")
     elif args.command == "packages":
         only = {name.strip() for name in args.only.split(",") if name.strip()}
-        print(json.dumps([package for package in published(repo) if not only or package["name"] in only]))
+        found = published(repo, args.released)
+        if args.released:
+            bumped = set(versions.changed_in(repo, args.released))
+            found = [package for package in found if package["name"] in bumped]
+        print(json.dumps([package for package in found if not only or package["name"] in only]))
     elif args.command == "setting":
         value: object = repo.settings()
         for part in args.key.split("."):

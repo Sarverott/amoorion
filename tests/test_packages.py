@@ -1,4 +1,4 @@
-"""Every package of the workspace is released together (lock-step versions)."""
+"""Every package of the workspace has its own version (Q15), written by amoorion-dev, not commitizen."""
 
 import tomllib
 from pathlib import Path
@@ -11,9 +11,15 @@ def load(path: Path) -> dict:
     return tomllib.loads(path.read_text())
 
 
-def test_every_package_is_bumped_with_the_others():
-    root = load(ROOT / "pyproject.toml")
-    files = root["tool"]["commitizen"]["version_files"]
-    assert sorted(files) == sorted(f"packages/{package.name}/pyproject.toml:^version" for package in PACKAGES)
-    versions = {load(package / "pyproject.toml")["project"]["version"] for package in PACKAGES}
-    assert versions == {root["project"]["version"]}
+def test_commitizen_writes_no_versions():
+    commitizen = load(ROOT / "pyproject.toml")["tool"]["commitizen"]
+    assert "version_files" not in commitizen and "pre_bump_hooks" not in commitizen
+
+
+def test_no_package_is_ahead_of_amoorion():
+    """amoorion is bumped at every release, a package only when it changed."""
+    from amoorion_dev.version import parse
+
+    main = parse(load(ROOT / "pyproject.toml")["project"]["version"])
+    for package in PACKAGES:
+        assert parse(load(package / "pyproject.toml")["project"]["version"])[:3] <= main[:3], package.name
