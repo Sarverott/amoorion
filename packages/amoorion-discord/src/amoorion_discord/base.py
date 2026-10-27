@@ -1,10 +1,12 @@
 """discord plugins: a bot through the REST API, and a channel webhook.
 
 `discord` secrets (`discord/<key>`): `token` (the bot's), `channel` (the
-channel's id); optional `uri` (the API with its version). It posts, reads
-and replies in that channel.
+channel's id); optional `uri` (the API with its version). It posts, reads,
+replies and deletes in that channel (others' messages too, with Manage
+Messages).
 
-`discord-webhook` secret: `url`, the channel's webhook URL; it only posts.
+`discord-webhook` secret: `url`, the channel's webhook URL; it posts, and
+deletes what it posted.
 
 Both send at most 2000 characters, and no mention pings anyone.
 """
@@ -53,8 +55,8 @@ def message(platform: str, data: dict[str, Any], guild: str | None) -> Message:
 
 class Discord(HttpPlugin):
     name: ClassVar[str] = "discord"
-    description: ClassVar[str] = "Discord bot in one channel (REST API): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
+    description: ClassVar[str] = "Discord bot in one channel (REST API): post, read, reply, delete"
+    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
     secrets: ClassVar[tuple[str, ...]] = ("token", "channel")
 
     _guild: str | None = None
@@ -94,11 +96,19 @@ class Discord(HttpPlugin):
             raise AmoorionError("discord needs the id of the message to reply to")
         return self._send(text, reply_to=to.id)
 
+    def delete(self, message: Message) -> None:
+        if not message.id:
+            raise AmoorionError("discord needs the id of the message to delete")
+        self._call("DELETE", f"{self._channel()}/messages/{message.id}")
+
+    def profile(self) -> str:
+        return f"channel-{self.secret('channel')}"
+
 
 class DiscordWebhook(HttpPlugin):
     name: ClassVar[str] = "discord-webhook"
-    description: ClassVar[str] = "Discord channel webhook, no bot: post"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST})
+    description: ClassVar[str] = "Discord channel webhook, no bot: post, delete what it posted"
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.DELETE})
     secrets: ClassVar[tuple[str, ...]] = ("url",)
 
     def hidden(self) -> list[str]:
@@ -110,3 +120,12 @@ class DiscordWebhook(HttpPlugin):
         # wait=true: Discord answers with the message instead of nothing.
         sent = self.request("POST", self.secret("url"), params={"wait": "true"}, json=body)
         return message(self.name, sent, sent.get("guild_id"))
+
+    def delete(self, message: Message) -> None:
+        if not message.id:
+            raise AmoorionError("discord-webhook needs the id of the message to delete")
+        self.request("DELETE", f"{self.secret('url').rstrip('/')}/messages/{message.id}")
+
+    def profile(self) -> str:
+        # .../webhooks/<id>/<token>: the id names it, the token stays secret.
+        return "webhook-" + self.secret("url").rstrip("/").rsplit("/", 2)[-2]

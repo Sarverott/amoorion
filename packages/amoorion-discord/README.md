@@ -2,7 +2,7 @@
 
 Discord plugins of [amoorion](../../README.md), both ways of decision Q12:
 
-- **`discord`**: a bot posts, reads and replies in one channel, through
+- **`discord`**: a bot posts, reads, replies and deletes in one channel, through
   the REST API. Secrets in amoorion's vault: `discord/token` (the bot's
   token, Developer Portal → the application → Bot) and `discord/channel`
   (the channel id: Developer Mode on, right click → Copy Channel ID);
@@ -10,7 +10,8 @@ Discord plugins of [amoorion](../../README.md), both ways of decision Q12:
   needs the permissions View Channel, Send Messages and Read Message
   History in that channel, and the **Message Content** intent switched on
   in the Developer Portal, or it reads messages of others as empty.
-- **`discord-webhook`**: posts only, no bot. Secret
+  Deleting others' messages needs Manage Messages too.
+- **`discord-webhook`**: posts, and deletes what it posted; no bot. Secret
   `discord-webhook/url`: the channel's webhook URL (channel settings →
   Integrations → Webhooks).
 

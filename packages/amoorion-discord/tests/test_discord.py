@@ -66,6 +66,19 @@ class FakeDiscord(BaseHTTPRequestHandler):
         self.messages.append(created)
         self._send(200, created)
 
+    def do_DELETE(self):
+        url = urlparse(self.path)
+        if url.path == "/api/webhooks/5/hooktoken/messages/w1":
+            return self._send(204, {})
+        if self.headers.get("Authorization") != "Bot tok":
+            return self._send(401, {"message": "401: Unauthorized", "code": 0})
+        number = url.path.rsplit("/", 1)[-1]
+        if not url.path.startswith("/api/channels/42/messages/") or not any(m["id"] == number for m in self.messages):
+            return self._send(404, {"message": "Unknown Message", "code": 10008})
+        FakeDiscord.messages = [m for m in self.messages if m["id"] != number]
+        self.send_response(204)
+        self.end_headers()
+
     def log_message(self, *args):
         pass
 
@@ -133,3 +146,19 @@ def test_webhook_token_never_in_errors(server, vault, monkeypatch):
 
 def test_compose():
     assert compose(Post(text="t", links=["https://a"])) == "t\nhttps://a"
+
+
+def test_bot_deletes(server, vault):
+    discord = open_plugin("discord", vault)
+    gone, kept = discord.post(Post(text="oops")), discord.post(Post(text="fine"))
+    discord.delete(gone)
+    assert [m.id for m in discord.read()] == [kept.id]
+    with pytest.raises(AmoorionError, match="Unknown Message"):
+        discord.delete(gone)
+    assert discord.profile() == "channel-42"
+
+
+def test_webhook_deletes_what_it_posted(server, vault):
+    webhook = open_plugin("discord-webhook", vault)
+    webhook.delete(webhook.post(Post(text="oops")))
+    assert webhook.profile() == "webhook-5"
