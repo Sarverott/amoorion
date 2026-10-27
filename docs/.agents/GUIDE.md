@@ -6,7 +6,8 @@ result later, so every step must be findable, checked and told.
 
 ## 1. Begin
 
-1. Read `AGENTS.md`, this guide and `MAP.md`.
+1. Read `AGENTS.md`, this guide and `MAP.md`; the commands of every
+   step are in `docs/contributing.md`.
 2. `uv run task state` (`-- --online` when GitHub matters): branch, version
    stage, open pull request, waiting orders or inquiries, phases.
 3. `git status`: anything changed that you didn't make is the author's.

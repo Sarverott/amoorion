@@ -74,5 +74,7 @@ What is being worked on now. Vision and the plan of all phases:
       Pages
 - [x] An easy CLI: `amoorion` alone asks what to do, step by step (rich)
 - [x] A map and a working guide for agents in `docs/.agents/`
+- [x] A contributors guide in the docs' Development section: pulling the
+      current state, pushing changes, versioning, what the loop does with them
 
 Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).

@@ -12,6 +12,7 @@ structure, a workflow or a tool updates this map in the same commit.
 | `tools/amoorion-dev/` | development tools, never published | agents |
 | `examples/*.ipynb` | notebooks, run by the tests; `examples/build/` ignored | agents |
 | `tests/`, `packages/*/tests/`, `tools/*/tests/` | pytest; `tests/live/` only when named | agents |
+| `docs/contributing.md` | contributors guide: pull, change, push, versions | agents |
 | `docs/*.md`, `docs/conf.py` | the docs site (Sphinx, MyST); `docs/api/`, `docs/examples/`, `docs/devlog/STATE.md` are built | agents |
 | `docs/devlog/ORDERS.md` | the author's answers to `Q<n>` | **author**; agents empty it |
 | `docs/devlog/INQUIRIES.md` | the author's requests in their own words | **author**; agents empty it |
@@ -19,7 +20,7 @@ structure, a workflow or a tool updates this map in the same commit.
 | `docs/devlog/BRAINSTORM.md` | open questions `Q<n>` with a *Lean:* | agents ask, the author decides |
 | `docs/changelog/phase-<n>.md` | the story: orders word for word, decisions, what was done; **append-only** | agents |
 | `CHANGELOG.md` | the commits per release; written by `amoorion-dev version final` | the flow |
-| `docs/.agents/` | this map, the guide, the notes; the author reads it | agents |
+| `docs/.agents/` | this map, the guide, the notes, `CLEO.md` (Cleo's own view); the author reads it | agents |
 | `.github/flow.toml` | settings of the loop: bot, branches, phase releases, PyPI | the author |
 | `.github/workflows/`, `.github/actions/` | the automation below | agents |
 | `lefthook.yml`, `Taskfile.yml`, `docs/Taskfile.yml` | git hooks, tasks | agents |

@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-x"
-version = "0.3.0"
+version = "0.3.1"
 description = "X (twitter) plugin of amoorion: post, read and reply through the X API v2"
 readme = "README.md"
 license = "MIT"
