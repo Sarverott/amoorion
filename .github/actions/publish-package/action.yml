@@ -1,8 +1,9 @@
 # One package of the workspace, published: built, attached to the GitHub
 # release of its tag (the git package) and uploaded to PyPI. Called once per
 # package by the publish workflow. PyPI creates only a few new projects an
-# hour for an account; a 429 is waited out, and files already on PyPI are
-# skipped, so publishing a tag again goes on where it stopped.
+# hour for an account; a 429 is waited out only `tries` times (pypi.tries
+# of flow.toml), and files already on PyPI are skipped, so publishing a tag
+# again goes on where it stopped.
 name: publish package
 description: Build one package, attach it to the GitHub release, upload it to PyPI
 
@@ -26,7 +27,7 @@ inputs:
   tries:
     description: how often to try PyPI while it answers 429
     required: false
-    default: '12'
+    default: '1'
   pause:
     description: seconds between two tries
     required: false

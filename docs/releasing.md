@@ -75,8 +75,10 @@ some by name), `gh-pages` for a tag, `release`, `flow` and `check` on
 their branch. A release made by hand on GitHub publishes and builds the
 page too. Files already on PyPI are skipped, so starting `publish` again
 for a tag goes on where it stopped. PyPI lets an account create only a few
-new projects an hour (`429 Too many new projects created`): the first
-release of new packages waits out that limit, 15 minutes at a time.
+new projects an hour (`429 Too many new projects created`). Such a
+package fails at once instead of asking PyPI again for hours (`pypi.tries`
+in `.github/flow.toml`, 1); start `publish` for the tag by hand with its
+name an hour later, a few at a time.
 
 The full BOS flow goes through `revision`, `testing` and `releasing`
 between development and master; this repository takes the short way,
