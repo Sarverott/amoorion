@@ -1,8 +1,22 @@
 # amoorion
 
-[![check](https://github.com/Sarverott/amoorion/actions/workflows/check.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/check.yml) [![release](https://github.com/Sarverott/amoorion/actions/workflows/release.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/release.yml) [![publish](https://github.com/Sarverott/amoorion/actions/workflows/publish.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/publish.yml) [![gh-pages](https://github.com/Sarverott/amoorion/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/gh-pages.yml) 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Sarverott/amoorion/master/resources/images/Amoorion%20rose-gold%20gothic%20wordmark.png" alt="amoorion" width="600">
+</p>
 
-Universal tool for administration of chatting and communication platforms
+<p align="center">
+  <b>One heart for all your conversations.</b><br>
+  Universal tool for administration of chatting and communication platforms
+</p>
+
+<p align="center">
+  <a href="https://sarverott.github.io/amoorion">web page</a> ·
+  <a href="https://amoorion.readthedocs.io">documentation</a> ·
+  <a href="https://pypi.org/project/amoorion/">PyPI</a> ·
+  <a href="https://github.com/Sarverott/amoorion">GitHub</a>
+</p>
+
+[![check](https://github.com/Sarverott/amoorion/actions/workflows/check.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/check.yml) [![release](https://github.com/Sarverott/amoorion/actions/workflows/release.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/release.yml) [![publish](https://github.com/Sarverott/amoorion/actions/workflows/publish.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/publish.yml) [![gh-pages](https://github.com/Sarverott/amoorion/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/Sarverott/amoorion/actions/workflows/gh-pages.yml)
 
 ---
 <!--
@@ -49,6 +63,36 @@ with the services around it.
 
 #### documentation: https://amoorion.readthedocs.io
 
+```sh
+pip install amoorion amoorion-bluesky        # the core and the platforms you use
+amoorion                                     # asks step by step what to do
+amoorion publish --text "hello" --to dryrun  # dryrun sends nothing: try it first
+```
+
+## What it does
+
+<img src="https://raw.githubusercontent.com/Sarverott/amoorion/master/resources/images/Amoorion%E2%80%99s%20Cupid%20Bot%20Sends%20Heart%20Messages-2-mini.png" alt="Amoorion's cupid bot" width="220" align="right">
+
+- **Publish:** write once, post to every platform you name.
+- **Read & reply:** read what came in, in one inbox, and answer from there.
+- **Connect:** link the platforms with each other and with the services
+  around them (webhooks, ntfy, NATS, e-mail: phase 5 of the plan).
+
+| Platform | Package | Post | Read | Reply |
+| -------- | ------- | :--: | :--: | :---: |
+| Bluesky | `amoorion-bluesky` | ✓ | ✓ | ✓ |
+| Mastodon | `amoorion-mastodon` | ✓ | ✓ | ✓ |
+| X (twitter) | `amoorion-x` | ✓ | ✓ | ✓ |
+| Tumblr | `amoorion-tumblr` | ✓ | ✓ | |
+| Blogger (by mail) | `amoorion-blogger` | ✓ | | |
+| Facebook Page | `amoorion-facebook` | ✓ | ✓ | ✓ (comment) |
+| Discord bot / webhook | `amoorion-discord` | ✓ | ✓ (bot) | ✓ (bot) |
+| Telegram bot | `amoorion-telegram` | ✓ | ✓ | ✓ |
+| Matrix room | `amoorion-matrix` | ✓ | ✓ | ✓ |
+
+**Early stage:** every platform is tested against fakes of its API; trying
+them against real accounts is under way.
+
 ## How it is built
 
 One core (model, view, controller) and namespaces on it: **plugins** (one
@@ -59,8 +103,6 @@ the methods: **CLI**, **HTTP API**, **MCP** server for AI agents, and a
 `.env` holds just the link to it. Each platform is its own package in
 `packages/` (a uv workspace). Details: [docs/structure.md](docs/structure.md), writing a plugin:
 [docs/plugins.md](docs/plugins.md).
-
-
 
 ## Usage
 
