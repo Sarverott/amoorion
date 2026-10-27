@@ -1,3 +1,9 @@
+## v0.3.1 (2026-10-27)
+
+### Fix
+
+- **gh-pages**: keep the page in the github-pages branch before asking for Pages
+
 ## v0.3.0 (2026-10-27)
 
 ### Feat
