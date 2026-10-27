@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-tumblr"
-version = "0.2.2"
+version = "0.3.0"
 description = "Tumblr plugin of amoorion: post and read through the Tumblr API v2"
 readme = "README.md"
 license = "MIT"

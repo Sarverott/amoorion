@@ -1,4 +1,9 @@
-## v0.2.2 (2026-10-27)
+## v0.3.0 (2026-10-27)
+
+### Feat
+
+- **cli**: amoorion alone asks step by step: the method, its parameters, platforms by what they can do, a confirmation before changing anything; results show messages as text
+- **tools**: amoorion-dev, the development tools: state of development, versions of the loop, phases, release notes, web page; settings in .github/flow.toml
 
 ### Fix
 
