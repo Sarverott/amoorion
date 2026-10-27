@@ -41,7 +41,7 @@ What is being worked on now. Vision and the plan of all phases:
       with an index, `dataset/<platform>/<profile>/` (Q14)
 - [x] `delete` capability and method, storing what it deletes in the
       dataset first (Q14)
-- [ ] One command for the live tests of all platforms (Q13)
+- [x] One command for the live tests of all platforms (Q13)
 - [ ] Every platform tried against a real account (needs the author's
       accounts and go-ahead, Q13; ready: `task test:live -- <platform>…`)
 

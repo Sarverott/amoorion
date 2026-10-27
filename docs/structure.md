@@ -39,7 +39,8 @@ packages/            one package per platform, a uv workspace (Q10)
 
 Every package's README lists its secrets. Each is tested against a fake of
 its API; `tests/live/` tries each against its real account, only when asked
-(`task test:live -- <platform>…`, Q13).
+(`task test:connect`, read-only, and `task test:live`, posting; every platform
+with its secrets, or those named, Q13).
 
 ## How they depend on each other
 

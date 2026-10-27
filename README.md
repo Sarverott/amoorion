@@ -146,7 +146,8 @@ uv run task vault:status       # bw's state, and which platforms have their secr
 uv run task check              # tests, YAML, commit messages, docs (= CI)
 uv run task docs:build         # the docs site into docs/_build/html
 uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform
-uv run task test:live -- bluesky mastodon    # one real test post on each platform named
+uv run task test:connect       # read-only: log in to every platform with its secrets, read a few posts
+uv run task test:live          # a real test post on each (or: -- bluesky mastodon), read, replied, deleted
 ```
 
 Examples of usage: Jupyter notebooks in [examples/](examples/)

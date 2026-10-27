@@ -126,9 +126,16 @@ tasks:
       - uv run --frozen pytest
 
   test:live:
-    desc: 'Post for real on the platforms named: task test:live -- <platform>… (needs the go-ahead)'
+    desc: 'For real: post, read, reply, delete on every platform with its secrets (or: task test:live -- <platform>…)'
     cmds:
       - uv run --frozen pytest tests/live -m live -s -rA
+    env:
+      AMOORION_LIVE: '{{.CLI_ARGS}}'
+
+  test:connect:
+    desc: 'Read-only: log in to every platform with its secrets (or those named), its profile, a few posts'
+    cmds:
+      - uv run --frozen pytest tests/live -m live -k test_connect -s -rA
     env:
       AMOORION_LIVE: '{{.CLI_ARGS}}'
 
