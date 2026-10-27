@@ -18,6 +18,7 @@
 
 ### Fix
 
+- **dataset**: the dataset package itself into git: dataset/ in .gitignore had kept src/amoorion/dataset/ out
 - **live**: a platform skipped for missing secrets tells the vault's reason; a locked vault points to task vault:login
 
 ### Refactor
