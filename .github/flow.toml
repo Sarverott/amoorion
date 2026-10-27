@@ -33,6 +33,8 @@ automerge = "always"
 major_after_phase = 6
 
 [pypi]
-# PyPI creates only a few new projects an hour for an account.
-tries = 12
+# PyPI creates only a few new projects an hour for an account. One try:
+# a 429 fails the package at once instead of asking PyPI again for hours;
+# start `publish` by hand with its name later.
+tries = 1
 pause = 900
