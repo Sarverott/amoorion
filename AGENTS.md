@@ -28,6 +28,8 @@ Read first:
 4. [docs/changelog/](docs/changelog/): how it got here, answered orders and decisions
 5. [docs/structure.md](docs/structure.md): the shape of `src/amoorion/`
 6. [docs/plugins.md](docs/plugins.md): how to write a platform plugin
+7. [docs/contributing.md](docs/contributing.md): pulling, pushing,
+   versions, for people and agents
 
 The author's answers come in [docs/devlog/ORDERS.md](docs/devlog/ORDERS.md),
 the work they ask for in their own words in

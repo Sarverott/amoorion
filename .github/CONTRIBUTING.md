@@ -1,11 +1,13 @@
 # Contributing
 
-amoorion is in an early stage. Before you start, read [AGENTS.md](../AGENTS.md)
-(it is for humans too) and [docs/devlog/TODO.md](../docs/devlog/TODO.md).
+amoorion is in an early stage. The contributors guide is in the docs:
+[docs/contributing.md](../docs/contributing.md) (on Read the Docs:
+Development → Contributors guide). In short:
 
-1. Branch from `development`; pull requests go to `development`.
-2. `uv sync && uv run task setup` installs the tools and the git hooks.
-3. Commits follow [conventional commits](https://www.conventionalcommits.org/),
-   checked by commitizen.
-4. `uv run task check` must pass before you open a pull request.
-5. Never commit platform tokens or passwords.
+1. Work on `development`; pull requests go to `development`, never `master`.
+2. `uv run task init` installs the tools and the git hooks, then checks.
+3. Start with `git pull --rebase origin development` and `uv run task state`.
+4. Commits follow [conventional commits](https://www.conventionalcommits.org/),
+   checked by commitizen; their type decides the next version.
+5. `uv run task check` must pass before you push or open a pull request.
+6. Never commit platform tokens or passwords.

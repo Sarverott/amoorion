@@ -12,6 +12,7 @@ structure, a workflow or a tool updates this map in the same commit.
 | `tools/amoorion-dev/` | development tools, never published | agents |
 | `examples/*.ipynb` | notebooks, run by the tests; `examples/build/` ignored | agents |
 | `tests/`, `packages/*/tests/`, `tools/*/tests/` | pytest; `tests/live/` only when named | agents |
+| `docs/contributing.md` | contributors guide: pull, change, push, versions | agents |
 | `docs/*.md`, `docs/conf.py` | the docs site (Sphinx, MyST); `docs/api/`, `docs/examples/`, `docs/devlog/STATE.md` are built | agents |
 | `docs/devlog/ORDERS.md` | the author's answers to `Q<n>` | **author**; agents empty it |
 | `docs/devlog/INQUIRIES.md` | the author's requests in their own words | **author**; agents empty it |
