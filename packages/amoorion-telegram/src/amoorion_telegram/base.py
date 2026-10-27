@@ -40,7 +40,7 @@ def link(chat: dict[str, Any], number: int) -> str | None:
 class Telegram(HttpPlugin):
     name: ClassVar[str] = "telegram"
     description: ClassVar[str] = "Telegram bot in one chat (Bot API): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("token", "chat")
 
     def hidden(self) -> list[str]:

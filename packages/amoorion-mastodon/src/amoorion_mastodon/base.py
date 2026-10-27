@@ -61,7 +61,7 @@ def length(text: str, links: list[str]) -> int:
 class Mastodon(HttpPlugin):
     name: ClassVar[str] = "mastodon"
     description: ClassVar[str] = "Mastodon (REST API): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("uri", "token")
 
     _account: dict[str, Any] | None = None

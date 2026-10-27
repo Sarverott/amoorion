@@ -40,7 +40,7 @@ def compose(post: Post) -> str:
 class X(HttpPlugin):
     name: ClassVar[str] = "x"
     description: ClassVar[str] = "X (twitter) API v2: post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("api-key", "api-secret", "access-token", "access-secret")
 
     _me: dict[str, Any] | None = None

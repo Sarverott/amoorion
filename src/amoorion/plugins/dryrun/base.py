@@ -11,7 +11,7 @@ from amoorion.plugins.base import Capability, Plugin
 class DryRun(Plugin):
     name: ClassVar[str] = "dryrun"
     description: ClassVar[str] = "sends nothing; remembers posts for the running process"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
 
     _messages: ClassVar[list[Message]] = []
     _ids = count(1)

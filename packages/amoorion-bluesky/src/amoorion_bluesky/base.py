@@ -54,7 +54,7 @@ def compose(post: Post) -> tuple[str, list[dict[str, Any]]]:
 class Bluesky(HttpPlugin):
     name: ClassVar[str] = "bluesky"
     description: ClassVar[str] = "Bluesky (AT Protocol): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("username", "password")
 
     _session: dict[str, Any] | None = None

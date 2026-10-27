@@ -54,7 +54,7 @@ def message(platform: str, data: dict[str, Any], guild: str | None) -> Message:
 class Discord(HttpPlugin):
     name: ClassVar[str] = "discord"
     description: ClassVar[str] = "Discord bot in one channel (REST API): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("token", "channel")
 
     _guild: str | None = None

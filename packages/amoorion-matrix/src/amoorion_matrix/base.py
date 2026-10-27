@@ -36,7 +36,7 @@ def part(value: str) -> str:
 class Matrix(HttpPlugin):
     name: ClassVar[str] = "matrix"
     description: ClassVar[str] = "Matrix room (client-server API): post, read, reply"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("uri", "token", "room")
 
     _room: str | None = None

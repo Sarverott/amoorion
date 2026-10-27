@@ -26,7 +26,7 @@ def compose(post: Post) -> str:
 class Facebook(HttpPlugin):
     name: ClassVar[str] = "facebook"
     description: ClassVar[str] = "Facebook Page (Graph API): post, read, reply as comment"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.REPLY})
     secrets: ClassVar[tuple[str, ...]] = ("page-id", "page-token")
 
     def _call(self, method: str, path: str, **kwargs: Any) -> Any:
