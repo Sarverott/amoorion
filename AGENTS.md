@@ -100,11 +100,13 @@ tools/amoorion-dev/     development tools: state, versions, phases, release note
    `SUBCOMMANDS` in Taskfile.yml; a test checks it). Platforms are plugin
    packages in `packages/`, tested against fakes of their APIs, never real
    accounts.
-5. **Ask first** before tagging a release, publishing a package or posting
-   to any real platform account. Pushing `development` is allowed; it
-   finalizes the version and opens the release pull request to `master`
-   (flow workflow). Merging it releases and publishes
-   ([docs/releasing.md](docs/releasing.md)), so agents never push `master`.
+5. **Ask first** before tagging a release or publishing a package by
+   hand, or posting to any real platform account. Pushing `development`
+   is allowed and is a release (Q15): the flow finalizes the versions,
+   opens the release pull request to `master` and merges it; the release
+   publishes the bumped packages and merges master back
+   ([docs/releasing.md](docs/releasing.md)). Agents never push `master`;
+   after a push they wait for the release and pull before the next step.
 6. **Branches:** BOS flow `master` → `development` → `revision` → `testing`
    → `releasing` → `master` via PR. Work on `development`.
 7. **Commits:** one per finished step, gated on `task check`, conventional

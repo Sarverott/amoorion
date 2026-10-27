@@ -26,7 +26,7 @@ ever skip `task init`, run `uv run task setup`.
 
 | Branch | What |
 | ------ | ---- |
-| `master` | releases only; changed by merging the release pull request, never by a push |
+| `master` | releases only; changed by merging the release pull request (the flow does), never by a push |
 | `development` | where all work goes |
 | `github-pages` | the built web page, written by the `gh-pages` workflow |
 
@@ -41,7 +41,7 @@ Every session starts the same way:
 ```sh
 git switch development
 git pull --rebase origin development   # others' work and the bot's version commits
-uv run task flow:pull                  # only after a release: master in, the next pre-release marked
+uv run task flow:pull                  # only if master isn't merged back yet
 uv run task state                      # where it stands (-- --online: also GitHub and PyPI)
 git status                             # anything changed you didn't make is someone else's work
 ```
@@ -49,12 +49,12 @@ git status                             # anything changed you didn't make is som
 - **`git pull` of development** brings the work of others and the commits
   of the bot (mr. Cravley), which finalizes the version after every push
   (below).
-- **`task flow:pull`**, after the release pull request was merged, brings
-  master back into development: `git pull origin master`, then the
-  released version becomes the next pre-release in its own commit
-  (`bump: version 0.3.0 → 0.3.1a0`). lefthook's `post-merge` hook does the
-  marking too; the task marks again in case hooks are off, which changes
-  nothing twice. When nothing new was released, it only pulls.
+- **The merge back:** after a release, the `release` workflow merges
+  master into development on origin and marks the next pre-release
+  (`bump: version 0.3.1 → 0.3.2a0`), so `git pull` brings it.
+  **`task flow:pull`** does the same locally (`git pull origin master`,
+  then the mark; lefthook's `post-merge` hook marks too, which changes
+  nothing twice), for a release merged by hand.
 - **`task state`** shows the branch, the version and its stage, the next
   release, the open pull request, the phases of
   [TODO.md](devlog/TODO.md), the open questions, and whether the author
@@ -82,18 +82,12 @@ One finished step at a time, each its own commit:
 ### Commit messages
 
 [Conventional commits](https://www.conventionalcommits.org/), checked by
-commitizen. The type is not decoration: it decides the next version.
+commitizen: `feat`, `fix`, `docs`, `test`, `refactor`, `chore`, `ci`,
+`build`, `style`, `perf`, with a scope where it helps (`fix(x): …`).
+`bump` is for version commits, made only by the loop. Agents end their
+message with their `Co-Authored-By:` line.
 
-| Type | For | Next version (while `0.x`) |
-| ---- | --- | -------------------------- |
-| `feat` | something new a user can do | minor: `0.3.0` → `0.4.0` |
-| `fix` | a bug fixed | patch: `0.3.0` → `0.3.1` |
-| `docs`, `test`, `refactor`, `chore`, `ci`, `build`, `style`, `perf` | the rest | patch |
-| `feat!:` or a `BREAKING CHANGE:` footer | something that stops working as before | minor (major from `1.0`) |
-| `bump` | version commits; only the hook and the bot make them | none |
-
-A phase of TODO.md completed since the last release raises at least the
-minor too. Agents end their message with their `Co-Authored-By:` line.
+The type no longer decides the version (Q15): what the step finished does.
 
 ## Push
 
@@ -103,38 +97,53 @@ git pull --rebase origin development   # if the bot pushed meanwhile, your push 
 git push origin development
 ```
 
-Pushing development is safe; nothing is released by it. What follows, on
-GitHub:
+**Every push to development is a release.** What follows, on GitHub:
 
 1. `check` runs `task check` on the push.
-2. `flow` makes the version **final**: the one the commits since the last
-   release ask for (table above). Every package and `uv.lock` follow,
+2. `flow` makes the versions **final** (below), `uv.lock` follows,
    `CHANGELOG.md` gets the section, and the bot pushes
-   `bump: version 0.3.1a0 → 0.4.0` back to development. **Pull before you
-   go on** (`git pull --rebase origin development`).
+   `bump: version 0.3.2a0 → 0.3.2` back to development.
 3. `flow` opens the pull request development → master,
-   `Release v0.4.0`, or retitles the open one. Later pushes update it; the
-   version follows what the new commits ask for.
-4. If the push ticked the last item of a phase, and
-   `release.automerge_completed_phase` in `.github/flow.toml` is on, the
-   flow runs `task check` and merges the pull request itself.
+   `Release v0.3.2`, runs `task check` and merges it
+   (`release.automerge` in `.github/flow.toml`: `always`; `phase` merges
+   only a completed phase, `never` leaves it to the author).
+4. `release` tags master, makes the GitHub release, publishes the bumped
+   packages and builds the web page; when all of that has ended, it
+   merges master back into development and marks the next pre-release.
+5. **Pull before the next step:**
+
+   ```sh
+   gh run watch "$(gh run list -w release -L 1 --json databaseId -q '.[0].databaseId')"
+   git pull --rebase origin development
+   ```
 
 Watch it with `gh run list` or `uv run task state -- --online`.
 
 ## Versions
 
-All packages, `amoorion` and every `amoorion-<platform>`, have one version
-and are released together. Don't edit versions by hand; the loop sets them.
+Every package has its own version (Q15). Don't edit them by hand; the loop
+sets them.
+
+| Release | When | `amoorion` | the other packages |
+| ------- | ---- | ---------- | ------------------ |
+| `Z`, patch: `0.3.1` → `0.3.2` | every step (every push) | bumped, changed or not | bumped only if changed since the last release |
+| `Y`, minor: `0.3.2` → `0.4.0` | a phase of TODO.md completed | bumped | all to the same `0.4.0` |
+| `X`, major: `0.9.3` → `1.0.0` | the last phase of the plan completed (`release.major_after_phase`) | bumped | all to `1.0.0` |
+
+A package changed when a commit since the last release (not a merge, not a
+bump) touched its directory. A `Z` release attaches and publishes only the
+packages it bumped; `X` and `Y` releases all of them. The release's tag is
+the version of `amoorion`.
 
 | Stage | Example | Where | Made by |
 | ----- | ------- | ----- | ------- |
-| released | `0.3.0`, tag `v0.3.0` | master; development right after the pull | the `release` workflow |
-| pre-release | `0.3.1a0` | development, being made | `task flow:pull` (post-merge) |
-| final | `0.4.0`, no tag | development and its pull request, ready | the `flow` workflow |
+| released | `0.3.1`, tag `v0.3.1` | master; development after the merge back | the `release` workflow |
+| pre-release | `0.3.2a0` (only `amoorion`) | development, being made | the merge back, or `task flow:pull` |
+| final | `0.3.2`, no tag | development, for a moment | the `flow` workflow |
 
 ```sh
-uv run task version                   # the version of every package
-uv run amoorion-dev version next      # what the next release would be now
+uv run task version                   # every package: its version, and in the next release
+uv run amoorion-dev version next      # amoorion's next version
 uv run amoorion-dev phases            # the phases and what is ticked
 ```
 
@@ -143,16 +152,17 @@ package, so they always match it.
 
 ## Release
 
-Merging the release pull request is the release; only the author does it
-(or the flow, for a completed phase). `release` tags master and makes the
-GitHub release with its notes, `publish` puts every package on PyPI and
-the release, `gh-pages` builds the web page. Then the loop starts again
-with `task flow:pull`. Details, and what the author sets up once on
-GitHub: [Releasing](releasing.md).
+Merging the release pull request is the release; the flow does it after
+every push (or the author, when `release.automerge` says so). `release`
+tags master and makes the GitHub release with its notes, `publish` puts
+the bumped packages on PyPI and the release, `gh-pages` builds the web
+page, and master is merged back into development. Details, and what the
+author sets up once on GitHub: [Releasing](releasing.md).
 
 ## Never
 
-- push or commit to `master`, tag, release or publish by hand;
+- push or commit to `master`, tag, release or publish by hand: the loop
+  does it;
 - post to a real platform account, or run `task test:live`, without the
   author's go-ahead;
 - commit a token or password, or overwrite `.env`;
