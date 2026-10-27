@@ -1,3 +1,11 @@
+## v0.3.4 (2026-10-27)
+
+**Packages:** amoorion 0.3.4
+
+### Feat
+
+- **site**: the web page is the presentation page of amoorion-website (built by vite for /amoorion/) with the marimo examples, project and releases pages in its style, and manifest files
+
 ## v0.3.3 (2026-10-27)
 
 **Packages:** amoorion 0.3.3
