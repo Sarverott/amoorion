@@ -10,6 +10,10 @@ vars:
   SUBCOMMANDS: [accounts, inbox, plugins, publish, read, reply, api, mcp, daemon]
 
 includes:
+  # ./tests/Taskfile.yml
+  # ./tools/Taskfile.yml
+  # ./scripts/Taskfile.yml
+  # ./examples/Taskfile.yml
   docs:
     taskfile: ./docs/Taskfile.yml
     dir: ./docs
