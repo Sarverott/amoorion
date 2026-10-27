@@ -155,9 +155,11 @@ def write(repo: Repo, versions: dict[str, str]) -> None:
 
 
 def commit(repo: Repo, before: str, after: str) -> str:
+    # Same version: an earlier `final` set it, only the changelog section is renewed.
+    message = f"bump: version {before} → {after}" if before != after else f"bump: changelog of {after}"
     repo.run("git", "add", "-A", "pyproject.toml", "uv.lock", "packages", CHANGELOG)
-    repo.run("git", "commit", "--no-verify", "-m", f"bump: version {before} → {after}")
-    return f"bump: version {before} → {after}"
+    repo.run("git", "commit", "--no-verify", "-m", message)
+    return message
 
 
 def changelog_section(repo: Repo, version: str, base: str | None, versions: dict[str, str]) -> str:
