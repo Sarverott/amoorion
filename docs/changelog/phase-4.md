@@ -104,3 +104,18 @@ great work Cleo! looks great my friend! feel free to write own thoughts in docs/
 Drawn into phase 4 (TODO.md): a contributors guide in the docs'
 Development section. The thoughts go to `docs/.agents/CLEO.md`, as in
 rs-tech-infra.
+
+## UNIXUSAT=1793068537104 · commit bfeea4f
+
+The order carried out. `docs/contributing.md`, the contributors guide,
+opens the docs' Development section: a checkout, pulling the current state
+(development, then master after a release, then `task state`), making a
+change, which commit type asks for which version, pushing and what the
+flow does with it, the version stages, the release and what never to do.
+`.github/CONTRIBUTING.md`, AGENTS.md, the map and the working guide point
+to it. Cleo's own thoughts started in `docs/.agents/CLEO.md`.
+
+Along the way, after v0.3.0: the author's empty Taskfiles committed as
+they are; development marked 0.3.1a0 by hand, as the hook hadn't; the
+`gh-pages` workflow keeps the page in the `github-pages` branch before it
+asks for GitHub Pages, which v0.3.0's run had stopped at.

@@ -119,6 +119,8 @@ The author reads this directory **read-only**:
 - `docs/.agents/MAP.md`: the map; updated with every structural change.
 - `docs/.agents/NOTES.md`: findings, decisions taken with the user. Newest
   on top, dated.
+- `docs/.agents/CLEO.md`: Cleo's own view of the project:
+  conclusions and wishes; newest sections at the end.
 
 Both GUIDE and MAP are also pages of the docs (Development → For agents).
 

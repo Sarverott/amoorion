@@ -2,6 +2,27 @@
 
 Newest on top.
 
+## 2026-10-27: after v0.3.0, a contributors guide
+
+- v0.3.0 was released by merging PR #3. The tag, the GitHub release and
+  the notes worked. `publish`: amoorion, -blogger, -bluesky and -discord
+  went up at once; the six new projects were still queued about 35 minutes
+  later, presumably waiting out the 429 limit (logs of running jobs are
+  not readable from here).
+- `gh-pages` failed at `configure-pages`: Pages is not enabled. That step
+  came before the branch step, so the page was kept nowhere. It is now
+  after it (dcc5db5). The `github-pages` branch on origin points at the
+  merge commit 9df8d0a; I didn't make that, and I left it.
+- development held 0.3.0 after the pull of master: the post-merge mark
+  hadn't run (the hooks are installed; I don't know how the pull was
+  made). I ran `amoorion-dev version mark` by hand: 0.3.1a0.
+- The author's empty Taskfiles in `examples/`, `scripts/`, `tests/` and
+  `tools/` (includes commented out) were committed as they are; I read them
+  as a split in progress and left it for them to say.
+- `docs/contributing.md` holds the commands of a session for people;
+  GUIDE.md stays the strict version for agents and points to it.
+- `CLEO.md` started, at the author's invitation, after rs-tech-infra's.
+
 ## 2026-10-27: tools, phase releases, split publishing, web page, guided CLI
 
 - The author's inquiry ("github pages should contain builded examples")
