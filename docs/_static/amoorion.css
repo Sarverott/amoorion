@@ -1,0 +1,26 @@
+/* The docs in the style of the presentation page (amoorion-website) and the
+   graphics of resources/: night, rose and gold; Cormorant Garamond headings,
+   Cinzel for the brand, Plus Jakarta Sans for the text. */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap");
+
+h1, h2, h3, h4, .sidebar-brand-text {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+h1 { font-size: 2.6em; }
+.sidebar-tree .caption, .sidebar-tree .caption-text {
+  font-family: Cinzel, serif;
+  letter-spacing: 0.08em;
+}
+.sidebar-logo { max-width: 100%; }
+body[data-theme="dark"] .sidebar-drawer,
+body[data-theme="dark"] .toc-drawer {
+  background: linear-gradient(180deg, #120c14 0%, var(--color-sidebar-background) 40%);
+}
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme="light"]) .sidebar-drawer,
+  body:not([data-theme="light"]) .toc-drawer {
+    background: linear-gradient(180deg, #120c14 0%, var(--color-sidebar-background) 40%);
+  }
+}

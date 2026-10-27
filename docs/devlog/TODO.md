@@ -89,7 +89,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] After all workflows of a release: master merged back into development
 - [x] The web page: `amoorion-website` built, with the marimo examples and
       manifest files, in the `github-pages` branch (served from it)
-- [ ] The docs styled after the web page and `resources/`; the README
+- [x] The docs styled after the web page and `resources/`; the README
       presenting the project
 - [ ] `llms.txt` (sphinx-llm), Markdown for agents, agent skills,
       `robots.txt`, a 404 page

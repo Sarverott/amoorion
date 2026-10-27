@@ -49,7 +49,40 @@ autodoc_typehints = "description"
 
 html_theme = "furo"
 html_title = f"amoorion {version}"
-html_theme_options = {"source_repository": REPOSITORY, "source_branch": BRANCH, "source_directory": "docs/"}
+# The look of the presentation page and resources/images (docs/_static/amoorion.css).
+GRAPHICS = ROOT / "resources" / "images"
+html_logo = str(GRAPHICS / "Amoorion rose-gold gothic wordmark.png")
+html_favicon = str(GRAPHICS / "Amoorion\u2019s Cupid Bot Sends Heart Messages-2-mini.png")
+html_static_path = ["_static"]
+html_css_files = ["amoorion.css"]
+_FONT = '"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif'
+html_theme_options = {
+    "source_repository": REPOSITORY,
+    "source_branch": BRANCH,
+    "source_directory": "docs/",
+    "sidebar_hide_name": True,  # the logo is the name
+    "light_css_variables": {
+        "color-brand-primary": "#b3263c",
+        "color-brand-content": "#b3263c",
+        "color-brand-visited": "#8e3a4c",
+        "color-admonition-background": "#fbf1ee",
+        "font-stack": _FONT,
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#e2a893",
+        "color-brand-content": "#e14c62",
+        "color-brand-visited": "#c98a7a",
+        "color-background-primary": "#07090e",
+        "color-background-secondary": "#0d101a",
+        "color-background-hover": "#1a1220",
+        "color-background-border": "#2a1c26",
+        "color-sidebar-background": "#0a0c13",
+        "color-foreground-primary": "#f2e9e4",
+        "color-foreground-secondary": "#c9bbb5",
+        "color-code-background": "#0d101a",
+        "font-stack": _FONT,
+    },
+}
 
 LINK = re.compile(r"(\]\()(?!https?:|mailto:|#)([^)\s]+)(\))")
 
