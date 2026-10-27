@@ -57,6 +57,7 @@ the methods: **CLI**, **HTTP API**, **MCP** server for AI agents, and a
 uv sync
 cp example.env .env                          # the link to the vault
 
+uv run amoorion                              # asks step by step what to do (or: amoorion -i)
 uv run amoorion plugins                      # platforms and what they can do
 uv run amoorion accounts                     # which have their secrets in the vault
 uv run amoorion publish --text "hello" --to dryrun bluesky

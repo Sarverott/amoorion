@@ -1,3 +1,14 @@
+## v0.3.0 (2026-10-27)
+
+### Feat
+
+- **cli**: amoorion alone asks step by step: the method, its parameters, platforms by what they can do, a confirmation before changing anything; results show messages as text
+- **tools**: amoorion-dev, the development tools: state of development, versions of the loop, phases, release notes, web page; settings in .github/flow.toml
+
+### Fix
+
+- **publish**: PyPI gets one package at a time, skipping files already there, and waits out its limit on new projects (429 stopped v0.2.1 after four)
+
 ## v0.2.1 (2026-10-26)
 
 ### Fix

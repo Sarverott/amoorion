@@ -28,6 +28,8 @@
     # via amoorion-docs
 -e ./packages/amoorion-x
     # via amoorion-docs
+-e ./tools/amoorion-dev
+    # via amoorion-docs
 accessible-pygments==0.0.5
     # via furo
 alabaster==1.0.0
@@ -148,6 +150,7 @@ jupyter-core==5.9.1
     #   nbformat
 markdown-it-py==4.2.0
     # via
+    #   amoorion-dev
     #   mdit-py-plugins
     #   myst-parser
     #   rich
@@ -260,6 +263,7 @@ requests-oauthlib==2.0.0
 rich==15.0.0
     # via
     #   amoorion
+    #   amoorion-dev
     #   typer
 roman-numerals==4.1.0
     # via sphinx

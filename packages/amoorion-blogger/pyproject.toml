@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-blogger"
-version = "0.2.1"
+version = "0.3.0"
 description = "Blogger plugin of amoorion: posting by mail to a blog's secret address"
 readme = "README.md"
 license = "MIT"

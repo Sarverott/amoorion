@@ -1,6 +1,6 @@
 [project]
 name = "amoorion"
-version = "0.2.1"
+version = "0.3.0"
 description = "Universal tool for administration of chatting and communication platforms"
 readme = "README.md"
 license = "MIT"
@@ -39,6 +39,7 @@ build-backend = "uv_build"
 dev = [
     "amoorion-blogger",
     "amoorion-bluesky",
+    "amoorion-dev",
     "amoorion-discord",
     "amoorion-facebook",
     "amoorion-mastodon",
@@ -65,7 +66,7 @@ examples = [
 name = "cz_conventional_commits"
 version_provider = "uv"
 tag_format = "v$version"
-# CHANGELOG.md is written by scripts/version.py final, not on every bump.
+# CHANGELOG.md is written by `amoorion-dev version final`, not on every bump.
 major_version_zero = true
 # Every package of the workspace is released with the same version.
 version_files = [
@@ -83,7 +84,7 @@ version_files = [
 pre_bump_hooks = ["uv lock"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "packages"]
+testpaths = ["tests", "packages", "tools"]
 # Test modules of several packages may share a name. Live tests post for
 # real: left out unless asked for (task test:live).
 addopts = ["--import-mode=importlib", "-m", "not live"]
@@ -93,6 +94,7 @@ markers = ["live: posts on a real platform account (task test:live -- <platform>
 [tool.uv.workspace]
 members = [
     "packages/*",
+    "tools/*",
     "docs",
 ]
 
@@ -106,3 +108,4 @@ amoorion-facebook = { workspace = true }
 amoorion-discord = { workspace = true }
 amoorion-telegram = { workspace = true }
 amoorion-matrix = { workspace = true }
+amoorion-dev = { workspace = true }

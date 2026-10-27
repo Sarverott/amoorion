@@ -1,9 +1,12 @@
 # A push to development readies the next release and proposes it:
-#   1. scripts/version.py final: the pre-release X.Y.Za0 becomes the version
+#   1. amoorion-dev version final: the pre-release X.Y.Za0 becomes the version
 #      the commits since the last release ask for, with its CHANGELOG.md
 #      section, committed as "bump: ..." and pushed back to development;
 #   2. the pull request development → master is opened (or kept up to date),
-#      and the checks run on what it carries.
+#      and the checks run on what it carries;
+#   3. when a phase of TODO.md got its last item ticked since the last
+#      release, the flow merges the pull request itself after `task check`
+#      (release.automerge_completed_phase in .github/flow.toml).
 # Merging it releases (release.yml). docs/releasing.md has the whole loop.
 name: flow
 
@@ -47,15 +50,14 @@ jobs:
         id: final
         if: steps.news.outputs.commits != '0'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          uv run -q --frozen amoorion-dev identity
           before=$(git rev-parse HEAD)
-          uv run --frozen python scripts/version.py final
+          uv run --frozen amoorion-dev version final
           if [ "$(git rev-parse HEAD)" != "$before" ]; then
             git push origin HEAD:development
             echo "bumped=true" >> "$GITHUB_OUTPUT"
           fi
-          echo "version=$(uv run -q --frozen python scripts/version.py current)" >> "$GITHUB_OUTPUT"
+          echo "version=$(uv run -q --frozen amoorion-dev version current)" >> "$GITHUB_OUTPUT"
 
       - name: Check the bump commit
         # Pushed with this workflow's token, it starts no check by itself.
@@ -65,6 +67,7 @@ jobs:
         run: gh workflow run check.yml --ref development
 
       - name: Open the pull request to master
+        id: pr
         if: steps.news.outputs.commits != '0'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -74,8 +77,31 @@ jobs:
           if [ -n "$open" ]; then
             gh pr edit "$open" --title "Release v$VERSION"
             echo "pull request #$open is open, updated"
+            echo "number=$open" >> "$GITHUB_OUTPUT"
           else
             body="Merging releases v$VERSION: tag, GitHub release with the packages, PyPI."
             body="$body See docs/releasing.md. Opened by the flow workflow."
-            gh pr create --base master --head development --title "Release v$VERSION" --body "$body"
+            url=$(gh pr create --base master --head development --title "Release v$VERSION" --body "$body")
+            echo "opened $url"
+            echo "number=${url##*/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: A completed phase releases by itself
+        if: steps.pr.outputs.number
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ steps.pr.outputs.number }}
+        run: |
+          dev="uv run -q --frozen amoorion-dev"
+          completed=$($dev phases --completed)
+          if [ -z "$completed" ]; then
+            echo "no phase completed since the last release; the pull request waits for the author"
+          elif [ "$($dev setting release.automerge_completed_phase)" != true ]; then
+            echo "completed: $completed; automerge_completed_phase is off, the pull request waits"
+          else
+            echo "completed: $completed; checking, then merging #$PR"
+            uv run --frozen task check
+            gh pr merge "$PR" --merge --subject "Release v$($dev version current): phase $completed"
+            # The merge made with this token starts no workflow by itself.
+            gh workflow run release.yml --ref master
           fi

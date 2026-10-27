@@ -1,5 +1,8 @@
 """CLI: every method becomes a subcommand, its params become options.
 
+`amoorion` alone in a terminal, or `amoorion -i`, asks step by step instead
+(cli/guide.py).
+
 Servers (`api`, `mcp`, `daemon`) are subcommands too; their namespaces are
 imported only when asked for, so the plain commands stay fast.
 """
@@ -33,6 +36,11 @@ class RichView(View):
 
     @staticmethod
     def _cell(value: Any) -> str:
+        if isinstance(value, bool):
+            return "[green]yes[/]" if value else "[red]no[/]"
+        if isinstance(value, dict) and isinstance(value.get("text"), str):
+            # A message inside a result: what was said, and where.
+            return value["text"] + (f"\n{value['url']}" if value.get("url") else f"\nid {value.get('id')}")
         if isinstance(value, (dict, list)):
             return json.dumps(value, ensure_ascii=False) if value else ""
         return "" if value is None else str(value)
@@ -84,6 +92,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="amoorion", description="Administration of chatting and communication platforms")
     parser.add_argument("--version", action="version", version=f"amoorion {__version__}")
     parser.add_argument("--json", action="store_true", help="print JSON instead of tables")
+    parser.add_argument("-i", "--interactive", action="store_true", help="ask step by step what to do")
     commands = parser.add_subparsers(dest="command", metavar="command")
     for name in METHODS.names():
         method = METHODS.get(name)
@@ -103,6 +112,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command is None:
+        if args.interactive or (sys.stdin.isatty() and sys.stdout.isatty()):
+            from amoorion.cli.guide import Guide
+
+            try:
+                return Guide().run()
+            except (KeyboardInterrupt, EOFError):
+                print()
+                return 0
         parser.print_help()
         return 0
     try:
@@ -110,7 +127,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             module, function = SERVERS[args.command][1].split(":")
             getattr(import_module(module), function)(args)
             return 0
-        params = {key: value for key, value in vars(args).items() if key not in ("command", "json")}
+        params = {key: value for key, value in vars(args).items() if key not in ("command", "json", "interactive")}
         method = METHODS.get(args.command)()
         result = method.run(method.Params(**params))
     except (AmoorionError, ValueError) as error:

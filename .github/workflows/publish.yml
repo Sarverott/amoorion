@@ -1,6 +1,8 @@
-# A release publishes every package of the workspace: built once, attached
-# to the GitHub release (the git package), and uploaded to PyPI with the
-# secret PYPI_TOKEN of the `pypi` environment.
+# A release publishes every package of the workspace, one job each, by the
+# local action .github/actions/publish-package: built, attached to the
+# GitHub release, uploaded to PyPI with the PYPI_TOKEN of the `pypi`
+# environment. Started by the release workflow, by a release made by hand,
+# or by hand for a tag (optionally only some packages).
 name: publish
 
 on:
@@ -9,8 +11,12 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: tag of the release to publish, e.g. v0.2.0
+        description: tag of the release to publish, e.g. v0.3.0
         required: true
+      packages:
+        description: only these packages, comma-separated (empty = all)
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -19,8 +25,12 @@ env:
   TAG: ${{ inputs.tag || github.event.release.tag_name }}
 
 jobs:
-  build:
+  packages:
     runs-on: ubuntu-latest
+    outputs:
+      list: ${{ steps.list.outputs.list }}
+      tries: ${{ steps.list.outputs.tries }}
+      pause: ${{ steps.list.outputs.pause }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -28,44 +38,44 @@ jobs:
 
       - uses: astral-sh/setup-uv@v6
 
-      - name: Build every package
-        run: uv build --all-packages -o dist
+      - name: Packages to publish
+        id: list
+        env:
+          ONLY: ${{ inputs.packages }}
+        run: |
+          dev="uv run -q --frozen --package amoorion-dev amoorion-dev"
+          list=$($dev packages --only "$ONLY")
+          echo "$list"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+          echo "tries=$($dev setting pypi.tries)" >> "$GITHUB_OUTPUT"
+          echo "pause=$($dev setting pypi.pause)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-  github:
-    needs: build
+  package:
+    needs: packages
+    name: ${{ matrix.package.name }}
     runs-on: ubuntu-latest
+    # Waiting out PyPI's limit on new projects can take a while.
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        package: ${{ fromJSON(needs.packages.outputs.list) }}
+    environment:
+      name: pypi
+      url: https://pypi.org/project/${{ matrix.package.name }}/
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v5
         with:
-          name: dist
-          path: dist/
+          ref: ${{ env.TAG }}
 
-      - name: Attach the packages to the release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$TAG" dist/* --clobber --repo "$GITHUB_REPOSITORY"
-
-  pypi:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/project/amoorion/
-    steps:
-      - uses: actions/download-artifact@v4
+      - uses: ./.github/actions/publish-package
         with:
-          name: dist
-          path: dist/
-
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
-          # A package already on PyPI in this version (a release published again) is left as it is.
-          skip-existing: true
+          package: ${{ matrix.package.name }}
+          tag: ${{ env.TAG }}
+          github-token: ${{ github.token }}
+          pypi-token: ${{ secrets.PYPI_TOKEN }}
+          tries: ${{ needs.packages.outputs.tries }}
+          pause: ${{ needs.packages.outputs.pause }}
