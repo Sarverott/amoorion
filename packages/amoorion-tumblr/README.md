@@ -1,7 +1,7 @@
 # amoorion-tumblr
 
-Tumblr plugin of [amoorion](../../README.md): post and read through the Tumblr
-API v2 (Neue Post Format), signed with OAuth 1.0a.
+Tumblr plugin of [amoorion](../../README.md): post, read and delete through the
+Tumblr API v2 (Neue Post Format), signed with OAuth 1.0a.
 
 Secrets in amoorion's vault, from an app [registered at
 Tumblr](https://www.tumblr.com/oauth/apps): `tumblr/consumer-key`,

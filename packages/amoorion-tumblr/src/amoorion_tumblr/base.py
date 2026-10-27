@@ -38,8 +38,8 @@ def text_of(content: list[dict[str, Any]]) -> str:
 
 class Tumblr(HttpPlugin):
     name: ClassVar[str] = "tumblr"
-    description: ClassVar[str] = "Tumblr API v2: post, read"
-    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ})
+    description: ClassVar[str] = "Tumblr API v2: post, read, delete"
+    capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST, Capability.READ, Capability.DELETE})
     secrets: ClassVar[tuple[str, ...]] = ("consumer-key", "consumer-secret", "token", "token-secret", "blog")
 
     def reason(self, response: requests.Response) -> str:
@@ -98,3 +98,11 @@ class Tumblr(HttpPlugin):
             )
             for item in answer.get("posts", [])
         ]
+
+    def delete(self, message: Message) -> None:
+        if not message.id or not message.id.isdigit():
+            raise AmoorionError("tumblr needs the number of the post to delete")
+        self._call("POST", "/post/delete", json={"id": message.id})
+
+    def profile(self) -> str:
+        return self.blog.removesuffix(".tumblr.com")
