@@ -56,14 +56,15 @@ def ready(platform: str, vault):
     if named and platform not in named:
         pytest.skip(f"not named in AMOORION_LIVE (task test:live -- {platform})")
     plugin = open_plugin(platform, vault)
-    missing = []
+    missing, why = [], ""
     for key in plugin.secrets:
         try:
             vault.get(f"{platform}/{key}")
-        except AmoorionError:
+        except AmoorionError as error:
             missing.append(key)
+            why = why or str(error)
     if missing:
-        reason = f"{platform}: secrets missing in the vault: {', '.join(missing)}"
+        reason = f"{platform}: secrets missing in the vault: {', '.join(missing)} ({why})"
         if named:
             pytest.fail(reason)
         pytest.skip(reason)

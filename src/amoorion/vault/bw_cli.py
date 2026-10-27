@@ -72,7 +72,7 @@ class BitwardenVault(Vault):
         status = self._bw("status")
         if status.get("status") != "unlocked":
             raise AmoorionError(
-                f"Bitwarden vault is {status.get('status')}: run `bw unlock --raw` and set AMOORION_VAULT_TOKEN"
+                f"Bitwarden vault is {status.get('status')}: run `task vault:login` (or `bw unlock --raw` into AMOORION_VAULT_TOKEN)"
             )
         if self.link.addr and status.get("serverUrl", "").rstrip("/") != self.link.addr.rstrip("/"):
             raise AmoorionError(f"bw talks to {status.get('serverUrl')}, not to {self.link.addr}")
