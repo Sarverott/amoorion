@@ -39,7 +39,7 @@ What is being worked on now. Vision and the plan of all phases:
       its session into `.env` (Q13)
 - [x] `dataset/` (gitignored): every profile's posts read into JSON files
       with an index, `dataset/<platform>/<profile>/` (Q14)
-- [ ] `delete` capability and method, storing what it deletes in the
+- [x] `delete` capability and method, storing what it deletes in the
       dataset first (Q14)
 - [ ] One command for the live tests of all platforms (Q13)
 - [ ] Every platform tried against a real account (needs the author's

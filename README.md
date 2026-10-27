@@ -75,20 +75,22 @@ amoorion publish --text "hello" --to dryrun  # dryrun sends nothing: try it firs
 
 - **Publish:** write once, post to every platform you name.
 - **Read & reply:** read what came in, in one inbox, and answer from there.
+- **Keep:** every profile's posts as JSON files in `dataset/`; `delete`
+  keeps a copy of what it removes.
 - **Connect:** link the platforms with each other and with the services
   around them (webhooks, ntfy, NATS, e-mail: phase 5 of the plan).
 
-| Platform | Package | Post | Read | Reply |
-| -------- | ------- | :--: | :--: | :---: |
-| Bluesky | `amoorion-bluesky` | ✓ | ✓ | ✓ |
-| Mastodon | `amoorion-mastodon` | ✓ | ✓ | ✓ |
-| X (twitter) | `amoorion-x` | ✓ | ✓ | ✓ |
-| Tumblr | `amoorion-tumblr` | ✓ | ✓ | |
-| Blogger (by mail) | `amoorion-blogger` | ✓ | | |
-| Facebook Page | `amoorion-facebook` | ✓ | ✓ | ✓ (comment) |
-| Discord bot / webhook | `amoorion-discord` | ✓ | ✓ (bot) | ✓ (bot) |
-| Telegram bot | `amoorion-telegram` | ✓ | ✓ | ✓ |
-| Matrix room | `amoorion-matrix` | ✓ | ✓ | ✓ |
+| Platform | Package | Post | Read | Reply | Delete |
+| -------- | ------- | :--: | :--: | :---: | :----: |
+| Bluesky | `amoorion-bluesky` | ✓ | ✓ | ✓ | ✓ |
+| Mastodon | `amoorion-mastodon` | ✓ | ✓ | ✓ | ✓ |
+| X (twitter) | `amoorion-x` | ✓ | ✓ | ✓ | ✓ |
+| Tumblr | `amoorion-tumblr` | ✓ | ✓ | | ✓ |
+| Blogger (by mail) | `amoorion-blogger` | ✓ | | | |
+| Facebook Page | `amoorion-facebook` | ✓ | ✓ | ✓ (comment) | ✓ |
+| Discord bot / webhook | `amoorion-discord` | ✓ | ✓ (bot) | ✓ (bot) | ✓ |
+| Telegram bot | `amoorion-telegram` | ✓ | ✓ | ✓ | ✓ |
+| Matrix room | `amoorion-matrix` | ✓ | ✓ | ✓ | ✓ (redact) |
 
 **Early stage:** every platform is tested against fakes of its API; trying
 them against real accounts is under way.
