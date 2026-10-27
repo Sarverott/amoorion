@@ -119,3 +119,119 @@ Along the way, after v0.3.0: the author's empty Taskfiles committed as
 they are; development marked 0.3.1a0 by hand, as the hook hadn't; the
 `gh-pages` workflow keeps the page in the `github-pages` branch before it
 asks for GitHub Pages, which v0.3.0's run had stopped at.
+
+## UNIXUSAT=1793085881648 · commit 62a3343
+
+The author's answers (docs/devlog/ORDERS.md), word for word:
+
+````markdown
+### Q13
+we need where to put our access data first
+well... at now i placed `bw` command as package dependency inside tools with npm
+let's begin with initializing our credentials been placed in .env - place them there
+prepare me please livetests for all platforms under one command 
+go ahead and try to connect with actual apis
+
+### Q14
+add deleting but with storage of what was deleted
+same place will be for readed state of all posts currently are on each socialmedia
+present them as json files with index for each profile in each platform (./platform/profile/*)
+create dataset/ dir that is gitignored - there will be our data stored
+
+### Q15
+wait...
+why we update packages that are not changed?
+if package is not changed then leave version updating and bumping 
+for example:
+- if in next update we change something in main amoorion and blogger package
+- then we bump version of both, rest we leave unchanged
+- release carries only updated wheels if it is `Z` number change (`vX.Y.Z`) if `X` or `Y` all must be placed in release
+- let's reduce calls to pypi, we still do not have couple of subpackages published yet
+after that
+- now we change accordingly docs and dev tools
+- we do not bump rest, only these one whitch has changes... and the main amoorion, but if main amoorion is not changed then it is always `Z` bump
+
+
+release of `X` stage will be after all current phases will be ended
+
+every phase end is bump of `Y`
+
+every step now should be bump of `Z`, pushed to origin dev branch, pull request created and automerged to master branch
+
+after all workflows ends then pull it back to dev on origin and pulled to local repository
+````
+
+The questions they answer (docs/devlog/BRAINSTORM.md), word for word:
+
+````markdown
+## Q13: trying the platforms for real
+
+All six publication plugins are tested only against fakes. Which accounts
+can be used for a first real post, and may the agent post there (one test
+post each, deleted afterwards where the platform allows)?
+
+*Lean:* the author gives a test account per platform in the vault and the
+go-ahead per platform; the agent runs `amoorion publish` once each and
+fixes what the real API answers differently.
+
+Ready for it: `uv run task test:live -- <platform>…` posts one marked test
+post per platform named, reads it back and replies to it where the plugin
+can, and prints the links (no plugin deletes yet, so deleting is by hand).
+It covers the communication platforms of phase 3 too: Discord (bot and
+webhook), Telegram, Matrix. The author can run it alone, or name the
+platforms the agent may run it for.
+
+## Q14: deleting posts
+
+No plugin can delete. The live tests (Q13) leave their test posts behind,
+and a post sent by mistake can only be removed by hand on each platform.
+
+- no deleting: amoorion only adds; mistakes are fixed by hand
+- a `delete` capability and method (`amoorion delete --platform x --id …`),
+  where the platform allows it (all but Blogger by mail and the Discord
+  webhook without its message id kept; Telegram only within 48 hours in
+  groups), not `read_only`, so agents get it only as a destructive tool
+- only inside the live tests, through each platform's API directly
+
+*Lean:* a `delete` capability and method; the live test then deletes its
+own test post and reply.
+
+## Q15: releases and packages
+
+The inquiry's release workflows are in place (docs/releasing.md); a few
+choices in them are the author's to confirm before the first merge to
+`master`:
+
+- "git package": the built wheels and source archives attached to each
+  GitHub release. GitHub Packages has no Python registry; a container
+  image on ghcr.io fits phase 6 (Dockerfile). Enough, or the image now?
+- one version for all packages (lock-step), bumped together; or each
+  plugin package versioned on its own (more work per release)?
+- the PyPI names `amoorion` and `amoorion-<platform>`, ten projects, each
+  with a trusted publisher; and the `pypi` environment with or without a
+  required reviewer.
+
+*Lean:* release assets now and the image in phase 6, lock-step versions,
+the `pypi` environment with the author as required reviewer.
+````
+
+**Decisions** (as I read the answers above):
+
+- **Q13:** the platforms' secrets stay in the Bitwarden vault, reached by
+  `bw`, now installed by npm in `tools/` (`tools/node_modules/.bin/bw`);
+  the access to it (the session of `bw unlock`) is initialized into
+  `.env` by a task, so `.env` holds the link and the session, never the
+  platforms' secrets. The live tests of all platforms run under one
+  command, and the agent has the go-ahead to try the real APIs.
+- **Q14:** a `delete` capability and method that first stores what it
+  deletes; the same storage keeps the read state of all posts on every
+  platform, as JSON files with an index per profile,
+  `dataset/<platform>/<profile>/`; `dataset/` is gitignored.
+- **Q15:** each package has its own version and is bumped only when it
+  changed; `amoorion` is bumped at every release (a `Z` bump when it
+  didn't change). Every step is a `Z` bump, pushed to development, its
+  pull request created and merged by itself; a phase completed is a `Y`
+  bump of all packages; `X` comes when all current phases (0–6) are
+  done. A `Z` release carries and publishes only the bumped packages, an
+  `X` or `Y` release all of them. After all workflows of a release end,
+  master is merged back into development on origin and pulled locally.
