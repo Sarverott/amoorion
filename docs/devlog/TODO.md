@@ -60,5 +60,18 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] The loop: pulling master marks the next pre-release (lefthook),
       a push to development makes it final and opens the pull request to
       master, its merge tags and releases; `__version__` from the package
+- [ ] Development tools (`amoorion-dev`, rich): state of development, the
+      versions, release notes, phases; the state as a page of the docs'
+      development section, which holds the devlog
+- [ ] Release notes: the commits (CHANGELOG.md) and the story of
+      `docs/changelog/` since the last release
+- [ ] A completed phase releases by itself (the flow merges its pull
+      request), switchable in `.github/flow.toml`
+- [ ] Publishing split: every package by a local action, one job each;
+      every workflow can also be started by hand
+- [ ] Project web page built at every release, kept in the `github-pages`
+      branch and served by GitHub Pages
+- [ ] An easy CLI: `amoorion` alone asks what to do, step by step (rich)
+- [ ] A map and a working guide for agents in `docs/.agents/`
 
 Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).

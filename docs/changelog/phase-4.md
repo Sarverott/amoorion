@@ -53,3 +53,15 @@ push to development makes it final with its changelog section and opens
 the pull request to master (flow workflow); merging it tags, releases and
 publishes, with the `PYPI_TOKEN` secret, committing nothing on master.
 The docs read the version from the package, as the package does.
+
+## UNIXUSAT=1793062052329 · commit 72d048f
+
+PR #3 (Release v0.2.2) was opened by the flow itself. The author's next
+order, given in the chat, word for word:
+
+````markdown
+okidoki then. split our workflow and make each package publishing as internal action calling there. also add for all workflows optional dispach besides standard calling. add tools to manage states, read state of developement and hide in readthedocs section with devlog stuff. each release will be also contain now besides listing of commit messages content of changelog. each phase will be automaticly releasing and add yourself map of all of that inside your "docs/.agents/" dir. think for some structural moves and make yourself guidance around to have strict and organized approach for yourself iterations and other AI agents. we need to create cli interface for easy to use - this is why i added rich to dependings package list. we need also to delegate at each release been made to produce webpage for this project - place it in gh-pages.yml for github-pages branch production like here it is done (besides change of branch name where it is placed): "https://github.com/redscope-pl/redscope.pl"
+````
+
+Drawn into phase 4 (VISION.md items 5–8, TODO.md). The bot's identity in
+the workflows is the author's: mr. Cravley, the git bot.

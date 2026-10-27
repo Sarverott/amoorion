@@ -93,6 +93,18 @@ and release it.
    `CHANGELOG.md` and creates a GitHub release. A created release builds
    every package, attaches them to the release (the git package) and
    publishes them to PyPI.
+5. **Development tools** (from the author's order of 2026-10-27):
+   `amoorion-dev`, a rich CLI over the state of development (branch,
+   version, the open pull request, last release, phases, open questions,
+   pending orders), the versions of the release loop, release notes made
+   of the commits and the story in `docs/changelog/`, and the project web
+   page. The state is a page of the docs' development section.
+6. **Phases release themselves:** when the last item of a phase is
+   ticked, the flow merges the release pull request after the checks.
+7. **The web page** of the project, built at every release into the
+   `github-pages` branch and served by GitHub Pages.
+8. **An easy CLI** for people: `amoorion` without arguments asks for the
+   method and its parameters.
 
 ### Phase 5: linking
 
