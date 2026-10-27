@@ -60,6 +60,17 @@ tests against recorded or faked HTTP; never against real accounts in CI.
 Per platform: limits (length, media) checked before sending; `Post` split or
 shortened by a rule the author confirms.
 
+From the author's answers to Q13 and Q14:
+
+6. **Real accounts:** the platforms' secrets in the Bitwarden vault, `bw`
+   from `tools/` (npm), its session initialized into `.env` by a task;
+   one command for the live tests of all platforms; the real APIs tried.
+7. **The dataset:** `dataset/` (gitignored) keeps the read state of all
+   posts of every profile on every platform as JSON files with an index,
+   `dataset/<platform>/<profile>/`.
+8. **Deleting:** a `delete` capability and method, which stores what it
+   deletes in the dataset first.
+
 ### Phase 3: communication platforms (done, against fakes)
 
 1. Discord: post and read through a bot, or post through a channel
@@ -105,6 +116,18 @@ and release it.
    `github-pages` branch and served by GitHub Pages.
 8. **An easy CLI** for people: `amoorion` without arguments asks for the
    method and its parameters.
+9. **Versions per package** (Q15): a package is bumped only when it
+   changed, `amoorion` at every release; every step is a `Z` release,
+   merged by itself; a completed phase is `Y` for all packages, `X` comes
+   when phases 0–6 are done. A `Z` release publishes only what was bumped.
+   After all workflows of a release, master goes back into development.
+10. **The presentation page** (the author's inquiry): the web page from the
+    source of `amoorion-website` (built), with the marimo examples and
+    manifest files, in the `github-pages` branch; the Sphinx docs styled
+    after it (the graphics of `resources/`), and a README that presents
+    the project.
+11. **For machines:** `llms.txt` (sphinx-llm), Markdown for agents, agent
+    skills, `robots.txt` and a 404 page on Read the Docs.
 
 ### Phase 5: linking
 

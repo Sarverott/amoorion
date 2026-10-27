@@ -235,3 +235,36 @@ the `pypi` environment with the author as required reviewer.
   done. A `Z` release carries and publishes only the bumped packages, an
   `X` or `Y` release all of them. After all workflows of a release end,
   master is merged back into development on origin and pulled locally.
+
+## UNIXUSAT=1793085944110 · commit 397143f
+
+The author's third inquiry (docs/devlog/INQUIRIES.md), word for word:
+
+````markdown
+---
+
+# rebuild of presentation page
+
+we need to produce similar styled templating of readthedocs setup of sphinx, similar jekyll theme paging and reforging of README to present better project.
+
+in resources there are graphics, one logo and one mockup of page
+
+now we have also whole presentative page source code: https://github.com/Sarverott/amoorion-website
+
+in github-pages you can place produced marimo examples html, manifest files and builded source code for amoorion-website
+
+# llms.txt, robots.txt and error pages
+add according to that 
+- https://pypi.org/project/sphinx-llm/
+- https://docs.readthedocs.com/platform/stable/reference/agent-skills.html
+- https://docs.readthedocs.com/platform/stable/reference/llms-txt.html
+- https://docs.readthedocs.com/platform/stable/reference/markdown-for-agents.html
+- https://docs.readthedocs.com/platform/stable/reference/404-not-found.html
+- https://docs.readthedocs.com/platform/stable/reference/robots.html
+````
+
+Drawn, with the answers to Q13–Q15, into the plan: VISION.md phase 2
+items 6–8 and phase 4 items 9–11, TODO.md phases 2 and 4. The author's
+order in the chat with it: "adopt all these you will find around and
+update all according to new information. proceede new guidelines and
+commit on every small step you does."

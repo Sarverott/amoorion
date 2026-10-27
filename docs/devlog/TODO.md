@@ -35,6 +35,13 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Tumblr: post (Neue Post Format, tags), read
 - [x] Blogger by mail: post, TLS only
 - [x] Facebook Page: post, read, replies as comments
+- [ ] The vault reached by `bw` from `tools/` (npm); a task initializes
+      its session into `.env` (Q13)
+- [ ] `dataset/` (gitignored): every profile's posts read into JSON files
+      with an index, `dataset/<platform>/<profile>/` (Q14)
+- [ ] `delete` capability and method, storing what it deletes in the
+      dataset first (Q14)
+- [ ] One command for the live tests of all platforms (Q13)
 - [ ] Every platform tried against a real account (needs the author's
       accounts and go-ahead, Q13; ready: `task test:live -- <platform>…`)
 
@@ -76,5 +83,15 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] A map and a working guide for agents in `docs/.agents/`
 - [x] A contributors guide in the docs' Development section: pulling the
       current state, pushing changes, versioning, what the loop does with them
+- [ ] Versions per package (Q15): only changed packages bumped, `amoorion`
+      always; every push a `Z` release merged by itself, a phase `Y`, all
+      phases `X`; a `Z` release publishes only the bumped packages
+- [ ] After all workflows of a release: master merged back into development
+- [ ] The web page: `amoorion-website` built, with the marimo examples and
+      manifest files, in the `github-pages` branch (served from it)
+- [ ] The docs styled after the web page and `resources/`; the README
+      presenting the project
+- [ ] `llms.txt` (sphinx-llm), Markdown for agents, agent skills,
+      `robots.txt`, a 404 page
 
 Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).
