@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-bluesky"
-version = "0.2.2a0"
+version = "0.2.2"
 description = "Bluesky plugin of amoorion: post, read and reply through the AT Protocol"
 readme = "README.md"
 license = "MIT"

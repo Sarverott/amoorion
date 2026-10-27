@@ -1,3 +1,9 @@
+## v0.2.2 (2026-10-27)
+
+### Fix
+
+- **publish**: PyPI gets one package at a time, skipping files already there, and waits out its limit on new projects (429 stopped v0.2.1 after four)
+
 ## v0.2.1 (2026-10-26)
 
 ### Fix
