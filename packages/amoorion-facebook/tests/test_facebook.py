@@ -52,6 +52,15 @@ class FakeGraph(BaseHTTPRequestHandler):
         query = parse_qs(urlparse(self.path).query)
         self._send(200, {"data": self.posts[::-1][: int(query["limit"][0])]})
 
+    def do_DELETE(self):
+        if not self._authorized():
+            return
+        target = urlparse(self.path).path.rsplit("/", 1)[-1]
+        if not any(p["id"] == target for p in self.posts):
+            return self._send(400, {"error": {"message": "Unsupported delete request.", "code": 100}})
+        FakeGraph.posts = [p for p in self.posts if p["id"] != target]
+        self._send(200, {"success": True})
+
     def log_message(self, *args):
         pass
 
@@ -91,3 +100,13 @@ def test_graph_error_message(facebook, monkeypatch):
 
 def test_compose_tags():
     assert compose(Post(text="t", tags=["#a", "b"])) == "t\n\n#a #b"
+
+
+def test_delete_a_post(facebook):
+    gone = facebook.post(Post(text="oops"))
+    kept = facebook.post(Post(text="fine"))
+    facebook.delete(gone)
+    assert [m.id for m in facebook.read()] == [kept.id]
+    with pytest.raises(AmoorionError, match="Unsupported delete request"):
+        facebook.delete(gone)
+    assert facebook.profile() == "123"

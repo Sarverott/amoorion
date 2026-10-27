@@ -1,7 +1,8 @@
 # amoorion-facebook
 
 Facebook plugin of [amoorion](../../README.md): post on a Facebook Page, read
-its posts, and reply as comments, through the Graph API.
+its posts, reply as comments, and delete posts or comments, through the Graph
+API.
 
 Secrets in amoorion's vault: `facebook/page-id` and `facebook/page-token` (a
 Page access token with `pages_manage_posts`, `pages_read_engagement` and
