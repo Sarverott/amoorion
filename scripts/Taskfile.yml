@@ -4,19 +4,24 @@
 version: '3'
 
 tasks:
+  vault:new:
+    desc: 'KeePassXC: make the file of AMOORION_VAULT_PATH, with the group amoorion (an existing one stays)'
+    cmds:
+      - scripts/vault.sh new
+
   vault:login:
-    desc: Log in to and unlock the Bitwarden vault; its session goes into .env (AMOORION_VAULT_TOKEN)
+    desc: 'Bitwarden: log in and unlock; its session goes into .env (AMOORION_VAULT_TOKEN)'
     interactive: true
     cmds:
       - scripts/vault.sh login
 
   vault:lock:
-    desc: Lock the Bitwarden vault and empty its session in .env
+    desc: 'Bitwarden: lock the vault and empty its session in .env'
     cmds:
       - scripts/vault.sh lock
 
   vault:status:
-    desc: 'The vault: bw and its state, then which platforms have their secrets'
+    desc: 'The vault of .env: its state, then which platforms have their secrets'
     cmds:
       - scripts/vault.sh status
       - uv run --frozen amoorion accounts

@@ -12,7 +12,7 @@ They talk to real platforms, so they never run on their own:
 
 Without names, every platform whose secrets are in the vault is tried and
 the others are skipped; a platform named but without its secrets fails.
-The secrets come from the vault that `.env` links to (`task vault:login`).
+The secrets come from the vault that `.env` links to (`task vault:status`).
 """
 
 import os
