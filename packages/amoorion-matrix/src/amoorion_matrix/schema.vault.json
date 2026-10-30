@@ -1,0 +1,13 @@
+{
+  "vault": {
+    "matrix": {
+      "description": "One room through the client-server API",
+      "scopes": {
+        "uri": "The homeserver, e.g. https://matrix.org",
+        "token": "Access token of the account; better a separate bot account",
+        "room": "The room's id !...:server or alias #...:server, unencrypted"
+      },
+      "optional": {}
+    }
+  }
+}

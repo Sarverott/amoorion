@@ -1,0 +1,14 @@
+{
+  "vault": {
+    "telegram": {
+      "description": "A bot in one chat through the Bot API",
+      "scopes": {
+        "token": "The bot's token from @BotFather",
+        "chat": "The chat's id, e.g. -1001234567890, or a public chat's @username"
+      },
+      "optional": {
+        "uri": "The Bot API server; default: https://api.telegram.org"
+      }
+    }
+  }
+}

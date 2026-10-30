@@ -1,0 +1,14 @@
+{
+  "vault": {
+    "bluesky": {
+      "description": "Bluesky account through the AT Protocol",
+      "scopes": {
+        "username": "Handle or e-mail",
+        "password": "An app password (https://bsky.app/settings/app-passwords), not the account's"
+      },
+      "optional": {
+        "uri": "The PDS; default: https://bsky.social"
+      }
+    }
+  }
+}
