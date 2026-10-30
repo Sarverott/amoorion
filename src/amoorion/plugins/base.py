@@ -11,9 +11,11 @@ import time would load it while it is still half-imported.
 A plugin that fails to load is kept in FAILED instead of stopping amoorion.
 """
 
+import json
 from enum import StrEnum
 from importlib.metadata import entry_points
-from typing import ClassVar
+from importlib.resources import files
+from typing import Any, ClassVar
 
 from amoorion.core import AmoorionError, Controller, Registry, View
 from amoorion.models import Message, Post
@@ -39,6 +41,18 @@ class Plugin(Controller):
     def __init__(self, vault: Vault, view: View | None = None) -> None:
         super().__init__(view)
         self.vault = vault
+
+    @classmethod
+    def schema(cls) -> dict[str, Any]:
+        """What this plugin's vault entry holds, from `schema.vault.json` of its package.
+
+        Like the scopes of OpenAPI: `scopes` are the keys it needs and `optional`
+        the keys it can use, each with what it is.
+        """
+        file = files(cls.__module__.partition(".")[0]) / "schema.vault.json"
+        if file.is_file():
+            return json.loads(file.read_text())["vault"][cls.name]
+        return {"description": cls.description, "scopes": dict.fromkeys(cls.secrets, ""), "optional": {}}
 
     def secret(self, key: str) -> str:
         return self.vault.get(f"{self.name}/{key}")

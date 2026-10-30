@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-tumblr"
-version = "0.4.1"
+version = "0.4.2"
 description = "Tumblr plugin of amoorion: post and read through the Tumblr API v2"
 readme = "README.md"
 license = "MIT"
@@ -12,6 +12,13 @@ dependencies = [
     "amoorion",
     "requests-oauthlib>=2.0.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/tumblr.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-tumblr"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
 
 [project.entry-points."amoorion.plugins"]
 tumblr = "amoorion_tumblr:Tumblr"

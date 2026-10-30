@@ -38,6 +38,11 @@ class Mastodon(HttpPlugin):
   doesn't speak HTTP subclasses `Plugin` (see `amoorion-blogger`).
 - `self.secret("token")` reads `mastodon/token` from the vault; never take
   secrets from anywhere else.
+- `src/<module>/schema.vault.json` says what the entry holds, like the scopes
+  of OpenAPI: `{"vault": {"<platform>": {"description": …, "scopes": {key:
+  what it is}, "optional": {key: what it is}}}}`. `scopes` must match
+  `secrets`, and every key asked for must be in it (a test checks);
+  `task vault:new` makes the empty entries from it.
 - Raise `amoorion.core.AmoorionError` (or `Unsupported`) with a message a
   person can act on; the `publish` method turns it into that platform's
   failed `Result` and goes on with the others.

@@ -1,0 +1,21 @@
+{
+  "vault": {
+    "discord": {
+      "description": "A bot in one channel, through the REST API",
+      "scopes": {
+        "token": "The bot's token (Developer Portal, the application, Bot)",
+        "channel": "The channel id (Developer Mode on, right click, Copy Channel ID)"
+      },
+      "optional": {
+        "uri": "The API with its version; default: https://discord.com/api/v10"
+      }
+    },
+    "discord-webhook": {
+      "description": "A channel's webhook, no bot",
+      "scopes": {
+        "url": "The channel's webhook URL (channel settings, Integrations, Webhooks)"
+      },
+      "optional": {}
+    }
+  }
+}

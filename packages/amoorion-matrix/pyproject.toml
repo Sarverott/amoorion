@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-matrix"
-version = "0.4.1"
+version = "0.4.2"
 description = "Matrix plugin of amoorion: posts, reads and replies in one room through the client-server API"
 readme = "README.md"
 license = "MIT"
@@ -11,6 +11,13 @@ requires-python = ">=3.12"
 dependencies = [
     "amoorion",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/matrix.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-matrix"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
 
 [project.entry-points."amoorion.plugins"]
 matrix = "amoorion_matrix:Matrix"

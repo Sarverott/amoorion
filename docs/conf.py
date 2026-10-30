@@ -109,6 +109,7 @@ html_theme_options = {
     },
 }
 
+LATEST = "https://amoorion.readthedocs.io/en/latest/"
 LINK = re.compile(r"(\]\()(?!https?:|mailto:|#)([^)\s]+)(\))")
 
 
@@ -167,6 +168,21 @@ def _state(app) -> None:
     (DOCS / "devlog" / "STATE.md").write_text(markdown(read(Repo(ROOT), online=online)))
 
 
+def _llms_absolute(app, exception) -> None:
+    """The links of llms.txt (and its nested ones) in full, to the latest docs in English.
+
+    sphinx-llm writes them relative to the file, and Read the Docs also serves
+    llms.txt at its root, where those paths don't exist.
+    """
+    if exception is not None or app.builder.format != "html":
+        return
+    out = Path(app.outdir)
+    for file in out.rglob("llms*.txt"):
+        folder = file.parent.relative_to(out).as_posix()
+        prefix = LATEST if folder == "." else f"{LATEST}{folder}/"
+        file.write_text(LINK.sub(lambda match: f"{match[1]}{prefix}{match[2]}{match[3]}", file.read_text()))
+
+
 def _skills(app, exception) -> None:
     """skills/ of the repository into the built site, as /skills/<name>/SKILL.md."""
     if exception is None and app.builder.format == "html":
@@ -175,6 +191,8 @@ def _skills(app, exception) -> None:
 
 def setup(app) -> None:
     app.connect("build-finished", _skills)
+    # After sphinx-llm has written them.
+    app.connect("build-finished", _llms_absolute, priority=900)
     app.connect("builder-inited", _examples)
     app.connect("builder-inited", _state)
     app.connect("source-read", _source_read)

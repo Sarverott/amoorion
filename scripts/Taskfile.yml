@@ -5,7 +5,7 @@ version: '3'
 
 tasks:
   vault:new:
-    desc: 'KeePassXC: make the file of AMOORION_VAULT_PATH, with the group amoorion (an existing one stays)'
+    desc: 'KeePassXC: the file of AMOORION_VAULT_PATH and an empty entry per platform; values stay'
     cmds:
       - scripts/vault.sh new
 

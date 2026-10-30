@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-discord"
-version = "0.4.1"
+version = "0.4.2"
 description = "Discord plugin of amoorion: a bot posts, reads and replies in a channel; a channel webhook only posts"
 readme = "README.md"
 license = "MIT"
@@ -11,6 +11,13 @@ requires-python = ">=3.12"
 dependencies = [
     "amoorion",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/discord.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-discord"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
 
 [project.entry-points."amoorion.plugins"]
 discord = "amoorion_discord:Discord"

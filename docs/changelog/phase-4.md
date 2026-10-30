@@ -337,3 +337,15 @@ names carry the menu. Every task name stayed the same.
 
 **The lesson.** The broken commits stay. `tests/test_tracked.py` fails on an
 ignored source file, and tests no longer read the user's `.env`.
+
+## Entries from schemas, links of every package, llms.txt in full
+
+UNIXUSAT=1793368348420 · commit 808f11e
+
+The author's words:
+
+> our creating task commant `vault:new` can propably initialize empty entries for us, don't you think? add it so editing would be easier. maybe we can implement as `schema.vault.json` in packages with similar way openapi presents scopes. this will also make all our packages update by force. besides our schemas of vault entries we can update readme of each package with link to readthedocs pages focused on them, pypi page, place on github and other referings. also can you fix pathing in llms.txt? they should be directed in full url to latest EN docs (for example `https://amoorion.readthedocs.io/en/latest/index.html.md` not for example just `index.html.md` that is not found at ``https://amoorion.readthedocs.io/index.html.md``). after all steps around that topics i mentioned we will begin next phase. i will also figure out how to redefine code usage of our amoorion. ready?
+
+`schema.vault.json` lives inside each package's module, so it ships in the
+wheel. Touching every package bumps them all, which also brings x and tumblr
+past 0.3.1 on PyPI without publishing by hand.

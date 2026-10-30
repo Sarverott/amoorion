@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-blogger"
-version = "0.4.0"
+version = "0.4.1"
 description = "Blogger plugin of amoorion: posting by mail to a blog's secret address"
 readme = "README.md"
 license = "MIT"
@@ -11,6 +11,13 @@ requires-python = ">=3.12"
 dependencies = [
     "amoorion",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/blogger.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-blogger"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
 
 [project.entry-points."amoorion.plugins"]
 blogger = "amoorion_blogger:Blogger"

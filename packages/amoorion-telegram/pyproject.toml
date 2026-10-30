@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-telegram"
-version = "0.4.1"
+version = "0.4.2"
 description = "Telegram plugin of amoorion: a bot posts, reads and replies in one chat through the Bot API"
 readme = "README.md"
 license = "MIT"
@@ -11,6 +11,13 @@ requires-python = ">=3.12"
 dependencies = [
     "amoorion",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/telegram.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-telegram"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
 
 [project.entry-points."amoorion.plugins"]
 telegram = "amoorion_telegram:Telegram"
