@@ -5,7 +5,10 @@ on:
   push:
     # The web page's branch holds built files only.
     branches-ignore: [github-pages]
+  # To development only: from forks. The flow's pull requests to master would wait for an
+  # approval nobody gives (made by a bot), and the flow runs `task check` before merging.
   pull_request:
+    branches: [development]
   # Started by flow.yml for the commits it pushes (its token starts nothing by itself).
   workflow_dispatch:
 

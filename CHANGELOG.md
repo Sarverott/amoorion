@@ -1,3 +1,8 @@
+## v0.4.5 (2026-10-30)
+
+**Packages:** amoorion 0.4.5
+
+
 ## v0.4.4 (2026-10-30)
 
 **Packages:** amoorion 0.4.4, amoorion-blogger 0.4.1, amoorion-bluesky 0.4.2, amoorion-discord 0.4.2, amoorion-facebook 0.4.2, amoorion-mastodon 0.4.2, amoorion-matrix 0.4.2, amoorion-telegram 0.4.2, amoorion-tumblr 0.4.2, amoorion-x 0.4.2
