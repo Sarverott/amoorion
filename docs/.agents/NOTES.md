@@ -2,6 +2,24 @@
 
 Newest on top.
 
+## 2026-10-30: the lesson of the missing dataset package
+
+- **What happened:** `dataset/` in `.gitignore` also hid `src/amoorion/dataset/`.
+  Every test passed here, on files git had never seen; on GitHub all checks
+  failed, and PR #11 merged that into master. Commits 5b09217..2605b27 lack
+  the package.
+- **Decided with the author:** the broken commits stay in history; from now
+  on whatever is broken or lacking gets fixed first.
+- **The lesson:** a green check here proves the working directory, not the
+  repository. What counts is what a clean clone has, so CI's result counts,
+  not only mine. `tests/test_tracked.py` now fails on any ignored source file.
+- **It happened again the same day I wrote this:** I chained `task check ;
+  git commit`, and 090031f went in over a failing gate. Fixed in fd23ad4,
+  never pushed alone. Chain with `&&`.
+- **A second find on the way:** `VaultLink.from_env` puts the real `.env`
+  into `os.environ`, so tests could inherit the vault link and its master
+  password. `conftest.py` now blocks that for non-live tests.
+
 ## 2026-10-27: orders Q13–Q15, the third inquiry, a release per push
 
 - Read Q13's "initializing our credentials been placed in .env - place them

@@ -103,3 +103,13 @@ UNIXUSAT=1793089864028
   deletes cleanly (Bluesky, Mastodon).
 - The six missing PyPI projects published once, so later `Y` releases
   stop waiting.
+
+## 2026-10-30: KeePassXC, and what the empty places are
+
+The author asked for an opinion, so: the tree of Taskfiles is right, one
+level deep for now. A deeper tree would have more menus than tasks.
+
+The project being empty in places is not what worries me. The features are
+ahead of their proof: ten platforms, and not one has talked to its real
+account yet. I would rather see `task test:connect` pass on one platform than
+add an eleventh.

@@ -317,3 +317,23 @@ vault:login` logs in, unlocks and writes the session into `.env`;
 delete) try every platform with its secrets in one command. Tried here:
 the vault is not logged in on this machine, so every platform was skipped;
 the first real connection waits for the author's `task vault:login`.
+
+## KeePassXC for now, the Taskfile tree, the lesson of the missing package
+
+UNIXUSAT=1793366002765 · commit fd23ad4
+
+The author's words:
+
+> i spend couple days on waiting. after each day i succesfully publish couple of packages there. now there should be all of them in registry of pypi. currently we have server out of our reach for bitwarden so we will use for now keepassxc - look at current pathing in `.env`, add keepassxc dependency and broken commits should propably be there leaved but from now all breaking it lacking stuff had to be fixed. include also for yourself note about that situation, because it sounds like good lesson for future developement for us to remember. empty task files should be like submenu splitting of context that right now sits mostly in main taskfile, i think about it like similar way it is with graph propagation or binary tree, both both are used to divide a collection into smaller, ordered portions (a coding strategy inspired by the "divide and conquer" methodology).
+
+**KeePassXC.** `pykeepass` is a dependency of `amoorion`, no longer an extra.
+`task vault:new` makes the file of `AMOORION_VAULT_PATH` with the group
+`amoorion` and never overwrites one; `vault:status` opens it and lists the
+entries, never a secret. `example.env` now links to KeePassXC.
+
+**Taskfile tree.** The root keeps setup and check; `tests/`, `examples/` and
+`docs/` are submenus; `scripts/` and `tools/` are flattened because their
+names carry the menu. Every task name stayed the same.
+
+**The lesson.** The broken commits stay. `tests/test_tracked.py` fails on an
+ignored source file, and tests no longer read the user's `.env`.
