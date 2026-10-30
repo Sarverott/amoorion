@@ -183,3 +183,12 @@ methods carry `readOnlyHint`.
 `Service` (`run`, `stop`) and `Daemon` running them side by side; when one
 ends or fails, the others stop. Services now: the API. Later: platform
 listeners (bots) and NATS subscribers.
+
+## From Python: `amoorion.app`
+
+`Amoorion` is one setup as an object: its vault, dataset and inbox, the platforms
+in use and its flags. Every method is callable by its name (`amo.publish(...)`),
+`api()`, `mcp()` and `cli()` give the front-ends on that same setup, `save` and
+`load` keep where things are and hashes to detect changes (`changes()`), never a
+secret. `Plugins` is the collection of what is installed, at rest. See the
+notebooks of `examples/`.

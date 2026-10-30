@@ -113,6 +113,11 @@ class Plugins(Method):
         ]
 
 
+def plugsFlagsToList(flags: dict[str, bool]) -> list[str]:  # noqa: N802 - the author's name for it
+    """The names of the flags that are on, e.g. of `Plugins["x"].infoflags`."""
+    return [name for name, on in flags.items() if on]
+
+
 class AccountStatus(Model):
     platform: str
     ready: bool

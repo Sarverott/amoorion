@@ -14,6 +14,7 @@ from amoorion.methods.base import (
     Reply,
     Snapshot,
     SnapshotMethod,
+    plugsFlagsToList,
 )
 
 __all__ = [
@@ -30,4 +31,5 @@ __all__ = [
     "Reply",
     "Snapshot",
     "SnapshotMethod",
+    "plugsFlagsToList",
 ]

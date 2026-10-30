@@ -10,3 +10,12 @@ def main() -> int:
     from amoorion.cli import main
 
     return main()
+
+
+def __getattr__(name: str) -> object:
+    # Not imported above: plugin packages import amoorion.plugins while amoorion itself loads.
+    if name in ("Amoorion", "Plug", "Plugins"):
+        from amoorion import app
+
+        return getattr(app, name)
+    raise AttributeError(name)

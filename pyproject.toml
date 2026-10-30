@@ -20,6 +20,7 @@ dependencies = [
     "pykeepass>=4.2.0",
     "cryptography>=46.0.0",
     "nats-py>=2.10.0",
+    "pyyaml>=6.0",
 ]
 
 [project.scripts]
