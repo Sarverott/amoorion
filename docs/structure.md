@@ -31,6 +31,7 @@ packages/            one package per platform, a uv workspace (Q10)
 | `amoorion-bluesky` | Bluesky | post, read, reply, delete | AT Protocol (XRPC), app password |
 | `amoorion-mastodon` | Mastodon | post, read, reply, delete | REST API, access token |
 | `amoorion-ntfy` | ntfy | post, read | HTTP, optional access token |
+| `amoorion-email` | e-mail | post, read, reply | SMTP and IMAP, encrypted only |
 | `amoorion-x` | X (twitter) | post, read, reply, delete | API v2, OAuth 1.0a |
 | `amoorion-tumblr` | Tumblr | post, read, delete | API v2 (Neue Post Format), OAuth 1.0a |
 | `amoorion-blogger` | Blogger | post | e-mail to the blog's secret address (SMTP, TLS) |

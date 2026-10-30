@@ -40,6 +40,7 @@ dev = [
     "amoorion-dev",
     "amoorion-discord",
     "amoorion-facebook",
+    "amoorion-email",
     "amoorion-mastodon",
     "amoorion-ntfy",
     "amoorion-matrix",
@@ -90,6 +91,7 @@ members = [
 
 [tool.uv.sources]
 amoorion-bluesky = { workspace = true }
+amoorion-email = { workspace = true }
 amoorion-mastodon = { workspace = true }
 amoorion-ntfy = { workspace = true }
 amoorion-x = { workspace = true }
