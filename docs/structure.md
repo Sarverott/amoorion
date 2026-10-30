@@ -192,3 +192,11 @@ in use and its flags. Every method is callable by its name (`amo.publish(...)`),
 `load` keep where things are and hashes to detect changes (`changes()`), never a
 secret. `Plugins` is the collection of what is installed, at rest. See the
 notebooks of `examples/`.
+
+## What it does by itself: `amoorion.workflows`
+
+`workflow` runs methods one after another, passing on `$last`. `automate` runs rules
+on the inbox: for each new matching message, its steps, with `$text`, `$author`,
+`$platform`, `$id` and `$url`. A rule acts once per message and a failed one is tried
+again next time. Beware of a rule publishing to where it reads: what it said is a new
+message it may match. Steps can't start other steps.
