@@ -1,0 +1,30 @@
+[project]
+name = "amoorion-ntfy"
+version = "0.4.6"
+description = "ntfy plugin of amoorion: push notifications to one topic"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/ntfy.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-ntfy"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
+
+[project.entry-points."amoorion.plugins"]
+ntfy = "amoorion_ntfy:Ntfy"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"

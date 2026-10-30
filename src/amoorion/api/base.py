@@ -12,6 +12,7 @@ import hmac
 from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.concurrency import run_in_threadpool
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from amoorion import __version__
@@ -19,6 +20,7 @@ from amoorion.core import AmoorionError, JsonView
 from amoorion.hooks import HOOKS, Forbidden
 from amoorion.inbox import Inbox
 from amoorion.methods import METHODS, Method
+from amoorion.methods.base import NotifyParams
 from amoorion.vault import Vault, open_vault
 
 bearer = HTTPBearer(auto_error=False)
@@ -77,6 +79,9 @@ def create_app(vault: Vault | None = None, inbox: Inbox | None = None) -> FastAP
         except AmoorionError as error:
             raise HTTPException(400, str(error)) from None
         kept = inbox.keep([message]) if message else []
+        for new in kept:  # not while the service waits on the event loop: other platforms answer slowly
+            links = [new.url] if new.url else []
+            await run_in_threadpool(METHODS.get("notify")(vault, inbox=inbox).run, NotifyParams(text=new.text, links=links))
         answer = hook_.answer(payload)
         if answer is not None:
             return answer
