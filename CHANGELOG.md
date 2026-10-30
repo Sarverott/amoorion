@@ -1,3 +1,11 @@
+## v0.4.8 (2026-10-30)
+
+**Packages:** amoorion 0.4.8
+
+### Feat
+
+- **nats**: results of methods that change something published, and a daemon service keeping what comes in in the inbox; off unless AMOORION_NATS names a server
+
 ## v0.4.7 (2026-10-30)
 
 **Packages:** amoorion 0.4.7, amoorion-ntfy 0.4.6
