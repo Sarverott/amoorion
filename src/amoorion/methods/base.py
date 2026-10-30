@@ -6,6 +6,7 @@ models. Front-ends never talk to plugins directly.
 """
 
 import os
+from functools import wraps
 from typing import Any, ClassVar
 
 from pydantic import Field
@@ -14,6 +15,7 @@ from amoorion.core import AmoorionError, Controller, Model, Registry, View
 from amoorion.dataset import Dataset
 from amoorion.inbox import Inbox
 from amoorion.models import Message, Post, Result
+from amoorion.nats import announce
 from amoorion.plugins import FAILED, Capability, Plugin, load_plugins, open_plugin
 from amoorion.vault import Vault, open_vault
 
@@ -27,6 +29,21 @@ class Method(Controller):
     # True when the method changes nothing on any platform (agents may call it freely);
     # keeping what it read in the local inbox doesn't count.
     read_only: ClassVar[bool] = False
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        """What a method that changes something returned also goes out on NATS, whoever asked."""
+        super().__init_subclass__(**kwargs)
+        if cls.read_only or "run" not in cls.__dict__:
+            return
+        run = cls.run
+
+        @wraps(run)
+        def announced(self: "Method", params: Model) -> Any:
+            result = run(self, params)
+            announce(cls.name, result, self._vault)
+            return result
+
+        cls.run = announced  # type: ignore[method-assign]
 
     def __init__(
         self, vault: Vault | None = None, view: View | None = None, inbox: Inbox | None = None, dataset: Dataset | None = None

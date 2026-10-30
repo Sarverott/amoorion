@@ -16,6 +16,7 @@ src/amoorion/
 ├── inbox/           received messages of every platform, SQLite (Q11)
 ├── dataset/         the posts of every profile on every platform, JSON files (Q14)
 ├── hooks/           incoming webhooks → messages
+├── nats/            results of methods out, a subject into the inbox
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
 ├── mcp/             MCP server: methods as tools for AI agents       (__main__)
@@ -134,6 +135,13 @@ dataset/<platform>/<profile>/deleted/<id>.json what `delete` removed, kept befor
 A post is `present`, `gone` (no longer there when a read covered all) or
 `deleted` (by amoorion). Where: `AMOORION_DATASET` in `.env`, default
 `./dataset` (ignored by git). Ids become file names readable and unique.
+
+### `nats/`
+
+Off unless `AMOORION_NATS` names a server. What a method that changes
+something returned goes out on `<prefix>.methods.<name>` (a failure there
+never fails the method); the daemon keeps what arrives on `<prefix>.in.>` in
+the inbox as `nats:<subject>`.
 
 ### `inbox/`
 
