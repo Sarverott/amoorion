@@ -101,8 +101,14 @@ jobs:
             echo "automerge $mode${completed:+, completed: $completed}; checking, then merging #$PR"
             uv run --frozen task check
             gh pr merge "$PR" --merge --subject "$subject"
-            # The merge made with this token starts no workflow by itself.
-            gh workflow run release.yml --ref master
+            # The merge made with this token starts no workflow by itself. It has happened
+            # by now, so a hiccup of GitHub's must not leave master without its release.
+            for try in 1 2 3 4 5; do
+              gh workflow run release.yml --ref master && exit 0
+              echo "release not started, try $try of 5"
+              sleep 30
+            done
+            exit 1
           else
             echo "automerge $mode; the pull request waits for the author"
           fi
