@@ -43,8 +43,13 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
-from pykeepass import PyKeePass, create_database
+from pykeepass import PyKeePass
 from pykeepass.exceptions import CredentialsError
+
+from amoorion.core import AmoorionError
+from amoorion.plugins import PLUGINS, load_plugins
+from amoorion.vault import VaultLink
+from amoorion.vault.kpxc_db_file import initialize
 
 load_dotenv(".env", override=True)
 path, token = os.environ.get("AMOORION_VAULT_PATH"), os.environ.get("AMOORION_VAULT_TOKEN")
@@ -52,16 +57,13 @@ if not path:
     sys.exit("no AMOORION_VAULT_PATH in .env: the path of the .kdbx file")
 file = Path(path).expanduser()
 if sys.argv[1] == "new":
-    if file.exists():
-        sys.exit(f"{file} exists already, it stays")
-    if not token:
-        sys.exit("no AMOORION_VAULT_TOKEN in .env: the master password of the new file")
-    file.parent.mkdir(parents=True, exist_ok=True)
-    database = create_database(str(file), password=token)
-    database.add_group(database.root_group, "amoorion")
-    database.save()
-    file.chmod(0o600)
-    print(f"{file} made, with the group amoorion; add one entry per platform in KeePassXC")
+    load_plugins()
+    schemas = {name: PLUGINS.get(name).schema() for name in PLUGINS.names() if PLUGINS.get(name).secrets}
+    try:
+        added = initialize(VaultLink(kind="keepassxc", path=path, token=token), schemas)
+    except AmoorionError as error:
+        sys.exit(str(error))
+    print(f"{file}: added {', '.join(added)}; fill them in KeePassXC" if added else f"{file}: nothing to add")
 elif not file.exists():
     print(f"keepassxc: no {file}: `uv run task vault:new` makes it")
 else:

@@ -45,7 +45,7 @@ uv run task check        # tests, YAML, commits, docs build (= CI)
 uv run task test         # pytest only
 uv run task flow:pull    # on development: pull master in, mark the next pre-release
 uv run task version      # the version of every package (released together)
-uv run task vault:new     # KeePassXC (the vault for now): makes the file of AMOORION_VAULT_PATH
+uv run task vault:new     # KeePassXC (the vault for now): makes the file of AMOORION_VAULT_PATH and an empty entry per platform
 uv run task vault:status  # the vault's state and which platforms have their secrets
 uv run task vault:tools   # Bitwarden: bw by npm into tools/; vault:login (the author, interactive) puts its session into .env
 uv run task test:connect [-- <platform>…]   # read-only: log in, profile, read a few (every platform with secrets)
