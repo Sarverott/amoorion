@@ -1,3 +1,12 @@
+## v0.4.4 (2026-10-30)
+
+**Packages:** amoorion 0.4.4, amoorion-blogger 0.4.1, amoorion-bluesky 0.4.2, amoorion-discord 0.4.2, amoorion-facebook 0.4.2, amoorion-mastodon 0.4.2, amoorion-matrix 0.4.2, amoorion-telegram 0.4.2, amoorion-tumblr 0.4.2, amoorion-x 0.4.2
+
+### Feat
+
+- **vault**: task vault:new makes an empty entry per platform from schema.vault.json, with what each field is in its notes
+- **plugins**: schema.vault.json in every package says what its vault entry holds, like the scopes of OpenAPI; Plugin.schema() reads it
+
 ## v0.4.3 (2026-10-30)
 
 **Packages:** amoorion 0.4.3
