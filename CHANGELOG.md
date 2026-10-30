@@ -1,3 +1,11 @@
+## v0.4.20 (2026-10-30)
+
+**Packages:** amoorion 0.4.20
+
+### Feat
+
+- **app**: Amoorion.init() puts the whole process in a sandbox
+
 ## v0.4.19 (2026-10-30)
 
 **Packages:** amoorion 0.4.19
