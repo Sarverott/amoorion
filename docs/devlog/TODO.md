@@ -108,9 +108,9 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] `Amoorion` and `Plugins`, the author's way of using amoorion from Python:
       `use`, `load`, `save`, flags, changes detected by hashes
 - [x] Workflows and rules acting on what arrives; searching the inbox
-- [ ] `compose` through any OpenAI-compatible server (Ollama, LiteLLM,
+- [x] `compose` through any OpenAI-compatible server (Ollama, LiteLLM,
       llama.cpp, OpenAI, Claude, Hugging Face); a society simulated locally
-- [ ] Hooks for Sentry and Plane; small utilities (Wikipedia, ngrok, markdown posts)
+- [x] Hooks for Sentry and Plane; small utilities (Wikipedia, ngrok, markdown posts)
 - [ ] The nineteen notebooks and five advanced use cases filled and run by the
       tests; Gradio and Streamlit apps for Hugging Face Spaces
 - [ ] Every link of the author's inquiry considered, the verdicts in the docs
