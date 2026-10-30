@@ -6,7 +6,7 @@ everything in one place. Where it lives is set in `.env`:
 
     AMOORION_INBOX=<path>   default: $XDG_DATA_HOME/amoorion/inbox.sqlite3
 
-Rules acting on what arrives come in phase 5.
+Rules acting on what arrives: see amoorion.workflows.
 """
 
 import os
@@ -73,6 +73,21 @@ class Inbox:
         if platform:
             query += " WHERE platform = ?"
             args = (platform,)
+        connection = self._connect()
+        try:
+            rows = connection.execute(query + " ORDER BY at DESC, rowid DESC LIMIT ?", (*args, limit)).fetchall()
+        finally:
+            connection.close()
+        return [Message.model_validate_json(row[0]) for row in rows]
+
+    def search(self, text: str, platform: str | None = None, limit: int = 20) -> "list[Message]":
+        """Messages holding this text, in any case (of ASCII letters: SQLite's LIKE); newest first."""
+        pattern = "%" + text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+        query = "SELECT message FROM messages WHERE json_extract(message, '$.text') LIKE ? ESCAPE '\\'"
+        args: tuple[str | int, ...] = (pattern,)
+        if platform:
+            query += " AND platform = ?"
+            args += (platform,)
         connection = self._connect()
         try:
             rows = connection.execute(query + " ORDER BY at DESC, rowid DESC LIMIT ?", (*args, limit)).fetchall()

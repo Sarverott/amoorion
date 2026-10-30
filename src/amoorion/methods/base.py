@@ -18,6 +18,8 @@ from amoorion.models import Message, Post, Result
 from amoorion.nats import announce
 from amoorion.plugins import FAILED, Capability, Plugin, load_plugins, open_plugin
 from amoorion.vault import Vault, open_vault
+from amoorion.workflows import Rule, Step, StepResult, handled, mark_handled, matches, run_steps
+from amoorion.workflows.base import known_of
 
 
 class NoParams(Model):
@@ -313,3 +315,79 @@ class Delete(Method):
             return Result(platform=plugin.name, ok=False, message=message, error=str(error))
         self.dataset.deleted(plugin.name, profile, message)
         return Result(platform=plugin.name, ok=True, message=message)
+
+
+class SearchParams(Model):
+    text: str = Field(min_length=1)
+    platform: str | None = Field(None, description="only this platform (a hook is hook:<name>)")
+    limit: int = Field(20, ge=1, le=1000)
+
+
+@METHODS.register
+class Search(Method):
+    name: ClassVar[str] = "search"
+    description: ClassVar[str] = "Find messages of the inbox by their text, newest first"
+    read_only: ClassVar[bool] = True
+    Params: ClassVar[type[Model]] = SearchParams
+
+    def run(self, params: SearchParams) -> list[Message]:
+        return self.inbox.search(params.text, params.platform, params.limit)
+
+
+# Steps can't start steps: a rule that ends up calling itself would never stop.
+NOT_A_STEP = {"workflow", "automate"}
+
+
+class WorkflowParams(Model):
+    steps: list[Step] = Field(min_length=1, description="methods with their params, one after another; $last is the text of the previous answer")
+
+
+class StepsMethod(Method):
+    def _call(self, method: str, params: dict[str, Any]) -> Any:
+        if method in NOT_A_STEP:
+            raise AmoorionError(f"a step can't be {method}")
+        step = METHODS.get(method)(self._vault, inbox=self._inbox, dataset=self._dataset)
+        return step.run(step.Params(**params))
+
+
+@METHODS.register
+class Workflow(StepsMethod):
+    name: ClassVar[str] = "workflow"
+    description: ClassVar[str] = "Run methods one after another, until the end or the first failure"
+    Params: ClassVar[type[Model]] = WorkflowParams
+
+    def run(self, params: WorkflowParams) -> list[StepResult]:
+        return run_steps(params.steps, self._call)
+
+
+class AutomateParams(Model):
+    rules: list[Rule] = Field(min_length=1, description="what to do with which messages of the inbox")
+    limit: int = Field(100, ge=1, le=1000, description="look at this many of the newest messages")
+
+
+class Handled(Model):
+    rule: str
+    platform: str
+    message_id: str
+    ok: bool
+    steps: list[StepResult]
+
+
+@METHODS.register
+class Automate(StepsMethod):
+    name: ClassVar[str] = "automate"
+    description: ClassVar[str] = "Run rules on the messages of the inbox, once per message; a failure is tried again next time"
+    Params: ClassVar[type[Model]] = AutomateParams
+
+    def run(self, params: AutomateParams) -> list[Handled]:
+        done = []
+        for message in reversed(self.inbox.list(limit=params.limit)):
+            for rule in params.rules:
+                if not matches(rule, message) or handled(self.inbox, rule.name, message):
+                    continue
+                steps = run_steps(rule.steps, self._call, known_of(message))
+                ok = all(step.ok for step in steps)
+                if ok:
+                    mark_handled(self.inbox, rule.name, message)
+                done.append(Handled(rule=rule.name, platform=message.platform, message_id=message.id or "", ok=ok, steps=steps))
+        return done

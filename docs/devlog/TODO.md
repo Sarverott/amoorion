@@ -107,7 +107,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] The notebooks of `examples/` renamed `old.<NAME>.ipynb`
 - [x] `Amoorion` and `Plugins`, the author's way of using amoorion from Python:
       `use`, `load`, `save`, flags, changes detected by hashes
-- [ ] Workflows and rules acting on what arrives; searching the inbox
+- [x] Workflows and rules acting on what arrives; searching the inbox
 - [ ] `compose` through any OpenAI-compatible server (Ollama, LiteLLM,
       llama.cpp, OpenAI, Claude, Hugging Face); a society simulated locally
 - [ ] Hooks for Sentry and Plane; small utilities (Wikipedia, ngrok, markdown posts)

@@ -4,6 +4,7 @@ from amoorion.methods.base import (
     METHODS,
     AccountStatus,
     Accounts,
+    Automate,
     Delete,
     InboxMethod,
     Method,
@@ -12,8 +13,10 @@ from amoorion.methods.base import (
     Publish,
     Read,
     Reply,
+    Search,
     Snapshot,
     SnapshotMethod,
+    Workflow,
     plugsFlagsToList,
 )
 
@@ -21,6 +24,7 @@ __all__ = [
     "METHODS",
     "AccountStatus",
     "Accounts",
+    "Automate",
     "Delete",
     "InboxMethod",
     "Method",
@@ -29,7 +33,9 @@ __all__ = [
     "Publish",
     "Read",
     "Reply",
+    "Search",
     "Snapshot",
     "SnapshotMethod",
+    "Workflow",
     "plugsFlagsToList",
 ]
