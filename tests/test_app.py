@@ -2,6 +2,7 @@
 
 import gc
 import os
+import shutil
 
 import pytest
 import yaml
@@ -9,6 +10,8 @@ from fastapi.testclient import TestClient
 
 from amoorion import Amoorion, Plug, Plugins
 from amoorion.core import AmoorionError
+from amoorion.dataset import Dataset
+from amoorion.inbox import Inbox
 from amoorion.methods import plugsFlagsToList
 
 
@@ -80,6 +83,16 @@ def test_without_args_it_is_a_sandbox_gone_with_its_object(env, tmp_path, monkey
     del amo
     gc.collect()
     assert not home.exists()
+
+
+def test_init_puts_the_process_in_a_sandbox(env, tmp_path):
+    (tmp_path / ".env").write_text("AMOORION_VAULT=keepassxc\n")
+    scratch = Amoorion.init()
+    try:
+        assert os.environ["AMOORION_VAULT"] == "env"
+        assert Inbox().path == scratch / "inbox.sqlite3" and Dataset().path == scratch / "dataset"
+    finally:
+        shutil.rmtree(scratch)
 
 
 def test_save_load_detect_changes_and_hold_no_secret(env, tmp_path):
