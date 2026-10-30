@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 import pytest
-from amoorion_discord.base import compose
+from amoorion_discord.text import compose
 
 from amoorion.core import AmoorionError
 from amoorion.models import Post
