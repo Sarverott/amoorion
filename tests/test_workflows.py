@@ -45,3 +45,9 @@ def test_a_release_merges_back_after_publishing_and_the_page():
 
 def test_check_does_not_wait_on_the_flows_pull_requests():
     assert load(GITHUB / "workflows/check.yml")["on"]["pull_request"]["branches"] == ["development"]
+
+
+def test_the_flow_tries_again_to_start_the_release():
+    steps = load(GITHUB / "workflows/flow.yml")["jobs"]["propose"]["steps"]
+    [step] = [step for step in steps if step.get("name") == "Release by itself"]
+    assert "for try in" in step["run"] and "gh workflow run release.yml --ref master && exit 0" in step["run"]
