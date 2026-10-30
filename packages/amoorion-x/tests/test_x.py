@@ -9,7 +9,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import unquote, urlparse
 
 import pytest
-from amoorion_x.base import compose, weight
+from amoorion_x.text import compose, weight
 from oauthlib.oauth1.rfc5849 import signature
 
 from amoorion.core import AmoorionError

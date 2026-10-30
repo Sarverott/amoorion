@@ -5,7 +5,7 @@ import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
-from amoorion_telegram.base import compose, link
+from amoorion_telegram.text import compose, link
 
 from amoorion.core import AmoorionError
 from amoorion.models import Post

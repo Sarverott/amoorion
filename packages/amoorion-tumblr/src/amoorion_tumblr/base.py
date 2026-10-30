@@ -14,26 +14,9 @@ from amoorion.core import AmoorionError
 from amoorion.models import Account, Message, Post
 from amoorion.plugins import Capability, HttpPlugin
 
+from amoorion_tumblr.text import blocks, text_of
+
 SERVICE = "https://api.tumblr.com"
-
-
-def blocks(post: Post) -> list[dict[str, Any]]:
-    content: list[dict[str, Any]] = []
-    if post.title:
-        content.append({"type": "text", "subtype": "heading1", "text": post.title})
-    content += [{"type": "text", "text": paragraph} for paragraph in post.text.split("\n\n") if paragraph]
-    content += [{"type": "link", "url": link} for link in post.links]
-    return content
-
-
-def text_of(content: list[dict[str, Any]]) -> str:
-    parts = []
-    for block in content:
-        if block.get("type") == "text":
-            parts.append(block.get("text", ""))
-        elif block.get("type") == "link":
-            parts.append(block.get("url", ""))
-    return "\n\n".join(part for part in parts if part)
 
 
 class Tumblr(HttpPlugin):

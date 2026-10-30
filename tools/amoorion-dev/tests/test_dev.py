@@ -5,7 +5,8 @@ import subprocess
 import pytest
 import json
 
-from amoorion_dev import notes, phases, site, state, version
+from amoorion_dev import notes, phases, state, version, webpage
+from amoorion_dev.state_page import markdown
 from amoorion_dev.repo import Repo
 
 TODO = """# TODO
@@ -123,9 +124,9 @@ def test_state_reads_offline(repo):
     read = state.read(found)
     assert read.version == "0.2.0" and read.stage == "released" and read.next_release == "0.2.1"
     assert [p["number"] for p in read.phases] == [0, 1] and read.remote == {}
-    assert "| 1: platforms | 1/2 | in progress |" in state.markdown(read)
+    assert "| 1: platforms | 1/2 | in progress |" in markdown(read)
     assert read.packages["amoorion-a"] == {"version": "0.2.0", "next": "0.2.0"} and read.release_kind == "patch"
-    assert "| `amoorion` | `0.2.0` | 0.2.1 |" in state.markdown(read) and "(Z: a step)" in state.markdown(read)
+    assert "| `amoorion` | `0.2.0` | 0.2.1 |" in markdown(read) and "(Z: a step)" in markdown(read)
 
 
 def test_a_patch_bumps_amoorion_and_the_changed_packages_only(repo):
@@ -171,7 +172,7 @@ def test_the_site_puts_the_presentation_page_at_its_root(repo, tmp_path):
     examples.mkdir()
     (examples / "01-first-steps.html").write_text("<html>example</html>")
     out = tmp_path / "site"
-    site.build(found, out, examples, website)
+    webpage.build(found, out, examples, website)
     assert (out / "index.html").read_text() == "<html>presentation</html>"
     assert "What it is." in (out / "project.html").read_text() and "badges" not in (out / "project.html").read_text()
     assert 'href="01-first-steps.html"' in (out / "examples" / "index.html").read_text()
@@ -185,6 +186,6 @@ def test_the_site_puts_the_presentation_page_at_its_root(repo, tmp_path):
 
 def test_without_the_presentation_page_the_project_page_is_the_root(repo, tmp_path):
     found, _, _ = repo
-    site.build(found, tmp_path / "site")
+    webpage.build(found, tmp_path / "site")
     assert "Universal tool" in (tmp_path / "site" / "index.html").read_text()
     assert not (tmp_path / "site" / "project.html").exists()

@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 import pytest
-from amoorion_tumblr.base import blocks, text_of
+from amoorion_tumblr.text import blocks, text_of
 
 from amoorion.core import AmoorionError
 from amoorion.models import Post

@@ -10,6 +10,7 @@ structure, a workflow or a tool updates this map in the same commit.
 | `src/amoorion/` | the package: core and namespaces (`docs/structure.md`) | agents |
 | `packages/amoorion-<p>/` | one plugin package per platform, tested against fakes | agents (`task plugin:new`) |
 | `tools/amoorion-dev/` | development tools, never published | agents |
+| `docs/_ext/` | what the docs' build does around Sphinx (`amoorion_pages.py`) | agents |
 | `examples/*.ipynb` | notebooks, run by the tests; `examples/build/` ignored | agents |
 | `tests/`, `packages/*/tests/`, `tools/*/tests/` | pytest; `tests/live/` only when named | agents |
 | `packages/*/src/*/schema.vault.json` | what a plugin's vault entry holds (`Plugin.schema()`, `task vault:new`) | agents |

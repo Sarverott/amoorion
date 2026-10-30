@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-discord"
-version = "0.4.2"
+version = "0.4.3"
 description = "Discord plugin of amoorion: a bot posts, reads and replies in a channel; a channel webhook only posts"
 readme = "README.md"
 license = "MIT"

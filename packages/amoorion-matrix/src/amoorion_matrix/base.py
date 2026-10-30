@@ -9,28 +9,15 @@ import json
 import uuid
 from datetime import UTC, datetime
 from typing import Any, ClassVar
-from urllib.parse import quote
 
 from amoorion.core import AmoorionError
 from amoorion.models import Account, Message, Post
 from amoorion.plugins import Capability, HttpPlugin
 
+from amoorion_matrix.text import compose, part
+
 API = "/_matrix/client/v3"
 ONLY_MESSAGES = json.dumps({"types": ["m.room.message"]})
-
-
-def compose(post: Post) -> str:
-    text = "\n\n".join(part for part in (post.title, post.text) if part)
-    if post.links:
-        text += "\n" + "\n".join(post.links)
-    if post.tags:
-        text += "\n" + " ".join("#" + tag.lstrip("#") for tag in post.tags)
-    return text
-
-
-def part(value: str) -> str:
-    """Ids like !room:server or $event go into paths quoted whole."""
-    return quote(value, safe="")
 
 
 class Matrix(HttpPlugin):
