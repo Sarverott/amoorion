@@ -186,6 +186,8 @@ myst-nb==1.4.0
     # via amoorion-docs
 myst-parser==5.1.0
     # via myst-nb
+nats-py==2.16.0
+    # via amoorion
 nbclient==0.11.0
     # via
     #   jupyter-cache

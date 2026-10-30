@@ -1,8 +1,8 @@
 """Daemon: runs services side by side until one ends or it is stopped.
 
 A service is anything long-running: the API (which also receives the hooks)
-now; platform listeners (Discord, Telegram, Matrix bots) and NATS
-subscribers later. When one service ends or fails, the others are stopped.
+and a NATS subscriber now; platform listeners (Discord, Telegram, Matrix
+bots) later. When one service ends or fails, the others are stopped.
 """
 
 import argparse
@@ -10,6 +10,7 @@ import asyncio
 from typing import ClassVar
 
 from amoorion.core import Controller
+from amoorion.nats import NatsService, enabled
 
 
 class Service(Controller):
@@ -58,5 +59,13 @@ class Daemon(Controller):
             task.result()  # a failed service makes the daemon fail
 
 
+def services(host: str, port: int) -> list[Service]:
+    """The API always; NATS when `.env` names its server."""
+    found: list[Service] = [ApiService(host, port)]
+    if server := enabled():
+        found.append(NatsService(server))
+    return found
+
+
 def serve(args: argparse.Namespace) -> None:
-    asyncio.run(Daemon([ApiService(args.host, args.port)]).run())
+    asyncio.run(Daemon(services(args.host, args.port)).run())

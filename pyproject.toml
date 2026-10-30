@@ -19,6 +19,7 @@ dependencies = [
     "uvicorn>=0.54.0",
     "pykeepass>=4.2.0",
     "cryptography>=46.0.0",
+    "nats-py>=2.10.0",
 ]
 
 [project.scripts]

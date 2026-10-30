@@ -102,7 +102,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Webhooks: GitHub (`X-Hub-Signature-256`), GitLab (`X-Gitlab-Token`),
       Discord; each a hook in `hooks/`
 - [x] ntfy: plugin (post) and notification target
-- [ ] NATS: publish methods' results, subscribe as a daemon service
+- [x] NATS: publish methods' results, subscribe as a daemon service
 - [ ] E-mail client: send (also Blogger by mail) and read
 - [ ] The notebooks of `examples/` renamed `old.<NAME>.ipynb`
 - [ ] New examples from the author's list, with what they present implemented
