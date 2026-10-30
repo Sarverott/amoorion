@@ -2,7 +2,8 @@
 
 The shape of `src/amoorion/`: one core, and namespaces built on it (orders
 of phase 0, Q1). Every namespace keeps its own core mechanics in
-`<namespace>/base.py`; the ones that can run on their own also have
+`<namespace>/base.py`, and what has a purpose of its own in a short file next
+to it; the ones that can run on their own also have
 `<namespace>/__main__.py` (`python -m amoorion.<namespace>`).
 
 ```
@@ -105,7 +106,7 @@ field per key. One module per backend (Q6):
 it needs (`secrets`), and implements the calls; anything else raises
 `Unsupported`. `HttpPlugin` adds JSON-over-HTTP calls with the platform's
 own error reasons. Plugins are found through the entry point group
-`amoorion.plugins`, loaded on first use; one that fails to load is listed
+`amoorion.plugins`, loaded on first use (`loading.py`); one that fails to load is listed
 with its error. The platforms are packages in `packages/` (above); only
 `dryrun` is built in. How to write one: [plugins.md](plugins.md).
 
@@ -144,7 +145,8 @@ A post is `present`, `gone` (no longer there when a read covered all) or
 Off unless `AMOORION_NATS` names a server. What a method that changes
 something returned goes out on `<prefix>.methods.<name>` (a failure there
 never fails the method); the daemon keeps what arrives on `<prefix>.in.>` in
-the inbox as `nats:<subject>`.
+the inbox as `nats:<subject>`. `base.py` names the subjects, `publish.py` sends,
+`service.py` listens.
 
 ### `inbox/`
 
@@ -166,7 +168,7 @@ whose secret is missing from the vault refuses everything. Built in:
 `amoorion <method> --<param> …`, `--json` for machine output; `amoorion`
 alone in a terminal (or `-i`) asks step by step: the method from a table,
 each parameter, platforms offered by what they can do, a confirmation
-before anything changes on a platform (`cli/guide.py`); `amoorion api`,
+before anything changes on a platform (`cli/guide.py`; `parser.py` makes the options, `view.py` the tables); `amoorion api`,
 `amoorion mcp`, `amoorion daemon` start the servers.
 
 ### `api/`
@@ -192,7 +194,8 @@ listeners (bots) and NATS subscribers.
 in use and its flags. Every method is callable by its name (`amo.publish(...)`),
 `api()`, `mcp()` and `cli()` give the front-ends on that same setup, `save` and
 `load` keep where things are and hashes to detect changes (`changes()`), never a
-secret. `Plugins` is the collection of what is installed, at rest. See the
+secret (`states.py`, `frontends.py`). `Plugins` is the collection of what is
+installed, at rest (`plugs.py`). See the
 notebooks of `examples/`.
 
 ## What it does by itself: `amoorion.workflows`
@@ -201,7 +204,8 @@ notebooks of `examples/`.
 on the inbox: for each new matching message, its steps, with `$text`, `$author`,
 `$platform`, `$id` and `$url`. A rule acts once per message and a failed one is tried
 again next time. Beware of a rule publishing to where it reads: what it said is a new
-message it may match. Steps can't start other steps.
+message it may match. Steps can't start other steps. Steps are in `workflows/base.py`,
+rules in `workflows/rules.py`.
 
 ## Around the methods: `society`, `utilities`
 

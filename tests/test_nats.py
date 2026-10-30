@@ -6,7 +6,9 @@ from types import SimpleNamespace
 
 import pytest
 
-import amoorion.nats.base as bus
+import nats
+
+from amoorion.nats import NatsService
 from amoorion.daemon.base import services
 from amoorion.inbox import Inbox
 from amoorion.methods import METHODS
@@ -45,7 +47,7 @@ async def connect(server, **options):
 @pytest.fixture
 def vault(monkeypatch):
     FakeClient.published, FakeClient.fail, FakeClient.options = [], False, {}
-    monkeypatch.setattr(bus.nats, "connect", connect)
+    monkeypatch.setattr(nats, "connect", connect)
     monkeypatch.setenv("AMOORION_NATS", "nats://bus.test:4222")
     monkeypatch.delenv("AMOORION_NATS_PREFIX", raising=False)
     monkeypatch.delenv("AMOORION_SECRET_NATS_TOKEN", raising=False)
@@ -88,7 +90,7 @@ def test_the_token_comes_from_the_vault(vault, monkeypatch):
 
 def test_the_service_keeps_what_comes_in(vault, tmp_path):
     inbox = Inbox(tmp_path / "inbox.sqlite3")
-    service = bus.NatsService("nats://bus.test:4222", vault, inbox)
+    service = NatsService("nats://bus.test:4222", vault, inbox)
 
     async def scenario():
         task = asyncio.create_task(service.run())

@@ -66,13 +66,8 @@ class Inbox:
         connection.close()
         return kept
 
-    def list(self, platform: str | None = None, limit: int = 20) -> list[Message]:
+    def _messages(self, query: str, args: tuple[str | int, ...], limit: int) -> "list[Message]":
         """Newest first."""
-        query = "SELECT message FROM messages"
-        args: tuple[str | int, ...] = ()
-        if platform:
-            query += " WHERE platform = ?"
-            args = (platform,)
         connection = self._connect()
         try:
             rows = connection.execute(query + " ORDER BY at DESC, rowid DESC LIMIT ?", (*args, limit)).fetchall()
@@ -80,17 +75,16 @@ class Inbox:
             connection.close()
         return [Message.model_validate_json(row[0]) for row in rows]
 
+    def list(self, platform: str | None = None, limit: int = 20) -> "list[Message]":
+        """Newest first."""
+        if platform:
+            return self._messages("SELECT message FROM messages WHERE platform = ?", (platform,), limit)
+        return self._messages("SELECT message FROM messages", (), limit)
+
     def search(self, text: str, platform: str | None = None, limit: int = 20) -> "list[Message]":
         """Messages holding this text, in any case (of ASCII letters: SQLite's LIKE); newest first."""
         pattern = "%" + text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
         query = "SELECT message FROM messages WHERE json_extract(message, '$.text') LIKE ? ESCAPE '\\'"
-        args: tuple[str | int, ...] = (pattern,)
         if platform:
-            query += " AND platform = ?"
-            args += (platform,)
-        connection = self._connect()
-        try:
-            rows = connection.execute(query + " ORDER BY at DESC, rowid DESC LIMIT ?", (*args, limit)).fetchall()
-        finally:
-            connection.close()
-        return [Message.model_validate_json(row[0]) for row in rows]
+            return self._messages(query + " AND platform = ?", (pattern, platform), limit)
+        return self._messages(query, (pattern,), limit)

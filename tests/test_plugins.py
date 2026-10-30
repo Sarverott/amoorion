@@ -72,15 +72,15 @@ def test_dryrun_comes_from_an_entry_point():
 
 
 def test_outside_plugins_load_and_failures_are_kept(monkeypatch):
-    from amoorion.plugins import base
+    from amoorion.plugins import loading
 
     class Outside(Plugin):
         name = "outside"
 
-    monkeypatch.setattr(base, "PLUGINS", base.Registry("plugin"))
-    monkeypatch.setattr(base, "FAILED", {})
+    monkeypatch.setattr(loading, "PLUGINS", loading.Registry("plugin"))
+    monkeypatch.setattr(loading, "FAILED", {})
     monkeypatch.setattr(
-        base,
+        loading,
         "entry_points",
         lambda group: [
             FakeEntryPoint("outside", Outside),
@@ -89,7 +89,7 @@ def test_outside_plugins_load_and_failures_are_kept(monkeypatch):
             FakeEntryPoint("misnamed", Outside),
         ],
     )
-    base.load_plugins()
-    assert base.PLUGINS.names() == ["outside"]
-    assert set(base.FAILED) == {"broken", "notaplugin", "misnamed"}
-    assert "ImportError" in base.FAILED["broken"]
+    loading.load_plugins()
+    assert loading.PLUGINS.names() == ["outside"]
+    assert set(loading.FAILED) == {"broken", "notaplugin", "misnamed"}
+    assert "ImportError" in loading.FAILED["broken"]

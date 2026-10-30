@@ -113,7 +113,7 @@ def test_delete_where_the_platform_cannot(vault):
 
 
 def test_ids_become_safe_file_names():
-    from amoorion.dataset.base import safe
+    from amoorion.dataset.entry import safe
 
     assert safe("123") == "123"
     assert safe("at://did:plc:me/app.bsky.feed.post/rkey1").startswith("at_did_plc_me_app.bsky.feed.post_rkey1-")
