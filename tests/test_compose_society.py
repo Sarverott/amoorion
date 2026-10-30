@@ -76,7 +76,7 @@ def test_simulate_keeps_it_local_and_in_the_inbox(amo, monkeypatch):
         raise AssertionError("a simulation reached out")
 
     monkeypatch.setattr(requests, "post", nothing)
-    monkeypatch.setattr("amoorion.methods.base.open_plugin", nothing)
+    monkeypatch.setattr("amoorion.plugins.base.load_plugins", nothing)
     people = [{"name": "a", "stance": "supportive"}, {"name": "b", "stance": "critical"}]
     said = amo.simulate(topic="x", personas=people, rounds=1, run="trial")
     assert len(said) == 2

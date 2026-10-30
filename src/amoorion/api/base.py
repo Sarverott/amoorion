@@ -21,7 +21,7 @@ from amoorion.dataset import Dataset
 from amoorion.hooks import HOOKS, Forbidden
 from amoorion.inbox import Inbox
 from amoorion.methods import METHODS, Method
-from amoorion.methods.base import NotifyParams
+from amoorion.methods.all_params import NotifyParams
 from amoorion.vault import Vault, open_vault
 
 bearer = HTTPBearer(auto_error=False)
