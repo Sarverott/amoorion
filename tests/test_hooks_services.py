@@ -12,7 +12,8 @@ from fastapi.testclient import TestClient
 from amoorion.api import create_app
 from amoorion.core import AmoorionError
 from amoorion.inbox import Inbox
-from amoorion.methods.base import Notify, NotifyParams
+from amoorion.methods import Notify
+from amoorion.methods.all_params import NotifyParams
 from amoorion.models import Message, Post
 from amoorion.vault import VaultLink, open_vault
 
@@ -96,7 +97,7 @@ def test_gitlab(client):
 def test_what_a_hook_receives_goes_to_the_notify_targets(client, monkeypatch):
     sent = []
     monkeypatch.setenv("AMOORION_NOTIFY", "ntfy, nope")
-    monkeypatch.setattr("amoorion.methods.base.open_plugin", lambda name, vault: sent.append(name) or Target(name))
+    monkeypatch.setattr("amoorion.methods.publish_method.open_plugin", lambda name, vault: sent.append(name) or Target(name))
     payload = {"object_kind": "push", "project": {"path_with_namespace": "a/b", "web_url": "u"}, "commits": []}
     assert client.post("/hooks/gitlab", json=payload, headers={"X-Gitlab-Token": "sekret"}).status_code == 200
     assert sent == ["ntfy", "nope"]

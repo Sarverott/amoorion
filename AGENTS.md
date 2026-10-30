@@ -102,8 +102,9 @@ tools/amoorion-dev/     development tools: state, versions, phases, release note
    ask, or pick the *Lean:* option only when told to.
 3. **Secrets only from the vault.** `.env` holds only the link to it; never
    commit tokens or passwords.
-4. **Everything is a method.** A new operation goes into `methods/`, not
-   into one front-end; CLI, API and MCP pick it up (add new subcommands to
+4. **Everything is a method.** A new operation is a new
+   `methods/<name>_method.py` imported in `methods/__init__.py`, not part of
+   one front-end; CLI, API and MCP pick it up (add new subcommands to
    `SUBCOMMANDS` in Taskfile.yml; a test checks it). Platforms are plugin
    packages in `packages/`, tested against fakes of their APIs, never real
    accounts.

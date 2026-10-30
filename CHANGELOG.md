@@ -1,3 +1,11 @@
+## v0.4.16 (2026-10-30)
+
+**Packages:** amoorion 0.4.16
+
+### Refactor
+
+- **methods**: finish the author's split, one file per method
+
 ## v0.4.15 (2026-10-30)
 
 **Packages:** amoorion 0.4.15

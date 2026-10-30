@@ -12,7 +12,7 @@ src/amoorion/
 ├── models/          data shared by all: Account, Post, Message, Result
 ├── vault/           link to the secrets vault (.env); one module per backend
 ├── plugins/         plugin interface, HttpPlugin, entry point loading; dryrun/
-├── methods/         operations: accounts, delete, inbox, plugins, publish, read, reply, snapshot
+├── methods/         operations, one file each: <name>_method.py; base.py is what they share
 ├── inbox/           received messages of every platform, SQLite (Q11)
 ├── dataset/         the posts of every profile on every platform, JSON files (Q14)
 ├── hooks/           incoming webhooks → messages
@@ -112,7 +112,9 @@ with its error. The platforms are packages in `packages/` (above); only
 ### `methods/`
 
 `Method` has `Params` (a model) and `run(params)` returning models.
-`read_only` marks methods that change nothing. Built in: `accounts` (which
+`read_only` marks methods that change nothing. Each lives in its own
+`<name>_method.py`, with its params next to it (`all_params.py` lists them all)
+and its import in `methods/__init__.py`, which is what registers it. Built in: `accounts` (which
 platforms have their secrets; values never shown), `plugins`, `publish` (one
 post to many platforms, one `Result` each, a failing platform doesn't stop
 the others), `read` (keeps what it read in the inbox and the dataset),
