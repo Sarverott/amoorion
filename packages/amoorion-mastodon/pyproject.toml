@@ -12,6 +12,13 @@ dependencies = [
     "amoorion",
 ]
 
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/mastodon.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-mastodon"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
+
 [project.entry-points."amoorion.plugins"]
 mastodon = "amoorion_mastodon:Mastodon"
 

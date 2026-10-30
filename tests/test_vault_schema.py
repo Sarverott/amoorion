@@ -29,3 +29,13 @@ def test_schema_matches_the_plugin(name):
 def test_every_package_has_a_schema(package):
     [file] = package.glob("src/*/schema.vault.json")
     assert json.loads(file.read_text())["vault"]
+
+
+@pytest.mark.parametrize("package", sorted((ROOT / "packages").iterdir()), ids=lambda path: path.name)
+def test_every_package_has_its_page_and_links(package):
+    platform = package.name.removeprefix("amoorion-")
+    assert (ROOT / "docs/platforms" / f"{platform}.md").is_file()
+    assert f"platforms/{platform}\n" in (ROOT / "docs/platforms.md").read_text()
+    readme = (package / "README.md").read_text()
+    assert "../" not in readme  # PyPI shows it apart from the repository
+    assert f"https://pypi.org/project/{package.name}/" in readme

@@ -32,6 +32,13 @@ dependencies = [
     "amoorion",
 ]
 
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/$platform.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-$platform"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
+
 [project.entry-points."amoorion.plugins"]
 $platform = "$module:$class"
 
@@ -44,6 +51,27 @@ build-backend = "uv_build"
 TOML
 printf '# amoorion-%s\n\n%s\n\nSecrets in amoorion'"'"'s vault: `%s/<key>` … (TODO)\n' \
     "$platform" "$description" "$platform" > "$pkg/README.md"
+cat > "$pkg/src/$module/schema.vault.json" <<JSON
+{
+  "vault": {
+    "$platform": {
+      "description": "$description",
+      "scopes": {},
+      "optional": {}
+    }
+  }
+}
+JSON
+cat > "$root/docs/platforms/$platform.md" <<DOC
+\`\`\`{include} ../../packages/amoorion-$platform/README.md
+\`\`\`
+
+## Its vault entry
+
+\`\`\`{literalinclude} ../../packages/amoorion-$platform/src/$module/schema.vault.json
+:language: json
+\`\`\`
+DOC
 cat > "$pkg/src/$module/__init__.py" <<PY
 """amoorion-$platform: $description."""
 
@@ -88,4 +116,4 @@ if entry not in text:
 open("pyproject.toml", "w").write(text)
 PYEDIT
 uv add --dev "amoorion-$platform"
-echo "created $pkg: write base.py and tests/, then: uv run amoorion plugins"
+echo "created $pkg: write base.py, schema.vault.json and tests/, add docs/platforms/$platform to docs/platforms.md, then: uv run amoorion plugins"
