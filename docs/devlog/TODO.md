@@ -104,7 +104,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] ntfy: plugin (post) and notification target
 - [x] NATS: publish methods' results, subscribe as a daemon service
 - [x] E-mail client: send (also Blogger by mail) and read
-- [ ] The notebooks of `examples/` renamed `old.<NAME>.ipynb`
+- [x] The notebooks of `examples/` renamed `old.<NAME>.ipynb`
 - [ ] New examples from the author's list, with what they present implemented
 
 Phase 6 (deployment): see [VISION.md](VISION.md).

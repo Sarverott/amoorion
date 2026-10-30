@@ -1,3 +1,11 @@
+## v0.4.10 (2026-10-30)
+
+**Packages:** amoorion 0.4.10
+
+### Refactor
+
+- **examples**: the notebooks become old.<NAME>.ipynb, making room for the author's new list; the changelog of phase 5
+
 ## v0.4.9 (2026-10-30)
 
 **Packages:** amoorion 0.4.9, amoorion-blogger 0.4.2, amoorion-email 0.4.8
