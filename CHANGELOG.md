@@ -1,3 +1,11 @@
+## v0.4.14 (2026-10-30)
+
+**Packages:** amoorion 0.4.14
+
+### Feat
+
+- **examples**: the advanced use cases and web apps for Hugging Face Spaces
+
 ## v0.4.13 (2026-10-30)
 
 **Packages:** amoorion 0.4.13

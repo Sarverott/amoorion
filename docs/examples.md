@@ -10,3 +10,7 @@ them in Jupyter or build them with marimo (`uv run task examples:build`).
 
 examples/*
 ```
+
+Beside the notebooks, in the repository: `examples/advanced-usecases/` (one `run.py`
+each, run by the tests) and `examples/spaces/` (Gradio and Streamlit apps, ready to be
+Hugging Face Spaces, on `dryrun` only).

@@ -111,7 +111,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] `compose` through any OpenAI-compatible server (Ollama, LiteLLM,
       llama.cpp, OpenAI, Claude, Hugging Face); a society simulated locally
 - [x] Hooks for Sentry and Plane; small utilities (Wikipedia, ngrok, markdown posts)
-- [ ] The nineteen notebooks and five advanced use cases filled and run by the
+- [x] The nineteen notebooks and five advanced use cases filled and run by the
       tests; Gradio and Streamlit apps for Hugging Face Spaces
 - [ ] Every link of the author's inquiry considered, the verdicts in the docs
 - [ ] New examples from the author's list, with what they present implemented
