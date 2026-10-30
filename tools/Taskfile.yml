@@ -1,0 +1,34 @@
+# The development tools (amoorion-dev) and bw: versions, state, the flow, the web page.
+# Included by the root Taskfile.
+
+version: '3'
+
+tasks:
+  version:
+    desc: Show the version of every package (released together)
+    cmds:
+      - uv run --frozen amoorion-dev version list
+
+  state:
+    desc: 'The state of development (task state -- --online: also GitHub and PyPI)'
+    cmds:
+      - uv run --frozen amoorion-dev state {{.CLI_ARGS}}
+
+  flow:pull:
+    desc: 'On development: pull master in; its released version becomes the next pre-release (lefthook post-merge)'
+    cmds:
+      - test "$(git branch --show-current)" = development
+      - git pull --no-rebase --no-edit origin master
+      # lefthook marks the pre-release; when hooks are off, mark here (it changes nothing twice).
+      - uv run --frozen amoorion-dev version mark
+
+  site:
+    desc: 'The whole web page into site/ (not committed): the presentation page, examples, project pages'
+    deps: [examples:build, site:website]
+    cmds:
+      - uv run --frozen amoorion-dev site --out site --examples examples/build --website website/dist
+
+  vault:tools:
+    desc: Install the Bitwarden CLI (bw) by npm into tools/ (tools/package.json)
+    cmds:
+      - npm ci --prefix tools --no-audit --no-fund --loglevel=error

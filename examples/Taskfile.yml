@@ -1,0 +1,10 @@
+# The example notebooks: `task examples:build`.
+# Included by the root Taskfile.
+
+version: '3'
+
+tasks:
+  build:
+    desc: Build the example notebooks with marimo into examples/build/ (not committed)
+    cmds:
+      - scripts/build-examples.sh

@@ -25,5 +25,5 @@ website/
 site/
 
 # The posts of every profile (amoorion's dataset, Q14)
-dataset/
+dataset
 !src/amoorion/dataset/

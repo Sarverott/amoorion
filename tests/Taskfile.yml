@@ -1,0 +1,29 @@
+# The tests: `task test`, `task test:quiet`, against real accounts `task test:connect`, `task test:live`.
+# Included by the root Taskfile.
+
+version: '3'
+
+tasks:
+  default:
+    desc: Run the tests (pytest)
+    cmds:
+      - uv run --frozen pytest
+
+  quiet:
+    desc: Run the tests quietly
+    cmds:
+      - uv run --frozen pytest -q
+
+  connect:
+    desc: 'Read-only: log in to every platform with its secrets (or those named), its profile, a few posts'
+    cmds:
+      - uv run --frozen pytest tests/live -m live -k test_connect -s -rA
+    env:
+      AMOORION_LIVE: '{{.CLI_ARGS}}'
+
+  live:
+    desc: 'For real: post, read, reply, delete on every platform with its secrets (or: task test:live -- <platform>…)'
+    cmds:
+      - uv run --frozen pytest tests/live -m live -s -rA
+    env:
+      AMOORION_LIVE: '{{.CLI_ARGS}}'

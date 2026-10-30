@@ -26,7 +26,8 @@ structure, a workflow or a tool updates this map in the same commit.
 | `docs/.agents/` | this map, the guide, the notes, `CLEO.md` (Cleo's own view); the author reads it | agents |
 | `.github/flow.toml` | settings of the loop: bot, branches, phase releases, PyPI | the author |
 | `.github/workflows/`, `.github/actions/` | the automation below | agents |
-| `lefthook.yml`, `Taskfile.yml`, `docs/Taskfile.yml` | git hooks, tasks | agents |
+| `lefthook.yml`, `Taskfile.yml` | git hooks, the root of the tasks: setup and check | agents |
+| `tests/`, `examples/`, `docs/`, `scripts/`, `tools/`: `Taskfile.yml` | the tasks of each directory's context; the first three are submenus (`task test:live`), the last two flattened into the root's names (`task vault:login`) | agents |
 
 ## The release loop
 
