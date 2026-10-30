@@ -94,4 +94,17 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] `llms.txt` (sphinx-llm), Markdown for agents, agent skills,
       `robots.txt`, a 404 page
 
-Phases 5–6 (linking, deployment): see [VISION.md](VISION.md).
+## Phase 5: linking
+
+- [x] `check` no longer runs on pull requests to master: the flow's own
+      pull request waited for an approval nobody gives, and the flow checks
+      before merging
+- [ ] Webhooks: GitHub (`X-Hub-Signature-256`), GitLab (`X-Gitlab-Token`),
+      Discord; each a hook in `hooks/`
+- [ ] ntfy: plugin (post) and notification target
+- [ ] NATS: publish methods' results, subscribe as a daemon service
+- [ ] E-mail client: send (also Blogger by mail) and read
+- [ ] The notebooks of `examples/` renamed `old.<NAME>.ipynb`
+- [ ] New examples from the author's list, with what they present implemented
+
+Phase 6 (deployment): see [VISION.md](VISION.md).

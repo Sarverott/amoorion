@@ -41,3 +41,7 @@ def test_a_release_merges_back_after_publishing_and_the_page():
     assert set(jobs["back"]["needs"]) == {"release", "publish", "pages"}
     for called in ("publish", "gh-pages"):
         assert "workflow_call" in load(GITHUB / "workflows" / f"{called}.yml")["on"]
+
+
+def test_check_does_not_wait_on_the_flows_pull_requests():
+    assert load(GITHUB / "workflows/check.yml")["on"]["pull_request"]["branches"] == ["development"]
