@@ -1,7 +1,5 @@
 """keepassxc backend: a KeePassXC (KeePass 2, .kdbx) database file.
 
-Needs the optional dependency: `uv sync --extra keepassxc`.
-
     AMOORION_VAULT=keepassxc
     AMOORION_VAULT_PATH=/path/to/secrets.kdbx
     AMOORION_VAULT_TOKEN=<master password>
@@ -12,7 +10,11 @@ standard fields, any other key an additional attribute of that name.
 The database is opened read-only, once per process.
 """
 
+from pathlib import Path
 from typing import Any, ClassVar
+
+from pykeepass import PyKeePass
+from pykeepass.exceptions import CredentialsError
 
 from amoorion.core import AmoorionError
 from amoorion.vault.base import BACKENDS, PREFIX, Vault, VaultLink
@@ -34,14 +36,9 @@ class KeePassXCVault(Vault):
     def _open(self) -> Any:
         if self._db is None:
             try:
-                from pykeepass import PyKeePass
-                from pykeepass.exceptions import CredentialsError
-            except ImportError:
-                raise AmoorionError("the keepassxc vault needs `uv sync --extra keepassxc`") from None
-            try:
-                self._db = PyKeePass(self.link.path, password=self.link.token)
+                self._db = PyKeePass(Path(self.link.path).expanduser(), password=self.link.token)
             except FileNotFoundError:
-                raise AmoorionError(f"no KeePassXC database at {self.link.path}") from None
+                raise AmoorionError(f"no KeePassXC database at {self.link.path}: `task vault:new` makes it") from None
             except CredentialsError:
                 raise AmoorionError(f"wrong master password for {self.link.path}") from None
         return self._db
