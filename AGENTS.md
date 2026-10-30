@@ -72,7 +72,8 @@ packages/amoorion-<p>/  one package per platform (uv workspace); its README list
 scripts/new-plugin.sh  starts such a package (task plugin:new)
 example.env            the link to the vault; copy to .env
 tests/                 pytest tests (also run every notebook of examples/)
-examples/              Jupyter notebooks of usage (dryrun and fakes only)
+examples/              Jupyter notebooks of usage (dryrun and fakes only); advanced-usecases/ (run.py each,
+                       run by the tests), spaces/ (Gradio and Streamlit apps for Hugging Face)
 docs/                  the docs site (Sphinx + MyST, conf.py, Taskfile.yml); API pages generated
 docs/devlog/           VISION, TODO, BRAINSTORM, ORDERS, INQUIRIES
 docs/changelog/        phase-<n>.md, append-only
