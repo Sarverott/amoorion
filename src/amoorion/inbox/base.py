@@ -20,15 +20,7 @@ from dotenv import load_dotenv
 
 from amoorion.models import Message
 
-SCHEMA = """
-CREATE TABLE IF NOT EXISTS messages (
-    platform TEXT NOT NULL,
-    id TEXT NOT NULL,
-    at TEXT NOT NULL,
-    message TEXT NOT NULL,
-    PRIMARY KEY (platform, id)
-)
-"""
+SCHEMA = Path(__file__).with_name("schema.messages.sql").read_text()
 
 
 def default_path() -> Path:
