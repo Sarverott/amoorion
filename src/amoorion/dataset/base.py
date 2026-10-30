@@ -14,47 +14,21 @@ it lives is set in `.env` (`dataset/` is ignored by git):
     AMOORION_DATASET=<path>   default: ./dataset
 """
 
-import hashlib
 import json
 import os
-import re
 from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Literal
 
 from dotenv import load_dotenv
 
-from amoorion.core import Model
+from amoorion.dataset.entry import Entry, safe
 from amoorion.models import Message
-
-SAFE = re.compile(r"[^A-Za-z0-9._@-]+")
 
 
 def default_path() -> Path:
     load_dotenv(Path.cwd() / ".env", override=False)
     return Path(os.environ.get("AMOORION_DATASET") or "dataset").expanduser()
-
-
-def safe(name: str) -> str:
-    """A file name for an id or profile: readable, and different for different ids."""
-    cleaned = SAFE.sub("_", name).strip("._") or "_"
-    if cleaned == name:
-        return name
-    return f"{cleaned[:80]}-{hashlib.sha256(name.encode()).hexdigest()[:8]}"
-
-
-class Entry(Model):
-    """One post in a profile's index."""
-
-    id: str
-    file: str
-    state: Literal["present", "gone", "deleted"] = "present"
-    url: str | None = None
-    created_at: datetime | None = None
-    text: str = ""
-    seen_at: datetime | None = None
-    deleted_at: datetime | None = None
 
 
 class Dataset:
