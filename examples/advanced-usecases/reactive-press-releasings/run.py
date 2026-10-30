@@ -4,13 +4,11 @@ import hashlib
 import hmac
 import json
 import os
-import tempfile
 
 from fastapi.testclient import TestClient
 
 from amoorion import Amoorion
 
-os.environ |= {"AMOORION_VAULT": "env", "AMOORION_INBOX": tempfile.mktemp(), "AMOORION_DATASET": tempfile.mkdtemp()}
 os.environ["AMOORION_SECRET_HOOKS_GITHUB_SECRET"] = "example"
 
 amo = Amoorion()

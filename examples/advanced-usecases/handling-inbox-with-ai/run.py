@@ -6,12 +6,10 @@ llm/model=<a model you pulled>. Nothing else changes.
 
 import json
 import os
-import tempfile
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from amoorion import Amoorion
-from amoorion.models import Message
 
 
 class FakeModel(BaseHTTPRequestHandler):
@@ -29,9 +27,6 @@ class FakeModel(BaseHTTPRequestHandler):
 server = HTTPServer(("127.0.0.1", 0), FakeModel)
 threading.Thread(target=server.serve_forever, daemon=True).start()
 os.environ |= {
-    "AMOORION_VAULT": "env",
-    "AMOORION_INBOX": tempfile.mktemp(),
-    "AMOORION_DATASET": tempfile.mkdtemp(),
     "AMOORION_SECRET_LLM_URL": f"http://127.0.0.1:{server.server_port}/v1",
     "AMOORION_SECRET_LLM_MODEL": "fake",
 }

@@ -2,18 +2,15 @@
 
 import os
 import socket
-import tempfile
 import threading
 import time
-from pathlib import Path
 
 import uvicorn
 
 from amoorion import Amoorion
 from amoorion_post import post
 
-scratch = Path(tempfile.mkdtemp())
-os.environ |= {"AMOORION_VAULT": "env", "AMOORION_INBOX": str(scratch / "i.sqlite3"), "AMOORION_SECRET_API_TOKEN": "example"}
+os.environ["AMOORION_SECRET_API_TOKEN"] = "example"
 
 with socket.socket() as probe:
     probe.bind(("127.0.0.1", 0))
