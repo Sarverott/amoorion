@@ -48,7 +48,7 @@ wheels = [
 
 [[package]]
 name = "amoorion"
-version = "0.4.18a0"
+version = "0.4.18"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
@@ -152,7 +152,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-bluesky"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-bluesky" }
 dependencies = [
     { name = "amoorion" },
@@ -178,7 +178,7 @@ requires-dist = [
 
 [[package]]
 name = "amoorion-discord"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-discord" }
 dependencies = [
     { name = "amoorion" },
@@ -257,7 +257,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-mastodon"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-mastodon" }
 dependencies = [
     { name = "amoorion" },
@@ -268,7 +268,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-matrix"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-matrix" }
 dependencies = [
     { name = "amoorion" },
@@ -290,7 +290,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-telegram"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-telegram" }
 dependencies = [
     { name = "amoorion" },
@@ -301,7 +301,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-tumblr"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-tumblr" }
 dependencies = [
     { name = "amoorion" },
@@ -316,7 +316,7 @@ requires-dist = [
 
 [[package]]
 name = "amoorion-x"
-version = "0.4.2"
+version = "0.4.3"
 source = { editable = "packages/amoorion-x" }
 dependencies = [
     { name = "amoorion" },

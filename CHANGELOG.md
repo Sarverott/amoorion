@@ -1,3 +1,19 @@
+## v0.4.18 (2026-10-30)
+
+**Packages:** amoorion 0.4.18, amoorion-bluesky 0.4.3, amoorion-discord 0.4.3, amoorion-mastodon 0.4.3, amoorion-matrix 0.4.3, amoorion-telegram 0.4.3, amoorion-tumblr 0.4.3, amoorion-x 0.4.3
+
+### Refactor
+
+- **discord**: bot, webhook and text in files of their own
+- **tumblr**: what shapes a post's text in text.py
+- **matrix**: what shapes a post's text in text.py
+- **telegram**: what shapes a post's text in text.py
+- **mastodon**: what shapes a post's text in text.py
+- **x**: what shapes a post's text in text.py
+- **bluesky**: what shapes a post's text in text.py
+- **docs**: the build's hooks apart from the configuration
+- **dev**: commands, state, bump, remote and web page in short files
+
 ## v0.4.17 (2026-10-30)
 
 **Packages:** amoorion 0.4.17
