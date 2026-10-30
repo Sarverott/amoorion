@@ -1,3 +1,18 @@
+## v0.4.17 (2026-10-30)
+
+**Packages:** amoorion 0.4.17
+
+### Refactor
+
+- **inbox**: list and search ask the same way
+- **hooks**: the generic hook in its own file like the others
+- **plugins**: finding plugins apart from what a plugin is
+- **cli**: parser and view apart from running
+- **nats**: names, publishing and the service in three files
+- **dataset**: the index entry and file names apart
+- **workflows**: rules apart from steps
+- **app**: plugs, states and front-ends in files of their own
+
 ## v0.4.16 (2026-10-30)
 
 **Packages:** amoorion 0.4.16
