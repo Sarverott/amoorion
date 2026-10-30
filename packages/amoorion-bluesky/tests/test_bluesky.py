@@ -10,7 +10,7 @@ import pytest
 from amoorion.core import AmoorionError
 from amoorion.models import Post
 from amoorion.plugins import open_plugin
-from amoorion_bluesky.base import compose, graphemes
+from amoorion_bluesky.text import compose, graphemes
 from amoorion.vault import VaultLink, open_vault
 
 DID = "did:plc:me"
