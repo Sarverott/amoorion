@@ -116,7 +116,11 @@ class Dataset:
     def find(self, platform: str, profile: str, id: str) -> Message | None:
         entry = self.index(platform, profile).get(id)
         file = self.profile_dir(platform, profile) / entry.file if entry else None
-        return Message.model_validate_json(file.read_text()) if file and file.exists() else None
+        if not file or not file.exists():
+            return None
+        data = json.loads(file.read_text())
+        data.pop("deleting_at", None)  # keep_deleted's own note, not part of the message
+        return Message.model_validate(data)
 
     def keep_deleted(self, platform: str, profile: str, message: Message) -> Path:
         """Keep what is about to be deleted; call before deleting it on the platform."""

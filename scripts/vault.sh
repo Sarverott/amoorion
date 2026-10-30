@@ -62,6 +62,12 @@ if sys.argv[1] == "new":
     schemas = {name: PLUGINS.get(name).schema() for name in PLUGINS.names() if PLUGINS.get(name).secrets}
     schemas["hooks"] = hooks_schema()
     schemas["api"] = {"description": "The HTTP API", "scopes": {"token": "Bearer token of method calls"}, "optional": {}}
+    schemas["llm"] = {
+        "description": "A language model, any server with OpenAI's chat completions API",
+        "scopes": {"url": "e.g. http://localhost:11434/v1 for Ollama", "model": "The model's name"},
+        "optional": {"token": "API key; local servers need none"},
+    }
+    schemas["ngrok"] = {"description": "The tunnel for hooks", "scopes": {}, "optional": {"token": "ngrok's authtoken"}}
     try:
         added = initialize(VaultLink(kind="keepassxc", path=path, token=token), schemas)
     except AmoorionError as error:

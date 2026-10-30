@@ -8,8 +8,8 @@ vars:
   COMMITS_FROM: 743498f
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
   SUBCOMMANDS: [
-    accounts, automate, delete, inbox, notify, plugins, publish, read, reply,
-    search, snapshot, workflow, api, mcp, daemon,
+    accounts, automate, compose, delete, inbox, notify, plugins, publish, read, reply,
+    search, simulate, snapshot, wiki, workflow, api, mcp, daemon,
   ]
 
 # A tree, not a list: this file is the root, each directory keeps the tasks of

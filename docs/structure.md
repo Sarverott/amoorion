@@ -200,3 +200,12 @@ on the inbox: for each new matching message, its steps, with `$text`, `$author`,
 `$platform`, `$id` and `$url`. A rule acts once per message and a failed one is tried
 again next time. Beware of a rule publishing to where it reads: what it said is a new
 message it may match. Steps can't start other steps.
+
+## Around the methods: `society`, `utilities`
+
+`compose` asks any server with OpenAI's chat completions API (Ollama, llama.cpp, a
+LiteLLM proxy, OpenAI, Claude, Hugging Face), from `llm/url`, `llm/model` and the
+optional `llm/token` of the vault. `simulate` lets personas react to a topic in
+memory; no plugin is involved, so nothing it says can reach a platform. `wiki` gives
+a Wikipedia summary. `amoorion.utilities` has `post_from_markdown` and `open_tunnel`
+(ngrok, not a dependency). The hooks `sentry` and `plane` join github, gitlab, discord.

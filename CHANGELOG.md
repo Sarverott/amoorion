@@ -1,3 +1,11 @@
+## v0.4.13 (2026-10-30)
+
+**Packages:** amoorion 0.4.13
+
+### Feat
+
+- **methods**: compose, simulate, wiki; hooks for Sentry and Plane; the notebooks filled
+
 ## v0.4.12 (2026-10-30)
 
 **Packages:** amoorion 0.4.12
