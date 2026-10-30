@@ -2,6 +2,15 @@
 
 Newest on top.
 
+## 2026-10-30: `Amoorion()` is a sandbox
+
+- The author's note in `app/base.py`: no args = default config. Taken as a sandbox that ignores
+  `.env` and AMOORION_VAULT/INBOX/DATASET, so a script calling `Amoorion()` can't reach real
+  accounts; the real setup is `Amoorion(".env")`. CLI, API and MCP started by command are unchanged.
+- Examples that also use `Inbox()`, `Dataset()`, the CLI or `Plugins` flags keep their block: those
+  still read the process's environment.
+- The schemas are `.sql` files beside their code (the author's move); checked in the built wheel.
+
 ## 2026-10-30: cut into short files
 
 - Moves only, checked by the same tests. No real platform was tried, as before.

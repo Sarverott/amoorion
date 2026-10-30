@@ -5,11 +5,17 @@
     amo.publish(text="hello")          # every method is callable by its name
     amo.save("state.yaml")             # where things are, and hashes to detect changes
 
-An env file gives this object its link to the vault, inbox and dataset, without
-touching the environment of the process, so two objects can hold two identities.
-AMOORION_NOTIFY and AMOORION_NATS stay settings of the process.
+`Amoorion()` without an env file is a sandbox of its own: secrets only from
+AMOORION_SECRET_* variables, an inbox and a dataset in a temporary directory, nothing
+of `.env` or of the real setup. An env file gives the object its real link to the
+vault, inbox and dataset. Neither touches the environment of the process, so two
+objects can hold two identities. AMOORION_NOTIFY and AMOORION_NATS stay settings of
+the process.
 """
 
+import shutil
+import tempfile
+import weakref
 from pathlib import Path
 from typing import Any, Self
 
@@ -25,6 +31,13 @@ from amoorion.plugins import load_plugins
 from amoorion.vault import Vault, VaultLink, open_vault
 
 
+def scratch_setup(owner: object) -> dict[str, str]:
+    """What `Amoorion()` without an env file works on: no real secrets, and a temporary directory gone with its owner."""
+    scratch = Path(tempfile.mkdtemp(prefix="amoorion-"))
+    weakref.finalize(owner, shutil.rmtree, scratch, ignore_errors=True)
+    return {"AMOORION_VAULT": "env", "AMOORION_INBOX": str(scratch / "inbox.sqlite3"), "AMOORION_DATASET": str(scratch / "dataset")}
+
+
 class Amoorion(FrontEnds, States):
     def __init__(self, env: str | Path | None = None, dataset: str | Path | None = None, flags: dict[str, Any] | None = None) -> None:
         self.flags: dict[str, Any] = dict(flags or {})
@@ -35,11 +48,9 @@ class Amoorion(FrontEnds, States):
 
     def _open(self, env: Path | None) -> None:
         self.env = env
-        self._values: dict[str, str | None] = {}
-        if env is not None:
-            if not env.is_file():
-                raise AmoorionError(f"no env file at {env}")
-            self._values = dotenv_values(env)
+        if env is not None and not env.is_file():
+            raise AmoorionError(f"no env file at {env}")
+        self._values: dict[str, str | None] = dotenv_values(env) if env else scratch_setup(self)
         self._vault: Vault | None = None
 
     def _path(self, variable: str) -> Path | None:
@@ -48,8 +59,6 @@ class Amoorion(FrontEnds, States):
 
     @property
     def link(self) -> VaultLink:
-        if self.env is None:
-            return VaultLink.from_env()
         values = self._values
         return VaultLink(
             kind=values.get("AMOORION_VAULT") or "env",

@@ -1,5 +1,8 @@
 """`Amoorion` and `Plugins`: the way of using amoorion from Python."""
 
+import gc
+import os
+
 import pytest
 import yaml
 from fastapi.testclient import TestClient
@@ -62,8 +65,21 @@ def test_an_env_file_is_this_object_only(env, tmp_path, monkeypatch):
     one.publish(text="kept")
     one.read(limit=1)
     assert one.store.path == tmp_path / "one.sqlite3"
-    assert Amoorion().store.path == tmp_path / "inbox.sqlite3"
     assert "secret-value" not in repr(one)
+
+
+def test_without_args_it_is_a_sandbox_gone_with_its_object(env, tmp_path, monkeypatch):
+    (tmp_path / ".env").write_text("AMOORION_VAULT=keepassxc\nAMOORION_INBOX=real.sqlite3\n")
+    before = dict(os.environ)
+    amo = Amoorion().use("dryrun")
+    amo.read(limit=1)
+    home = amo.store.path.parent
+    assert amo.link.kind == "env" and not home.is_relative_to(tmp_path) and amo.dataset.path.parent == home
+    assert amo.store.path.is_file() and dict(os.environ) == before
+    assert Amoorion().store.path != amo.store.path
+    del amo
+    gc.collect()
+    assert not home.exists()
 
 
 def test_save_load_detect_changes_and_hold_no_secret(env, tmp_path):
