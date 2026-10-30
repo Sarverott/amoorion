@@ -113,7 +113,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] Hooks for Sentry and Plane; small utilities (Wikipedia, ngrok, markdown posts)
 - [x] The nineteen notebooks and five advanced use cases filled and run by the
       tests; Gradio and Streamlit apps for Hugging Face Spaces
-- [ ] Every link of the author's inquiry considered, the verdicts in the docs
+- [x] Every link of the author's inquiry considered, the verdicts in the docs
 - [ ] New examples from the author's list, with what they present implemented
 
 Phase 6 (deployment): see [VISION.md](VISION.md).

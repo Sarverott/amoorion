@@ -90,3 +90,18 @@ a title and marks the drafted cells `skip-execution`, word for word.
 - https://github.com/obsproject/obs-studio/wiki/Getting-Started-With-OBS-Scripting
 - https://github.com/Comfy-Org/ComfyUI
 - https://github.com/ultralytics/ultralytics
+
+## UNIXUSAT=1793389417618 · commit bb6de5e
+
+**The author's examples.** `Amoorion` and `Plugins` follow the pseudocode, with two
+departures it needed: a `Plug` is a `str`, because `list(Plugins)` was to give names
+while `for platform in Plugins` gives objects; and `dict(Plugins)` gives a named tuple,
+as a set can't hold a dict. `amo.inbox()` is the method, so the store is `amo.store`.
+
+New methods: `search`, `workflow`, `automate`, `compose`, `simulate`, `wiki`. New hooks:
+`sentry`, `plane`. Nineteen notebooks and six use cases run in the tests; the
+verdict on every link of the inquiry is `docs/inspirations.md`. Writing notebook 06 found
+that `Dataset.find` crashed on a deleted post; fixed.
+
+The last item of the phase stays open for the author to look at the examples, so the `Y`
+release waits for them.

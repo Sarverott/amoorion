@@ -2,6 +2,18 @@
 
 Newest on top.
 
+## 2026-10-30: the author's examples
+
+- `compose` has only met fake servers: Ollama is installed here but holds no model and
+  none was pulled. Claude's and others' OpenAI-compatible endpoints are from memory, untried.
+- `sentry` and `plane` follow their webhook docs as read today; no real delivery seen.
+  Plane's docs contradict themselves on some `event` values, so the header is preferred.
+- A rule publishing to where it reads can match its own post again; documented, not prevented.
+- An env file given to `Amoorion` doesn't carry AMOORION_NOTIFY or AMOORION_NATS, nor `env`
+  vault secrets: those stay process-wide.
+- `task examples:build` isn't in `task check`, but the release's page needs it: run it
+  before pushing notebook changes, a failing cell would break the page job.
+
 ## 2026-10-30: the lesson of the missing dataset package
 
 - **What happened:** `dataset/` in `.gitignore` also hid `src/amoorion/dataset/`.
