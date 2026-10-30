@@ -3,7 +3,10 @@
 Every hook checks first that the call is genuine (`verify`), then turns the
 payload into a message (`receive`). The API serves them at
 `POST /hooks/<name>`. A hook without its secret in the vault refuses
-everything.
+everything. One module per service: github, gitlab, discord.
+
+`receive` returns None when the call says nothing worth keeping (a ping);
+`answer` is what the service's protocol wants back, if it wants anything.
 """
 
 import hmac
@@ -20,9 +23,12 @@ class Forbidden(AmoorionError):
 
 
 class Hook(Controller):
+    secrets: ClassVar[dict[str, str]] = {}  # read as hooks/<name>-<key>: what each is
+
     def __init__(self, vault: Vault, view: View | None = None) -> None:
         super().__init__(view)
         self.vault = vault
+        self.headers: Mapping[str, str] = {}
 
     def secret(self, key: str) -> str:
         return self.vault.get(f"hooks/{self.name}-{key}")
@@ -30,10 +36,14 @@ class Hook(Controller):
     def verify(self, body: bytes, headers: Mapping[str, str]) -> None:
         raise NotImplementedError
 
-    def receive(self, payload: Any) -> Message:
+    def receive(self, payload: Any) -> Message | None:
         raise NotImplementedError
 
-    def handle(self, body: bytes, headers: Mapping[str, str], payload: Any) -> Message:
+    def answer(self, payload: Any) -> Any:
+        return None
+
+    def handle(self, body: bytes, headers: Mapping[str, str], payload: Any) -> Message | None:
+        self.headers = headers
         try:
             self.verify(body, headers)
         except Forbidden:
@@ -46,6 +56,12 @@ class Hook(Controller):
 HOOKS: Registry[type[Hook]] = Registry("hook")
 
 
+def schema() -> dict[str, Any]:
+    """The vault entry `hooks`, as in schema.vault.json of the plugins; each hook's keys are optional."""
+    keys = {f"{name}-{key}": text for name in HOOKS.names() for key, text in HOOKS.get(name).secrets.items()}
+    return {"description": "Incoming webhooks; a hook without its secret refuses all", "scopes": {}, "optional": keys}
+
+
 @HOOKS.register
 class GenericHook(Hook):
     """Any service that can send `{"text": …, "author": …}` with a shared token.
@@ -54,6 +70,7 @@ class GenericHook(Hook):
     """
 
     name: ClassVar[str] = "generic"
+    secrets: ClassVar[dict[str, str]] = {"token": "Shared token, sent in X-Amoorion-Token"}
     description: ClassVar[str] = "JSON {text, author} with a shared token header"
 
     def verify(self, body: bytes, headers: Mapping[str, str]) -> None:

@@ -86,7 +86,9 @@ comm==0.2.3
 construct==2.10.70
     # via pykeepass
 cryptography==50.0.2
-    # via pyjwt
+    # via
+    #   amoorion
+    #   pyjwt
 debugpy==1.8.22
     # via ipykernel
 docutils==0.22.4

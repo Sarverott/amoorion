@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14'",
@@ -49,6 +49,7 @@ name = "amoorion"
 version = "0.4.6a0"
 source = { editable = "." }
 dependencies = [
+    { name = "cryptography" },
     { name = "fastapi" },
     { name = "mcp", extra = ["cli"] },
     { name = "pydantic" },
@@ -90,6 +91,7 @@ examples = [
 
 [package.metadata]
 requires-dist = [
+    { name = "cryptography", specifier = ">=46.0.0" },
     { name = "fastapi", specifier = ">=0.162.0" },
     { name = "mcp", extras = ["cli"], specifier = ">=2.3.0" },
     { name = "pydantic", specifier = ">=2.14.1" },

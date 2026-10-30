@@ -47,6 +47,7 @@ from pykeepass import PyKeePass
 from pykeepass.exceptions import CredentialsError
 
 from amoorion.core import AmoorionError
+from amoorion.hooks import schema as hooks_schema
 from amoorion.plugins import PLUGINS, load_plugins
 from amoorion.vault import VaultLink
 from amoorion.vault.kpxc_db_file import initialize
@@ -59,6 +60,8 @@ file = Path(path).expanduser()
 if sys.argv[1] == "new":
     load_plugins()
     schemas = {name: PLUGINS.get(name).schema() for name in PLUGINS.names() if PLUGINS.get(name).secrets}
+    schemas["hooks"] = hooks_schema()
+    schemas["api"] = {"description": "The HTTP API", "scopes": {"token": "Bearer token of method calls"}, "optional": {}}
     try:
         added = initialize(VaultLink(kind="keepassxc", path=path, token=token), schemas)
     except AmoorionError as error:

@@ -99,7 +99,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] `check` no longer runs on pull requests to master: the flow's own
       pull request waited for an approval nobody gives, and the flow checks
       before merging
-- [ ] Webhooks: GitHub (`X-Hub-Signature-256`), GitLab (`X-Gitlab-Token`),
+- [x] Webhooks: GitHub (`X-Hub-Signature-256`), GitLab (`X-Gitlab-Token`),
       Discord; each a hook in `hooks/`
 - [ ] ntfy: plugin (post) and notification target
 - [ ] NATS: publish methods' results, subscribe as a daemon service

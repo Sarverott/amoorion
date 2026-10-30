@@ -37,6 +37,7 @@ def test_new_makes_an_empty_entry_per_platform(run, tmp_path):
     assert "api-key: " in x.notes and "uri (optional): " in x.notes
     assert db.find_entries(title="discord-webhook", first=True) is not None
     assert db.find_entries(title="dryrun", first=True) is None
+    assert {"github-secret", "gitlab-token", "discord-public-key"} <= set(db.find_entries(title="hooks", first=True).custom_properties)
 
 
 def test_new_again_changes_nothing_and_keeps_values(run, tmp_path):
