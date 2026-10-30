@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
-# The access to the Bitwarden vault, kept in .env (decision Q13): bw from
-# tools/ (npm, `task vault:tools`), logged in and unlocked; its session is
-# AMOORION_VAULT_TOKEN. The platforms' secrets stay in the vault. In .env
-# only that line changes (and AMOORION_VAULT, when it isn't set); a missing
-# .env is made from example.env.
-# Usage: scripts/vault.sh login|lock|status   (task vault:login, vault:lock, vault:status)
+# The access to the vault that .env names (decision Q13); the platforms' secrets stay in it.
+# - bitwarden: bw from tools/ (npm, `task vault:tools`), logged in and unlocked;
+#   its session is AMOORION_VAULT_TOKEN. In .env only that line changes (and
+#   AMOORION_VAULT, when it isn't set).
+# - keepassxc: the file AMOORION_VAULT_PATH, its master password
+#   AMOORION_VAULT_TOKEN, both written by the author; .env is never changed.
+# A missing .env is made from example.env.
+# Usage: scripts/vault.sh new|login|lock|status   (task vault:new, vault:login, vault:lock, vault:status)
 set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$root"
-bw=${AMOORION_BW:-$(command -v bw || echo "$root/tools/node_modules/.bin/bw")}
-if [ ! -x "$bw" ]; then
-    echo "no Bitwarden CLI: run \`uv run task vault:tools\` (npm puts it in tools/)" >&2
-    exit 1
-fi
 [ -f .env ] || { cp example.env .env; echo "made .env from example.env"; }
 chmod 600 .env
 
@@ -38,6 +35,62 @@ env.write_text(text)
 PY
 }
 
+# The password goes from .env to Python alone, never through arguments or output.
+keepassxc() {
+    "$root/.venv/bin/python" - "$1" <<'PY'
+import os
+import sys
+from pathlib import Path
+
+from dotenv import load_dotenv
+from pykeepass import PyKeePass, create_database
+from pykeepass.exceptions import CredentialsError
+
+load_dotenv(".env", override=True)
+path, token = os.environ.get("AMOORION_VAULT_PATH"), os.environ.get("AMOORION_VAULT_TOKEN")
+if not path:
+    sys.exit("no AMOORION_VAULT_PATH in .env: the path of the .kdbx file")
+file = Path(path).expanduser()
+if sys.argv[1] == "new":
+    if file.exists():
+        sys.exit(f"{file} exists already, it stays")
+    if not token:
+        sys.exit("no AMOORION_VAULT_TOKEN in .env: the master password of the new file")
+    file.parent.mkdir(parents=True, exist_ok=True)
+    database = create_database(str(file), password=token)
+    database.add_group(database.root_group, "amoorion")
+    database.save()
+    file.chmod(0o600)
+    print(f"{file} made, with the group amoorion; add one entry per platform in KeePassXC")
+elif not file.exists():
+    print(f"keepassxc: no {file}: `uv run task vault:new` makes it")
+else:
+    try:
+        database = PyKeePass(str(file), password=token)
+    except CredentialsError:
+        sys.exit(f"keepassxc: {file}: AMOORION_VAULT_TOKEN is not its master password")
+    group = database.find_groups(name="amoorion", first=True)
+    entries = [entry.title for entry in group.entries] if group else []
+    print(f"keepassxc: {file}, opens; group amoorion: {', '.join(entries) or 'no entries'}")
+PY
+}
+
+if [ "$(setting AMOORION_VAULT)" = keepassxc ]; then
+    case "${1:-}" in
+        new | status) keepassxc "$1"; exit ;;
+        login | lock)
+            echo "keepassxc has no session: AMOORION_VAULT_TOKEN in .env is its master password, and stays"
+            exit
+            ;;
+    esac
+fi
+
+bw=${AMOORION_BW:-$(command -v bw || echo "$root/tools/node_modules/.bin/bw")}
+if [ ! -x "$bw" ]; then
+    echo "no Bitwarden CLI: run \`uv run task vault:tools\` (npm puts it in tools/)" >&2
+    exit 1
+fi
+
 case "${1:-}" in
     login)
         if [ "$(status)" = unauthenticated ]; then
@@ -59,7 +112,7 @@ case "${1:-}" in
         echo "bw: $bw ($("$bw" --version 2>/dev/null | tail -1)), $(status)"
         ;;
     *)
-        echo "usage: $0 login|lock|status" >&2
+        echo "usage: $0 new|login|lock|status (new: keepassxc only)" >&2
         exit 2
         ;;
 esac

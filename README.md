@@ -140,9 +140,9 @@ Run locally first; a Dockerfile and compose come next (phase 6 of the plan).
 
 ```sh
 uv run task init               # tools, git hooks, .env, then check
-uv run task vault:tools        # the Bitwarden CLI, by npm into tools/
-uv run task vault:login        # log in and unlock; the session goes into .env
-uv run task vault:status       # bw's state, and which platforms have their secrets
+uv run task vault:new          # KeePassXC: the file of AMOORION_VAULT_PATH (.env), group amoorion
+uv run task vault:status       # the vault's state, and which platforms have their secrets
+uv run task vault:tools        # Bitwarden instead: bw by npm into tools/, then vault:login
 uv run task check              # tests, YAML, commit messages, docs (= CI)
 uv run task docs:build         # the docs site into docs/_build/html
 uv run task plugin:new -- <platform> <Class> "<description>"   # a new platform

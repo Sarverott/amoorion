@@ -1,3 +1,20 @@
+## v0.4.3 (2026-10-30)
+
+**Packages:** amoorion 0.4.3
+
+### Feat
+
+- **vault**: task vault:new and vault:status for KeePassXC, the vault for now: the file of AMOORION_VAULT_PATH, never overwritten; example.env links to it
+- **vault**: KeePassXC is a dependency of amoorion, not an extra: pykeepass always there, ~ in the path of the file
+
+### Fix
+
+- **tests**: no test reads the vault of the user's .env; vault.sh trusts .env over what it inherits
+
+### Refactor
+
+- **tasks**: the root Taskfile splits into a tree: each directory keeps the tasks of its own context, every name stays
+
 ## v0.4.2 (2026-10-27)
 
 **Packages:** amoorion 0.4.2

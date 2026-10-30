@@ -39,12 +39,16 @@ For every item:
 2. Test it: against fakes, never real accounts. A bug fixed gets a test.
 3. Touch what it changes in the docs: README, `docs/*.md`, `MAP.md`,
    `AGENTS.md`.
-4. `uv run task check` must pass (exit code, not a grep).
+4. `uv run task check` must pass (exit code, not a grep). Chain the commit
+   with `&&`, never `;`, or a failed gate commits anyway.
 5. Commit: conventional message, why in the body when not obvious, ending
    with your `Co-Authored-By:` line. Tick the TODO item in the commit that
    finishes it.
 6. Push it: every push is a `Z` release (Q15). Wait for the `release` run
    to end (`gh run watch`), pull the merge back, then the next step.
+
+What is broken stays in history (no rewriting), but from the moment it is
+seen, fixing what is broken or missing comes before anything new.
 
 Try things that can't run here (workflows, releases) in a throwaway clone
 in your scratch space, never on the real branches.

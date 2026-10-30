@@ -9,11 +9,25 @@ vars:
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
   SUBCOMMANDS: [accounts, delete, inbox, plugins, publish, read, reply, snapshot, api, mcp, daemon]
 
+# A tree, not a list: this file is the root, each directory keeps the tasks of
+# its own context. tests/, examples/ and docs/ are submenus (`task test:live`);
+# scripts/ and tools/ are flattened, their names carry the menu themselves
+# (`task vault:login`, `task site:website`).
 includes:
-  # ./tests/Taskfile.yml
-  # ./tools/Taskfile.yml
-  # ./scripts/Taskfile.yml
-  # ./examples/Taskfile.yml
+  test:
+    taskfile: ./tests/Taskfile.yml
+    dir: .
+  examples:
+    taskfile: ./examples/Taskfile.yml
+    dir: .
+  scripts:
+    taskfile: ./scripts/Taskfile.yml
+    dir: .
+    flatten: true
+  tools:
+    taskfile: ./tools/Taskfile.yml
+    dir: .
+    flatten: true
   docs:
     taskfile: ./docs/Taskfile.yml
     dir: ./docs
@@ -54,95 +68,10 @@ tasks:
       - uv sync --frozen
       - uv run --frozen lefthook install
 
-  vault:tools:
-    desc: Install the Bitwarden CLI (bw) by npm into tools/ (tools/package.json)
-    cmds:
-      - npm ci --prefix tools --no-audit --no-fund --loglevel=error
-
-  vault:login:
-    desc: Log in to and unlock the Bitwarden vault; its session goes into .env (AMOORION_VAULT_TOKEN)
-    interactive: true
-    cmds:
-      - scripts/vault.sh login
-
-  vault:lock:
-    desc: Lock the Bitwarden vault and empty its session in .env
-    cmds:
-      - scripts/vault.sh lock
-
-  vault:status:
-    desc: 'The vault: bw and its state, then which platforms have their secrets'
-    cmds:
-      - scripts/vault.sh status
-      - uv run --frozen amoorion accounts
-
   run:
     desc: Run the amoorion CLI
     cmds:
       - uv run --frozen amoorion {{.CLI_ARGS}}
-
-  flow:pull:
-    desc: 'On development: pull master in; its released version becomes the next pre-release (lefthook post-merge)'
-    cmds:
-      - test "$(git branch --show-current)" = development
-      - git pull --no-rebase --no-edit origin master
-      # lefthook marks the pre-release; when hooks are off, mark here (it changes nothing twice).
-      - uv run --frozen amoorion-dev version mark
-
-  version:
-    desc: Show the version of every package (released together)
-    cmds:
-      - uv run --frozen amoorion-dev version list
-
-  state:
-    desc: 'The state of development (task state -- --online: also GitHub and PyPI)'
-    cmds:
-      - uv run --frozen amoorion-dev state {{.CLI_ARGS}}
-
-  plugin:new:
-    desc: 'Start a plugin package: task plugin:new -- <platform> <ClassName> "<description>"'
-    cmds:
-      - scripts/new-plugin.sh {{.CLI_ARGS}}
-
-  examples:build:
-    desc: Build the example notebooks with marimo into examples/build/ (not committed)
-    cmds:
-      - scripts/build-examples.sh
-
-  site:website:
-    desc: Build the presentation page (amoorion-website, by npm and vite) into website/dist/ (not committed)
-    cmds:
-      - scripts/build-website.sh
-
-  site:
-    desc: 'The whole web page into site/ (not committed): the presentation page, examples, project pages'
-    deps: [examples:build, site:website]
-    cmds:
-      - uv run --frozen amoorion-dev site --out site --examples examples/build --website website/dist
-
-  test:
-    desc: Run the tests (pytest)
-    cmds:
-      - uv run --frozen pytest
-
-  test:live:
-    desc: 'For real: post, read, reply, delete on every platform with its secrets (or: task test:live -- <platform>…)'
-    cmds:
-      - uv run --frozen pytest tests/live -m live -s -rA
-    env:
-      AMOORION_LIVE: '{{.CLI_ARGS}}'
-
-  test:connect:
-    desc: 'Read-only: log in to every platform with its secrets (or those named), its profile, a few posts'
-    cmds:
-      - uv run --frozen pytest tests/live -m live -k test_connect -s -rA
-    env:
-      AMOORION_LIVE: '{{.CLI_ARGS}}'
-
-  test:quiet:
-    desc: Run the tests quietly
-    cmds:
-      - uv run --frozen pytest -q
 
   check:
     desc: Run every static check (same as CI)
