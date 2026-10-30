@@ -101,7 +101,7 @@ What is being worked on now. Vision and the plan of all phases:
       before merging
 - [x] Webhooks: GitHub (`X-Hub-Signature-256`), GitLab (`X-Gitlab-Token`),
       Discord; each a hook in `hooks/`
-- [ ] ntfy: plugin (post) and notification target
+- [x] ntfy: plugin (post) and notification target
 - [ ] NATS: publish methods' results, subscribe as a daemon service
 - [ ] E-mail client: send (also Blogger by mail) and read
 - [ ] The notebooks of `examples/` renamed `old.<NAME>.ipynb`

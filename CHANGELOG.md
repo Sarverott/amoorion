@@ -1,3 +1,11 @@
+## v0.4.7 (2026-10-30)
+
+**Packages:** amoorion 0.4.7, amoorion-ntfy 0.4.6
+
+### Feat
+
+- **ntfy**: plugin (post, read) and a notification target: the method notify sends to the platforms of AMOORION_NOTIFY, and everything the hooks receive goes there
+
 ## v0.4.6 (2026-10-30)
 
 **Packages:** amoorion 0.4.6

@@ -10,8 +10,26 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from fastapi.testclient import TestClient
 
 from amoorion.api import create_app
+from amoorion.core import AmoorionError
 from amoorion.inbox import Inbox
+from amoorion.methods.base import Notify, NotifyParams
+from amoorion.models import Message, Post
 from amoorion.vault import VaultLink, open_vault
+
+
+
+class Target:
+    posts: list[Post] = []
+
+    def __init__(self, name):
+        self.name = name
+
+    def post(self, post):
+        if self.name == "nope":
+            raise AmoorionError("a failing target stops nothing")
+        self.posts.append(post)
+        return Message(platform=self.name, text=post.text)
+
 
 KEY = Ed25519PrivateKey.generate()
 PUBLIC = KEY.public_key().public_bytes(Encoding.Raw, PublicFormat.Raw).hex()
@@ -73,6 +91,21 @@ def test_gitlab(client):
     assert answer.json()["author"]["handle"] == "me"
     assert client.post("/hooks/gitlab", json=payload, headers={"X-Gitlab-Token": "no"}).status_code == 403
     assert client.post("/hooks/gitlab", json=payload).status_code == 403
+
+
+def test_what_a_hook_receives_goes_to_the_notify_targets(client, monkeypatch):
+    sent = []
+    monkeypatch.setenv("AMOORION_NOTIFY", "ntfy, nope")
+    monkeypatch.setattr("amoorion.methods.base.open_plugin", lambda name, vault: sent.append(name) or Target(name))
+    payload = {"object_kind": "push", "project": {"path_with_namespace": "a/b", "web_url": "u"}, "commits": []}
+    assert client.post("/hooks/gitlab", json=payload, headers={"X-Gitlab-Token": "sekret"}).status_code == 200
+    assert sent == ["ntfy", "nope"]
+    assert Target.posts[-1].links == ["u"] and Target.posts[-1].text.startswith("a/b:")
+
+
+def test_no_notify_targets_no_notifications(monkeypatch):
+    monkeypatch.delenv("AMOORION_NOTIFY", raising=False)
+    assert Notify(open_vault(VaultLink(kind="env"))).run(NotifyParams(text="x")) == []
 
 
 def discord(client, payload, key=KEY):

@@ -5,6 +5,7 @@ arguments, request body or tool schema from it) and `run`, which returns
 models. Front-ends never talk to plugins directly.
 """
 
+import os
 from typing import Any, ClassVar
 
 from pydantic import Field
@@ -142,6 +143,23 @@ class Publish(Method):
             except Exception as error:  # one platform failing must not stop the others
                 results.append(Result(platform=platform, ok=False, error=str(error)))
         return results
+
+
+class NotifyParams(Post):
+    pass
+
+
+@METHODS.register
+class Notify(Method):
+    name: ClassVar[str] = "notify"
+    description: ClassVar[str] = "Send a notification to the platforms of AMOORION_NOTIFY; one result per platform"
+    Params: ClassVar[type[Model]] = NotifyParams
+
+    def run(self, params: NotifyParams) -> list[Result]:
+        targets = [name.strip() for name in os.environ.get("AMOORION_NOTIFY", "").split(",") if name.strip()]
+        if not targets:
+            return []
+        return Publish(self.vault).run(PublishParams(to=targets, **params.model_dump()))
 
 
 class ReadParams(Model):
