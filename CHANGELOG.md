@@ -1,3 +1,11 @@
+## v0.4.12 (2026-10-30)
+
+**Packages:** amoorion 0.4.12
+
+### Feat
+
+- **workflows**: workflow, automate and search methods
+
 ## v0.4.11 (2026-10-30)
 
 **Packages:** amoorion 0.4.11
