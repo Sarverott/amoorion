@@ -1,3 +1,11 @@
+## v0.4.9 (2026-10-30)
+
+**Packages:** amoorion 0.4.9, amoorion-blogger 0.4.2, amoorion-email 0.4.8
+
+### Feat
+
+- **email**: an e-mail client: send by SMTP, read by IMAP, reply; Blogger sends through the same code
+
 ## v0.4.8 (2026-10-30)
 
 **Packages:** amoorion 0.4.8
