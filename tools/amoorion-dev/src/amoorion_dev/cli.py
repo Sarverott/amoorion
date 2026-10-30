@@ -8,72 +8,19 @@ from dataclasses import asdict
 from pathlib import Path
 
 from rich.console import Console
-from rich.panel import Panel
 from rich.table import Table
 
+from amoorion_dev import bump
 from amoorion_dev import notes as release_notes
 from amoorion_dev import phases as plan
-from amoorion_dev import site as web
+from amoorion_dev import webpage as web
 from amoorion_dev import state as development
 from amoorion_dev import version as versions
 from amoorion_dev.repo import Repo
+from amoorion_dev.show import show_state
+from amoorion_dev.state_page import markdown
 
 console = Console()
-
-
-def show_state(state: development.State) -> None:
-    summary = Table.grid(padding=(0, 2))
-    summary.add_column(style="bold")
-    summary.add_column()
-    summary.add_row("Branch", state.branch + (f"  [yellow]{state.changed_files} files changed[/]" if state.changed_files else ""))
-    summary.add_row("Version", f"{state.version}  [dim]{state.stage}[/]")
-    summary.add_row("Last release", f"v{state.last_release}" if state.last_release else "none yet")
-    summary.add_row(
-        "Next release",
-        f"v{state.next_release}  [dim]{development.KINDS[state.release_kind]}, {len(state.news)} commits since the last[/]",
-    )
-    if state.ahead_of_master is not None:
-        summary.add_row("Against master", f"{state.ahead_of_master} ahead, {state.behind_master} behind")
-    if state.phase_release:
-        summary.add_row("Completes", "[green]phase " + ", phase ".join(state.phase_release) + "[/] (a phase release)")
-    waiting = [name for name, there in state.waiting.items() if there]
-    if waiting:
-        summary.add_row("Waiting", "[yellow]" + ", ".join(waiting) + " from the author[/]")
-    remote = state.remote
-    pr = remote.get("pull_request")
-    if isinstance(pr, dict) and "url" in pr:
-        summary.add_row("Pull request", f"#{pr['number']} {pr['title']}  [dim]{pr['url']}[/]")
-    elif "pull_request" in remote and pr is None:
-        summary.add_row("Pull request", "none open")
-    for name in ("release", "pypi"):
-        found = remote.get(name)
-        if isinstance(found, dict):
-            summary.add_row(
-                {"release": "GitHub release", "pypi": "On PyPI"}[name],
-                found.get("tag") or found.get("version") or f"[red]{found.get('error')}[/]",
-            )
-    console.print(Panel(summary, title="amoorion: state of development", expand=False))
-
-    packages = Table("Package", "Version", "Next release", title="Packages (a version each)", title_justify="left")
-    for name, found in state.packages.items():
-        coming = found["next"] if found["next"] != found["version"] else "[dim]unchanged[/]"
-        packages.add_row(name, found["version"], coming)
-    console.print(packages)
-
-    phases = Table("Phase", "Done", title="Phases (docs/devlog/TODO.md)", title_justify="left")
-    for phase in state.phases:
-        style = "green" if phase["complete"] else "yellow" if phase["done"] else "dim"
-        phases.add_row(f"[{style}]{phase['number']}: {phase['title']}[/]", f"{phase['done']}/{phase['total']}")
-    console.print(phases)
-    if state.questions:
-        console.print("[bold]Open questions[/] (docs/devlog/BRAINSTORM.md): " + "; ".join(state.questions))
-    runs = remote.get("runs")
-    if isinstance(runs, dict) and runs:
-        table = Table("Workflow", "Branch", "Last run", title="Workflows", title_justify="left")
-        for name, run in sorted(runs.items()):
-            colour = {"success": "green", "failure": "red"}.get(run["status"], "yellow")
-            table.add_row(name, run["branch"], f"[{colour}]{run['status']}[/]")
-        console.print(table)
 
 
 def published(repo: Repo, revision: str | None = None) -> list[dict[str, str]]:
@@ -84,7 +31,7 @@ def published(repo: Repo, revision: str | None = None) -> list[dict[str, str]]:
     ]
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="amoorion-dev", description="Development tools of amoorion")
     commands = parser.add_subparsers(dest="command", required=True, metavar="command")
 
@@ -116,65 +63,102 @@ def main(argv: Sequence[str] | None = None) -> int:
     site.add_argument("--website", type=Path, help="the built presentation page (website/dist), put at the root")
 
     commands.add_parser("identity", help="set git's user to the bot of .github/flow.toml")
+    return parser
 
-    args = parser.parse_args(argv)
-    repo = Repo.here()
 
-    if args.command == "state":
-        found = development.read(repo, online=args.online)
-        if args.json:
-            print(json.dumps(asdict(found), indent=2))
-        elif args.markdown:
-            print(development.markdown(found), end="")
-        else:
-            show_state(found)
-    elif args.command == "version":
-        if args.action == "current":
-            print(versions.current(repo))
-        elif args.action == "list":
-            table = Table("Package", "Version", "Next release")
-            coming = versions.plan(repo, versions.last_release(repo))
-            for package in published(repo):
-                table.add_row(package["name"], package["version"], coming.get(package["name"], ""))
-            console.print(table)
-        elif args.action == "next":
-            print(versions.next_release(repo, versions.last_release(repo)))
-        else:
-            print(getattr(versions, args.action)(repo))
-    elif args.command == "phases":
-        last = versions.last_release(repo)
-        if args.completed:
-            for phase in plan.completed_since(repo, f"v{last}" if last else None):
-                print(f"{phase.number}: {phase.title}")
-        else:
-            for phase in plan.phases(repo):
-                print(f"{phase.number}: {phase.title}  {phase.done}/{phase.total}" + ("  complete" if phase.complete else ""))
-    elif args.command == "notes":
-        print(release_notes.title(repo, args.tag) if args.title else release_notes.notes(repo, args.tag), end="\n" if args.title else "")
-    elif args.command == "packages":
-        only = {name.strip() for name in args.only.split(",") if name.strip()}
-        found = published(repo, args.released)
-        if args.released:
-            bumped = set(versions.changed_in(repo, args.released))
-            found = [package for package in found if package["name"] in bumped]
-        print(json.dumps([package for package in found if not only or package["name"] in only]))
-    elif args.command == "setting":
-        value: object = repo.settings()
-        for part in args.key.split("."):
-            if not isinstance(value, dict) or part not in value:
-                print(f"no {args.key} in .github/flow.toml", file=sys.stderr)
-                return 1
-            value = value[part]
-        print(json.dumps(value) if isinstance(value, bool) else value)
-    elif args.command == "site":
-        for path in web.build(repo, args.out, args.examples, args.website):
-            console.print(f"wrote {path}")
-    elif args.command == "identity":
-        bot = repo.settings().get("bot", {})
-        repo.run("git", "config", "user.name", bot["name"])
-        repo.run("git", "config", "user.email", bot["email"])
-        print(f"git user: {bot['name']} <{bot['email']}>")
+def state_command(repo: Repo, args: argparse.Namespace) -> int:
+    found = development.read(repo, online=args.online)
+    if args.json:
+        print(json.dumps(asdict(found), indent=2))
+    elif args.markdown:
+        print(markdown(found), end="")
+    else:
+        show_state(found)
     return 0
+
+
+def version_command(repo: Repo, args: argparse.Namespace) -> int:
+    if args.action == "current":
+        print(versions.current(repo))
+    elif args.action == "list":
+        table = Table("Package", "Version", "Next release")
+        coming = versions.plan(repo, versions.last_release(repo))
+        for package in published(repo):
+            table.add_row(package["name"], package["version"], coming.get(package["name"], ""))
+        console.print(table)
+    elif args.action == "next":
+        print(versions.next_release(repo, versions.last_release(repo)))
+    else:
+        print(getattr(bump, args.action)(repo))
+    return 0
+
+
+def phases_command(repo: Repo, args: argparse.Namespace) -> int:
+    last = versions.last_release(repo)
+    if args.completed:
+        for phase in plan.completed_since(repo, f"v{last}" if last else None):
+            print(f"{phase.number}: {phase.title}")
+    else:
+        for phase in plan.phases(repo):
+            print(f"{phase.number}: {phase.title}  {phase.done}/{phase.total}" + ("  complete" if phase.complete else ""))
+    return 0
+
+
+def notes_command(repo: Repo, args: argparse.Namespace) -> int:
+    print(release_notes.title(repo, args.tag) if args.title else release_notes.notes(repo, args.tag), end="\n" if args.title else "")
+    return 0
+
+
+def packages_command(repo: Repo, args: argparse.Namespace) -> int:
+    only = {name.strip() for name in args.only.split(",") if name.strip()}
+    found = published(repo, args.released)
+    if args.released:
+        bumped = set(versions.changed_in(repo, args.released))
+        found = [package for package in found if package["name"] in bumped]
+    print(json.dumps([package for package in found if not only or package["name"] in only]))
+    return 0
+
+
+def setting_command(repo: Repo, args: argparse.Namespace) -> int:
+    value: object = repo.settings()
+    for part in args.key.split("."):
+        if not isinstance(value, dict) or part not in value:
+            print(f"no {args.key} in .github/flow.toml", file=sys.stderr)
+            return 1
+        value = value[part]
+    print(json.dumps(value) if isinstance(value, bool) else value)
+    return 0
+
+
+def site_command(repo: Repo, args: argparse.Namespace) -> int:
+    for path in web.build(repo, args.out, args.examples, args.website):
+        console.print(f"wrote {path}")
+    return 0
+
+
+def identity_command(repo: Repo, args: argparse.Namespace) -> int:
+    bot = repo.settings().get("bot", {})
+    repo.run("git", "config", "user.name", bot["name"])
+    repo.run("git", "config", "user.email", bot["email"])
+    print(f"git user: {bot['name']} <{bot['email']}>")
+    return 0
+
+
+COMMANDS = {
+    "state": state_command,
+    "version": version_command,
+    "phases": phases_command,
+    "notes": notes_command,
+    "packages": packages_command,
+    "setting": setting_command,
+    "site": site_command,
+    "identity": identity_command,
+}
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    return COMMANDS[args.command](Repo.here(), args)
 
 
 if __name__ == "__main__":
