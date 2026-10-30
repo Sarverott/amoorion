@@ -16,6 +16,7 @@ from rich.console import Console
 from rich.prompt import Confirm, Prompt
 from rich.table import Table
 
+from amoorion.cli.view import RichView
 from amoorion.core import AmoorionError
 from amoorion.methods import METHODS, Method
 from amoorion.plugins import Capability, load_plugins
@@ -122,8 +123,6 @@ class Guide:
             f"Run {method.name} for real?", console=self.console, stream=self.stream, default=False
         ):
             return False
-        from amoorion.cli.base import RichView
-
         try:
             result = method().run(validated)
         except AmoorionError as error:
