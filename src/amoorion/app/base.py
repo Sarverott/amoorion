@@ -13,6 +13,8 @@ objects can hold two identities. AMOORION_NOTIFY and AMOORION_NATS stay settings
 the process.
 """
 
+import atexit
+import os
 import shutil
 import tempfile
 import weakref
@@ -31,10 +33,8 @@ from amoorion.plugins import load_plugins
 from amoorion.vault import Vault, VaultLink, open_vault
 
 
-def scratch_setup(owner: object) -> dict[str, str]:
-    """What `Amoorion()` without an env file works on: no real secrets, and a temporary directory gone with its owner."""
-    scratch = Path(tempfile.mkdtemp(prefix="amoorion-"))
-    weakref.finalize(owner, shutil.rmtree, scratch, ignore_errors=True)
+def scratch_values(scratch: Path) -> dict[str, str]:
+    """A sandbox's setup: no real secrets, an inbox and a dataset in the temporary directory `scratch`."""
     return {"AMOORION_VAULT": "env", "AMOORION_INBOX": str(scratch / "inbox.sqlite3"), "AMOORION_DATASET": str(scratch / "dataset")}
 
 
@@ -46,11 +46,28 @@ class Amoorion(FrontEnds, States):
         self._dataset_path = Path(dataset).expanduser() if dataset else None
         self._open(Path(env).expanduser() if env else None)
 
+    @staticmethod
+    def init() -> Path:
+        """Put the whole process in a sandbox, for what doesn't go through an object: the CLI, `Inbox()`, `Plugins`.
+
+        Returns its temporary directory, removed when the process ends. Examples start with it.
+        """
+        scratch = Path(tempfile.mkdtemp(prefix="amoorion-"))
+        atexit.register(shutil.rmtree, scratch, ignore_errors=True)
+        os.environ |= scratch_values(scratch)
+        return scratch
+
+    def _scratch(self) -> dict[str, str]:
+        """This object's own sandbox, gone with it."""
+        scratch = Path(tempfile.mkdtemp(prefix="amoorion-"))
+        weakref.finalize(self, shutil.rmtree, scratch, ignore_errors=True)
+        return scratch_values(scratch)
+
     def _open(self, env: Path | None) -> None:
         self.env = env
         if env is not None and not env.is_file():
             raise AmoorionError(f"no env file at {env}")
-        self._values: dict[str, str | None] = dotenv_values(env) if env else scratch_setup(self)
+        self._values: dict[str, str | None] = dotenv_values(env) if env else self._scratch()
         self._vault: Vault | None = None
 
     def _path(self, variable: str) -> Path | None:
