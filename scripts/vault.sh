@@ -46,7 +46,7 @@ from dotenv import load_dotenv
 from pykeepass import PyKeePass, create_database
 from pykeepass.exceptions import CredentialsError
 
-load_dotenv(".env")
+load_dotenv(".env", override=True)
 path, token = os.environ.get("AMOORION_VAULT_PATH"), os.environ.get("AMOORION_VAULT_TOKEN")
 if not path:
     sys.exit("no AMOORION_VAULT_PATH in .env: the path of the .kdbx file")
