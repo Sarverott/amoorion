@@ -16,6 +16,7 @@ myst:
 
 examples
 platforms
+inspirations
 ```
 
 ```{toctree}
