@@ -140,7 +140,7 @@ What amoorion received, of every platform, kept once by platform and id in
 a SQLite file (`AMOORION_INBOX` in `.env`, default
 `$XDG_DATA_HOME/amoorion/inbox.sqlite3`). `read` and the hooks put messages
 in; the `inbox` method lists them, newest first, optionally of one platform
-(hooks are `hook:<name>`). Rules acting on them come in phase 5 (Q11).
+(hooks are `hook:<name>`: `generic`, `github`, `gitlab`, `discord`). Rules acting on them come in phase 5 (Q11).
 
 ### `hooks/`
 

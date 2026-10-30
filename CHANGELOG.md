@@ -1,3 +1,11 @@
+## v0.4.6 (2026-10-30)
+
+**Packages:** amoorion 0.4.6
+
+### Feat
+
+- **hooks**: GitHub (signed), GitLab (token) and Discord interactions (Ed25519), each a module of hooks/; vault:new makes their entry
+
 ## v0.4.5 (2026-10-30)
 
 **Packages:** amoorion 0.4.5

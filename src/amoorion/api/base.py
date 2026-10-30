@@ -70,13 +70,17 @@ def create_app(vault: Vault | None = None, inbox: Inbox | None = None) -> FastAP
         except ValueError:
             raise HTTPException(400, "body is not JSON") from None
         try:
-            message = HOOKS.get(name)(vault).handle(body, request.headers, payload)
+            hook_ = HOOKS.get(name)(vault)
+            message = hook_.handle(body, request.headers, payload)
         except Forbidden as error:
             raise HTTPException(403, str(error)) from None
         except AmoorionError as error:
             raise HTTPException(400, str(error)) from None
-        [kept] = inbox.keep([message])
-        return JsonView().render(kept)
+        kept = inbox.keep([message]) if message else []
+        answer = hook_.answer(payload)
+        if answer is not None:
+            return answer
+        return JsonView().render(kept[0]) if kept else {}
 
     return app
 
