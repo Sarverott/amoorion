@@ -1,0 +1,30 @@
+[project]
+name = "amoorion-email"
+version = "0.4.8"
+description = "E-mail plugin of amoorion: send by SMTP, read by IMAP, reply"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Sett Sarverott", email = "sett@sarverott.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "amoorion",
+]
+
+[project.urls]
+Homepage = "https://github.com/Sarverott/amoorion"
+Documentation = "https://amoorion.readthedocs.io/en/latest/platforms/email.html"
+Source = "https://github.com/Sarverott/amoorion/tree/master/packages/amoorion-email"
+Issues = "https://github.com/Sarverott/amoorion/issues"
+Changelog = "https://github.com/Sarverott/amoorion/blob/master/CHANGELOG.md"
+
+[project.entry-points."amoorion.plugins"]
+email = "amoorion_email:Email"
+
+[tool.uv.sources]
+amoorion = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.12.20,<0.13.0"]
+build-backend = "uv_build"

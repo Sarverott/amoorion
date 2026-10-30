@@ -15,6 +15,7 @@ members = [
     "amoorion-dev",
     "amoorion-discord",
     "amoorion-docs",
+    "amoorion-email",
     "amoorion-facebook",
     "amoorion-mastodon",
     "amoorion-matrix",
@@ -47,7 +48,7 @@ wheels = [
 
 [[package]]
 name = "amoorion"
-version = "0.4.8"
+version = "0.4.9"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
@@ -68,6 +69,7 @@ dev = [
     { name = "amoorion-bluesky" },
     { name = "amoorion-dev" },
     { name = "amoorion-discord" },
+    { name = "amoorion-email" },
     { name = "amoorion-facebook" },
     { name = "amoorion-mastodon" },
     { name = "amoorion-matrix" },
@@ -112,6 +114,7 @@ dev = [
     { name = "amoorion-bluesky", editable = "packages/amoorion-bluesky" },
     { name = "amoorion-dev", editable = "tools/amoorion-dev" },
     { name = "amoorion-discord", editable = "packages/amoorion-discord" },
+    { name = "amoorion-email", editable = "packages/amoorion-email" },
     { name = "amoorion-facebook", editable = "packages/amoorion-facebook" },
     { name = "amoorion-mastodon", editable = "packages/amoorion-mastodon" },
     { name = "amoorion-matrix", editable = "packages/amoorion-matrix" },
@@ -136,7 +139,7 @@ examples = [{ name = "marimo", specifier = ">=0.25.2" }]
 
 [[package]]
 name = "amoorion-blogger"
-version = "0.4.1"
+version = "0.4.2"
 source = { editable = "packages/amoorion-blogger" }
 dependencies = [
     { name = "amoorion" },
@@ -227,6 +230,17 @@ requires-dist = [
     { name = "sphinx-notfound-page", specifier = ">=1.1.0" },
     { name = "sphinxcontrib-mermaid", specifier = ">=2.1.1" },
 ]
+
+[[package]]
+name = "amoorion-email"
+version = "0.4.8"
+source = { editable = "packages/amoorion-email" }
+dependencies = [
+    { name = "amoorion" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-facebook"

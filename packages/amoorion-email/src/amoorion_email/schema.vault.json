@@ -1,0 +1,18 @@
+{
+  "vault": {
+    "email": {
+      "description": "A mail account: SMTP to send, IMAP to read",
+      "scopes": {
+        "to": "Where a post goes",
+        "smtp-uri": "smtps://user@host:465 (TLS) or smtp://user@host:587 (STARTTLS)",
+        "smtp-password": "Password of the SMTP account",
+        "imap-uri": "imaps://user@host:993 (TLS) or imap://user@host:143 (STARTTLS)",
+        "imap-password": "Password of the IMAP account"
+      },
+      "optional": {
+        "from": "Sender address; default: the SMTP user",
+        "mailbox": "The mailbox read; default: INBOX"
+      }
+    }
+  }
+}

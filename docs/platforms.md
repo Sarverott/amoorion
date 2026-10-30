@@ -15,4 +15,5 @@ platforms/discord
 platforms/telegram
 platforms/matrix
 platforms/ntfy
+platforms/email
 ```

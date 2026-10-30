@@ -85,6 +85,7 @@ amoorion publish --text "hello" --to dryrun  # dryrun sends nothing: try it firs
 | Bluesky | `amoorion-bluesky` | ✓ | ✓ | ✓ | ✓ |
 | Mastodon | `amoorion-mastodon` | ✓ | ✓ | ✓ | ✓ |
 | ntfy | `amoorion-ntfy` | ✓ | ✓ | | |
+| E-mail | `amoorion-email` | ✓ | ✓ | ✓ | |
 | X (twitter) | `amoorion-x` | ✓ | ✓ | ✓ | ✓ |
 | Tumblr | `amoorion-tumblr` | ✓ | ✓ | | ✓ |
 | Blogger (by mail) | `amoorion-blogger` | ✓ | | | |
