@@ -105,3 +105,16 @@ that `Dataset.find` crashed on a deleted post; fixed.
 
 The last item of the phase stays open for the author to look at the examples, so the `Y`
 release waits for them.
+
+## UNIXUSAT=1793395763196 · commit f73e6c9
+
+The author cut `methods/base.py` into one file per method and asked to finish it and to
+bring the same shortness to the other `.py` files. The method files got their imports,
+`all_params.py` (left empty by the author) lists the params of every method. Then the rest
+was cut the same way, moving code and not changing what it does: `app` (plugs, states,
+front-ends), `workflows` (rules), `dataset` (entry), `nats` (publish, service), `cli` (parser,
+view), `plugins` (loading), `hooks` (generic), `amoorion-dev` (bump, remote, show, state_page,
+webpage), the docs' hooks (`docs/_ext`), and what shapes a post's text in seven plugin packages
+(`text.py`; the Discord webhook got its own file). Only the inbox's list and search, which
+repeated each other, and the servers' table of the CLI were simplified. Tests and notebook 08
+follow the new places; no test was removed.

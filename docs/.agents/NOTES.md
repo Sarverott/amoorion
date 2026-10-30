@@ -2,6 +2,15 @@
 
 Newest on top.
 
+## 2026-10-30: cut into short files
+
+- Moves only, checked by the same tests. No real platform was tried, as before.
+- The directory `site/` is ignored by git (the built page), so the package is `amoorion_dev.webpage`.
+  `tests/test_tracked.py` caught it.
+- A method is registered by its import in `methods/__init__.py`: a new `<name>_method.py` without
+  that import silently doesn't exist.
+- Left long on purpose, one purpose each: `cli/guide.py`, the plugin classes, `tests/`.
+
 ## 2026-10-30: the author's examples
 
 - `compose` has only met fake servers: Ollama is installed here but holds no model and
