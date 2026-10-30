@@ -5,6 +5,7 @@ are the message's.
 """
 
 import sqlite3
+from pathlib import Path
 
 from pydantic import Field
 
@@ -13,7 +14,7 @@ from amoorion.inbox import Inbox
 from amoorion.models import Message
 from amoorion.workflows.base import Step
 
-SCHEMA = "CREATE TABLE IF NOT EXISTS handled (rule TEXT NOT NULL, platform TEXT NOT NULL, id TEXT NOT NULL, PRIMARY KEY (rule, platform, id))"
+SCHEMA = Path(__file__).with_name("schema.handled.sql").read_text()
 
 
 class Rule(Model):

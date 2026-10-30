@@ -191,7 +191,8 @@ listeners (bots) and NATS subscribers.
 ## From Python: `amoorion.app`
 
 `Amoorion` is one setup as an object: its vault, dataset and inbox, the platforms
-in use and its flags. Every method is callable by its name (`amo.publish(...)`),
+in use and its flags. `Amoorion()` without an env file is a sandbox: `env` vault, inbox
+and dataset in a temporary directory, never `.env`; `Amoorion(".env")` is the real setup. Every method is callable by its name (`amo.publish(...)`),
 `api()`, `mcp()` and `cli()` give the front-ends on that same setup, `save` and
 `load` keep where things are and hashes to detect changes (`changes()`), never a
 secret (`states.py`, `frontends.py`). `Plugins` is the collection of what is

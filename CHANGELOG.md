@@ -1,3 +1,15 @@
+## v0.4.19 (2026-10-30)
+
+**Packages:** amoorion 0.4.19
+
+### Feat
+
+- **app**: Amoorion() without an env file is a sandbox of its own
+
+### Refactor
+
+- **inbox**: the schemas in .sql files beside their code
+
 ## v0.4.18 (2026-10-30)
 
 **Packages:** amoorion 0.4.18, amoorion-bluesky 0.4.3, amoorion-discord 0.4.3, amoorion-mastodon 0.4.3, amoorion-matrix 0.4.3, amoorion-telegram 0.4.3, amoorion-tumblr 0.4.3, amoorion-x 0.4.3
