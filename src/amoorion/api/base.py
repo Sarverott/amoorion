@@ -17,6 +17,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from amoorion import __version__
 from amoorion.core import AmoorionError, JsonView
+from amoorion.dataset import Dataset
 from amoorion.hooks import HOOKS, Forbidden
 from amoorion.inbox import Inbox
 from amoorion.methods import METHODS, Method
@@ -26,7 +27,7 @@ from amoorion.vault import Vault, open_vault
 bearer = HTTPBearer(auto_error=False)
 
 
-def create_app(vault: Vault | None = None, inbox: Inbox | None = None) -> FastAPI:
+def create_app(vault: Vault | None = None, inbox: Inbox | None = None, dataset: Dataset | None = None) -> FastAPI:
     vault = vault or open_vault()
     inbox = inbox or Inbox()
     app = FastAPI(title="amoorion", version=__version__)
@@ -48,7 +49,7 @@ def create_app(vault: Vault | None = None, inbox: Inbox | None = None) -> FastAP
 
         def call(params: Params) -> Any:  # type: ignore[valid-type]
             try:
-                return JsonView().render(method(vault, inbox=inbox).run(params))
+                return JsonView().render(method(vault, inbox=inbox, dataset=dataset).run(params))
             except AmoorionError as error:
                 raise HTTPException(400, str(error)) from None
 

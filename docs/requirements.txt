@@ -261,6 +261,7 @@ pywin32==312 ; sys_platform == 'win32'
     # via mcp
 pyyaml==6.0.3
     # via
+    #   amoorion
     #   jupyter-cache
     #   myst-nb
     #   myst-parser

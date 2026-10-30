@@ -136,6 +136,10 @@ and release it.
 2. ntfy: plugin (post) and notification target.
 3. NATS: publish methods' results, subscribe as a daemon service.
 4. E-mail client: send (also Blogger by mail) and read.
+5. The author's examples: a Python object to use amoorion by (`Amoorion`,
+   `Plugins`), and what the notebooks present made real. The projects the author
+   linked are references, not orders: each is considered, adopted through what
+   amoorion already speaks (HTTP, MCP, hooks) before adding a dependency.
 
 ### Phase 6: deployment
 

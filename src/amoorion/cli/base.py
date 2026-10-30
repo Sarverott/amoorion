@@ -108,7 +108,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv: Sequence[str] | None = None, vault: Any = None, inbox: Any = None, dataset: Any = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command is None:
@@ -128,7 +128,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             getattr(import_module(module), function)(args)
             return 0
         params = {key: value for key, value in vars(args).items() if key not in ("command", "json", "interactive")}
-        method = METHODS.get(args.command)()
+        method = METHODS.get(args.command)(vault, inbox=inbox, dataset=dataset)
         result = method.run(method.Params(**params))
     except (AmoorionError, ValueError) as error:
         print(f"amoorion: {error}", file=sys.stderr)

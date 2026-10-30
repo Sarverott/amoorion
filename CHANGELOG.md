@@ -1,3 +1,11 @@
+## v0.4.11 (2026-10-30)
+
+**Packages:** amoorion 0.4.11
+
+### Feat
+
+- **app**: Amoorion and Plugins, the author's way of using amoorion from Python
+
 ## v0.4.10 (2026-10-30)
 
 **Packages:** amoorion 0.4.10

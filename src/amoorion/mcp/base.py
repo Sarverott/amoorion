@@ -15,14 +15,16 @@ from mcp.types import ToolAnnotations
 
 from amoorion import __version__
 from amoorion.core import AmoorionError, JsonView
+from amoorion.dataset import Dataset
+from amoorion.inbox import Inbox
 from amoorion.methods import METHODS, Method
 from amoorion.vault import Vault, open_vault
 
 
-def _tool(method: type[Method], vault: Vault) -> Callable[..., Any]:
+def _tool(method: type[Method], vault: Vault, inbox: Inbox | None, dataset: Dataset | None) -> Callable[..., Any]:
     def call(**params: Any) -> Any:
         try:
-            return JsonView().render(method(vault).run(method.Params(**params)))
+            return JsonView().render(method(vault, inbox=inbox, dataset=dataset).run(method.Params(**params)))
         except AmoorionError as error:  # tell the agent why, not only that it failed
             raise ToolError(str(error)) from error
 
@@ -40,13 +42,13 @@ def _tool(method: type[Method], vault: Vault) -> Callable[..., Any]:
     return call
 
 
-def create_server(vault: Vault | None = None) -> MCPServer:
+def create_server(vault: Vault | None = None, inbox: Inbox | None = None, dataset: Dataset | None = None) -> MCPServer:
     vault = vault or open_vault()
     server = MCPServer("amoorion", version=__version__, instructions=__doc__)
     for name in METHODS.names():
         method = METHODS.get(name)
         server.add_tool(
-            _tool(method, vault),
+            _tool(method, vault, inbox, dataset),
             name=name,
             description=method.description,
             annotations=ToolAnnotations(readOnlyHint=method.read_only, destructiveHint=False),
