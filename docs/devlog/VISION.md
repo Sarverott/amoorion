@@ -140,6 +140,20 @@ and release it.
    `Plugins`), and what the notebooks present made real. The projects the author
    linked are references, not orders: each is considered, adopted through what
    amoorion already speaks (HTTP, MCP, hooks) before adding a dependency.
+6. The author's reading of the examples (their words: `docs/changelog/phase-5.md`):
+   workflows written as Python (`@amo.workflow`, `@step`, `EXECUTE`) next to rules in
+   YAML files, with logs and a JSON artifact out of each; `automate` gone, what it did
+   now part of `workflow`; MCP tools and resources in the official style; a CLI of arrow
+   menus; every outside program a method; examples that show data as tables and plots.
+
+Moved on by the same reading: dataset backends (torrent, IPFS, FTP, S3, Hugging Face,
+Google Drive, SSHFS, zip, git) and a vector database to phase 8; the model of holders,
+submodels and flags, the graph of who follows whom, and methods for media programs
+(ffmpeg, yt-download, GIMP, ADB, browsers, Blender, OBS) to phase 9; Scalar and
+gRPC to phase 7, Cosmos SDK with phase 7's carrier of trust; the web app (mobile web app first,
+browser extension second, Obsidian plugin last) to phase 7; the society as a simulation of lives
+(biblical names, born and dead, tarot, narrator, emotional drivers) to a phase of its own, once
+the author gives their sets of names.
 
 ### Phase 6: deployment
 

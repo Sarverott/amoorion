@@ -209,3 +209,460 @@ PDF. `scripts/check-latex.py`, part of `task docs:build`, refuses both before th
 The PDF was compiled here by `latexmk` in `sphinxdoc/sphinx-latexpdf`: exit code 0, 258 pages. Doing so
 found `python -m amoorion` starting the CLI on import, as the API reference imports every module; it
 now runs only when run.
+
+## UNIXUSAT=1793429156670 · commit aeb2310
+
+The author read the notebooks and wrote back inside them. Their words, word for word, cell by cell;
+the plan drawn from them is in VISION.md (phase 5, point 6) and TODO.md.
+
+### `examples/01-getting-started.ipynb`
+
+Cell 2:
+
+````text
+# is there a jupyter presentable ploter like matplotlib for mermaid? or just matplotlib if it fits with some plotting
+# or just pandas
+````
+
+Cell 4:
+
+````text
+# ugly
+# wanna try prettyprint? 
+import pprint
+````
+
+### `examples/02-config-and-setup.ipynb`
+
+Cell 9:
+
+````text
+# create simple reader/writter of env files... aren't they just oversimplified forms of something between shell variables and ini file formating?
+# honestly defining in the air env by os.env[] and inline string with newlines chars looks like impro teather - sory for harsh critical feedback but seriously i know you can better
+````
+
+### `examples/04-identity-vaults.ipynb`
+
+Cell 8:
+
+````text
+# i want inputing commands with mentioned elsevere choosing with arrows menus
+# after that i will provide all you need here
+````
+
+### `examples/05-cli-and-terminals.ipynb`
+
+Cell 2:
+
+````text
+main(["plugins"]) # note that it can be defined in other way
+# HEY! show me data like that with pandas table - leave this part, add below second one dedicated for notebook jupyter with pandas, how it looks like in comparition is good presentation of possibilities
+````
+
+Cell 3:
+
+````text
+# show me it with something like matplotlib or pandas, this way it is it is it is rough in my cognitive processing
+````
+
+Cell 6:
+
+````text
+# can we use something like that?:
+output = None
+Amoorion().cli.CALL()>"read"-"platform">"nowhere"[output] # set output of command as value of output variable 
+#OR
+Amoorion().cli.CALL()>"read"-"platform">"nowhere"(print) # prints out same as above calling of main
+# because
+# CALL functions returns special abstract class with operators overloading `CALL() == abstractor_call`
+# after each calling of operator with argument like `(abstractor_call > "read") returns wraped abstractor_call`
+# at end there we have confirm expression with output where to place abstractor_call[print] or abstractor_call(print) can callback own final output  into 
+````
+
+### `examples/06-getting-over-dataset.ipynb`
+
+Cell 8:
+
+````text
+# here will be stored data about movement on socialmedia and library of all posts
+# even drafts
+# also links and graphs of related social personas etc.
+# for quick movement we need vectorized database
+# besides that this is place where we can place storylines of identities and profiles for LLMs to grow on that data like mashrooms on warm wet soil of old forest
+# so knowledge also lands here in dataset
+# dataset can use 
+# - torrent, 
+# - ipfs, 
+# - ftp
+# - S3 bucketing, 
+# - hugging face, 
+# - google drive, 
+# - sshfs, 
+# - ziparchive, 
+# - git repository 
+# all of them are our targeting
+# try to write some example of above below this block 
+````
+
+### `examples/07-summoning-daemons.ipynb`
+
+Cell 3:
+
+````text
+# i previously wrote somewhere about multiprocess + threades + asyncio etc. - here is more proper place for them i think
+````
+
+### `examples/09-how-to-use-packages.ipynb`
+
+Cell 5:
+
+````text
+# keep simplicity at all cost - i like your style with that standarised methods there: `delete, post, read, reply`
+# keep it simple but adhence the grouping of options: 
+# - model -> create / delete / view / update / submodels{responses-reblogs-comments-reactions} / holder(supermodel){author-identity-profile} / flags{viev_by_user_Q-is_hidden-is_private-type_booleans}
+# - post is content type that extends model
+# - holder extends model as supermodel
+# - user OR bot is holder -> name, id, description, avatar, mail, internal_personificational_data, creds
+# - comment is submodel of post
+# - reaction is submodel of post
+# - holder can follow other holders and can be followed by other holders - vector of id from-to in graph of platform
+# - supermodel can live on more than one plain of socialmedia - shared context of profiled identity
+````
+
+### `examples/10-webapp-interfacing.ipynb`
+
+Cell 2:
+
+````text
+# what in your opinion should have this app in webapp frontend interface Cleo?
+# i think about something between chrome extension, obsidian editor plugin and maybe mobile webapp on capasitor?
+````
+
+### `examples/11-additional-utilities.ipynb`
+
+Cell 8:
+
+````text
+# utilities... also known as helper functions
+# most of simple pure python codes that handle things like processing of strings, hashing, encoding etc.
+# should be functions among utilities
+````
+
+### `examples/12-rest-api.ipynb`
+
+Cell 9:
+
+````text
+# can we be compatible with scalar by openapi production?
+# can we harvert power of cosmos sdk blockchain, grpc and protobuf?
+# i think we can
+````
+
+### `examples/13-mcp-in-action.ipynb`
+
+Cell 5:
+
+````text
+# NOPE
+# we will gonna follow official examples of mcp server creation
+from mcp.server import MCPServer
+mcp = MCPServer("Demo")  # this will be replaced with Amoorion name and version
+@mcp.tool() # we need tools
+def add(a: int, b: int) -> int:
+    """Add two numbers."""
+    return a + b
+@mcp.resource("greeting://{name}")  # we need resources
+def greeting(name: str) -> str:
+    """Greet someone by name."""
+    return f"Hello, {name}!"
+````
+
+Cell 6:
+
+````text
+# also we will create this kind of tooling for our simulated party
+import asyncio
+from mcp import Client
+async def main() -> None:
+    async with Client("http://localhost:8000/mcp") as client:
+        result = await client.call_tool("add", {"a": 1, "b": 2})
+        print(result.structured_content)  # {'result': 3}
+asyncio.run(main())
+````
+
+### `examples/15-calling-procedures-by-methods.ipynb`
+
+Cell 8:
+
+````text
+# only method can be subcommand or outside execution of shell - i saw that git command wrapping in dev pack
+# try to use gitpython instead
+# every subcommand or shell script or task running is method
+# every heavy process of complicated stuff like page request, rest get, html2md or pdf parsing is also method
+# ffmpeg, yt-download, ai graphics, usage of integrated programs like gimp, adb, chrome, firefox, blender or obs should also be a method 
+````
+
+### `examples/17-unified-inbox.ipynb`
+
+Cell 1:
+
+````text
+# let's consider for that one webapp interface injection  - i know that ipython and pupeteer for example (or playwright) allows us to do that
+````
+
+### `examples/18-automation-workflowing.ipynb`
+
+Cell 3:
+
+````text
+# amo.automate(rules=[rule])
+"""
+ YES for rules
+ NO for amo.automate()
+ use 
+"""
+@amo.workflow("workflowname", rules=[rule]) # draft v1
+def workflow_name(amo, inputs):
+    try:
+        pass
+    except Exception():
+        return False
+    return True
+````
+
+Cell 4:
+
+````text
+@amo.workflow("workflowname", rules=[rule]) # draft v2 variant A
+def workflow_name(amo, inputs):
+    '''one'''
+    @step
+    def first():
+        '''one'''
+        try:
+            pass
+        except Exception():
+            return False
+        return True
+    @step
+    def first():
+        '''one'''
+        try:
+            pass
+        except Exception():
+            return False
+        return True
+    @step
+    def first():
+        '''one'''
+        try:
+            pass
+        except Exception():
+            return False
+        return True
+    return EXECUTE(first, third).serial()
+````
+
+Cell 5:
+
+````text
+@amo.workflow("workflowname", rules=[rule])  # draft v2 variant B
+async def workflow_name(amo, inputs):
+    '''one'''
+    @step
+    async def first():
+        '''one'''
+        try:
+            pass
+        except Exception():
+            return False
+        return True
+    @step
+    async def second():
+        '''one'''
+        try:
+            pass
+        except Exception():
+            return False
+        return True
+    @step
+    async def third():
+        '''one'''
+        try:
+            pass
+        except Exception():
+            return False
+        return True
+    return await EXECUTE(third, first).paralel()
+````
+
+Cell 7:
+
+````text
+        {"method": "publish", "params": {"text": "$text", "to": ["nowhere"]}} # this can still be used with workflows i think
+} 
+````
+
+Cell 9:
+
+````text
+# alright, so let's assum it that all rules are yaml files defined and readable
+# output of workflow should have logs then
+# and result can be artifact of json for example that can be passed to the sender of post on socialmedia
+````
+
+### `examples/19-trying-society-emulations.ipynb`
+
+Cell 10:
+
+````text
+# i want here to use my set of biblical names for these personality forming
+persona_schema = {
+    # from bornday we have got zodiak, chinese zodiak, generation at now psychology, general sociology of times, numberological profile info
+    # from death we have lifestyle profiling predictions, statistics of deseases, age mentality, aging factor in perspective (patience level), shorter life is more brave decisions
+    born: [
+        date.fromtimestamp(random.random())
+        geocoords: [random.random(),random.random()]
+    ],
+    death:[
+        date.fromtimestamp(random.random()),
+         geocoords: [random.random(),random.random()]
+    ]
+    
+    names: []
+    sirnames:[]
+    soulname:"..."
+    ghostname:"..."
+    devilname:"..."
+    # from place of birth we can randomize first name, second name and third name - these i collect from necrologs an birth acts then statistical weighted average of propability lottery 
+    # each name has own story descriptor - adding to full person summary
+    # from place of death we can randomize 2 last names and coinflip whitch one is mother's 
+    # also lifestory from-to we can now generate based on that
+    # gender choice - coinflip with binary restriction
+    # psychological trauma related with one's own gender and sexual confusion, stemming from environmental and genetic factors that present a certain probability of occurrence during puberty ==  random(1,10)^(coinflip+coinflip)/random(1,10)*random(1,10)
+    # because why not...
+    # every of people will also have random choosen from records of all biblical names for soulname, random person from history for ghostname and demonical or devil's title name from records of myths and legends
+    # also random tarot lotery draw in every 6 hours to inspire destiny narrator AI agent that writing novel of person's life
+    # wonderful dumb and simplistic masquerade of delusions for our society based on this i took here for us from human society
+    # emotions can be driven by emotional drivers --- these are in block below
+    # we generates person with lingual talker (small deepseek or quem), operational instructor (small instructional tooling llm in openclaw) and coder of logics that can only code their internal code and provide structurized json for both other
+    # power of emotional coders is decided by narrator based on responses by grand 3 above and storyline that identity draws
+    # since now chackrams AKA emotional drivers AKA 7 deadly sins will From time to time, they will immersively toss the character about and prompt a discourse regarding the decisions made by the "great trio" whenever they encounter the twists of fate conjured up by a narratorial entity.
+    # sounds like solid engine for simulation of humanity...
+    # we have to do this!
+````
+
+Cell 11:
+
+````text
+# emotional drivers can be some of below mentioned
+```
+W przeciwieństwie do generatywnych modeli AI (jak ChatGPT), które „wymyślają” tekst, te prostsze modele są analityczne i klasyfikacyjne – dostają tekst i przypisują mu konkretną kategorię, etykietę lub wartość liczbową.
+Oto zestawienie najważniejszych i najpopularniejszych prostych modeli podzielonych na kategorie:
+Klasyfikacja i Filtrowanie Tekstu
+• Analiza sentymentu (Sentiment Analysis): Ocenia emocjonalny ton wypowiedzi. Najczęściej dzieli tekst na trzy kategorie: pozytywny, negatywny lub neutralny.
+• Detekcja toksyczności i oflagowanych treści (Content Moderation / Toxicity Detection): Wykrywa mowę nienawiści, wulgaryzmy, przemoc czy spam. Służy do automatycznego moderowania komentarzy.
+• Klasyfikacja intencji (Intent Classification): Rozpoznaje, czego chce użytkownik (np. w chatbotach bankowych decyduje, czy klient chce „sprawdzić saldo”, czy „zablokować kartę”).
+Wyciąganie Informacji i Semantyka
+• Rozpoznawanie encji nazwanych (NER - Named Entity Recognition): Wyłapuje z tekstu konkretne obiekty i przypisuje im kategorie, np. imiona ludzi, nazwy firm, daty, kwoty czy lokalizacje.
+• Analiza semantyczna i podobieństwo tekstów (Semantic Similarity): Mierzy, jak bliskie znaczeniowo są dwa zdania (nawet jeśli używają zupełnie innych słów, np. „Jak naprawić koło?” i „Instrukcja zmiany opony”).
+• Wykrywanie języka (Language Detection): Natychmiastowo rozpoznaje, w jakim języku (np. polskim, angielskim, hiszpańskim) został napisany dany tekst.
+Tradycyjne Algorytmy (Co stoi pod maską?)
+Te prostsze zadania bardzo często realizuje się za pomocą mniejszych, starszych architektur, które nie potrzebują potężnych kart graficznych:
+• Modele typu BERT (np. RoBERTa, DistilBERT): Małe modele transformerowe, które świetnie "rozumieją" kontekst i są mistrzami w klasyfikacji oraz NER.
+• Algorytmy statystyczne (TF-IDF, Naive Bayes, SVM): Klasyczne metody matematyczne. Nie wymagają sieci neuronowych, są błyskawiczne i idealnie sprawdzają się np. w filtrach antyspamowych.
+Czy potrzebujesz tych modeli do konkretnego projektu programistycznego, czy chcesz po prostu porównać ich skuteczność i koszty z nowoczesnymi modelami generatywnymi?
+```
+````
+
+### `examples/20-all-socialmedia-posting-from-one-script.ipynb` (new)
+
+Cell 0:
+
+````text
+# sending to the world the news about newest release
+
+- requires ngrok running
+- workflow that react after webhook 
+- determining standard template of release info
+- checking available platforms with credentials
+- listing types of approaches
+- for each platform little shaffling of content
+- for each platform another graphics
+- for each platform another video
+- all posts with linking of latest release link, latest package, latest documentation link
+- 
+````
+
+Cell 1:
+
+````text
+
+### mechanics of hooks should be runned like that
+
+from amoorion import Amoorion
+
+#from amoorion.hooks import HOOKS
+
+# 
+amo = Amoorion()
+
+#amo.listen() 
+# todo in future: totp or hotp secreting
+#amo.hook(HOOKS["github:webhook"].at(options))
+
+amo.workflows() # draft, 
+
+amo.on(HOOKS["category", "category"])
+
+@HOOKS.listen(
+    amo, # who listens
+    "webhook",  # classed category of hook
+    "github",  # registered sender type with format and schema of data that will come
+    "secret's label" # identity label of profile
+) # DRAFT: it has only hash of secret, when it gets it from call, it hashes and compare them
+async def call_webhook(self, payload_by_shema, request_data, callback): # if webhook receives request and routing maches registered sender and condition of maching secret returns true this is executed
+    callback(int(), "data")
+    # for example another webhook without waiting
+    # and another webhook with waiting
+    return int() # errorcode
+
+# asyncio + threading + multiprocessing + contextvars + sched ... i don't know actualy what would be better here
+
+async def host():
+
+    await Daemon(
+        [*amo.listeners]
+    ).run()
+
+
+# above code is just conceptual, give it own flavor, this is brainstorm
+````
+
+Cell 2:
+
+````text
+@amo.workflow("hello-world")
+def hello_world_posting(amo):
+    try:
+        for platform in PLUGINS:
+            platform.send_post({
+                identity_label, # for example sarverott on tumblr by oauth would be "OAUTH::tumblr.com::sarverott"
+                post_title,
+                post_content_template.fill(post_content_json OR post_content_dict),
+                post_options # including type, flag switches, hashtags that if it is active on particular platform will check and replace inside content text of post if hashtagged word is in the text
+            }) # returns list of link to post and diagnostical return dict like id, or timestamp
+    except Exception():
+        return False
+    return True
+
+````
+
+### `src/amoorion/cli/view.py`
+
+````text
+# can we make it more interactive? like for example instead of input we can try arrow steering of context menu selection with enter as confirmation, shift as going back by stacking of context recurrentions calling, form mechanics and staff like loading screens
+````
+
+New files of the author: `resources/rulesets/world.rule.yml`, `resources/scopes/{input1,output1}.sheme.json`,
+`resources/scopes/{input2,output2}.sheme.toml` (all empty for now), `resources/templates/hello.template.md`.
