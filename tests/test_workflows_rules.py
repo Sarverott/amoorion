@@ -95,7 +95,7 @@ def test_workflow_stops_at_the_first_failure(amo):
     )
 
 
-@pytest.mark.parametrize("name", ["workflow", "automate"])
+@pytest.mark.parametrize("name", ["workflow"])
 def test_steps_cant_start_more_steps(
     amo,
     name,
@@ -178,7 +178,7 @@ def test_a_rule_acts_once_per_message(amo):
         ],
     }
 
-    [done] = amo.automate(rules=[rule])
+    [done] = amo.workflow(rules=[rule])
 
     assert (
         done["rule"] == "announce" and done["message_id"] == "1" and done["ok"]
@@ -189,7 +189,7 @@ def test_a_rule_acts_once_per_message(amo):
         == "news: deploy done from hook:generic"
     )
 
-    assert amo.automate(rules=[rule]) == []
+    assert amo.workflow(rules=[rule]) == []
 
 
 def test_a_failed_rule_is_tried_again(amo):
@@ -217,9 +217,9 @@ def test_a_failed_rule_is_tried_again(amo):
         ],
     }
 
-    assert amo.automate(rules=[rule])[0]["ok"] is False
+    assert amo.workflow(rules=[rule])[0]["ok"] is False
 
-    assert amo.automate(rules=[rule])[0]["ok"] is False
+    assert amo.workflow(rules=[rule])[0]["ok"] is False
 
 
 def test_search_finds_text_of_any_case_and_escapes(amo):

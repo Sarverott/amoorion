@@ -1,7 +1,6 @@
 """Operations over the platforms; the CLI, API, MCP and daemon expose them."""
 
 from amoorion.methods.accounts_method import Accounts, AccountStatus
-from amoorion.methods.automate_method import Automate
 from amoorion.methods.base import METHODS, Method
 from amoorion.methods.compose_method import Compose
 from amoorion.methods.delete_method import Delete
@@ -26,7 +25,6 @@ __all__ = [
     "METHODS",
     "AccountStatus",
     "Accounts",
-    "Automate",
     "Compose",
     "Delete",
     "InboxMethod",

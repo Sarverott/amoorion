@@ -41,7 +41,7 @@ amoorion reply --platform bluesky --to "<post id>" --text "…"
 amoorion delete --platform bluesky --id "<post id>"            # a copy stays in the dataset
 amoorion notify --text "…"                                     # to the platforms of AMOORION_NOTIFY
 amoorion workflow --steps …                                    # methods in order, stops at the first failure
-amoorion automate --rules …                                    # rules on the inbox, once per message
+amoorion workflow --rules …                                    # rules on the inbox, once per message
 ```
 
 `amoorion compose --prompt "…"` asks a language model (from the vault) to write

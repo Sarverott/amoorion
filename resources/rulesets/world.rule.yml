@@ -1,0 +1,6 @@
+---
+# When to tell the world: a release, as GitHub's webhook delivers it to the inbox.
+rules:
+  - name: new-release
+    platform: hook:github
+    contains: release published

@@ -7,9 +7,10 @@ are the message's.
 import sqlite3
 from pathlib import Path
 
+import yaml
 from pydantic import Field
 
-from amoorion.core import Model
+from amoorion.core import AmoorionError, Model
 from amoorion.inbox import Inbox
 from amoorion.models import Message
 from amoorion.workflows.base import Step
@@ -21,7 +22,10 @@ class Rule(Model):
     """What to do (`steps`) with which messages of the inbox (`platform`, `contains`)."""
 
     name: str = Field(min_length=1)
-    steps: list[Step] = Field(min_length=1)
+    steps: list[Step] = Field(
+        [],
+        description="methods to run; a rule of a Python workflow may have none",
+    )
     platform: str | None = Field(
         None,
         description="only messages of this platform (a hook is hook:<name>)",
@@ -30,6 +34,32 @@ class Rule(Model):
         None,
         description="only messages with this text, in any case",
     )
+
+
+def load_rules(path: str | Path) -> list[Rule]:
+    """Rules of a YAML file (`rules: [...]`, a list, or one rule), or of every `*.rule.yml` in a directory."""
+
+    path = Path(path).expanduser()
+
+    if path.is_dir():
+        return [
+            rule
+            for file in sorted(path.glob("*.rule.yml"))
+            for rule in load_rules(file)
+        ]
+
+    if not path.is_file():
+        raise AmoorionError(f"no rules at {path}")
+
+    data = yaml.safe_load(path.read_text()) or []
+
+    if isinstance(data, dict):
+        data = data.get(
+            "rules",
+            [data],
+        )
+
+    return [Rule.model_validate(rule) for rule in data]
 
 
 def matches(

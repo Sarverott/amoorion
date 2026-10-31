@@ -21,7 +21,7 @@ what really ran; everything else is untried against the real thing.
 | Project | How | Tried |
 | ------- | --- | ----- |
 | [CrewAI](https://github.com/crewaiinc/crewai), [ADK](https://adk.dev/), [LangChain](https://github.com/langchain-ai/langchain), [nanobot](https://github.com/HKUDS/nanobot), [Dify](https://github.com/langgenius/dify) | agents and workflows can call amoorion's MCP server or its API (notebooks 12, 13) | the server, not from those frameworks |
-| [Ansible](https://github.com/ansible/ansible) | a play can call `amoorion automate`; deploying amoorion by it belongs to phase 6 | no |
+| [Ansible](https://github.com/ansible/ansible) | a play can call `amoorion workflow`; deploying amoorion by it belongs to phase 6 | no |
 | [TensorFlow](https://github.com/tensorflow/tensorflow), [PyTorch](https://github.com/pytorch/pytorch), [Keras](https://github.com/keras-team/keras), [Transformers](https://github.com/huggingface/transformers), [Ultralytics](https://github.com/ultralytics/ultralytics) | far too heavy as dependencies of a posting tool; a model of your own fits as `think` of `Society`, or behind `compose` | no |
 
 ## For later

@@ -118,9 +118,9 @@ What is being worked on now. Vision and the plan of all phases:
       gate checks its LaTeX sources
 - [ ] New examples from the author's list, with what they present implemented
 - [x] The author's reading of the examples taken in, word for word, drafts kept as raw cells
-- [ ] `@amo.workflow`, `@step`, `EXECUTE`: serial and parallel, sync and async, with
+- [x] `@amo.workflow`, `@step`, `EXECUTE`: serial and parallel, sync and async, with
       logs and a JSON artifact; `automate` becomes part of `workflow`
-- [ ] Rules and templates read from files (`resources/rulesets`, `resources/templates`);
+- [x] Rules and templates read from files (`resources/rulesets`, `resources/templates`);
       example 20 running against fakes
 - [ ] MCP: resources, the official style in example 13, a client for the simulated party
 - [ ] CLI: arrow menus, forms, going back, loading screens; vault setup through them
