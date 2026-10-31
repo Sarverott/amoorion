@@ -195,7 +195,14 @@ def shape_command(
 
     paths = args.paths or [
         repo.root / name
-        for name in repo.git("ls-files", "*.py", "*.ipynb").splitlines()
+        for name in repo.git(
+            "ls-files",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+            "*.py",
+            "*.ipynb",
+        ).splitlines()
     ]
 
     changed = shaping.run(

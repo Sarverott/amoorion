@@ -1,11 +1,16 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // Run and Debug (F5): the same entry points as the terminal, under the debugger.
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Current File with Arguments",
+            "name": "Current file",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Current file with arguments",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
@@ -13,20 +18,50 @@
             "args": "${command:pickArgs}"
         },
         {
-            "name": "Python Debugger: Current File",
+            "name": "amoorion (asks what to do)",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "module": "amoorion",
             "console": "integratedTerminal"
-        }
-    ],
-    "compounds": [
+        },
         {
-            "name": "Compound",
-            "configurations": []
+            "name": "amoorion with arguments",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "amoorion",
+            "console": "integratedTerminal",
+            "args": "${command:pickArgs}"
+        },
+        {
+            "name": "HTTP API on 127.0.0.1:8000",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "amoorion",
+            "console": "integratedTerminal",
+            "args": ["api"]
+        },
+        {
+            "name": "Notebooks: refresh all",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/refresh-examples.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Notebook: refresh this one",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/refresh-examples.py",
+            "console": "integratedTerminal",
+            "args": ["${file}"]
+        },
+        {
+            "name": "Tests of the current file",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "console": "integratedTerminal",
+            "args": ["${file}", "-q"]
         }
-    ],
-    "inputs": [
-        
     ]
 }

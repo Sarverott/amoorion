@@ -52,6 +52,7 @@ uv run task vault:tools   # Bitwarden: bw by npm into tools/; vault:login (the a
 uv run task test:connect [-- <platform>…]   # read-only: log in, profile, read a few (every platform with secrets)
 uv run task test:live [-- <platform>…]      # post, read, reply, delete for real (the author's go-ahead, Q13)
 uv run task help         # help of the CLI and every subcommand
+uv run task examples:refresh  # run the notebooks and save their outputs into them
 uv run task examples:build   # marimo builds of examples/ into examples/build/ (gitignored)
 uv run task docs:build   # docs into docs/_build/html (Sphinx, warnings are errors)
 uv run task docs:requirements   # docs/requirements.txt for Read the Docs, after a uv.lock change

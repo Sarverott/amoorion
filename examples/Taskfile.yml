@@ -8,3 +8,8 @@ tasks:
     desc: Build the example notebooks with marimo into examples/build/ (not committed)
     cmds:
       - scripts/build-examples.sh
+
+  refresh:
+    desc: 'Run the notebooks and save their outputs (task examples:refresh -- <notebook>…; none: all)'
+    cmds:
+      - uv run --frozen python scripts/refresh-examples.py {{.CLI_ARGS}}

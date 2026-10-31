@@ -2,6 +2,7 @@
     "recommendations": [
         "ms-python.debugpy",
         "ms-python.python",
+        "charliermarsh.ruff",
         "ms-python.vscode-python-envs",
         "ms-toolsai.jupyter",
         "ms-toolsai.jupyter-keymap",
