@@ -127,6 +127,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [ ] Filling the vault through those menus
 - [x] What the web page shows comes from the release: typed API responses, `openapi.json`,
       platforms in `manifest.json`, and its shape in `manifest.schema.json`
+- [x] The web page builds amoorion-website by its own `npm run build`, with that data at hand
 - [x] Every outside program a method; `amoorion-dev` on GitPython
 - [x] Examples show data with pandas and plots; env files read and written by a helper;
       the dataset example filled; `Daemon` with threads and processes; outputs refreshed

@@ -4,6 +4,8 @@ ignore: |
   .venv/
   dist/
   node_modules/
+  site/
+  website/
 
 rules:
   document-start: disable
