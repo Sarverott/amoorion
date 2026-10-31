@@ -17,6 +17,7 @@ from amoorion.methods.read_method import Read
 from amoorion.methods.reply_method import Reply
 from amoorion.methods.search_method import Search
 from amoorion.methods.simulate_method import Simulate
+from amoorion.methods.skill_method import Skill, SkillText
 from amoorion.methods.snapshot_method import Snapshot, SnapshotMethod
 from amoorion.methods.wiki_method import Wiki
 from amoorion.methods.workflow_method import Workflow
@@ -38,6 +39,8 @@ __all__ = [
     "Reply",
     "Search",
     "Simulate",
+    "Skill",
+    "SkillText",
     "Snapshot",
     "SnapshotMethod",
     "Wiki",

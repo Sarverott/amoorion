@@ -1,3 +1,11 @@
+## v0.4.23 (2026-10-31)
+
+**Packages:** amoorion 0.4.23
+
+### Feat
+
+- **methods**: skill, amoorion as an agent skill itself
+
 ## v0.4.22 (2026-10-31)
 
 **Packages:** amoorion 0.4.22

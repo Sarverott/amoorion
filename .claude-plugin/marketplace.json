@@ -1,0 +1,13 @@
+{
+  "name": "amoorion",
+  "owner": {
+    "name": "Sett Sarverott"
+  },
+  "plugins": [
+    {
+      "name": "amoorion",
+      "source": "./",
+      "description": "Teaches an agent to publish, read and reply on chatting and communication platforms with amoorion"
+    }
+  ]
+}
