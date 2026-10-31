@@ -21,6 +21,7 @@ import libcst as cst
 
 def _commas(node):
     """`node` with a trailing comma in everything of two or more items it holds."""
+
     if isinstance(
         node,
         cst.Call,
@@ -35,10 +36,13 @@ def _commas(node):
             ),
         )
 
-    if isinstance(
-        node,
-        cst.Tuple,
-    ) and not node.lpar:
+    if (
+        isinstance(
+            node,
+            cst.Tuple,
+        )
+        and not node.lpar
+    ):
         # `return a, b` has no brackets to open
         return node
 
@@ -69,6 +73,7 @@ def _commas(node):
 
 def _descend(node):
     """`Table(a, b).add(c, d)`: both calls of a chain open."""
+
     if isinstance(
         node,
         cst.Attribute,
@@ -85,6 +90,7 @@ def _descend(node):
 
 
 def _last_comma(items):
+
     if len(items) < 2:
         return items
 
@@ -96,15 +102,22 @@ def _last_comma(items):
 
 def _blank(node):
     """`node` with a blank line above it (and above its comments)."""
+
     lines = node.leading_lines
 
     if lines and lines[0].comment is None:
         return node
 
-    return node.with_changes(leading_lines=[cst.EmptyLine(indent=False), *lines])
+    return node.with_changes(
+        leading_lines=[
+            cst.EmptyLine(indent=False),
+            *lines,
+        ]
+    )
 
 
 def _is_docstring(statement) -> bool:
+
     return (
         isinstance(statement, cst.SimpleStatementLine)
         and isinstance(statement.body[0], cst.Expr)
@@ -118,52 +131,108 @@ def _is_docstring(statement) -> bool:
 class _Open(cst.CSTTransformer):
     """The first pass; `spaced_module` also spaces the top level (notebook cells)."""
 
-    def __init__(self, spaced_module: bool) -> None:
+    def __init__(
+        self,
+        spaced_module: bool,
+    ) -> None:
+
         self.spaced_module = spaced_module
+
         self.functions = 0
 
-    def _value(self, updated):
+    def _value(
+        self,
+        updated,
+    ):
+
         return updated.with_changes(value=_commas(updated.value))
 
-    def leave_Assign(self, original, updated):
+    def leave_Assign(
+        self,
+        original,
+        updated,
+    ):
+
         return self._value(updated)
 
-    def leave_AugAssign(self, original, updated):
+    def leave_AugAssign(
+        self,
+        original,
+        updated,
+    ):
+
         return self._value(updated)
 
-    def leave_Expr(self, original, updated):
+    def leave_Expr(
+        self,
+        original,
+        updated,
+    ):
+
         return self._value(updated)
 
-    def leave_AnnAssign(self, original, updated):
+    def leave_AnnAssign(
+        self,
+        original,
+        updated,
+    ):
+
         return self._value(updated) if updated.value else updated
 
-    def leave_Return(self, original, updated):
+    def leave_Return(
+        self,
+        original,
+        updated,
+    ):
+
         return self._value(updated) if updated.value else updated
 
-    def leave_Raise(self, original, updated):
+    def leave_Raise(
+        self,
+        original,
+        updated,
+    ):
+
         return (
             updated.with_changes(exc=_commas(updated.exc))
             if updated.exc
             else updated
         )
 
-    def visit_FunctionDef(self, node) -> None:
+    def visit_FunctionDef(
+        self,
+        node,
+    ) -> None:
+
         self.functions += 1
 
-    def _space(self, body):
+    def _space(
+        self,
+        body,
+    ):
+
         return [
             body[0],
             *(_blank(statement) for statement in body[1:]),
         ]
 
-    def leave_IndentedBlock(self, original, updated):
+    def leave_IndentedBlock(
+        self,
+        original,
+        updated,
+    ):
+
         if not self.functions:
             return updated
 
         return updated.with_changes(body=self._space(updated.body))
 
-    def _open_head(self, updated):
+    def _open_head(
+        self,
+        updated,
+    ):
         """A blank line under `def …:` (ruff removes one under `for`, `if` and the like)."""
+
         body = updated.body
 
         if not isinstance(
@@ -173,12 +242,24 @@ class _Open(cst.CSTTransformer):
             return updated
 
         return updated.with_changes(
-            body=body.with_changes(body=[_blank(body.body[0]), *body.body[1:]])
+            body=body.with_changes(
+                body=[
+                    _blank(body.body[0]),
+                    *body.body[1:],
+                ]
+            )
         )
 
-    def leave_FunctionDef(self, original, updated):
+    def leave_FunctionDef(
+        self,
+        original,
+        updated,
+    ):
+
         self.functions -= 1
+
         parameters = updated.params
+
         ordered = [
             *parameters.posonly_params,
             *parameters.params,
@@ -193,7 +274,8 @@ class _Open(cst.CSTTransformer):
 
         # `def f(a, /):` can't take a comma after the slash from its last name
         if len(ordered) >= 2 and not (
-            parameters.posonly_params and ordered[-1] is parameters.posonly_params[-1]
+            parameters.posonly_params
+            and ordered[-1] is parameters.posonly_params[-1]
         ):
             last = ordered[-1]
 
@@ -222,31 +304,51 @@ class _Open(cst.CSTTransformer):
 
         return self._open_head(updated.with_changes(params=parameters))
 
-    def leave_If(self, original, updated):
+    def leave_If(
+        self,
+        original,
+        updated,
+    ):
+
         if not self.functions or updated.orelse is None:
             return updated
 
         return updated.with_changes(orelse=_blank(updated.orelse))
 
-    def leave_Module(self, original, updated):
+    def leave_Module(
+        self,
+        original,
+        updated,
+    ):
+
         if not self.spaced_module or not updated.body:
             return updated
 
         return updated.with_changes(body=self._space(updated.body))
 
 
-def shape(source: str, spaced_module: bool = False) -> str:
+def shape(
+    source: str,
+    spaced_module: bool = False,
+) -> str:
     """The first pass alone."""
-    return (
-        cst.parse_module(source)
-        .visit(_Open(spaced_module))
-        .code
-    )
+
+    return cst.parse_module(source).visit(_Open(spaced_module)).code
 
 
-def _ruff(source: str, name: str) -> str:
+def _ruff(
+    source: str,
+    name: str,
+) -> str:
+
     return subprocess.run(
-        ["ruff", "format", "--stdin-filename", name, "-"],
+        [
+            "ruff",
+            "format",
+            "--stdin-filename",
+            name,
+            "-",
+        ],
         input=source,
         capture_output=True,
         text=True,
@@ -254,12 +356,23 @@ def _ruff(source: str, name: str) -> str:
     ).stdout
 
 
-def shaped_python(source: str, name: str = "code.py") -> str:
-    return _ruff(shape(source), name)
+def shaped_python(
+    source: str,
+    name: str = "code.py",
+) -> str:
+
+    return _ruff(
+        shape(source),
+        name,
+    )
 
 
-def shaped_notebook(text: str, name: str = "cell.py") -> str:
+def shaped_notebook(
+    text: str,
+    name: str = "cell.py",
+) -> str:
     """A notebook with its code cells in shape. A cell that isn't plain Python stays as it is."""
+
     notebook = json.loads(text)
 
     for cell in notebook["cells"]:
@@ -290,8 +403,12 @@ def shaped_notebook(text: str, name: str = "cell.py") -> str:
     )
 
 
-def run(paths: list[Path], check: bool = False) -> list[Path]:
+def run(
+    paths: list[Path],
+    check: bool = False,
+) -> list[Path]:
     """Shape `paths`; with `check` only tell. Returns those out of shape."""
+
     changed = []
 
     for path in paths:
@@ -300,7 +417,10 @@ def run(paths: list[Path], check: bool = False) -> list[Path]:
         after = (
             shaped_notebook(before)
             if path.suffix == ".ipynb"
-            else shaped_python(before, str(path))
+            else shaped_python(
+                before,
+                str(path),
+            )
         )
 
         if after == before:

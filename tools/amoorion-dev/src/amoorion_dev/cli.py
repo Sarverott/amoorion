@@ -171,7 +171,7 @@ def build_parser() -> argparse.ArgumentParser:
         "paths",
         nargs="*",
         type=Path,
-        help="files (default: every tracked .py and .ipynb)",
+        help="files (default: every .py and .ipynb git knows or would add)",
     )
 
     shape.add_argument(
