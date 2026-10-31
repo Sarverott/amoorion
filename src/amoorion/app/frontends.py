@@ -30,6 +30,13 @@ class FrontEnds:
             self.dataset,
         )
 
+    def mcp_client(self) -> Any:
+        """A client talking to this setup's MCP server in memory: `async with amo.mcp_client() as client`."""
+
+        from mcp import Client
+
+        return Client(self.mcp())
+
     def cli(
         self,
         *argv: str,

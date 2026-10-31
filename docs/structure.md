@@ -20,7 +20,7 @@ src/amoorion/
 ├── nats/            results of methods out, a subject into the inbox
 ├── cli/             command line: methods as subcommands, servers   (__main__)
 ├── api/             HTTP API: methods and hooks over HTTP            (__main__)
-├── mcp/             MCP server: methods as tools for AI agents       (__main__)
+├── mcp/             MCP server: methods as tools, resources, for AI agents       (__main__)
 └── daemon/          long-running services in one process            (__main__)
 
 packages/            one package per platform, a uv workspace (Q10)

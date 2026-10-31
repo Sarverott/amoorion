@@ -56,3 +56,32 @@ def test_failing_call_raises_tool_error():
                 {"platform": "nope"},
             )
         )
+
+
+def test_resources_through_a_client():
+
+    from amoorion import Amoorion
+
+    async def talk():
+
+        amo = Amoorion().use("dryrun")
+
+        amo.publish(text="seen")
+
+        amo.read(limit=1)
+
+        async with amo.mcp_client() as client:
+            methods = await client.read_resource("amoorion://methods")
+
+            inbox = await client.read_resource("amoorion://inbox/5")
+
+            return methods.contents[0].text, inbox.contents[0].text
+
+    methods, inbox = asyncio.run(talk())
+
+    assert any(
+        method["name"] == "publish" and not method["read_only"]
+        for method in json.loads(methods)
+    )
+
+    assert "seen" in inbox
