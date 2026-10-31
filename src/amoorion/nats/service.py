@@ -13,17 +13,40 @@ from amoorion.nats.base import in_subject, options
 from amoorion.vault import Vault, open_vault
 
 
-def to_message(subject: str, data: bytes) -> Message:
+def to_message(
+    subject: str,
+    data: bytes,
+) -> Message:
+
     platform = "nats:" + subject.removeprefix(in_subject()[:-1])
+
     try:
         body = json.loads(data)
     except ValueError:
         body = None
+
     if isinstance(body, dict) and isinstance(body.get("text"), str):
         author = body.get("author")
-        account = Account(platform=platform, handle=author) if isinstance(author, str) else None
-        return Message(platform=platform, text=body["text"], author=account)
-    return Message(platform=platform, text=data.decode(errors="replace"))
+
+        account = (
+            Account(
+                platform=platform,
+                handle=author,
+            )
+            if isinstance(author, str)
+            else None
+        )
+
+        return Message(
+            platform=platform,
+            text=body["text"],
+            author=account,
+        )
+
+    return Message(
+        platform=platform,
+        text=data.decode(errors="replace"),
+    )
 
 
 class NatsService(Controller):
@@ -32,21 +55,54 @@ class NatsService(Controller):
     name: ClassVar[str] = "nats"
     description: ClassVar[str] = "NATS subscriber filling the inbox"
 
-    def __init__(self, server: str, vault: Vault | None = None, inbox: Inbox | None = None) -> None:
+    def __init__(
+        self,
+        server: str,
+        vault: Vault | None = None,
+        inbox: Inbox | None = None,
+    ) -> None:
+
         super().__init__()
-        self.server, self.vault, self.inbox = server, vault or open_vault(), inbox or Inbox()
+
+        self.server, self.vault, self.inbox = (
+            server,
+            vault or open_vault(),
+            inbox or Inbox(),
+        )
+
         self._stop = asyncio.Event()
 
-    async def _received(self, message: Any) -> None:
-        self.inbox.keep([to_message(message.subject, message.data)])
+    async def _received(
+        self,
+        message: Any,
+    ) -> None:
+
+        self.inbox.keep(
+            [
+                to_message(
+                    message.subject,
+                    message.data,
+                )
+            ]
+        )
 
     async def run(self) -> None:
-        client = await nats.connect(self.server, **options(self.vault))
+
+        client = await nats.connect(
+            self.server,
+            **options(self.vault),
+        )
+
         try:
-            await client.subscribe(in_subject(), cb=self._received)
+            await client.subscribe(
+                in_subject(),
+                cb=self._received,
+            )
+
             await self._stop.wait()
         finally:
             await client.drain()
 
     async def stop(self) -> None:
+
         self._stop.set()

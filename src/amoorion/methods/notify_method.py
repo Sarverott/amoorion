@@ -16,11 +16,28 @@ class NotifyParams(Post):
 @METHODS.register
 class Notify(Method):
     name: ClassVar[str] = "notify"
-    description: ClassVar[str] = "Send a notification to the platforms of AMOORION_NOTIFY; one result per platform"
+    description: ClassVar[str] = (
+        "Send a notification to the platforms of AMOORION_NOTIFY; one result per platform"
+    )
     Params: ClassVar[type[Model]] = NotifyParams
 
-    def run(self, params: NotifyParams) -> list[Result]:
-        targets = [name.strip() for name in os.environ.get("AMOORION_NOTIFY", "").split(",") if name.strip()]
+    def run(
+        self,
+        params: NotifyParams,
+    ) -> list[Result]:
+
+        targets = [
+            name.strip()
+            for name in os.environ.get("AMOORION_NOTIFY", "").split(",")
+            if name.strip()
+        ]
+
         if not targets:
             return []
-        return Publish(self.vault).run(PublishParams(to=targets, **params.model_dump()))
+
+        return Publish(self.vault).run(
+            PublishParams(
+                to=targets,
+                **params.model_dump(),
+            )
+        )

@@ -8,8 +8,24 @@ vars:
   COMMITS_FROM: 743498f
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
   SUBCOMMANDS: [
-    accounts, automate, compose, delete, inbox, notify, plugins, publish, read, reply,
-    search, simulate, snapshot, wiki, workflow, api, mcp, daemon,
+    accounts,
+    automate,
+    compose,
+    delete,
+    inbox,
+    notify,
+    plugins,
+    publish,
+    read,
+    reply,
+    search,
+    simulate,
+    snapshot,
+    wiki,
+    workflow,
+    api,
+    mcp,
+    daemon,
   ]
 
 # A tree, not a list: this file is the root, each directory keeps the tasks of
@@ -78,7 +94,17 @@ tasks:
 
   check:
     desc: Run every static check (same as CI)
-    deps: [test:quiet, check:yaml, check:commits, docs:build, docs:check:requirements]
+    deps: [test:quiet, check:format, check:yaml, check:commits, docs:build, docs:check:requirements]
+
+  format:
+    desc: Format the code in amoorion's open shape (ruff and amoorion-dev shape)
+    cmds:
+      - uv run --frozen amoorion-dev shape {{.CLI_ARGS}}
+
+  check:format:
+    desc: Check that the code is in shape
+    cmds:
+      - uv run --frozen amoorion-dev shape --check
 
   check:yaml:
     desc: Lint YAML files

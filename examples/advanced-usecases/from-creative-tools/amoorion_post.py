@@ -10,11 +10,26 @@ import json
 import urllib.request
 
 
-def post(text: str, to: list[str], token: str, api: str = "http://127.0.0.1:8000") -> list[dict]:
+def post(
+    text: str,
+    to: list[str],
+    token: str,
+    api: str = "http://127.0.0.1:8000",
+) -> list[dict]:
+
     request = urllib.request.Request(
         f"{api}/methods/publish",
-        data=json.dumps({"text": text, "to": to}).encode(),
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        data=json.dumps(
+            {
+                "text": text,
+                "to": to,
+            }
+        ).encode(),
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        },
     )
+
     with urllib.request.urlopen(request, timeout=30) as response:
         return json.load(response)

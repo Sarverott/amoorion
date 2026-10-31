@@ -22,21 +22,37 @@ FAILED: dict[str, str] = {}
 
 def load_plugins() -> Registry[type[Plugin]]:
     """Load the plugins not loaded yet (failed ones are tried again) and return PLUGINS."""
+
     for entry_point in entry_points(group=ENTRY_POINTS):
         if entry_point.name in PLUGINS:
             continue
+
         try:
             plugin = entry_point.load()
+
             if not (isinstance(plugin, type) and issubclass(plugin, Plugin)):
                 raise AmoorionError(f"{entry_point.value} is not a Plugin")
+
             if plugin.name != entry_point.name:
-                raise AmoorionError(f"{entry_point.value} is named {plugin.name!r}, not {entry_point.name!r}")
+                raise AmoorionError(
+                    f"{entry_point.value} is named {plugin.name!r}, not {entry_point.name!r}"
+                )
+
             PLUGINS.register(plugin)
-            FAILED.pop(entry_point.name, None)
+
+            FAILED.pop(
+                entry_point.name,
+                None,
+            )
         except Exception as error:  # an outside package must not break amoorion
             FAILED[entry_point.name] = f"{type(error).__name__}: {error}"
+
     return PLUGINS
 
 
-def open_plugin(name: str, vault: Vault | None = None) -> Plugin:
+def open_plugin(
+    name: str,
+    vault: Vault | None = None,
+) -> Plugin:
+
     return load_plugins().get(name)(vault or open_vault())

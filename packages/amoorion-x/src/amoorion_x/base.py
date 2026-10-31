@@ -23,90 +23,195 @@ class X(HttpPlugin):
     name: ClassVar[str] = "x"
     description: ClassVar[str] = "X (twitter) API v2: post, read, reply, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
-    secrets: ClassVar[tuple[str, ...]] = ("api-key", "api-secret", "access-token", "access-secret")
+    secrets: ClassVar[tuple[str, ...]] = (
+        "api-key",
+        "api-secret",
+        "access-token",
+        "access-secret",
+    )
 
     _me: dict[str, Any] | None = None
 
-    def reason(self, response: requests.Response) -> str:
+    def reason(
+        self,
+        response: requests.Response,
+    ) -> str:
+
         try:
             errors = response.json().get("errors")
         except (ValueError, AttributeError):
             errors = None
-        if errors and isinstance(errors, list) and isinstance(errors[0], dict) and errors[0].get("message"):
+
+        if (
+            errors
+            and isinstance(errors, list)
+            and isinstance(errors[0], dict)
+            and errors[0].get("message")
+        ):
             return "; ".join(error.get("message", "") for error in errors)
+
         return super().reason(response)
 
-    def _call(self, method: str, path: str, **kwargs: Any) -> Any:
+    def _call(
+        self,
+        method: str,
+        path: str,
+        **kwargs: Any,
+    ) -> Any:
+
         try:
             base = self.secret("uri").rstrip("/")
         except AmoorionError:
             base = SERVICE
+
         auth = OAuth1(
-            self.secret("api-key"), self.secret("api-secret"), self.secret("access-token"), self.secret("access-secret")
+            self.secret("api-key"),
+            self.secret("api-secret"),
+            self.secret("access-token"),
+            self.secret("access-secret"),
         )
-        return self.request(method, base + path, auth=auth, **kwargs)
+
+        return self.request(
+            method,
+            base + path,
+            auth=auth,
+            **kwargs,
+        )
 
     def _user(self) -> dict[str, Any]:
+
         if self._me is None:
             self._me = self._call("GET", "/2/users/me")["data"]
+
         return self._me
 
-    def _tweet(self, text: str, links: list[str], reply_to: str | None = None) -> Message:
+    def _tweet(
+        self,
+        text: str,
+        links: list[str],
+        reply_to: str | None = None,
+    ) -> Message:
+
         if weight(text, links) > LIMIT:
-            raise AmoorionError(f"x takes {LIMIT} weighted characters, this is {weight(text, links)}")
+            raise AmoorionError(
+                f"x takes {LIMIT} weighted characters, this is {weight(text, links)}"
+            )
+
         body: dict[str, Any] = {"text": text}
+
         if reply_to:
             body["reply"] = {"in_reply_to_tweet_id": reply_to}
+
         data = self._call("POST", "/2/tweets", json=body)["data"]
+
         user = self._user()
+
         return Message(
             platform=self.name,
             text=text,
             id=data["id"],
             url=f"https://x.com/{user['username']}/status/{data['id']}",
-            author=Account(platform=self.name, handle=user["username"], name=user.get("name")),
+            author=Account(
+                platform=self.name,
+                handle=user["username"],
+                name=user.get("name"),
+            ),
             reply_to=reply_to,
             created_at=datetime.now(UTC),
         )
 
-    def post(self, post: Post) -> Message:
-        return self._tweet(compose(post), post.links)
+    def post(
+        self,
+        post: Post,
+    ) -> Message:
 
-    def read(self, limit: int = 20) -> list[Message]:
+        return self._tweet(
+            compose(post),
+            post.links,
+        )
+
+    def read(
+        self,
+        limit: int = 20,
+    ) -> list[Message]:
+
         user = self._user()
+
         answer = self._call(
             "GET",
             f"/2/users/{user['id']}/tweets",
-            params={"max_results": min(max(limit, 5), 100), "tweet.fields": "created_at,referenced_tweets"},
+            params={
+                "max_results": min(
+                    max(
+                        limit,
+                        5,
+                    ),
+                    100,
+                ),
+                "tweet.fields": "created_at,referenced_tweets",
+            },
         )
+
         messages = []
+
         for tweet in answer.get("data", [])[:limit]:
             replied = next(
-                (ref["id"] for ref in tweet.get("referenced_tweets", []) if ref.get("type") == "replied_to"), None
+                (
+                    ref["id"]
+                    for ref in tweet.get("referenced_tweets", [])
+                    if ref.get("type") == "replied_to"
+                ),
+                None,
             )
+
             messages.append(
                 Message(
                     platform=self.name,
                     text=tweet["text"],
                     id=tweet["id"],
                     url=f"https://x.com/{user['username']}/status/{tweet['id']}",
-                    author=Account(platform=self.name, handle=user["username"], name=user.get("name")),
+                    author=Account(
+                        platform=self.name,
+                        handle=user["username"],
+                        name=user.get("name"),
+                    ),
                     reply_to=replied,
                     created_at=tweet.get("created_at"),
                 )
             )
+
         return messages
 
-    def reply(self, to: Message, text: str) -> Message:
+    def reply(
+        self,
+        to: Message,
+        text: str,
+    ) -> Message:
+
         if not to.id:
             raise AmoorionError("x needs the id of the post to reply to")
-        return self._tweet(text, [], reply_to=to.id)
 
-    def delete(self, message: Message) -> None:
+        return self._tweet(
+            text,
+            [],
+            reply_to=to.id,
+        )
+
+    def delete(
+        self,
+        message: Message,
+    ) -> None:
+
         if not message.id:
             raise AmoorionError("x needs the id of the post to delete")
-        if not self._call("DELETE", f"/2/tweets/{message.id}").get("data", {}).get("deleted"):
+
+        if (
+            not self._call("DELETE", f"/2/tweets/{message.id}")
+            .get("data", {})
+            .get("deleted")
+        ):
             raise AmoorionError(f"x did not delete {message.id}")
 
     def profile(self) -> str:
+
         return self._user()["username"]

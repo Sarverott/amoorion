@@ -2,4 +2,9 @@
 
 from amoorion.models.base import Account, Message, Post, Result
 
-__all__ = ["Account", "Message", "Post", "Result"]
+__all__ = [
+    "Account",
+    "Message",
+    "Post",
+    "Result",
+]

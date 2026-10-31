@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-ntfy"
-version = "0.4.6"
+version = "0.4.7"
 description = "ntfy plugin of amoorion: push notifications to one topic"
 readme = "README.md"
 license = "MIT"

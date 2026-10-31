@@ -159,6 +159,8 @@ jupyter-core==5.9.1
     #   jupyter-client
     #   nbclient
     #   nbformat
+libcst==1.9.0
+    # via amoorion-dev
 lxml==6.1.3
     # via pykeepass
 markdown-it-py==4.2.0
@@ -263,9 +265,12 @@ pyyaml==6.0.3
     # via
     #   amoorion
     #   jupyter-cache
+    #   libcst
     #   myst-nb
     #   myst-parser
     #   sphinxcontrib-mermaid
+pyyaml-ft==8.0.0 ; python_full_version == '3.13.*'
+    # via libcst
 pyzmq==27.2.0
     # via
     #   ipykernel

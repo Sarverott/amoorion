@@ -19,9 +19,17 @@ from amoorion.core import AmoorionError, JsonView
 from amoorion.methods import METHODS
 
 
-def main(argv: Sequence[str] | None = None, vault: Any = None, inbox: Any = None, dataset: Any = None) -> int:
+def main(
+    argv: Sequence[str] | None = None,
+    vault: Any = None,
+    inbox: Any = None,
+    dataset: Any = None,
+) -> int:
+
     parser = build_parser()
+
     args = parser.parse_args(argv)
+
     if args.command is None:
         if args.interactive or (sys.stdin.isatty() and sys.stdout.isatty()):
             from amoorion.cli.guide import Guide
@@ -30,22 +38,52 @@ def main(argv: Sequence[str] | None = None, vault: Any = None, inbox: Any = None
                 return Guide().run()
             except (KeyboardInterrupt, EOFError):
                 print()
+
                 return 0
+
         parser.print_help()
+
         return 0
+
     try:
         if args.command in SERVERS:
             module, function = SERVERS[args.command][1].split(":")
+
             getattr(import_module(module), function)(args)
+
             return 0
-        params = {key: value for key, value in vars(args).items() if key not in ("command", "json", "interactive")}
-        method = METHODS.get(args.command)(vault, inbox=inbox, dataset=dataset)
+
+        params = {
+            key: value
+            for key, value in vars(args).items()
+            if key not in ("command", "json", "interactive")
+        }
+
+        method = METHODS.get(args.command)(
+            vault,
+            inbox=inbox,
+            dataset=dataset,
+        )
+
         result = method.run(method.Params(**params))
     except (AmoorionError, ValueError) as error:
-        print(f"amoorion: {error}", file=sys.stderr)
+        print(
+            f"amoorion: {error}",
+            file=sys.stderr,
+        )
+
         return 1
+
     if args.json:
-        print(json.dumps(JsonView().render(result), ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                JsonView().render(result),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+
     else:
         RichView().render(result)
+
     return 0

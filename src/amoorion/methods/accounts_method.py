@@ -17,19 +17,38 @@ class AccountStatus(Model):
 @METHODS.register
 class Accounts(Method):
     name: ClassVar[str] = "accounts"
-    description: ClassVar[str] = "Which platforms have their secrets in the vault (values never shown)"
+    description: ClassVar[str] = (
+        "Which platforms have their secrets in the vault (values never shown)"
+    )
     read_only: ClassVar[bool] = True
 
-    def run(self, params: Model) -> list[AccountStatus]:
+    def run(
+        self,
+        params: Model,
+    ) -> list[AccountStatus]:
+
         statuses = []
+
         plugins = load_plugins()
+
         for plugin in map(plugins.get, plugins.names()):
             missing, error = [], None
+
             for key in plugin.secrets:
                 try:
                     self.vault.get(f"{plugin.name}/{key}")
                 except AmoorionError as failure:
                     missing.append(key)
+
                     error = error or str(failure)
-            statuses.append(AccountStatus(platform=plugin.name, ready=not missing, missing=missing, error=error))
+
+            statuses.append(
+                AccountStatus(
+                    platform=plugin.name,
+                    ready=not missing,
+                    missing=missing,
+                    error=error,
+                )
+            )
+
         return statuses

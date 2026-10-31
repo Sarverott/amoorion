@@ -22,22 +22,30 @@ from amoorion.vault import Vault
 
 
 def enabled() -> str | None:
+
     return os.environ.get("AMOORION_NATS") or None
 
 
 def prefix() -> str:
-    return os.environ.get("AMOORION_NATS_PREFIX", "amoorion")
+
+    return os.environ.get(
+        "AMOORION_NATS_PREFIX",
+        "amoorion",
+    )
 
 
 def out_subject(method: str) -> str:
+
     return f"{prefix()}.methods.{method}"
 
 
 def in_subject() -> str:
+
     return f"{prefix()}.in.>"
 
 
 def options(vault: Vault) -> dict[str, Any]:
+
     try:
         return {"token": vault.get("nats/token")}
     except AmoorionError:

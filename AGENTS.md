@@ -43,6 +43,7 @@ uv run task init         # fresh checkout: tools, lefthook hooks, .env, check
 uv run task setup        # tools (uv sync) and lefthook git hooks
 uv run task check        # tests, YAML, commits, docs build (= CI)
 uv run task test         # pytest only
+uv run task format       # the code in its open shape (amoorion-dev shape, then ruff)
 uv run task flow:pull    # on development: pull master in, mark the next pre-release
 uv run task version      # the version of every package (released together)
 uv run task vault:new     # KeePassXC (the vault for now): makes the file of AMOORION_VAULT_PATH and an empty entry per platform
@@ -59,6 +60,9 @@ uv run amoorion          # run the CLI
 ```
 
 - **Gate every commit** on `uv run task check`.
+- **Shape of the code:** one thing per line, a blank line between statements,
+  room for comments. Don't fight it by hand: `task format` writes it, `task
+  check` refuses anything else.
 - **Commits:** conventional commits, checked by commitizen in the lefthook
   `commit-msg` hook and in `task check`. Commits up to `743498f` predate it.
 

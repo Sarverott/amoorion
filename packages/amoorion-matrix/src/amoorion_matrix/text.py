@@ -6,14 +6,22 @@ from amoorion.models import Post
 
 
 def compose(post: Post) -> str:
+
     text = "\n\n".join(part for part in (post.title, post.text) if part)
+
     if post.links:
         text += "\n" + "\n".join(post.links)
+
     if post.tags:
         text += "\n" + " ".join("#" + tag.lstrip("#") for tag in post.tags)
+
     return text
 
 
 def part(value: str) -> str:
     """Ids like !room:server or $event go into paths quoted whole."""
-    return quote(value, safe="")
+
+    return quote(
+        value,
+        safe="",
+    )

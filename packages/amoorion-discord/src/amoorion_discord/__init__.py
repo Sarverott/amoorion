@@ -3,4 +3,7 @@
 from amoorion_discord.base import Discord
 from amoorion_discord.webhook import DiscordWebhook
 
-__all__ = ["Discord", "DiscordWebhook"]
+__all__ = [
+    "Discord",
+    "DiscordWebhook",
+]

@@ -8,6 +8,8 @@ amo = Amoorion().use("dryrun")
 
 def post(text: str) -> list[list[str]]:
     """Publish and read back; rows of (id, text), newest first."""
+
     if text.strip():
         amo.publish(text=text)
+
     return [[message["id"], message["text"]] for message in amo.read(limit=20)]

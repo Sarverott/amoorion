@@ -27,51 +27,92 @@ class Method(Controller):
     # keeping what it read in the local inbox doesn't count.
     read_only: ClassVar[bool] = False
 
-    def __init_subclass__(cls, **kwargs: Any) -> None:
+    def __init_subclass__(
+        cls,
+        **kwargs: Any,
+    ) -> None:
         """What a method that changes something returned also goes out on NATS, whoever asked."""
+
         super().__init_subclass__(**kwargs)
+
         if cls.read_only or "run" not in cls.__dict__:
             return
+
         run = cls.run
 
         @wraps(run)
-        def announced(self: "Method", params: Model) -> Any:
-            result = run(self, params)
-            announce(cls.name, result, self._vault)
+        def announced(
+            self: "Method",
+            params: Model,
+        ) -> Any:
+
+            result = run(
+                self,
+                params,
+            )
+
+            announce(
+                cls.name,
+                result,
+                self._vault,
+            )
+
             return result
 
         cls.run = announced  # type: ignore[method-assign]
 
     def __init__(
-        self, vault: Vault | None = None, view: View | None = None, inbox: Inbox | None = None, dataset: Dataset | None = None
+        self,
+        vault: Vault | None = None,
+        view: View | None = None,
+        inbox: Inbox | None = None,
+        dataset: Dataset | None = None,
     ) -> None:
+
         super().__init__(view)
+
         self._vault = vault
+
         self._inbox = inbox
+
         self._dataset = dataset
 
     @property
     def vault(self) -> Vault:
+
         if self._vault is None:
             self._vault = open_vault()
+
         return self._vault
 
     @property
     def inbox(self) -> Inbox:
+
         if self._inbox is None:
             self._inbox = Inbox()
+
         return self._inbox
 
     @property
     def dataset(self) -> Dataset:
+
         if self._dataset is None:
             self._dataset = Dataset()
+
         return self._dataset
 
-    def run(self, params: Model) -> Model | list[Model]:
+    def run(
+        self,
+        params: Model,
+    ) -> Model | list[Model]:
+
         raise NotImplementedError
 
-    def __call__(self, **params: Any) -> Any:
+    def __call__(
+        self,
+        **params: Any,
+    ) -> Any:
+
         return self.respond(self.run(self.Params(**params)))
 
 
@@ -80,6 +121,7 @@ METHODS: Registry[type[Method]] = Registry("method")
 
 def profile_of(plugin: Plugin) -> str:
     """The plugin's profile; "default" when the platform can't tell it now."""
+
     try:
         return plugin.profile() or "default"
     except AmoorionError:

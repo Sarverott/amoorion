@@ -1,6 +1,6 @@
 [project]
 name = "amoorion"
-version = "0.4.20"
+version = "0.4.21"
 description = "Universal tool for administration of chatting and communication platforms"
 readme = "README.md"
 license = "MIT"
@@ -60,6 +60,7 @@ dev = [
     "pygithub>=2.10.0",
     "pytest>=9.1.1",
     "yamllint>=1.38.0",
+    "ruff>=0.17.3",
 ]
 examples = [
     "marimo>=0.25.2",
@@ -103,3 +104,8 @@ amoorion-discord = { workspace = true }
 amoorion-telegram = { workspace = true }
 amoorion-matrix = { workspace = true }
 amoorion-dev = { workspace = true }
+
+# Formatting: `task format` (amoorion_dev/shape.py opens the code up, ruff finishes).
+# Short lines, and ruff keeps what is split once it has a trailing comma.
+[tool.ruff]
+line-length = 80

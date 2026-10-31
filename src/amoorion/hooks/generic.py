@@ -17,20 +17,48 @@ class GenericHook(Hook):
     """
 
     name: ClassVar[str] = "generic"
-    secrets: ClassVar[dict[str, str]] = {"token": "Shared token, sent in X-Amoorion-Token"}
-    description: ClassVar[str] = "JSON {text, author} with a shared token header"
+    secrets: ClassVar[dict[str, str]] = {
+        "token": "Shared token, sent in X-Amoorion-Token"
+    }
+    description: ClassVar[str] = (
+        "JSON {text, author} with a shared token header"
+    )
 
-    def verify(self, body: bytes, headers: Mapping[str, str]) -> None:
-        sent = headers.get("x-amoorion-token", "")
-        if not hmac.compare_digest(sent.encode(), self.secret("token").encode()):
+    def verify(
+        self,
+        body: bytes,
+        headers: Mapping[str, str],
+    ) -> None:
+
+        sent = headers.get(
+            "x-amoorion-token",
+            "",
+        )
+
+        if not hmac.compare_digest(
+            sent.encode(), self.secret("token").encode()
+        ):
             raise Forbidden("wrong or missing X-Amoorion-Token")
 
-    def receive(self, payload: Any) -> Message:
-        if not isinstance(payload, dict) or not isinstance(payload.get("text"), str):
+    def receive(
+        self,
+        payload: Any,
+    ) -> Message:
+
+        if not isinstance(payload, dict) or not isinstance(
+            payload.get("text"), str
+        ):
             raise AmoorionError('generic hook expects JSON {"text": "…"}')
+
         author = payload.get("author")
+
         return Message(
             platform=f"hook:{self.name}",
             text=payload["text"],
-            author=Account(platform=f"hook:{self.name}", handle=author) if isinstance(author, str) else None,
+            author=Account(
+                platform=f"hook:{self.name}",
+                handle=author,
+            )
+            if isinstance(author, str)
+            else None,
         )

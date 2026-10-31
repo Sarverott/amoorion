@@ -8,4 +8,15 @@ from amoorion.hooks.gitlab import GitLabHook
 from amoorion.hooks.plane import PlaneHook
 from amoorion.hooks.sentry import SentryHook
 
-__all__ = ["HOOKS", "DiscordHook", "Forbidden", "GenericHook", "GitHubHook", "GitLabHook", "Hook", "PlaneHook", "SentryHook", "schema"]
+__all__ = [
+    "HOOKS",
+    "DiscordHook",
+    "Forbidden",
+    "GenericHook",
+    "GitHubHook",
+    "GitLabHook",
+    "Hook",
+    "PlaneHook",
+    "SentryHook",
+    "schema",
+]

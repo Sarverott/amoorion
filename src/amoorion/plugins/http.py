@@ -15,43 +15,79 @@ import requests
 from amoorion.core import AmoorionError
 from amoorion.plugins.base import Plugin
 
-REASON_KEYS = ("message", "error", "detail", "title", "error_description")
+REASON_KEYS = (
+    "message",
+    "error",
+    "detail",
+    "title",
+    "error_description",
+)
 
 
 class HttpPlugin(Plugin):
     timeout: ClassVar[float] = 30
 
-    def reason(self, response: requests.Response) -> str:
+    def reason(
+        self,
+        response: requests.Response,
+    ) -> str:
+
         try:
             body = response.json()
         except ValueError:
             return response.text[:200]
+
         if isinstance(body, dict):
             for key in REASON_KEYS:
                 value = body.get(key)
+
                 if isinstance(value, dict):
                     value = value.get("message")
+
                 if isinstance(value, str) and value:
                     return value
+
         return response.text[:200]
 
     def hidden(self) -> list[str]:
         """Secrets that are part of the URLs and must not appear in errors."""
+
         return []
 
-    def _error(self, text: str) -> AmoorionError:
+    def _error(
+        self,
+        text: str,
+    ) -> AmoorionError:
+
         for secret in self.hidden():
             if secret:
-                text = text.replace(secret, "***")
+                text = text.replace(
+                    secret,
+                    "***",
+                )
+
         return AmoorionError(text)
 
-    def request(self, method: str, url: str, **kwargs: Any) -> Any:
+    def request(
+        self,
+        method: str,
+        url: str,
+        **kwargs: Any,
+    ) -> Any:
+
         try:
-            response = requests.request(method, url, timeout=self.timeout, **kwargs)
+            response = requests.request(
+                method,
+                url,
+                timeout=self.timeout,
+                **kwargs,
+            )
         except requests.RequestException as error:
             raise self._error(f"{self.name} unreachable: {error}") from None
+
         if not response.ok:
             raise self._error(
                 f"{self.name} {urlparse(url).path} answered {response.status_code}: {self.reason(response)}"
             )
+
         return response.json() if response.content else {}
