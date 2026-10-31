@@ -1,3 +1,11 @@
+## v0.4.33 (2026-10-31)
+
+**Packages:** amoorion 0.4.33
+
+### Refactor
+
+- **dev**: git through GitPython, and every outside program a method
+
 ## v0.4.32 (2026-10-31)
 
 **Packages:** amoorion 0.4.32
