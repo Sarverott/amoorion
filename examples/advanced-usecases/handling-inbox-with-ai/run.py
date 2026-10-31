@@ -12,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from amoorion import Amoorion
 
 
+# Instead of Ollama: answers every request with one sentence.
 class FakeModel(BaseHTTPRequestHandler):
     def do_POST(self):
 
@@ -42,6 +43,7 @@ class FakeModel(BaseHTTPRequestHandler):
         pass
 
 
+# Port 0 asks the system for a free port.
 server = HTTPServer(
     (
         "127.0.0.1",
@@ -53,14 +55,18 @@ threading.Thread(
     target=server.serve_forever,
     daemon=True,
 ).start()
+# What the vault holds in real use: where the model is, and its name.
 os.environ |= {
     "AMOORION_SECRET_LLM_URL": f"http://127.0.0.1:{server.server_port}/v1",
     "AMOORION_SECRET_LLM_MODEL": "fake",
 }
 
 amo = Amoorion().use("dryrun")
+# A question arrives…
 [published] = amo.publish(text="Does this work offline?")
+# …and reading puts it into the inbox.
 amo.read(limit=1)
+# Questions get answered: the model writes, `$last` goes on to the reply.
 rule = {
     "name": "answer",
     "platform": "dryrun",
@@ -83,6 +89,7 @@ rule = {
         },
     ],
 }
+# Run this from a timer: each message is handled only once.
 [done] = amo.automate(rules=[rule])
 print(
     done["ok"],

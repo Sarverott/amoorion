@@ -36,6 +36,7 @@ def main(
     args = parser.parse_args(argv)
 
     if args.command is None:
+        # A person at a terminal gets the dialogue; a script gets the help below.
         if args.interactive or (sys.stdin.isatty() and sys.stdout.isatty()):
             from amoorion.cli.guide import Guide
 

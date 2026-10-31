@@ -90,6 +90,7 @@ class BitwardenVault(Vault):
         env = dict(os.environ)
 
         if self.link.token:
+            # In the environment: other users can read a command line in `ps`.
             env["BW_SESSION"] = self.link.token
 
         done = subprocess.run(

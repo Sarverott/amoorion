@@ -92,12 +92,15 @@ from amoorion.plugins import Capability, HttpPlugin
 
 
 class $class(HttpPlugin):
+    """$description."""
+
     name: ClassVar[str] = "$platform"
     description: ClassVar[str] = "$description"
     capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST})
     secrets: ClassVar[tuple[str, ...]] = ()
 
     def post(self, post: Post) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
         raise NotImplementedError
 PY
 cd "$root"

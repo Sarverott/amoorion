@@ -5,6 +5,7 @@ from pathlib import Path
 
 import streamlit as st
 
+# panel.py is one directory up, and shared by both apps.
 sys.path.insert(
     0,
     str(Path(__file__).parents[1]),
@@ -12,5 +13,6 @@ sys.path.insert(
 from panel import post
 
 st.title("amoorion")
+# Streamlit runs this file again on every change of the page.
 text = st.text_input("Post")
 st.table([{"id": row[0], "text": row[1]} for row in post(text)])

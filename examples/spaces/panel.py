@@ -3,6 +3,7 @@
 from amoorion import Amoorion
 
 # A public Space must never hold real accounts: a sandbox, and only dryrun.
+# One object for the whole app; dryrun, as a public demo must post nowhere.
 amo = Amoorion().use("dryrun")
 
 

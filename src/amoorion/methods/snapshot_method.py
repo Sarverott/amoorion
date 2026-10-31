@@ -61,6 +61,7 @@ class SnapshotMethod(Method):
         messages = plugin.read(params.limit)
 
         # Fewer than asked for: the platform gave all it has, so what wasn't seen is gone.
+        # Fewer than asked for: the platform had no more to give.
         complete = len(messages) < params.limit
 
         self.dataset.record(

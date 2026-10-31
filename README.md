@@ -173,3 +173,12 @@ contributors: [AGENTS.md](AGENTS.md).
 
 Free, under the MIT License, © 2024–present Sett Sarverott:
 [LICENSE](LICENSE), https://sett.mit-license.org
+
+## For agents
+
+amoorion comes with an agent skill: `amoorion --json skill` gives it to any agent.
+In Claude Code:
+
+```sh
+/plugin install amoorion --marketplace Sarverott/amoorion
+```

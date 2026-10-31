@@ -206,9 +206,11 @@ class Amoorion(FrontEnds, States):
 
         fields = METHODS.get(name).Params.model_fields
 
+        # What `use` chose fills in what the call left out: where to publish…
         if name == "publish" and "to" not in params and self.used:
             params["to"] = list(self.used)
 
+        # …and the platform to work on, if there is only one to choose from.
         if (
             "platform" in fields
             and fields["platform"].is_required()

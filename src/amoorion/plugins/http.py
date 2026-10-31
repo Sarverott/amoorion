@@ -68,6 +68,7 @@ class HttpPlugin(Plugin):
 
         for secret in self.hidden():
             if secret:
+                # Replaced wherever it appears: in a URL, in the answer of a server.
                 text = text.replace(
                     secret,
                     "***",
