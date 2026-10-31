@@ -48,7 +48,7 @@ wheels = [
 
 [[package]]
 name = "amoorion"
-version = "0.4.31"
+version = "0.4.32a0"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
