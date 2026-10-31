@@ -6,6 +6,7 @@ asking, and ask before the rest (publishing reaches real accounts).
 
 import argparse
 import inspect
+import json
 from collections.abc import Callable
 from typing import Any
 
@@ -65,6 +66,50 @@ def _tool(
     return call
 
 
+def _resources(
+    server: MCPServer,
+    vault: Vault,
+    inbox: Inbox | None,
+    dataset: Dataset | None,
+) -> None:
+    """What agents may read without calling anything: the methods and the newest messages."""
+
+    @server.resource(
+        "amoorion://methods",
+        mime_type="application/json",
+    )
+    def methods() -> str:
+        """Every method, what it does and whether it only reads."""
+
+        return json.dumps(
+            [
+                {
+                    "name": name,
+                    "description": METHODS.get(name).description,
+                    "read_only": METHODS.get(name).read_only,
+                }
+                for name in METHODS.names()
+            ]
+        )
+
+    @server.resource(
+        "amoorion://inbox/{limit}",
+        mime_type="application/json",
+    )
+    def newest(limit: int) -> str:
+        """The newest messages of the inbox, as many as `limit` says."""
+
+        method = METHODS.get("inbox")
+
+        return JsonView().render(
+            method(
+                vault,
+                inbox=inbox,
+                dataset=dataset,
+            ).run(method.Params(limit=limit))
+        )
+
+
 def create_server(
     vault: Vault | None = None,
     inbox: Inbox | None = None,
@@ -97,6 +142,13 @@ def create_server(
                 destructiveHint=False,
             ),
         )
+
+    _resources(
+        server,
+        vault,
+        inbox,
+        dataset,
+    )
 
     return server
 

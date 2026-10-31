@@ -122,7 +122,7 @@ What is being worked on now. Vision and the plan of all phases:
       logs and a JSON artifact; `automate` becomes part of `workflow`
 - [x] Rules and templates read from files (`resources/rulesets`, `resources/templates`);
       example 20 running against fakes
-- [ ] MCP: resources, the official style in example 13, a client for the simulated party
+- [x] MCP: resources, the official style in example 13, a client for the simulated party
 - [ ] CLI: arrow menus, forms, going back, loading screens; vault setup through them
 - [ ] Every outside program a method; `amoorion-dev` on GitPython
 - [ ] Examples show data with pandas and plots; env files read and written by a helper;
