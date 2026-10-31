@@ -1,3 +1,11 @@
+## v0.4.34 (2026-10-31)
+
+**Packages:** amoorion 0.4.34
+
+### Feat
+
+- **api**: every method says in OpenAPI what it answers
+
 ## v0.4.33 (2026-10-31)
 
 **Packages:** amoorion 0.4.33
