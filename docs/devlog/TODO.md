@@ -126,7 +126,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] CLI: arrow menus, forms, going back, loading screens
 - [ ] Filling the vault through those menus
 - [ ] Every outside program a method; `amoorion-dev` on GitPython
-- [ ] Examples show data with pandas and plots; env files read and written by a helper;
+- [x] Examples show data with pandas and plots; env files read and written by a helper;
       the dataset example filled; `Daemon` with threads and processes; outputs refreshed
 
 Phases 6 (deployment) to 9: see [VISION.md](VISION.md).

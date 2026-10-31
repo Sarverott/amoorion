@@ -180,3 +180,35 @@ def test_answers_go_back_to_the_previous_question(
         "first": "again",
         "second": "two",
     }
+
+
+def test_call_runs_the_same_command_line(monkeypatch):
+
+    from amoorion import Amoorion
+
+    output = []
+
+    call = Amoorion().CALL() / "read" - "platform" + "nowhere" >> output.append
+
+    assert call.words == ["read", "--platform", "nowhere"]
+
+    assert call.code == 1 and "nowhere" in output[0]
+
+
+def test_env_files_read_and_written(tmp_path):
+
+    from amoorion.utilities import read_env, write_env
+
+    path = tmp_path / "a.env"
+
+    path.write_text("# keep me\nA=1\n")
+
+    write_env(
+        path,
+        A="2",
+        B="two words",
+    )
+
+    assert read_env(path) == {"A": "2", "B": "two words"}
+
+    assert "# keep me" in path.read_text()

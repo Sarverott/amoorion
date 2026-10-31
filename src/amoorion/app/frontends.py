@@ -52,6 +52,13 @@ class FrontEnds:
             self.dataset,
         )
 
+    def CALL(self) -> Any:  # noqa: N802
+        """A command line as an expression: `amo.CALL() / "plugins" >> print`."""
+
+        from amoorion.cli.call import CliCall
+
+        return CliCall(lambda words: self.cli(*words))
+
     def run(
         self,
         *argv: str,
