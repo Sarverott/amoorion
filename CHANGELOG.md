@@ -1,3 +1,11 @@
+## v0.4.26 (2026-10-31)
+
+**Packages:** amoorion 0.4.26
+
+### Fix
+
+- **docs**: the PDF of Read the Docs survives notebook outputs
+
 ## v0.4.25 (2026-10-31)
 
 **Packages:** amoorion 0.4.25, amoorion-mastodon 0.4.6, amoorion-x 0.4.6
