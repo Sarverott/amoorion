@@ -150,3 +150,33 @@ In the order of Q4:
 3. `compose.yaml`: the daemon with its vault link from `.env`.
 4. Ready for a zone: health endpoint, logs to stdout, reverse proxy notes,
    no zone-specific settings in the code.
+
+### Phase 7: distribution and access
+
+1. Container images on Docker Hub by a workflow; the image and the Python
+   packages also as packages on GitHub.
+2. Delegated access: TOTP, HOTP, OAuth, WebAuthn (`pywarp`), elliptic curves and
+   segwit; `paramiko`, `pyotp`, QR codes. A carrier of trust probably needs
+   setternet, whose integration is phase 9.
+3. Phones as user simulations: pure Python ADB, `scrcpy`, remote ADB, a GSM
+   gateway for SMS and calls; perhaps QPython brought back, a phone as a suite
+   for agents.
+4. Dependabot, and the other security, vulnerability and dependency matters on
+   GitHub.
+5. Releases announced on every platform amoorion supports, by its own plugins.
+
+### Phase 8: Google, mirrors, self-sufficiency
+
+1. Colab and Google's services: Calendar, Sheets, Docs, Slides, Forms, Drive,
+   YouTube, Translate, Ads, Keep, Analytics, Contacts, Maps, AI Studio, Gemini,
+   BigQuery.
+2. Mirrors on GitLab, Bitbucket, Gitea and sr.ht, with their pipelines.
+3. Issues handled by the development scripts with an agent in charge: hooks,
+   listeners, self-sufficiency.
+
+### Phase 9: integrations and the Almanah
+
+1. Setternet and the other integrations (see phase 7).
+2. An "Almanah" in `docs/.agents/`: problems, obstacles and accidents, past or
+   anticipated, with their solutions, how to devise such solutions, the logic
+   behind them, and how likely they are to happen again.

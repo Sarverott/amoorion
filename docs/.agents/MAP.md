@@ -92,7 +92,7 @@ workflow, so each workflow starts the next with `gh workflow run`.
 
 ## Gates
 
-- `task check` = tests (+ notebooks, workflows' shape), code shape (`amoorion_dev/shape.py`, ruff), YAML, commit
+- `task check` = tests (+ notebooks, workflows' shape), code shape (`amoorion_dev/shape.py`, ruff), LaTeX sources of the PDF (`scripts/check-latex.py`), YAML, commit
   messages, docs build with warnings as errors, docs requirements.
 - lefthook: `pre-commit` (shape of staged code, YAML), `commit-msg`
   (commitizen), `pre-push` (`task check` on development), `post-merge`

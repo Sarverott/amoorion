@@ -7,6 +7,7 @@ copied in at build time and shown as they were saved, not run again
 """
 
 import sys
+import unicodedata
 from pathlib import Path
 
 sys.path.insert(
@@ -121,4 +122,31 @@ html_theme_options = {
         "color-code-background": "#0d101a",
         "font-stack": _FONT,
     },
+}
+
+# The PDF of Read the Docs is made by pdflatex, which knows no box drawing, and
+# stops after 100 errors with no PDF at all. Rich's tables in the outputs of the
+# notebooks are full of it, so they are drawn with + - | there.
+# `task docs:check:latex` tells of any other character it wouldn't know.
+
+
+def _ascii_box(code: int) -> str:
+    """What stands for one box drawing character: a line stays a line, the rest is a joint."""
+
+    name = unicodedata.name(chr(code))
+
+    if "HORIZONTAL" in name and "VERTICAL" not in name and "AND" not in name:
+        return "-"
+
+    if "VERTICAL" in name and "HORIZONTAL" not in name and "AND" not in name:
+        return "|"
+
+    return "+"
+
+
+latex_elements = {
+    "preamble": "\n".join(
+        f"\\DeclareUnicodeCharacter{{{code:04X}}}{{{_ascii_box(code)}}}"
+        for code in range(0x2500, 0x2580)
+    ),
 }
