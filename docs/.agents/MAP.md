@@ -15,7 +15,7 @@ structure, a workflow or a tool updates this map in the same commit.
 | `tests/`, `packages/*/tests/`, `tools/*/tests/` | pytest; `tests/live/` only when named | agents |
 | `packages/*/src/*/schema.vault.json` | what a plugin's vault entry holds (`Plugin.schema()`, `task vault:new`) | agents |
 | `docs/platforms/<platform>.md` | the page of a package: its README and schema | agents |
-| `skills/<name>/SKILL.md` | agent skills for using amoorion; also served by the docs at `/skills/` | agents |
+| `src/amoorion/SKILL.md` | the agent skill, installed with the package (`amoorion skill`); `skills/amoorion/SKILL.md` links to it, `.claude-plugin/` makes the repository a Claude Code plugin; also served by the docs at `/skills/` | agents |
 | `docs/_static/`, `docs/_extra/` | the docs' style (after the web page), `robots.txt`; `llms.txt`, page Markdown and 404 are built | agents |
 | `resources/` | the author's graphics: logo, mockup | **author** |
 | `docs/contributing.md` | contributors guide: pull, change, push, versions | agents |

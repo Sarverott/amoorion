@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from amoorion.methods import METHODS, Plugins, Publish, Read
@@ -266,3 +268,20 @@ def test_ids_become_safe_file_names():
     )
 
     assert safe("a/b") != safe("a:b")
+
+
+def test_skill_is_the_file_installed_with_the_package():
+
+    answer = METHODS.get("skill")(None).run(METHODS.get("skill").Params())
+
+    assert answer.text.startswith("---\nname: amoorion\n")
+
+    assert answer.text == Path(answer.path).read_text()
+
+
+def test_skill_names_every_method():
+
+    text = METHODS.get("skill")(None).run(METHODS.get("skill").Params()).text
+
+    for name in METHODS.names():
+        assert f"amoorion {name}" in text or f"--json {name}" in text, name

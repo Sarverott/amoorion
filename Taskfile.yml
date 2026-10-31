@@ -20,6 +20,7 @@ vars:
     reply,
     search,
     simulate,
+    skill,
     snapshot,
     wiki,
     workflow,
