@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-email"
-version = "0.4.8"
+version = "0.4.9"
 description = "E-mail plugin of amoorion: send by SMTP, read by IMAP, reply"
 readme = "README.md"
 license = "MIT"

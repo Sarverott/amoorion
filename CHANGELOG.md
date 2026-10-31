@@ -1,3 +1,8 @@
+## v0.4.21 (2026-10-31)
+
+**Packages:** amoorion 0.4.21, amoorion-blogger 0.4.3, amoorion-bluesky 0.4.4, amoorion-discord 0.4.4, amoorion-email 0.4.9, amoorion-facebook 0.4.3, amoorion-mastodon 0.4.4, amoorion-matrix 0.4.4, amoorion-ntfy 0.4.7, amoorion-telegram 0.4.4, amoorion-tumblr 0.4.4, amoorion-x 0.4.4
+
+
 ## v0.4.20 (2026-10-30)
 
 **Packages:** amoorion 0.4.20
