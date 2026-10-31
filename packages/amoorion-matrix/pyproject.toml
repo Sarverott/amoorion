@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-matrix"
-version = "0.4.4"
+version = "0.4.5"
 description = "Matrix plugin of amoorion: posts, reads and replies in one room through the client-server API"
 readme = "README.md"
 license = "MIT"

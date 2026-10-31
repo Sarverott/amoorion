@@ -1,6 +1,6 @@
 [project]
 name = "amoorion-mastodon"
-version = "0.4.4"
+version = "0.4.5"
 description = "Mastodon plugin of amoorion: post, read and reply through the Mastodon REST API"
 readme = "README.md"
 license = "MIT"
