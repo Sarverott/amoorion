@@ -27,6 +27,7 @@ from amoorion.models import Message
 
 
 def default_path() -> Path:
+    """Where the dataset is: AMOORION_DATASET (also from `.env`), or `dataset` in the current directory."""
 
     load_dotenv(
         Path.cwd() / ".env",
@@ -37,10 +38,16 @@ def default_path() -> Path:
 
 
 class Dataset:
+    """The posts of every profile, kept as files one can read and put under git.
+
+    `<platform>/<profile>/index.json` lists them, next to one JSON file per post.
+    """
+
     def __init__(
         self,
         path: Path | None = None,
     ) -> None:
+        """The dataset at `path`, by default the one of the environment."""
 
         self.path = path or default_path()
 
@@ -49,6 +56,7 @@ class Dataset:
         platform: str,
         profile: str,
     ) -> Path:
+        """The directory of one profile; both names made safe for a file system."""
 
         return self.path / safe(platform) / safe(profile)
 
@@ -57,6 +65,7 @@ class Dataset:
         platform: str,
         profile: str,
     ) -> dict[str, Entry]:
+        """What is known of a profile, by post id; empty if nothing yet."""
 
         file = self.profile_dir(platform, profile) / "index.json"
 
@@ -74,6 +83,7 @@ class Dataset:
         profile: str,
         entries: dict[str, Entry],
     ) -> None:
+        """Write the index of a profile, newest posts first."""
 
         directory = self.profile_dir(
             platform,
@@ -109,6 +119,7 @@ class Dataset:
         path: Path,
         data: dict,
     ) -> None:
+        """One JSON file, its directories made when missing."""
 
         path.parent.mkdir(
             parents=True,
@@ -183,6 +194,7 @@ class Dataset:
         profile: str,
         id: str,
     ) -> Message | None:
+        """One kept message by its id; `None` if unknown or its file is gone."""
 
         entry = self.index(
             platform,

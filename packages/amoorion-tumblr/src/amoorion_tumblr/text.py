@@ -6,6 +6,7 @@ from amoorion.models import Post
 
 
 def blocks(post: Post) -> list[dict[str, Any]]:
+    """A post as Neue Post Format blocks: a heading, the text, links and so on."""
 
     content: list[dict[str, Any]] = []
 
@@ -30,6 +31,7 @@ def blocks(post: Post) -> list[dict[str, Any]]:
 
 
 def text_of(content: list[dict[str, Any]]) -> str:
+    """Neue Post Format blocks back as plain text."""
 
     parts = []
 

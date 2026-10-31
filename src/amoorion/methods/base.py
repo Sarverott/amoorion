@@ -18,10 +18,18 @@ from amoorion.vault import Vault, open_vault
 
 
 class NoParams(Model):
+    """For a method that takes nothing."""
+
     pass
 
 
 class Method(Controller):
+    """One operation of amoorion, the same for every front-end.
+
+    A subclass names itself, declares `Params` and implements `run`; registered in
+    `METHODS`, it appears in the CLI, the API, the MCP server and `Amoorion`.
+    """
+
     Params: ClassVar[type[Model]] = NoParams
     # True when the method changes nothing on any platform (agents may call it freely);
     # keeping what it read in the local inbox doesn't count.
@@ -68,6 +76,7 @@ class Method(Controller):
         inbox: Inbox | None = None,
         dataset: Dataset | None = None,
     ) -> None:
+        """Whatever isn't given opens from the environment on first use."""
 
         super().__init__(view)
 
@@ -79,6 +88,7 @@ class Method(Controller):
 
     @property
     def vault(self) -> Vault:
+        """The vault given, or the environment's when first needed."""
 
         if self._vault is None:
             self._vault = open_vault()
@@ -87,6 +97,7 @@ class Method(Controller):
 
     @property
     def inbox(self) -> Inbox:
+        """The inbox given, or the environment's when first needed."""
 
         if self._inbox is None:
             self._inbox = Inbox()
@@ -95,6 +106,7 @@ class Method(Controller):
 
     @property
     def dataset(self) -> Dataset:
+        """The dataset given, or the environment's when first needed."""
 
         if self._dataset is None:
             self._dataset = Dataset()
@@ -105,6 +117,7 @@ class Method(Controller):
         self,
         params: Model,
     ) -> Model | list[Model]:
+        """Do the work; takes validated parameters, answers models."""
 
         raise NotImplementedError
 
@@ -112,6 +125,7 @@ class Method(Controller):
         self,
         **params: Any,
     ) -> Any:
+        """Validate the parameters, run, and answer through the view."""
 
         return self.respond(self.run(self.Params(**params)))
 

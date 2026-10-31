@@ -22,6 +22,12 @@ class Forbidden(AmoorionError):
 
 
 class Hook(Controller):
+    """One sender of webhooks: how to trust a call, and what the call means.
+
+    A subclass says how to check a call (`verify`) and which message it is (`receive`);
+    the API keeps that message in the inbox.
+    """
+
     secrets: ClassVar[
         dict[str, str]
     ] = {}  # read as hooks/<name>-<key>: what each is
@@ -31,6 +37,7 @@ class Hook(Controller):
         vault: Vault,
         view: View | None = None,
     ) -> None:
+        """A hook working with the secrets of `vault`."""
 
         super().__init__(view)
 
@@ -42,6 +49,7 @@ class Hook(Controller):
         self,
         key: str,
     ) -> str:
+        """A secret of this hook: `hooks/<name>-<key>` in the vault."""
 
         return self.vault.get(f"hooks/{self.name}-{key}")
 
@@ -50,6 +58,7 @@ class Hook(Controller):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Raise `Forbidden` unless this call really comes from the sender."""
 
         raise NotImplementedError
 
@@ -57,6 +66,7 @@ class Hook(Controller):
         self,
         payload: Any,
     ) -> Message | None:
+        """The message a call carries; `None` when it is only a check by the sender."""
 
         raise NotImplementedError
 
@@ -64,6 +74,7 @@ class Hook(Controller):
         self,
         payload: Any,
     ) -> Any:
+        """What to answer the sender, when it expects more than an empty success."""
 
         return None
 
@@ -73,6 +84,10 @@ class Hook(Controller):
         headers: Mapping[str, str],
         payload: Any,
     ) -> Message | None:
+        """Verify a call, then read it. Trust comes first: nothing of an unverified call is read.
+
+        A hook unable to verify (say, its secret is missing) refuses as well.
+        """
 
         self.headers = headers
 

@@ -12,6 +12,8 @@ from amoorion.society.base import by_model, scripted
 
 
 class SimulateParams(Model):
+    """A topic, who reacts to it, for how long, and whether a language model does the talking."""
+
     topic: str = Field(min_length=1)
     personas: list[Persona] = Field(
         min_length=1,
@@ -35,6 +37,8 @@ class SimulateParams(Model):
 
 @METHODS.register
 class Simulate(Method):
+    """Personas talking about a topic, for trying out rules and workflows on a crowd."""
+
     name: ClassVar[str] = "simulate"
     description: ClassVar[str] = (
         "Simulate personas reacting to a topic, locally: nothing reaches any platform"
@@ -46,6 +50,7 @@ class Simulate(Method):
         self,
         params: SimulateParams,
     ) -> list[Message]:
+        """The feed goes into the inbox under `society:<run>`; no platform is touched."""
 
         think = by_model(self.vault) if params.llm else scripted
 

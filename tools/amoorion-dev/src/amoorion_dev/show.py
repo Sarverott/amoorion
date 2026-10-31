@@ -10,6 +10,7 @@ console = Console()
 
 
 def show_state(state: State) -> None:
+    """Print the state of development as tables."""
 
     summary = Table.grid(
         padding=(

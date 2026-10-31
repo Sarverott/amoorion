@@ -8,6 +8,7 @@ LIMIT = 4096
 
 
 def compose(post: Post) -> str:
+    """A post as this platform's text: title, text, links and tags."""
 
     text = "\n\n".join(part for part in (post.title, post.text) if part)
 
@@ -24,6 +25,7 @@ def link(
     chat: dict[str, Any],
     number: int,
 ) -> str | None:
+    """The address of a message: public chats by name, private supergroups by number."""
 
     if chat.get("username"):
         return f"https://t.me/{chat['username']}/{number}"

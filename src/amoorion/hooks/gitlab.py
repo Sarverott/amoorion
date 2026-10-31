@@ -66,6 +66,8 @@ def describe(payload: dict[str, Any]) -> tuple[str, str | None]:
 
 @HOOKS.register
 class GitLabHook(Hook):
+    """Events of a GitLab project as messages."""
+
     name: ClassVar[str] = "gitlab"
     description: ClassVar[str] = (
         "GitLab webhooks, with a secret token (X-Gitlab-Token)"
@@ -77,6 +79,7 @@ class GitLabHook(Hook):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Compare the secret token, which GitLab sends as it is, in constant time."""
 
         if not hmac.compare_digest(
             headers.get("x-gitlab-token", "").encode(),
@@ -88,6 +91,7 @@ class GitLabHook(Hook):
         self,
         payload: Any,
     ) -> Message | None:
+        """One sentence on the event, by its user."""
 
         if not isinstance(payload, dict):
             raise AmoorionError("gitlab hook expects a JSON object")

@@ -41,6 +41,7 @@ def published(
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """The command line of the tools: one subcommand per concern."""
 
     parser = argparse.ArgumentParser(
         prog="amoorion-dev",
@@ -192,6 +193,7 @@ def shape_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Format the code, or with `--check` only list what isn't in shape, failing if any."""
 
     paths = args.paths or [
         repo.root / name
@@ -220,6 +222,7 @@ def state_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Show the state of development: as a table, JSON, or the docs' page."""
 
     found = development.read(
         repo,
@@ -250,6 +253,7 @@ def version_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Show or move versions (see `version` and `bump`)."""
 
     if args.action == "current":
         print(versions.current(repo))
@@ -296,6 +300,7 @@ def phases_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """The phases of TODO.md, or those a release would complete."""
 
     last = versions.last_release(repo)
 
@@ -317,6 +322,7 @@ def notes_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Print the release notes of a tag, or only their title."""
 
     print(
         release_notes.title(
@@ -338,6 +344,7 @@ def packages_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """The packages as JSON, for the matrix of the publish workflow."""
 
     only = {name.strip() for name in args.only.split(",") if name.strip()}
 
@@ -373,6 +380,7 @@ def setting_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Print one value of .github/flow.toml."""
 
     value: object = repo.settings()
 
@@ -396,6 +404,7 @@ def site_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Build the web page."""
 
     for path in web.build(repo, args.out, args.examples, args.website):
         console.print(f"wrote {path}")
@@ -407,6 +416,7 @@ def identity_command(
     repo: Repo,
     args: argparse.Namespace,
 ) -> int:
+    """Make the bot of flow.toml git's user, for commits of the workflows."""
 
     bot = repo.settings().get(
         "bot",
@@ -446,6 +456,7 @@ COMMANDS = {
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Parse and run a subcommand in the repository at hand; answers the exit code."""
 
     args = build_parser().parse_args(argv)
 

@@ -15,6 +15,7 @@ SERVICE = "https://graph.facebook.com/v24.0"
 
 
 def compose(post: Post) -> str:
+    """A post as this platform's text: title, text, links and tags."""
 
     text = "\n\n".join(part for part in (post.title, post.text) if part)
 
@@ -28,6 +29,11 @@ def compose(post: Post) -> str:
 
 
 class Facebook(HttpPlugin):
+    """A Facebook Page through the Graph API; a reply is a comment on the post.
+
+    It works with a Page access token from the vault.
+    """
+
     name: ClassVar[str] = "facebook"
     description: ClassVar[str] = (
         "Facebook Page (Graph API): post, read, reply as comment, delete"
@@ -44,6 +50,7 @@ class Facebook(HttpPlugin):
         path: str,
         **kwargs: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         try:
             base = self.secret("uri").rstrip("/")
@@ -61,6 +68,7 @@ class Facebook(HttpPlugin):
         )
 
     def _page(self) -> Account:
+        """The page as the author of what is read."""
 
         return Account(
             platform=self.name,
@@ -71,6 +79,7 @@ class Facebook(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         text = compose(post)
 
@@ -93,6 +102,7 @@ class Facebook(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         answer = self._call(
             "GET",
@@ -123,6 +133,7 @@ class Facebook(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id:
             raise AmoorionError(
@@ -160,5 +171,6 @@ class Facebook(HttpPlugin):
             raise AmoorionError(f"facebook did not delete {message.id}")
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return self.secret("page-id")

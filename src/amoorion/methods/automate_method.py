@@ -19,6 +19,8 @@ from amoorion.workflows import (
 
 
 class AutomateParams(Model):
+    """Rules to apply, and how far back in the inbox to look."""
+
     rules: list[Rule] = Field(
         min_length=1,
         description="what to do with which messages of the inbox",
@@ -32,6 +34,8 @@ class AutomateParams(Model):
 
 
 class Handled(Model):
+    """One rule run on one message, and how its steps went."""
+
     rule: str
     platform: str
     message_id: str
@@ -41,6 +45,11 @@ class Handled(Model):
 
 @METHODS.register
 class Automate(StepsMethod):
+    """Reacting to what arrives: rules over the inbox, for running again and again.
+
+    Each message goes through a rule once; a rule that failed gets it again next time.
+    """
+
     name: ClassVar[str] = "automate"
     description: ClassVar[str] = (
         "Run rules on the messages of the inbox, once per message; a failure is tried again next time"
@@ -51,6 +60,7 @@ class Automate(StepsMethod):
         self,
         params: AutomateParams,
     ) -> list[Handled]:
+        """Oldest messages first, so that reactions keep the order things happened in."""
 
         done = []
 

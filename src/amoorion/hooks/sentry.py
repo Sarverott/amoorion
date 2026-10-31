@@ -17,6 +17,8 @@ from amoorion.models import Message
 
 @HOOKS.register
 class SentryHook(Hook):
+    """Issues and errors of Sentry as messages."""
+
     name: ClassVar[str] = "sentry"
     description: ClassVar[str] = (
         "Sentry webhooks, signed (Sentry-Hook-Signature)"
@@ -30,6 +32,7 @@ class SentryHook(Hook):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Compare the HMAC-SHA256 of the body with Sentry's signature, in constant time."""
 
         expected = hmac.new(
             self.secret("secret").encode(),
@@ -46,6 +49,7 @@ class SentryHook(Hook):
         self,
         payload: Any,
     ) -> Message | None:
+        """One sentence on the resource; installing the integration is no message."""
 
         resource = self.headers.get(
             "sentry-hook-resource",

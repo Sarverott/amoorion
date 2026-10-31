@@ -21,6 +21,11 @@ DEFAULT_LIMIT = 500
 
 
 class Mastodon(HttpPlugin):
+    """Mastodon's REST API on the instance the vault names.
+
+    The length limit is the instance's own, asked once.
+    """
+
     name: ClassVar[str] = "mastodon"
     description: ClassVar[str] = (
         "Mastodon (REST API): post, read, reply, delete"
@@ -40,6 +45,7 @@ class Mastodon(HttpPlugin):
         path: str,
         **kwargs: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         headers = {
             "Authorization": f"Bearer {self.secret('token')}"
@@ -53,6 +59,7 @@ class Mastodon(HttpPlugin):
         )
 
     def _me(self) -> dict[str, Any]:
+        """The account of the token, asked once."""
 
         if self._account is None:
             self._account = self._call(
@@ -63,6 +70,7 @@ class Mastodon(HttpPlugin):
         return self._account
 
     def _max_characters(self) -> int:
+        """This instance's limit, asked once; the usual one when it doesn't say."""
 
         if self._limit is None:
             try:
@@ -83,6 +91,7 @@ class Mastodon(HttpPlugin):
         self,
         status: dict[str, Any],
     ) -> Message:
+        """The platform's answer as a `Message`."""
 
         account = status.get("account") or {}
 
@@ -114,6 +123,7 @@ class Mastodon(HttpPlugin):
         links: list[str],
         reply_to: str | None = None,
     ) -> Message:
+        """Publish one status, after checking its length."""
 
         limit = self._max_characters()
 
@@ -143,6 +153,7 @@ class Mastodon(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         return self._status(
             compose(post),
@@ -153,6 +164,7 @@ class Mastodon(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         statuses = self._call(
             "GET",
@@ -172,6 +184,7 @@ class Mastodon(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id:
             raise AmoorionError(
@@ -188,6 +201,7 @@ class Mastodon(HttpPlugin):
         self,
         message: Message,
     ) -> None:
+        """Delete a message by its id."""
 
         if not message.id:
             raise AmoorionError("mastodon needs the id of the status to delete")
@@ -198,5 +212,6 @@ class Mastodon(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return f"{self._me()['acct']}@{urlparse(self.secret('uri')).hostname}"

@@ -10,6 +10,8 @@ from amoorion.models import Message
 
 
 class InboxParams(Model):
+    """Which messages of the inbox, and how many."""
+
     platform: str | None = Field(
         None,
         description="only this platform (a hook is hook:<name>)",
@@ -23,6 +25,8 @@ class InboxParams(Model):
 
 @METHODS.register
 class InboxMethod(Method):
+    """Lists what is already kept; asks no platform, so it works offline."""
+
     name: ClassVar[str] = "inbox"
     description: ClassVar[str] = (
         "Messages received so far, of every platform and hook, newest first"
@@ -34,6 +38,7 @@ class InboxMethod(Method):
         self,
         params: InboxParams,
     ) -> list[Message]:
+        """The newest messages kept."""
 
         return self.inbox.list(
             params.platform,

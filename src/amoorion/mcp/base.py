@@ -27,6 +27,11 @@ def _tool(
     inbox: Inbox | None,
     dataset: Dataset | None,
 ) -> Callable[..., Any]:
+    """One method as an MCP tool: a function whose signature is the method's parameters.
+
+    The server reads the signature to describe the tool to agents, so it is built by hand
+    from `Params`. Failures reach the agent as tool errors.
+    """
 
     def call(**params: Any) -> Any:
 
@@ -65,6 +70,7 @@ def create_server(
     inbox: Inbox | None = None,
     dataset: Dataset | None = None,
 ) -> MCPServer:
+    """The MCP server with one tool per method, marked read-only or destructive as each method says."""
 
     vault = vault or open_vault()
 
@@ -96,6 +102,7 @@ def create_server(
 
 
 def serve(args: argparse.Namespace) -> None:
+    """Run the server on the transport asked for: stdio by default, as agents start it themselves."""
 
     server = create_server()
 

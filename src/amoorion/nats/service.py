@@ -17,6 +17,7 @@ def to_message(
     subject: str,
     data: bytes,
 ) -> Message:
+    """A NATS message as an inbox message: JSON with `text` is read, the rest kept as plain text."""
 
     platform = "nats:" + subject.removeprefix(in_subject()[:-1])
 
@@ -61,6 +62,7 @@ class NatsService(Controller):
         vault: Vault | None = None,
         inbox: Inbox | None = None,
     ) -> None:
+        """A subscriber to `server`, keeping what arrives in `inbox`."""
 
         super().__init__()
 
@@ -76,6 +78,7 @@ class NatsService(Controller):
         self,
         message: Any,
     ) -> None:
+        """Keep one arrived message."""
 
         self.inbox.keep(
             [
@@ -87,6 +90,7 @@ class NatsService(Controller):
         )
 
     async def run(self) -> None:
+        """Subscribe and wait for `stop`; draining lets what has arrived finish."""
 
         client = await nats.connect(
             self.server,
@@ -104,5 +108,6 @@ class NatsService(Controller):
             await client.drain()
 
     async def stop(self) -> None:
+        """End `run`."""
 
         self._stop.set()

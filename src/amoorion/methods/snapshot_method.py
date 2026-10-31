@@ -10,6 +10,8 @@ from amoorion.plugins import open_plugin
 
 
 class SnapshotParams(Model):
+    """Which platform, and how many posts at most."""
+
     platform: str
     limit: int = Field(
         100,
@@ -20,6 +22,8 @@ class SnapshotParams(Model):
 
 
 class Snapshot(Model):
+    """What a snapshot found: read now, present, gone from the platform, and deleted by amoorion."""
+
     platform: str
     profile: str
     path: str
@@ -32,6 +36,8 @@ class Snapshot(Model):
 
 @METHODS.register
 class SnapshotMethod(Method):
+    """A copy of a profile's posts, as files. Read-only for the platform."""
+
     name: ClassVar[str] = "snapshot"
     description: ClassVar[str] = (
         "Read the posts of one platform's profile into the dataset (JSON files with an index)"
@@ -43,6 +49,7 @@ class SnapshotMethod(Method):
         self,
         params: SnapshotParams,
     ) -> Snapshot:
+        """Only a complete read (fewer posts than asked for) can tell that a post is gone."""
 
         plugin = open_plugin(
             params.platform,

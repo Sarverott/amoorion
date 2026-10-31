@@ -90,6 +90,7 @@ def _descend(node):
 
 
 def _last_comma(items):
+    """The items with a comma after the last, when there are two or more."""
 
     if len(items) < 2:
         return items
@@ -117,6 +118,7 @@ def _blank(node):
 
 
 def _is_docstring(statement) -> bool:
+    """Whether a statement is a lone string, which ruff wants right under the `def`."""
 
     return (
         isinstance(statement, cst.SimpleStatementLine)
@@ -135,6 +137,7 @@ class _Open(cst.CSTTransformer):
         self,
         spaced_module: bool,
     ) -> None:
+        """Start outside of any function."""
 
         self.spaced_module = spaced_module
 
@@ -144,6 +147,7 @@ class _Open(cst.CSTTransformer):
         self,
         updated,
     ):
+        """The statement with its value opened up."""
 
         return updated.with_changes(value=_commas(updated.value))
 
@@ -152,6 +156,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """`x = f(a, b)`."""
 
         return self._value(updated)
 
@@ -160,6 +165,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """`x += f(a, b)`."""
 
         return self._value(updated)
 
@@ -168,6 +174,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """`f(a, b)` standing alone."""
 
         return self._value(updated)
 
@@ -176,6 +183,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """`x: int = f(a, b)`; a bare annotation has no value."""
 
         return self._value(updated) if updated.value else updated
 
@@ -184,6 +192,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """`return f(a, b)`."""
 
         return self._value(updated) if updated.value else updated
 
@@ -192,6 +201,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """`raise Error(a, b)`."""
 
         return (
             updated.with_changes(exc=_commas(updated.exc))
@@ -203,6 +213,7 @@ class _Open(cst.CSTTransformer):
         self,
         node,
     ) -> None:
+        """Blank lines only go inside functions: count how deep."""
 
         self.functions += 1
 
@@ -210,6 +221,7 @@ class _Open(cst.CSTTransformer):
         self,
         body,
     ):
+        """A blank line above every statement but the first."""
 
         return [
             body[0],
@@ -221,6 +233,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """Any block inside a function gets spaced."""
 
         if not self.functions:
             return updated
@@ -255,6 +268,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """One parameter per line when there are two or more, and a blank line under the head."""
 
         self.functions -= 1
 
@@ -309,6 +323,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """A blank line above `elif` and `else`."""
 
         if not self.functions or updated.orelse is None:
             return updated
@@ -320,6 +335,7 @@ class _Open(cst.CSTTransformer):
         original,
         updated,
     ):
+        """The top level, for notebook cells only: in files ruff handles it."""
 
         if not self.spaced_module or not updated.body:
             return updated
@@ -340,6 +356,7 @@ def _ruff(
     source: str,
     name: str,
 ) -> str:
+    """The second pass: ruff format through a pipe, with the configuration of `name`."""
 
     return subprocess.run(
         [
@@ -360,6 +377,7 @@ def shaped_python(
     source: str,
     name: str = "code.py",
 ) -> str:
+    """Python source in its shape."""
 
     return _ruff(
         shape(source),

@@ -27,11 +27,14 @@ MAIN = "amoorion"
 
 @dataclass
 class Package:
+    """One package of the workspace."""
+
     name: str
     path: str  # "." for amoorion
 
     @property
     def pyproject(self) -> str:
+        """Its pyproject.toml, relative to the root."""
 
         return (
             "pyproject.toml"
@@ -44,6 +47,7 @@ class Package:
         repo: Repo,
         revision: str | None = None,
     ) -> str | None:
+        """Its version at a revision, by default now; `None` if it isn't there yet."""
 
         text = repo.read(
             self.pyproject,
@@ -77,6 +81,7 @@ def packages(repo: Repo) -> list[Package]:
 
 
 def parse(version: str) -> tuple[int, int, int, str | None]:
+    """A version into its numbers and pre-release kind; anything else stops the tool."""
 
     match = VERSION.match(version)
 
@@ -99,6 +104,7 @@ def released(version: str) -> str:
 
 
 def current(repo: Repo) -> str:
+    """The version of the main package."""
 
     return tomllib.loads(repo.read("pyproject.toml"))["project"]["version"]
 
@@ -107,6 +113,7 @@ def last_release(
     repo: Repo,
     before: str = "HEAD",
 ) -> str | None:
+    """The newest final release before a revision, by its tags."""
 
     tags = repo.git(
         "tag",
@@ -198,6 +205,7 @@ def bumped(
     version: str,
     how: str,
 ) -> str:
+    """A version after a major, minor or patch bump."""
 
     major, minor, patch, _ = parse(version)
 

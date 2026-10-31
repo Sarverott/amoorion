@@ -14,6 +14,7 @@ PORTS = {
 
 
 def smtp_user(uri: str) -> str:
+    """The user of a mail URI, percent-decoded as it may hold an e-mail address."""
 
     return unquote(urlparse(uri).username or "")
 

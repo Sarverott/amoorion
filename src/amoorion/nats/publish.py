@@ -24,6 +24,7 @@ async def _publish(
     body: bytes,
     extra: dict[str, Any],
 ) -> None:
+    """Connect, send one message, make sure it left, close. No retries: it must not hold a method up."""
 
     client = await nats.connect(
         server,

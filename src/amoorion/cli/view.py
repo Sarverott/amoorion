@@ -16,11 +16,13 @@ class RichView(View):
         self,
         console: Console | None = None,
     ) -> None:
+        """Print to the given console, or the terminal."""
 
         self.console = console or Console()
 
     @staticmethod
     def _cell(value: Any) -> str:
+        """One value as table text: yes and no in colour, a message as its text, the rest as JSON."""
 
         if isinstance(value, bool):
             return "[green]yes[/]" if value else "[red]no[/]"
@@ -49,6 +51,7 @@ class RichView(View):
         self,
         model: Model | list[Model],
     ) -> None:
+        """Print a result as a table with one row per item."""
 
         rows = JsonView().render(model if isinstance(model, list) else [model])
 

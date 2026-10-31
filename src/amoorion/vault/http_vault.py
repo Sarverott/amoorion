@@ -19,6 +19,8 @@ from amoorion.vault.base import BACKENDS, PREFIX, Vault, VaultLink
 
 @BACKENDS.register
 class HttpVault(Vault):
+    """HashiCorp Vault or OpenBao: a KV version 2 secret per platform, read over HTTP."""
+
     name: ClassVar[str] = "http"
     description: ClassVar[str] = "HashiCorp Vault / OpenBao, KV v2 over HTTP"
 
@@ -26,6 +28,7 @@ class HttpVault(Vault):
         self,
         link: VaultLink,
     ) -> None:
+        """Check the link, and split its path into the mount and the prefix."""
 
         super().__init__(link)
 
@@ -50,6 +53,7 @@ class HttpVault(Vault):
         self,
         platform: str,
     ) -> dict[str, Any]:
+        """The secrets of a platform, fetched once."""
 
         if platform not in self._entries:
             path = "/".join(part for part in (self.prefix, platform) if part)
@@ -82,6 +86,7 @@ class HttpVault(Vault):
         self,
         name: str,
     ) -> str:
+        """A key of the platform's secret; an empty one counts as missing."""
 
         platform, key = self.split(name)
 

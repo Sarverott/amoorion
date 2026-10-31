@@ -29,6 +29,7 @@ class GenericHook(Hook):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Compare the shared token, in constant time so that timing gives nothing away."""
 
         sent = headers.get(
             "x-amoorion-token",
@@ -44,6 +45,7 @@ class GenericHook(Hook):
         self,
         payload: Any,
     ) -> Message:
+        """A message of the JSON `{"text": …, "author": …}`."""
 
         if not isinstance(payload, dict) or not isinstance(
             payload.get("text"), str

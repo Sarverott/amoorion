@@ -21,6 +21,11 @@ ONLY_MESSAGES = json.dumps({"types": ["m.room.message"]})
 
 
 class Matrix(HttpPlugin):
+    """One room of a Matrix server, through the client-server API.
+
+    Deleting is called redacting there; the event stays, without its content.
+    """
+
     name: ClassVar[str] = "matrix"
     description: ClassVar[str] = (
         "Matrix room (client-server API): post, read, reply, delete (redact)"
@@ -41,6 +46,7 @@ class Matrix(HttpPlugin):
         path: str,
         **kwargs: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         headers = {"Authorization": f"Bearer {self.secret('token')}"}
 
@@ -52,6 +58,7 @@ class Matrix(HttpPlugin):
         )
 
     def _room_id(self) -> str:
+        """The room's id, resolved once when the vault names its alias (`#…`)."""
 
         if self._room is None:
             room = self.secret("room")
@@ -66,6 +73,7 @@ class Matrix(HttpPlugin):
         return self._room
 
     def _whoami(self) -> str:
+        """The user of the token, asked once."""
 
         if self._me is None:
             self._me = self._call("GET", "/account/whoami")["user_id"]
@@ -76,6 +84,7 @@ class Matrix(HttpPlugin):
         self,
         event: dict[str, Any],
     ) -> Message:
+        """The platform's answer as a `Message`."""
 
         content = event.get("content") or {}
 
@@ -112,6 +121,7 @@ class Matrix(HttpPlugin):
         text: str,
         reply_to: str | None = None,
     ) -> Message:
+        """Send a text, optionally as a reply; answers the message."""
 
         content: dict[str, Any] = {
             "msgtype": "m.text",
@@ -143,6 +153,7 @@ class Matrix(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         return self._send(compose(post))
 
@@ -150,6 +161,7 @@ class Matrix(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         params = {
             "dir": "b",
@@ -184,6 +196,7 @@ class Matrix(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id:
             raise AmoorionError("matrix needs the id of the event to reply to")
@@ -211,5 +224,6 @@ class Matrix(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return self.secret("room")

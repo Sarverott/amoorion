@@ -22,11 +22,13 @@ from amoorion.vault import Vault
 
 
 def enabled() -> str | None:
+    """The NATS server of AMOORION_NATS; `None` means amoorion stays away from NATS."""
 
     return os.environ.get("AMOORION_NATS") or None
 
 
 def prefix() -> str:
+    """What all subjects start with, for several amoorions on one server."""
 
     return os.environ.get(
         "AMOORION_NATS_PREFIX",
@@ -35,16 +37,19 @@ def prefix() -> str:
 
 
 def out_subject(method: str) -> str:
+    """Where the result of a method goes."""
 
     return f"{prefix()}.methods.{method}"
 
 
 def in_subject() -> str:
+    """What the daemon listens to: everything below `<prefix>.in`."""
 
     return f"{prefix()}.in.>"
 
 
 def options(vault: Vault) -> dict[str, Any]:
+    """The connection's login: a token from the vault, or none."""
 
     try:
         return {"token": vault.get("nats/token")}

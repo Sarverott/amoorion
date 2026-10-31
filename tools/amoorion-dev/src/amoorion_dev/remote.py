@@ -14,6 +14,7 @@ TIMEOUT = 5
 
 
 def fetch(url: str) -> Any:
+    """JSON of a URL, with the token of the environment for GitHub's limits."""
 
     request = urllib.request.Request(
         url,
@@ -36,6 +37,7 @@ def fetch(url: str) -> Any:
 
 
 def remote(repo: Repo) -> dict[str, Any]:
+    """What GitHub and PyPI know: only for `state --online`, to keep calls few."""
 
     settings = repo.settings()
 

@@ -10,6 +10,8 @@ from amoorion.utilities.llm import Composition, complete
 
 
 class ComposeParams(Model):
+    """What to ask the model, and optionally how it should behave and which model."""
+
     prompt: str = Field(min_length=1)
     system: str | None = Field(
         None,
@@ -23,6 +25,8 @@ class ComposeParams(Model):
 
 @METHODS.register
 class Compose(Method):
+    """Lets a language model write a text. Posts nothing: pair it with `publish` in a workflow."""
+
     name: ClassVar[str] = "compose"
     description: ClassVar[str] = (
         "Ask a language model (llm/url of the vault, any OpenAI-compatible server) to write something"
@@ -33,6 +37,7 @@ class Compose(Method):
         self,
         params: ComposeParams,
     ) -> Composition:
+        """One completion by the server in the vault."""
 
         return complete(
             params.prompt,

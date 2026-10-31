@@ -8,11 +8,17 @@ import yaml
 
 
 def _sha(data: bytes) -> str:
+    """The hash that tells whether a file changed."""
 
     return hashlib.sha256(data).hexdigest()
 
 
 class States:
+    """Saving an `Amoorion` to a file and bringing it back, and noticing changes.
+
+    The state holds where things are and hashes of them, never the secrets themselves.
+    """
+
     def hashes(self) -> dict[str, str]:
         """What now is, as hashes. Of the link only its public parts: a hash of a password can be guessed at."""
 

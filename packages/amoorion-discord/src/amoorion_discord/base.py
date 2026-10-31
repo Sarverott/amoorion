@@ -17,6 +17,11 @@ SERVICE = "https://discord.com/api/v10"
 
 
 class Discord(HttpPlugin):
+    """A Discord bot writing into one channel, with mentions turned off.
+
+    Its token and the channel come from the vault.
+    """
+
     name: ClassVar[str] = "discord"
     description: ClassVar[str] = (
         "Discord bot in one channel (REST API): post, read, reply, delete"
@@ -35,6 +40,7 @@ class Discord(HttpPlugin):
         path: str,
         **kwargs: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         try:
             base = self.secret("uri").rstrip("/")
@@ -51,10 +57,12 @@ class Discord(HttpPlugin):
         )
 
     def _channel(self) -> str:
+        """The API path of the channel."""
 
         return f"/channels/{self.secret('channel')}"
 
     def _guild_id(self) -> str | None:
+        """The server of the channel, asked once; it is needed for links to messages."""
 
         # Message links need the server (guild) of the channel; asked once.
         if self._guild is None:
@@ -69,6 +77,7 @@ class Discord(HttpPlugin):
         text: str,
         reply_to: str | None = None,
     ) -> Message:
+        """Send a text, optionally as a reply; answers the message."""
 
         body: dict[str, Any] = {"content": checked(text)} | NO_PINGS
 
@@ -89,6 +98,7 @@ class Discord(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         return self._send(compose(post))
 
@@ -96,6 +106,7 @@ class Discord(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         found = self._call(
             "GET",
@@ -115,6 +126,7 @@ class Discord(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id:
             raise AmoorionError(
@@ -130,6 +142,7 @@ class Discord(HttpPlugin):
         self,
         message: Message,
     ) -> None:
+        """Delete a message by its id."""
 
         if not message.id:
             raise AmoorionError("discord needs the id of the message to delete")
@@ -140,5 +153,6 @@ class Discord(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return f"channel-{self.secret('channel')}"

@@ -11,6 +11,8 @@ from amoorion.plugins import Capability, Plugin, open_plugin
 
 
 class DeleteParams(Model):
+    """Which message on which platform."""
+
     platform: str
     id: str = Field(
         description="id of the message to delete, as read or publish gave it"
@@ -19,6 +21,8 @@ class DeleteParams(Model):
 
 @METHODS.register
 class Delete(Method):
+    """Removes a message from its platform, and marks its copy in the dataset as deleted."""
+
     name: ClassVar[str] = "delete"
     description: ClassVar[str] = (
         "Delete one message on its platform, keeping a copy in the dataset first"
@@ -58,6 +62,7 @@ class Delete(Method):
         self,
         params: DeleteParams,
     ) -> Result:
+        """A failure comes back as a `Result` with the reason, not as an exception."""
 
         plugin = open_plugin(
             params.platform,

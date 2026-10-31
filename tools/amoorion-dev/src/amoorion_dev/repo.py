@@ -9,6 +9,8 @@ from typing import Any
 
 @dataclass
 class Repo:
+    """The git repository worked on, and the files in it at any revision."""
+
     root: Path
 
     @classmethod
@@ -16,6 +18,7 @@ class Repo:
         cls,
         start: Path | None = None,
     ) -> "Repo":
+        """The repository around `start`, by default the current directory."""
 
         start = start or Path.cwd()
 
@@ -37,6 +40,7 @@ class Repo:
         return cls(Path(top))
 
     def run(self, *args: str, check: bool = True) -> str:
+        """Run a program at the root; answers its output."""
 
         result = subprocess.run(
             args,
@@ -81,6 +85,7 @@ class Repo:
         )
 
     def settings(self) -> dict[str, Any]:
+        """The settings of .github/flow.toml, empty if there is none."""
 
         file = self.root / ".github" / "flow.toml"
 
@@ -90,6 +95,7 @@ class Repo:
         self,
         version: str,
     ) -> bool:
+        """Whether a version has its tag."""
 
         return bool(
             self.git(

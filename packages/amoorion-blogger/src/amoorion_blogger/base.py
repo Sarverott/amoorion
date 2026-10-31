@@ -38,6 +38,11 @@ def compose(post: Post) -> tuple[str, str]:
 
 
 class Blogger(Plugin):
+    """Blogger, by its publishing address: a mail to it becomes a blog post.
+
+    That address is the only secret needed besides the mailbox; there is no reading back.
+    """
+
     name: ClassVar[str] = "blogger"
     description: ClassVar[str] = "Blogger by mail: post"
     capabilities: ClassVar[frozenset[Capability]] = frozenset({Capability.POST})
@@ -51,6 +56,7 @@ class Blogger(Plugin):
         self,
         mail: EmailMessage,
     ) -> None:
+        """Hand a prepared mail to SMTP."""
 
         send_mail(
             self.name,
@@ -60,6 +66,7 @@ class Blogger(Plugin):
         )
 
     def _sender(self) -> str:
+        """The `from` secret, or the login of the SMTP address."""
 
         try:
             return self.secret("from")
@@ -70,6 +77,7 @@ class Blogger(Plugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         subject, body = compose(post)
 

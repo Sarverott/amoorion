@@ -26,6 +26,7 @@ class View:
         self,
         model: Model | list[Model],
     ) -> Any:
+        """Turn a result into what this view gives out."""
 
         raise NotImplementedError
 
@@ -37,6 +38,7 @@ class JsonView(View):
         self,
         model: Model | list[Model],
     ) -> Any:
+        """Plain JSON-compatible data: dicts, or a list of them."""
 
         if isinstance(model, list):
             return [item.model_dump(mode="json") for item in model]
@@ -59,6 +61,7 @@ class Controller:
         self,
         view: View | None = None,
     ) -> None:
+        """Answer through the given view, by default as plain data."""
 
         self.view = view or JsonView()
 
@@ -66,6 +69,7 @@ class Controller:
         self,
         model: Model | list[Model],
     ) -> Any:
+        """A result through this controller's view."""
 
         return self.view.render(model)
 
@@ -81,6 +85,7 @@ class Registry[T: type[Controller]]:
         self,
         kind: str,
     ) -> None:
+        """An empty registry; `kind` names its items in the error for an unknown name."""
 
         self.kind = kind
 
@@ -108,6 +113,7 @@ class Registry[T: type[Controller]]:
         self,
         name: str,
     ) -> T:
+        """The item of that name; a clear error otherwise."""
 
         try:
             return self._items[name]
@@ -115,6 +121,7 @@ class Registry[T: type[Controller]]:
             raise AmoorionError(f"no {self.kind} named {name!r}") from None
 
     def names(self) -> list[str]:
+        """All names, sorted: lists stay in the same order everywhere."""
 
         return sorted(self._items)
 
@@ -122,5 +129,6 @@ class Registry[T: type[Controller]]:
         self,
         name: str,
     ) -> bool:
+        """Whether a name is registered."""
 
         return name in self._items

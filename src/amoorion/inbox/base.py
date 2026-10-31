@@ -24,6 +24,7 @@ SCHEMA = Path(__file__).with_name("schema.messages.sql").read_text()
 
 
 def default_path() -> Path:
+    """Where the inbox is: AMOORION_INBOX (also from `.env`), or the user's data directory."""
 
     load_dotenv(
         Path.cwd() / ".env",
@@ -41,14 +42,21 @@ def default_path() -> Path:
 
 
 class Inbox:
+    """Every message read or received, of all platforms and hooks, in one SQLite file.
+
+    Connections are short: each operation opens one, so several processes can share it.
+    """
+
     def __init__(
         self,
         path: Path | None = None,
     ) -> None:
+        """The inbox at `path`, by default the one of the environment."""
 
         self.path = path or default_path()
 
     def _connect(self) -> sqlite3.Connection:
+        """A connection, with the directory and table made when missing."""
 
         self.path.parent.mkdir(
             parents=True,

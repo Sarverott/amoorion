@@ -17,11 +17,15 @@ from amoorion.core import AmoorionError, Model
 
 
 class Step(Model):
+    """One method to run, and its parameters (which may use `$last` and known values)."""
+
     method: str
     params: dict[str, Any] = {}
 
 
 class StepResult(Model):
+    """How a step went: its plain result, or the error."""
+
     method: str
     ok: bool
     result: Any = None
@@ -124,6 +128,7 @@ def run_steps(
 
 
 def _plain(answer: Any) -> Any:
+    """A step's answer as JSON-compatible data, so that results can be saved and sent."""
 
     if isinstance(answer, list):
         return [item.model_dump(mode="json") for item in answer]

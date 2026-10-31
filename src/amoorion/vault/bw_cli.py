@@ -37,6 +37,7 @@ NPM_BW = Path("tools") / "node_modules" / ".bin" / "bw"
 
 
 def find_bw() -> str | None:
+    """The `bw` program: AMOORION_BW, the PATH, or the one `task vault:tools` installed."""
 
     if binary := os.environ.get("AMOORION_BW"):
         return binary
@@ -51,6 +52,11 @@ def find_bw() -> str | None:
 
 @BACKENDS.register
 class BitwardenVault(Vault):
+    """Bitwarden or Vaultwarden through its CLI, an item per platform.
+
+    The vault must be unlocked first (`task vault:login`); items are fetched once.
+    """
+
     name: ClassVar[str] = "bitwarden"
     description: ClassVar[str] = "Bitwarden / Vaultwarden through the bw CLI"
 
@@ -58,6 +64,7 @@ class BitwardenVault(Vault):
         self,
         link: VaultLink,
     ) -> None:
+        """Nothing is asked of `bw` until the first secret."""
 
         super().__init__(link)
 
@@ -71,6 +78,7 @@ class BitwardenVault(Vault):
         self,
         *args: str,
     ) -> Any:
+        """Run `bw` with the session in its environment, never on the command line; answers its JSON."""
 
         binary = find_bw()
 
@@ -105,6 +113,7 @@ class BitwardenVault(Vault):
         return json.loads(done.stdout)
 
     def _check(self) -> None:
+        """Once: the vault is unlocked, and it is the server the link means."""
 
         if self._checked:
             return
@@ -129,6 +138,7 @@ class BitwardenVault(Vault):
         self,
         platform: str,
     ) -> dict[str, Any]:
+        """The item of a platform; exactly one must have that name."""
 
         if platform not in self._items:
             self._check()
@@ -154,6 +164,7 @@ class BitwardenVault(Vault):
         self,
         name: str,
     ) -> str:
+        """A secret of an item: a login field, the first URI, the notes, or a custom field."""
 
         platform, key = self.split(name)
 

@@ -64,6 +64,7 @@ def _source_read(
     docname: str,
     source: list[str],
 ) -> None:
+    """Links out of docs/ in a page become links to the repository."""
 
     placed = Path(app.env.doc2path(docname))
 
@@ -86,6 +87,7 @@ def _include_read(
     parent_docname: str,
     content: list[str],
 ) -> None:
+    """The same for files included into a page."""
 
     content[0] = _outward(
         content[0],
@@ -179,6 +181,7 @@ def _skills(
 
 
 def setup(app) -> None:
+    """Hook all of this into the build of Sphinx."""
 
     app.connect(
         "build-finished",
