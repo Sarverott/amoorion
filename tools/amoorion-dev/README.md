@@ -11,6 +11,7 @@ Development tools of [amoorion](../../README.md), never published. One CLI,
 | `notes <tag>` | release notes: the commits and the story of `docs/changelog/` since the last release |
 | `packages` | the published packages (for the publish workflow) |
 | `site --out <dir>` | the project's web page |
+| `site-data --out <dir>` | only `openapi.json`, `manifest.json` and `manifest.schema.json`, for amoorion-website's build |
 | `identity` | sets git's user to the bot of `.github/flow.toml` |
 
 Settings: [`.github/flow.toml`](../../.github/flow.toml).

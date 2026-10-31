@@ -410,11 +410,85 @@ def test_the_site_puts_the_presentation_page_at_its_root(
         and (out / ".nojekyll").is_file()
     )
 
+    assert any(
+        plugin["name"] == "dryrun" and "post" in plugin["capabilities"]
+        for plugin in manifest["platforms"]
+    )
+
+    assert (
+        "/methods/publish"
+        in json.loads((out / "openapi.json").read_text())["paths"]
+    )
+
+    assert (
+        "platforms"
+        in json.loads((out / "manifest.schema.json").read_text())["properties"]
+    )
+
     assert "Lost between platforms" in (out / "404.html").read_text()
 
     assert "Allow: /" in (out / "robots.txt").read_text()
 
     assert "examples/01-first-steps.html" in (out / "llms.txt").read_text()
+
+
+def test_the_data_for_the_website_is_there_before_the_site(
+    repo,
+    tmp_path,
+):
+
+    found, _, _ = repo
+
+    examples = tmp_path / "examples"
+
+    examples.mkdir()
+
+    (examples / "01-first-steps.html").write_text("<html>example</html>")
+
+    (examples / "index.html").write_text("<html>index</html>")
+
+    webpage.site_data(
+        found,
+        tmp_path / "data",
+        examples,
+    )
+
+    manifest = json.loads((tmp_path / "data" / "manifest.json").read_text())
+
+    assert manifest["pages"] == [] and manifest["examples"] == [
+        "examples/01-first-steps.html"
+    ]
+
+    assert (tmp_path / "data" / "openapi.json").is_file()
+
+
+def test_a_plugin_failing_to_load_stops_the_site(
+    monkeypatch,
+):
+
+    from amoorion import Amoorion
+
+    from amoorion_dev.webpage.contract import platforms
+
+    monkeypatch.setattr(
+        Amoorion,
+        "plugins",
+        lambda self: [
+            {
+                "name": "broken",
+                "description": "failed to load",
+                "capabilities": [],
+                "error": "boom",
+            }
+        ],
+        raising=False,
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match="broken",
+    ):
+        platforms()
 
 
 def test_without_the_presentation_page_the_project_page_is_the_root(

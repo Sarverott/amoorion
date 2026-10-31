@@ -86,7 +86,8 @@ workflow, so each workflow starts the next with `gh workflow run`.
 | `amoorion-dev phases [--completed]` | | the plan; what a release completes |
 | `amoorion-dev notes <tag> [--title]` | | release notes |
 | `amoorion-dev packages [--only] [--released <tag>]`, `setting <key>` | | the workflows |
-| `amoorion-dev site [--website website/dist]` | `task site`, `task site:website` | the web page: amoorion-website at its root, project, examples, releases, manifests |
+| `amoorion-dev site [--website website/dist]` | `task site`, `task site:website` | the web page: amoorion-website at its root, project, examples, releases, manifests, `openapi.json` |
+| `amoorion-dev site-data --out <dir>` | `task site:website` | only `openapi.json`, `manifest.json`, `manifest.schema.json`, for amoorion-website's build |
 | `amoorion-dev identity` | | the bot as git user |
 | `amoorion …` | `task run` | the product's CLI; alone it asks step by step |
 
