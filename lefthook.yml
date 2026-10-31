@@ -1,18 +1,39 @@
 # https://lefthook.dev — git hooks, installed by `task setup`
 
+# Before a commit: staged code in its shape (fixed and staged again), YAML clean.
+pre-commit:
+  commands:
+    shape:
+      glob: "*.{py,ipynb}"
+      run: uv run --frozen amoorion-dev shape {staged_files}
+      stage_fixed: true
+    yaml:
+      glob: "*.{yml,yaml}"
+      run: uv run --frozen yamllint --strict {staged_files}
+
 commit-msg:
   commands:
     commitizen:
       run: uv run --frozen cz check --allow-abort --commit-msg-file {1}
 
+# A push of development is a release (Q15): the whole gate before it leaves.
+pre-push:
+  commands:
+    check:
+      run: |
+        [ "$(git branch --show-current)" = development ] || exit 0
+        uv run --frozen task check
+
 # After master is pulled into development (task flow:pull): a released
 # version becomes the next pre-release, X.Y.(Z+1)a0 (docs/releasing.md).
+# And what the pull changed in the dependencies is installed.
 post-merge:
   commands:
     pre-release:
       run: |
         [ "$(git branch --show-current)" = development ] || exit 0
         uv run --frozen amoorion-dev version mark
-
-
-### write here more automations
+    sync:
+      files: git diff --name-only ORIG_HEAD HEAD
+      glob: "uv.lock"
+      run: uv sync --frozen

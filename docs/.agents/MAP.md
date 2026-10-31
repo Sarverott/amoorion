@@ -94,4 +94,6 @@ workflow, so each workflow starts the next with `gh workflow run`.
 
 - `task check` = tests (+ notebooks, workflows' shape), code shape (`amoorion_dev/shape.py`, ruff), YAML, commit
   messages, docs build with warnings as errors, docs requirements.
-- lefthook: `commit-msg` (commitizen), `post-merge` (version mark).
+- lefthook: `pre-commit` (shape of staged code, YAML), `commit-msg`
+  (commitizen), `pre-push` (`task check` on development), `post-merge`
+  (version mark, `uv sync` when the lock changed).
