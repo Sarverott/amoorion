@@ -112,7 +112,10 @@ tools/amoorion-dev/     development tools: state, versions, phases, release note
    one front-end; CLI, API and MCP pick it up (add new subcommands to
    `SUBCOMMANDS` in Taskfile.yml; a test checks it). Platforms are plugin
    packages in `packages/`, tested against fakes of their APIs, never real
-   accounts.
+   accounts. Every outside program is a method of its own with its own
+   params, never one method running any command, as methods reach agents and
+   the API; a test holds this. Only the vault's `bw` stays below the methods,
+   which need the vault. `amoorion-dev` speaks git through GitPython.
 5. **Ask first** before tagging a release or publishing a package by
    hand, or posting to any real platform account. Pushing `development`
    is allowed and is a release (Q15): the flow finalizes the versions,

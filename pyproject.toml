@@ -1,6 +1,6 @@
 [project]
 name = "amoorion"
-version = "0.4.32"
+version = "0.4.33"
 description = "Universal tool for administration of chatting and communication platforms"
 readme = "README.md"
 license = "MIT"

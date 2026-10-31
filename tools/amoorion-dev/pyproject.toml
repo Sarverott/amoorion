@@ -9,6 +9,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "gitpython>=3.2.1",
     "libcst>=1.9.0",
     "markdown-it-py>=4.0.0",
     "rich>=15.0.0",

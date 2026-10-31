@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import git
+
 
 @dataclass
 class Repo:
@@ -23,21 +25,14 @@ class Repo:
         start = start or Path.cwd()
 
         try:
-            top = subprocess.run(
-                [
-                    "git",
-                    "rev-parse",
-                    "--show-toplevel",
-                ],
-                cwd=start,
-                check=True,
-                text=True,
-                capture_output=True,
-            ).stdout.strip()
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            top = str(start)
+            top = git.Repo(
+                start,
+                search_parent_directories=True,
+            ).working_tree_dir
+        except (git.InvalidGitRepositoryError, git.NoSuchPathError):
+            top = None
 
-        return cls(Path(top))
+        return cls(Path(top or start))
 
     def run(self, *args: str, check: bool = True) -> str:
         """Run a program at the root; answers its output."""
@@ -60,11 +55,17 @@ class Repo:
         """git's answer, or "" when git has none (no such revision, no repository)."""
 
         try:
-            return self.run(
-                "git",
-                *args,
+            return (
+                git.Git(self.root)
+                .execute(
+                    [
+                        "git",
+                        *args,
+                    ]
+                )
+                .strip()
             )
-        except (subprocess.CalledProcessError, FileNotFoundError):
+        except (git.GitCommandError, FileNotFoundError):
             return ""
 
     def read(
