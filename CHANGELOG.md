@@ -1,3 +1,11 @@
+## v0.4.31 (2026-10-31)
+
+**Packages:** amoorion 0.4.31
+
+### Feat
+
+- **cli**: arrow menus, forms and going back in the guide
+
 ## v0.4.30 (2026-10-31)
 
 **Packages:** amoorion 0.4.30

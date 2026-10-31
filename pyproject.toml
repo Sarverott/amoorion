@@ -1,6 +1,6 @@
 [project]
 name = "amoorion"
-version = "0.4.30"
+version = "0.4.31"
 description = "Universal tool for administration of chatting and communication platforms"
 readme = "README.md"
 license = "MIT"
@@ -16,6 +16,7 @@ dependencies = [
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
     "rich>=15.0.0",
+    "prompt-toolkit>=3.0.53",
     "uvicorn>=0.54.0",
     "pykeepass>=4.2.0",
     "cryptography>=46.0.0",

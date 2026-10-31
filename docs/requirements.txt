@@ -218,7 +218,9 @@ pexpect==4.9.0 ; sys_platform != 'emscripten' and sys_platform != 'win32'
 platformdirs==4.13.5
     # via jupyter-core
 prompt-toolkit==3.0.53
-    # via ipython
+    # via
+    #   amoorion
+    #   ipython
 psutil==7.2.2 ; sys_platform != 'cygwin' and sys_platform != 'emscripten'
     # via ipython
 ptyprocess==0.7.0 ; sys_platform != 'emscripten' and sys_platform != 'win32'
