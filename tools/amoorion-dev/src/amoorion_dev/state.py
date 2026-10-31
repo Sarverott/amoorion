@@ -14,9 +14,19 @@ from amoorion_dev import version as versions
 from amoorion_dev.remote import remote
 from amoorion_dev.repo import Repo
 
-QUESTION = re.compile(r"^## (Q\d+): (.+)$", re.MULTILINE)
-WAITING = {"orders": "docs/devlog/ORDERS.md", "inquiries": "docs/devlog/INQUIRIES.md"}
-KINDS = {"patch": "Z: a step", "minor": "Y: a phase completed", "major": "X: all phases done"}
+QUESTION = re.compile(
+    r"^## (Q\d+): (.+)$",
+    re.MULTILINE,
+)
+WAITING = {
+    "orders": "docs/devlog/ORDERS.md",
+    "inquiries": "docs/devlog/INQUIRIES.md",
+}
+KINDS = {
+    "patch": "Z: a step",
+    "minor": "Y: a phase completed",
+    "major": "X: all phases done",
+}
 
 
 @dataclass
@@ -40,55 +50,133 @@ class State:
     remote: dict[str, Any] = field(default_factory=dict)
 
 
-def stage(repo: Repo, version: str) -> str:
+def stage(
+    repo: Repo,
+    version: str,
+) -> str:
+
     if versions.parse(version)[3] is not None:
         return "pre-release: the next release is being made"
+
     if repo.tagged(version):
         return "released"
+
     return "final: ready for master"
 
 
-def waiting(repo: Repo, path: str) -> bool:
+def waiting(
+    repo: Repo,
+    path: str,
+) -> bool:
     """Whether the author left something below the header paragraph."""
+
     text = repo.read(path)
+
     body = text.split("\n\n", 2)[2] if text.count("\n\n") >= 2 else ""
+
     return bool(body.strip())
 
 
-def counts(repo: Repo, master: str) -> tuple[int | None, int | None]:
+def counts(
+    repo: Repo,
+    master: str,
+) -> tuple[int | None, int | None]:
+
     if not repo.git("rev-parse", "--verify", "-q", master):
         return None, None
-    behind, ahead = (repo.git("rev-list", "--left-right", "--count", f"{master}...HEAD") or "0 0").split()
+
+    behind, ahead = (
+        repo.git("rev-list", "--left-right", "--count", f"{master}...HEAD")
+        or "0 0"
+    ).split()
+
     return int(ahead), int(behind)
 
 
-def read(repo: Repo, online: bool = False) -> State:
+def read(
+    repo: Repo,
+    online: bool = False,
+) -> State:
+
     version = versions.current(repo)
+
     last = versions.last_release(repo)
-    master = repo.settings().get("branches", {}).get("release", "master")
-    ahead, behind = counts(repo, f"origin/{master}")
-    coming = versions.plan(repo, last)
+
+    master = (
+        repo.settings()
+        .get(
+            "branches",
+            {},
+        )
+        .get(
+            "release",
+            "master",
+        )
+    )
+
+    ahead, behind = counts(
+        repo,
+        f"origin/{master}",
+    )
+
+    coming = versions.plan(
+        repo,
+        last,
+    )
+
     return State(
         branch=repo.git("branch", "--show-current") or "(detached)",
         version=version,
-        stage=stage(repo, version),
+        stage=stage(
+            repo,
+            version,
+        ),
         last_release=last,
-        next_release=versions.next_release(repo, last),
-        news=versions.news(repo, f"v{last}") if last else [],
+        next_release=versions.next_release(
+            repo,
+            last,
+        ),
+        news=versions.news(
+            repo,
+            f"v{last}",
+        )
+        if last
+        else [],
         ahead_of_master=ahead,
         behind_master=behind,
-        changed_files=len(repo.git("status", "--porcelain").splitlines()),
-        phases=[asdict(phase) | {"complete": phase.complete} for phase in plan.phases(repo)],
+        changed_files=len(
+            repo.git(
+                "status",
+                "--porcelain",
+            ).splitlines()
+        ),
+        phases=[
+            asdict(phase) | {"complete": phase.complete}
+            for phase in plan.phases(repo)
+        ],
         phase_release=[
             f"{phase.number}: {phase.title}"
-            for phase in plan.completed_since(repo, f"v{last}" if last else None)
+            for phase in plan.completed_since(
+                repo, f"v{last}" if last else None
+            )
         ],
-        questions=[f"{number}: {title}" for number, title in QUESTION.findall(repo.read("docs/devlog/BRAINSTORM.md"))],
+        questions=[
+            f"{number}: {title}"
+            for number, title in QUESTION.findall(
+                repo.read("docs/devlog/BRAINSTORM.md")
+            )
+        ],
         waiting={name: waiting(repo, path) for name, path in WAITING.items()},
         packages={
-            package.name: {"version": package.version(repo) or "", "next": coming.get(package.name, "")}
+            package.name: {
+                "version": package.version(repo) or "",
+                "next": coming.get(package.name, ""),
+            }
             for package in versions.packages(repo)
         },
-        release_kind=versions.kind(repo, last),
+        release_kind=versions.kind(
+            repo,
+            last,
+        ),
         remote=remote(repo) if online else {},
     )

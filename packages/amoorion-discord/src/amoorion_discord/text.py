@@ -11,30 +11,59 @@ NO_PINGS = {"allowed_mentions": {"parse": []}}
 
 
 def compose(post: Post) -> str:
-    parts = [f"**{post.title}**" if post.title else None, post.text]
+
+    parts = [
+        f"**{post.title}**" if post.title else None,
+        post.text,
+    ]
+
     text = "\n\n".join(part for part in parts if part)
+
     if post.links:
         text += "\n" + "\n".join(post.links)
+
     if post.tags:
         text += "\n" + " ".join("#" + tag.lstrip("#") for tag in post.tags)
+
     return text
 
 
 def checked(text: str) -> str:
+
     if len(text) > LIMIT:
-        raise AmoorionError(f"discord takes {LIMIT} characters, this is {len(text)}")
+        raise AmoorionError(
+            f"discord takes {LIMIT} characters, this is {len(text)}"
+        )
+
     return text
 
 
-def message(platform: str, data: dict[str, Any], guild: str | None) -> Message:
+def message(
+    platform: str,
+    data: dict[str, Any],
+    guild: str | None,
+) -> Message:
+
     author = data.get("author") or {}
+
     reference = data.get("message_reference") or {}
+
     return Message(
         platform=platform,
-        text=data.get("content", ""),
+        text=data.get(
+            "content",
+            "",
+        ),
         id=data["id"],
         url=f"https://discord.com/channels/{guild or '@me'}/{data['channel_id']}/{data['id']}",
-        author=Account(platform=platform, handle=author.get("username", ""), name=author.get("global_name")),
+        author=Account(
+            platform=platform,
+            handle=author.get(
+                "username",
+                "",
+            ),
+            name=author.get("global_name"),
+        ),
         reply_to=reference.get("message_id"),
         created_at=data.get("timestamp"),
     )

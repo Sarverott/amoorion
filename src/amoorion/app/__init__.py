@@ -3,4 +3,10 @@
 from amoorion.app.base import Amoorion
 from amoorion.app.plugs import Plug, PlugInfo, Plugins, Plugs
 
-__all__ = ["Amoorion", "Plug", "PlugInfo", "Plugins", "Plugs"]
+__all__ = [
+    "Amoorion",
+    "Plug",
+    "PlugInfo",
+    "Plugins",
+    "Plugs",
+]

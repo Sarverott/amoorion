@@ -32,10 +32,21 @@ class VaultLink(Model):
     path: str | None = None
 
     @classmethod
-    def from_env(cls, env_file: Path | None = None) -> "VaultLink":
-        load_dotenv(env_file or Path.cwd() / ".env", override=False)
+    def from_env(
+        cls,
+        env_file: Path | None = None,
+    ) -> "VaultLink":
+
+        load_dotenv(
+            env_file or Path.cwd() / ".env",
+            override=False,
+        )
+
         return cls(
-            kind=os.environ.get("AMOORION_VAULT", "env"),
+            kind=os.environ.get(
+                "AMOORION_VAULT",
+                "env",
+            ),
             addr=os.environ.get("AMOORION_VAULT_ADDR"),
             token=os.environ.get("AMOORION_VAULT_TOKEN"),
             path=os.environ.get("AMOORION_VAULT_PATH"),
@@ -45,19 +56,31 @@ class VaultLink(Model):
 class Vault(Controller):
     """A backend that hands out secrets by name."""
 
-    def __init__(self, link: VaultLink) -> None:
+    def __init__(
+        self,
+        link: VaultLink,
+    ) -> None:
+
         super().__init__()
+
         self.link = link
 
     @staticmethod
     def split(name: str) -> tuple[str, str]:
         """`bluesky/password` -> (`bluesky`, `password`)."""
+
         platform, _, key = name.partition("/")
+
         if not platform or not key:
             raise AmoorionError(f"secret name {name!r} is not <platform>/<key>")
+
         return platform, key
 
-    def get(self, name: str) -> str:
+    def get(
+        self,
+        name: str,
+    ) -> str:
+
         raise NotImplementedError
 
 
@@ -65,5 +88,7 @@ BACKENDS: Registry[type[Vault]] = Registry("vault backend")
 
 
 def open_vault(link: VaultLink | None = None) -> Vault:
+
     link = link or VaultLink.from_env()
+
     return BACKENDS.get(link.kind)(link)

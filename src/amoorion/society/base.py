@@ -25,16 +25,33 @@ from amoorion.utilities.llm import complete
 class Persona(Model):
     name: str = Field(min_length=1)
     bio: str = ""
-    stance: str = Field("neutral", description="supportive, critical, neutral or silent: what `scripted` goes by")
+    stance: str = Field(
+        "neutral",
+        description="supportive, critical, neutral or silent: what `scripted` goes by",
+    )
 
 
 Think = Callable[[Persona, str, list[Message]], str | None]
 
 
-def scripted(persona: Persona, topic: str, feed: list[Message]) -> str | None:
+def scripted(
+    persona: Persona,
+    topic: str,
+    feed: list[Message],
+) -> str | None:
     """No model: a line by stance, answering the last one who spoke."""
-    last = next((message for message in reversed(feed) if message.author and message.author.handle != persona.name), None)
+
+    last = next(
+        (
+            message
+            for message in reversed(feed)
+            if message.author and message.author.handle != persona.name
+        ),
+        None,
+    )
+
     to = f"@{last.author.handle} " if last and last.author else ""
+
     return {
         "supportive": f"{to}{topic}? Yes, finally.",
         "critical": f"{to}I doubt {topic} is what is needed.",
@@ -42,38 +59,80 @@ def scripted(persona: Persona, topic: str, feed: list[Message]) -> str | None:
     }.get(persona.stance)
 
 
-def by_model(vault: Vault, model: str | None = None) -> Think:
+def by_model(
+    vault: Vault,
+    model: str | None = None,
+) -> Think:
     """Reactions from a language model (`llm/url` in the vault)."""
 
-    def think(persona: Persona, topic: str, feed: list[Message]) -> str | None:
-        lines = "\n".join(f"{message.author.handle if message.author else '?'}: {message.text}" for message in feed[-20:])
+    def think(
+        persona: Persona,
+        topic: str,
+        feed: list[Message],
+    ) -> str | None:
+
+        lines = "\n".join(
+            f"{message.author.handle if message.author else '?'}: {message.text}"
+            for message in feed[-20:]
+        )
+
         system = f"You are {persona.name}. {persona.bio} Your stance: {persona.stance}. Answer as a short social media post."
+
         prompt = f"The topic: {topic}\n\nSaid so far:\n{lines or '(nothing)'}\n\nWhat do you say?"
+
         return complete(prompt, vault, system=system, model=model).text or None
 
     return think
 
 
 class Society:
-    def __init__(self, personas: list[Persona], think: Think = scripted, run: str = "default") -> None:
-        self.personas, self.think, self.platform = personas, think, f"society:{run}"
+    def __init__(
+        self,
+        personas: list[Persona],
+        think: Think = scripted,
+        run: str = "default",
+    ) -> None:
 
-    def simulate(self, topic: str, rounds: int = 3) -> list[Message]:
+        self.personas, self.think, self.platform = (
+            personas,
+            think,
+            f"society:{run}",
+        )
+
+    def simulate(
+        self,
+        topic: str,
+        rounds: int = 3,
+    ) -> list[Message]:
+
         feed: list[Message] = []
+
         start = datetime.now(UTC)
+
         for round_ in range(1, rounds + 1):
             for persona in self.personas:
-                text = self.think(persona, topic, feed)
+                text = self.think(
+                    persona,
+                    topic,
+                    feed,
+                )
+
                 if not text:
                     continue
+
                 feed.append(
                     Message(
                         platform=self.platform,
                         text=text,
                         id=f"{start.timestamp():.0f}-{round_}-{persona.name}",
-                        author=Account(platform=self.platform, handle=persona.name, name=persona.bio or None),
+                        author=Account(
+                            platform=self.platform,
+                            handle=persona.name,
+                            name=persona.bio or None,
+                        ),
                         reply_to=feed[-1].id if feed else None,
                         created_at=start + timedelta(seconds=len(feed)),
                     )
                 )
+
         return feed

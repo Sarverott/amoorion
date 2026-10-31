@@ -12,7 +12,9 @@ from amoorion.plugins import open_plugin
 
 class ReplyParams(Model):
     platform: str
-    to: str = Field(description="id of the message to answer, as read or publish gave it")
+    to: str = Field(
+        description="id of the message to answer, as read or publish gave it"
+    )
     text: str = Field(min_length=1)
 
 
@@ -22,6 +24,21 @@ class Reply(Method):
     description: ClassVar[str] = "Answer one message on its platform"
     Params: ClassVar[type[Model]] = ReplyParams
 
-    def run(self, params: ReplyParams) -> Message:
-        to = Message(platform=params.platform, text="", id=params.to)
-        return open_plugin(params.platform, self.vault).reply(to, params.text)
+    def run(
+        self,
+        params: ReplyParams,
+    ) -> Message:
+
+        to = Message(
+            platform=params.platform,
+            text="",
+            id=params.to,
+        )
+
+        return open_plugin(
+            params.platform,
+            self.vault,
+        ).reply(
+            to,
+            params.text,
+        )

@@ -10,16 +10,32 @@ from amoorion.models import Message
 
 
 class InboxParams(Model):
-    platform: str | None = Field(None, description="only this platform (a hook is hook:<name>)")
-    limit: int = Field(20, ge=1, le=1000)
+    platform: str | None = Field(
+        None,
+        description="only this platform (a hook is hook:<name>)",
+    )
+    limit: int = Field(
+        20,
+        ge=1,
+        le=1000,
+    )
 
 
 @METHODS.register
 class InboxMethod(Method):
     name: ClassVar[str] = "inbox"
-    description: ClassVar[str] = "Messages received so far, of every platform and hook, newest first"
+    description: ClassVar[str] = (
+        "Messages received so far, of every platform and hook, newest first"
+    )
     read_only: ClassVar[bool] = True
     Params: ClassVar[type[Model]] = InboxParams
 
-    def run(self, params: InboxParams) -> list[Message]:
-        return self.inbox.list(params.platform, params.limit)
+    def run(
+        self,
+        params: InboxParams,
+    ) -> list[Message]:
+
+        return self.inbox.list(
+            params.platform,
+            params.limit,
+        )

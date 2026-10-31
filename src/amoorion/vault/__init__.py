@@ -6,4 +6,13 @@ from amoorion.vault.default import EnvVault
 from amoorion.vault.http_vault import HttpVault
 from amoorion.vault.kpxc_db_file import KeePassXCVault
 
-__all__ = ["BACKENDS", "BitwardenVault", "EnvVault", "HttpVault", "KeePassXCVault", "Vault", "VaultLink", "open_vault"]
+__all__ = [
+    "BACKENDS",
+    "BitwardenVault",
+    "EnvVault",
+    "HttpVault",
+    "KeePassXCVault",
+    "Vault",
+    "VaultLink",
+    "open_vault",
+]

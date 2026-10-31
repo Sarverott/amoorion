@@ -5,7 +5,10 @@ from pathlib import Path
 
 import streamlit as st
 
-sys.path.insert(0, str(Path(__file__).parents[1]))  # in a Space, panel.py lies beside this file
+sys.path.insert(
+    0,
+    str(Path(__file__).parents[1]),
+)  # in a Space, panel.py lies beside this file
 from panel import post
 
 st.title("amoorion")

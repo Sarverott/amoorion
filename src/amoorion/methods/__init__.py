@@ -7,7 +7,11 @@ from amoorion.methods.compose_method import Compose
 from amoorion.methods.delete_method import Delete
 from amoorion.methods.inbox_method import InboxMethod
 from amoorion.methods.notify_method import Notify
-from amoorion.methods.plugins_method import PluginInfo, Plugins, plugsFlagsToList
+from amoorion.methods.plugins_method import (
+    PluginInfo,
+    Plugins,
+    plugsFlagsToList,
+)
 from amoorion.methods.publish_method import Publish
 from amoorion.methods.read_method import Read
 from amoorion.methods.reply_method import Reply

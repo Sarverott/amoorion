@@ -9,7 +9,10 @@ copied in at build time and shown as they were saved, not run again
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent / "_ext"))
+sys.path.insert(
+    0,
+    str(Path(__file__).parent / "_ext"),
+)
 
 from amoorion_pages import BRANCH, REPOSITORY, ROOT, setup  # noqa: E402, F401 - Sphinx calls `setup`
 
@@ -30,9 +33,18 @@ extensions = [
     "sphinx_llm.txt",
     "notfound.extension",
 ]
-exclude_patterns = ["_build", ".agents", "Taskfile.yml", "README.md", "**/.ipynb_checkpoints"]
+exclude_patterns = [
+    "_build",
+    ".agents",
+    "Taskfile.yml",
+    "README.md",
+    "**/.ipynb_checkpoints",
+]
 
-myst_enable_extensions = ["colon_fence", "deflist"]
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+]
 myst_heading_anchors = 3
 myst_fence_as_directive = ["mermaid"]
 # The README skips heading levels (## to ####), as GitHub allows.
@@ -42,7 +54,10 @@ nb_execution_mode = "off"
 # The docstrings use `single backticks` for code, as Markdown does.
 default_role = "code"
 autosummary_generate = True
-autodoc_default_options = {"members": True, "show-inheritance": True}
+autodoc_default_options = {
+    "members": True,
+    "show-inheritance": True,
+}
 autodoc_member_order = "bysource"
 autodoc_typehints = "description"
 
@@ -51,7 +66,9 @@ html_title = f"amoorion {version}"
 # The look of the presentation page and resources/images (docs/_static/amoorion.css).
 GRAPHICS = ROOT / "resources" / "images"
 html_logo = str(GRAPHICS / "Amoorion rose-gold gothic wordmark.png")
-html_favicon = str(GRAPHICS / "Amoorion\u2019s Cupid Bot Sends Heart Messages-2-mini.png")
+html_favicon = str(
+    GRAPHICS / "Amoorion\u2019s Cupid Bot Sends Heart Messages-2-mini.png"
+)
 html_static_path = ["_static"]
 # robots.txt at the root (Read the Docs serves it from the default version).
 html_extra_path = ["_extra"]

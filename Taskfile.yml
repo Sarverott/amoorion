@@ -94,7 +94,17 @@ tasks:
 
   check:
     desc: Run every static check (same as CI)
-    deps: [test:quiet, check:yaml, check:commits, docs:build, docs:check:requirements]
+    deps: [test:quiet, check:format, check:yaml, check:commits, docs:build, docs:check:requirements]
+
+  format:
+    desc: Format the code in amoorion's open shape (ruff and amoorion-dev shape)
+    cmds:
+      - uv run --frozen amoorion-dev shape {{.CLI_ARGS}}
+
+  check:format:
+    desc: Check that the code is in shape
+    cmds:
+      - uv run --frozen amoorion-dev shape --check
 
   check:yaml:
     desc: Lint YAML files

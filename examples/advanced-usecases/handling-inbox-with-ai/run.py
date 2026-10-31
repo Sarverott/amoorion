@@ -14,18 +14,45 @@ from amoorion import Amoorion
 
 class FakeModel(BaseHTTPRequestHandler):
     def do_POST(self):
+
         asked = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-        answer = {"choices": [{"message": {"content": "Thanks! About: " + asked["messages"][-1]["content"][-30:]}}]}
+
+        answer = {
+            "choices": [
+                {
+                    "message": {
+                        "content": "Thanks! About: "
+                        + asked["messages"][-1]["content"][-30:]
+                    }
+                }
+            ]
+        }
+
         self.send_response(200)
+
         self.end_headers()
+
         self.wfile.write(json.dumps(answer).encode())
 
-    def log_message(self, *args):
+    def log_message(
+        self,
+        *args,
+    ):
+
         pass
 
 
-server = HTTPServer(("127.0.0.1", 0), FakeModel)
-threading.Thread(target=server.serve_forever, daemon=True).start()
+server = HTTPServer(
+    (
+        "127.0.0.1",
+        0,
+    ),
+    FakeModel,
+)
+threading.Thread(
+    target=server.serve_forever,
+    daemon=True,
+).start()
 os.environ |= {
     "AMOORION_SECRET_LLM_URL": f"http://127.0.0.1:{server.server_port}/v1",
     "AMOORION_SECRET_LLM_MODEL": "fake",
@@ -39,10 +66,27 @@ rule = {
     "platform": "dryrun",
     "contains": "?",
     "steps": [
-        {"method": "compose", "params": {"prompt": "Answer briefly: $text", "system": "You answer our community."}},
-        {"method": "reply", "params": {"platform": "$platform", "to": "$id", "text": "$last"}},
+        {
+            "method": "compose",
+            "params": {
+                "prompt": "Answer briefly: $text",
+                "system": "You answer our community.",
+            },
+        },
+        {
+            "method": "reply",
+            "params": {
+                "platform": "$platform",
+                "to": "$id",
+                "text": "$last",
+            },
+        },
     ],
 }
 [done] = amo.automate(rules=[rule])
-print(done["ok"], "|", done["steps"][1]["result"]["text"])
+print(
+    done["ok"],
+    "|",
+    done["steps"][1]["result"]["text"],
+)
 server.shutdown()

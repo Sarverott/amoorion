@@ -2,4 +2,7 @@
 
 from amoorion.dataset.base import Dataset, Entry
 
-__all__ = ["Dataset", "Entry"]
+__all__ = [
+    "Dataset",
+    "Entry",
+]

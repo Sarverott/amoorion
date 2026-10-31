@@ -2,4 +2,9 @@
 
 from amoorion.daemon.base import ApiService, Daemon, Service, serve
 
-__all__ = ["ApiService", "Daemon", "Service", "serve"]
+__all__ = [
+    "ApiService",
+    "Daemon",
+    "Service",
+    "serve",
+]

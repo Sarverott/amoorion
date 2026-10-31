@@ -22,33 +22,72 @@ class Forbidden(AmoorionError):
 
 
 class Hook(Controller):
-    secrets: ClassVar[dict[str, str]] = {}  # read as hooks/<name>-<key>: what each is
+    secrets: ClassVar[
+        dict[str, str]
+    ] = {}  # read as hooks/<name>-<key>: what each is
 
-    def __init__(self, vault: Vault, view: View | None = None) -> None:
+    def __init__(
+        self,
+        vault: Vault,
+        view: View | None = None,
+    ) -> None:
+
         super().__init__(view)
+
         self.vault = vault
+
         self.headers: Mapping[str, str] = {}
 
-    def secret(self, key: str) -> str:
+    def secret(
+        self,
+        key: str,
+    ) -> str:
+
         return self.vault.get(f"hooks/{self.name}-{key}")
 
-    def verify(self, body: bytes, headers: Mapping[str, str]) -> None:
+    def verify(
+        self,
+        body: bytes,
+        headers: Mapping[str, str],
+    ) -> None:
+
         raise NotImplementedError
 
-    def receive(self, payload: Any) -> Message | None:
+    def receive(
+        self,
+        payload: Any,
+    ) -> Message | None:
+
         raise NotImplementedError
 
-    def answer(self, payload: Any) -> Any:
+    def answer(
+        self,
+        payload: Any,
+    ) -> Any:
+
         return None
 
-    def handle(self, body: bytes, headers: Mapping[str, str], payload: Any) -> Message | None:
+    def handle(
+        self,
+        body: bytes,
+        headers: Mapping[str, str],
+        payload: Any,
+    ) -> Message | None:
+
         self.headers = headers
+
         try:
-            self.verify(body, headers)
+            self.verify(
+                body,
+                headers,
+            )
         except Forbidden:
             raise
         except AmoorionError as error:  # e.g. the secret is missing
-            raise Forbidden(f"hook {self.name} can't verify calls: {error}") from None
+            raise Forbidden(
+                f"hook {self.name} can't verify calls: {error}"
+            ) from None
+
         return self.receive(payload)
 
 
@@ -57,5 +96,15 @@ HOOKS: Registry[type[Hook]] = Registry("hook")
 
 def schema() -> dict[str, Any]:
     """The vault entry `hooks`, as in schema.vault.json of the plugins; each hook's keys are optional."""
-    keys = {f"{name}-{key}": text for name in HOOKS.names() for key, text in HOOKS.get(name).secrets.items()}
-    return {"description": "Incoming webhooks; a hook without its secret refuses all", "scopes": {}, "optional": keys}
+
+    keys = {
+        f"{name}-{key}": text
+        for name in HOOKS.names()
+        for key, text in HOOKS.get(name).secrets.items()
+    }
+
+    return {
+        "description": "Incoming webhooks; a hook without its secret refuses all",
+        "scopes": {},
+        "optional": keys,
+    }

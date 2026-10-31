@@ -2,4 +2,8 @@
 
 from amoorion.society.base import Persona, Society, scripted
 
-__all__ = ["Persona", "Society", "scripted"]
+__all__ = [
+    "Persona",
+    "Society",
+    "scripted",
+]

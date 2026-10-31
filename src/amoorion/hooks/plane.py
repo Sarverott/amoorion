@@ -21,16 +21,38 @@ class PlaneHook(Hook):
     description: ClassVar[str] = "Plane webhooks, signed (X-Plane-Signature)"
     secrets: ClassVar[dict[str, str]] = {"secret": "The webhook's secret"}
 
-    def verify(self, body: bytes, headers: Mapping[str, str]) -> None:
-        expected = hmac.new(self.secret("secret").encode(), body, hashlib.sha256).hexdigest()
-        if not hmac.compare_digest(headers.get("x-plane-signature", "").encode(), expected.encode()):
+    def verify(
+        self,
+        body: bytes,
+        headers: Mapping[str, str],
+    ) -> None:
+
+        expected = hmac.new(
+            self.secret("secret").encode(),
+            body,
+            hashlib.sha256,
+        ).hexdigest()
+
+        if not hmac.compare_digest(
+            headers.get("x-plane-signature", "").encode(), expected.encode()
+        ):
             raise Forbidden("wrong or missing X-Plane-Signature")
 
-    def receive(self, payload: Any) -> Message:
+    def receive(
+        self,
+        payload: Any,
+    ) -> Message:
+
         if not isinstance(payload, dict):
             raise AmoorionError("plane hook expects a JSON object")
+
         event = self.headers.get("x-plane-event") or payload.get("event", "?")
-        name = (payload.get("data") or {}).get("name", "")
+
+        name = (payload.get("data") or {}).get(
+            "name",
+            "",
+        )
+
         return Message(
             platform=f"hook:{self.name}",
             text=f"plane: {event}: {name}".strip().rstrip(":"),

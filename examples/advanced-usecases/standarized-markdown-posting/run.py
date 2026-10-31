@@ -9,4 +9,9 @@ amo = Amoorion()
 for file in sorted(Path(__file__).parent.glob("*.md")):
     post, to = post_from_markdown(file)
     for result in amo.publish(to=to, **post.model_dump()):
-        print(file.name, result["platform"], result["ok"], result["message"]["text"][:40])
+        print(
+            file.name,
+            result["platform"],
+            result["ok"],
+            result["message"]["text"][:40],
+        )

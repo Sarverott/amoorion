@@ -22,30 +22,61 @@ class Composition(Model):
     model: str
 
 
-def _optional(vault: Vault, name: str) -> str | None:
+def _optional(
+    vault: Vault,
+    name: str,
+) -> str | None:
+
     try:
         return vault.get(name)
     except AmoorionError:
         return None
 
 
-def complete(prompt: str, vault: Vault, system: str | None = None, model: str | None = None) -> Composition:
+def complete(
+    prompt: str,
+    vault: Vault,
+    system: str | None = None,
+    model: str | None = None,
+) -> Composition:
+
     url = vault.get("llm/url").rstrip("/")
+
     model = model or vault.get("llm/model")
-    token = _optional(vault, "llm/token")
-    messages = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
+
+    token = _optional(
+        vault,
+        "llm/token",
+    )
+
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": prompt}
+    ]
+
     try:
         response = requests.post(
             f"{url}/chat/completions",
-            json={"model": model, "messages": messages},
+            json={
+                "model": model,
+                "messages": messages,
+            },
             headers={"Authorization": f"Bearer {token}"} if token else {},
             timeout=TIMEOUT,
         )
     except requests.RequestException as error:
-        raise AmoorionError(f"the model at {url} can't be reached: {type(error).__name__}") from None
+        raise AmoorionError(
+            f"the model at {url} can't be reached: {type(error).__name__}"
+        ) from None
+
     if not response.ok:
-        raise AmoorionError(f"the model at {url} answered {response.status_code}: {response.text[:200]}")
+        raise AmoorionError(
+            f"the model at {url} answered {response.status_code}: {response.text[:200]}"
+        )
+
     try:
-        return Composition(text=response.json()["choices"][0]["message"]["content"].strip(), model=model)
+        return Composition(
+            text=response.json()["choices"][0]["message"]["content"].strip(),
+            model=model,
+        )
     except (ValueError, KeyError, IndexError, TypeError, AttributeError):
         raise AmoorionError(f"the model at {url} gave no answer") from None

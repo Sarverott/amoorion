@@ -32,8 +32,14 @@ class Plugin(Controller):
     # Keys this plugin reads from the vault as `<platform>/<key>`.
     secrets: ClassVar[tuple[str, ...]] = ()
 
-    def __init__(self, vault: Vault, view: View | None = None) -> None:
+    def __init__(
+        self,
+        vault: Vault,
+        view: View | None = None,
+    ) -> None:
+
         super().__init__(view)
+
         self.vault = vault
 
     @classmethod
@@ -43,28 +49,63 @@ class Plugin(Controller):
         Like the scopes of OpenAPI: `scopes` are the keys it needs and `optional`
         the keys it can use, each with what it is.
         """
+
         file = files(cls.__module__.partition(".")[0]) / "schema.vault.json"
+
         if file.is_file():
             return json.loads(file.read_text())["vault"][cls.name]
-        return {"description": cls.description, "scopes": dict.fromkeys(cls.secrets, ""), "optional": {}}
 
-    def secret(self, key: str) -> str:
+        return {
+            "description": cls.description,
+            "scopes": dict.fromkeys(
+                cls.secrets,
+                "",
+            ),
+            "optional": {},
+        }
+
+    def secret(
+        self,
+        key: str,
+    ) -> str:
+
         return self.vault.get(f"{self.name}/{key}")
 
-    def _unsupported(self, capability: Capability) -> Unsupported:
+    def _unsupported(
+        self,
+        capability: Capability,
+    ) -> Unsupported:
+
         return Unsupported(f"{self.name} can't {capability}")
 
-    def post(self, post: Post) -> Message:
+    def post(
+        self,
+        post: Post,
+    ) -> Message:
+
         raise self._unsupported(Capability.POST)
 
-    def read(self, limit: int = 20) -> list[Message]:
+    def read(
+        self,
+        limit: int = 20,
+    ) -> list[Message]:
+
         raise self._unsupported(Capability.READ)
 
-    def reply(self, to: Message, text: str) -> Message:
+    def reply(
+        self,
+        to: Message,
+        text: str,
+    ) -> Message:
+
         raise self._unsupported(Capability.REPLY)
 
-    def delete(self, message: Message) -> None:
+    def delete(
+        self,
+        message: Message,
+    ) -> None:
         """Remove one message of this platform (amoorion's `delete` keeps a copy first)."""
+
         raise self._unsupported(Capability.DELETE)
 
     def profile(self) -> str:
@@ -73,4 +114,5 @@ class Plugin(Controller):
         Names its directory in the dataset; never a secret. Plugins with
         one natural name override it.
         """
+
         return "default"
