@@ -1,3 +1,11 @@
+## v0.4.30 (2026-10-31)
+
+**Packages:** amoorion 0.4.30
+
+### Feat
+
+- **mcp**: resources, and a client of the server in memory
+
 ## v0.4.29 (2026-10-31)
 
 **Packages:** amoorion 0.4.29
