@@ -8,6 +8,8 @@ from rich.table import Table
 
 from amoorion.core import JsonView, Model, View
 
+# can we make it more interactive? like for example instead of input we can try arrow steering of context menu selection with enter as confirmation, shift as going back by stacking of context recurrentions calling, form mechanics and staff like loading screens
+
 
 class RichView(View):
     """Tables for lists, key/value tables for one model."""
