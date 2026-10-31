@@ -9,7 +9,6 @@ vars:
   # Subcommands of the CLI, for `task help` (tests/test_taskfile.py keeps it in step).
   SUBCOMMANDS: [
     accounts,
-    automate,
     compose,
     delete,
     inbox,

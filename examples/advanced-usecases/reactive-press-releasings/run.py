@@ -53,7 +53,7 @@ rule = {
     ],
 }
 # Run twice: the second run finds nothing to do.
-for done in amo.automate(rules=[rule]) + amo.automate(
+for done in amo.workflow(rules=[rule]) + amo.workflow(
     rules=[rule]
 ):  # the second finds nothing new
     print(

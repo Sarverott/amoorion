@@ -25,6 +25,7 @@ from dotenv import dotenv_values
 
 from amoorion.app.frontends import FrontEnds
 from amoorion.app.states import States
+from amoorion.app.workflows import Workflows
 from amoorion.core import AmoorionError
 from amoorion.dataset import Dataset
 from amoorion.inbox import Inbox
@@ -43,7 +44,7 @@ def scratch_values(scratch: Path) -> dict[str, str]:
     }
 
 
-class Amoorion(FrontEnds, States):
+class Amoorion(FrontEnds, States, Workflows):
     """The heart of the project: one setup of amoorion as one object.
 
     It holds where the secrets, the inbox and the dataset are, the flags, and the
@@ -68,6 +69,8 @@ class Amoorion(FrontEnds, States):
         self.used: list[str] = []
 
         self._hashes: dict[str, str] = {}
+
+        self._workflows: dict[str, Any] = {}
 
         self._dataset_path = Path(dataset).expanduser() if dataset else None
 

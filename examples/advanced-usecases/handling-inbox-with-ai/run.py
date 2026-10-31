@@ -90,7 +90,7 @@ rule = {
     ],
 }
 # Run this from a timer: each message is handled only once.
-[done] = amo.automate(rules=[rule])
+[done] = amo.workflow(rules=[rule])
 print(
     done["ok"],
     "|",

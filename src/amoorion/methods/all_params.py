@@ -1,6 +1,5 @@
 """The params of every method in one place; each is defined next to its method."""
 
-from amoorion.methods.automate_method import AutomateParams
 from amoorion.methods.base import NoParams
 from amoorion.methods.compose_method import ComposeParams
 from amoorion.methods.delete_method import DeleteParams
@@ -16,7 +15,6 @@ from amoorion.methods.wiki_method import WikiParams
 from amoorion.methods.workflow_method import WorkflowParams
 
 __all__ = [
-    "AutomateParams",
     "ComposeParams",
     "DeleteParams",
     "InboxParams",

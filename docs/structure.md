@@ -203,12 +203,17 @@ notebooks of `examples/`.
 
 ## What it does by itself: `amoorion.workflows`
 
-`workflow` runs methods one after another, passing on `$last`. `automate` runs rules
-on the inbox: for each new matching message, its steps, with `$text`, `$author`,
+`workflow` runs methods one after another, passing on `$last`. Given rules instead, it runs
+them on the inbox: for each new matching message, its steps, with `$text`, `$author`,
 `$platform`, `$id` and `$url`. A rule acts once per message and a failed one is tried
 again next time. Beware of a rule publishing to where it reads: what it said is a new
 message it may match. Steps can't start other steps. Steps are in `workflows/base.py`,
-rules in `workflows/rules.py`.
+rules in `workflows/rules.py`, which also reads them from YAML files.
+
+Workflows in Python are `workflows/python.py`: `@amo.workflow("name", rules=…)` keeps a
+function, `@step` logs a step, `EXECUTE(…).serial()` or `.paralel()` runs steps, plain or
+async. `amo.perform(name)` runs one and `amo.react()` runs them on new messages of the inbox;
+each gives a `WorkflowRun` with its logs and artifact, which `.save()` writes as JSON.
 
 ## Around the methods: `society`, `utilities`
 

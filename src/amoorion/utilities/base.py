@@ -6,12 +6,16 @@ from typing import Any
 
 import yaml
 
+from amoorion.workflows.base import fill
 from amoorion.core import AmoorionError
 from amoorion.models import Post
 from amoorion.vault import Vault
 
 
-def post_from_markdown(source: str | Path) -> tuple[Post, list[str]]:
+def post_from_markdown(
+    source: str | Path,
+    values: dict[str, str] | None = None,
+) -> tuple[Post, list[str]]:
     """A Markdown text or file as a post, and the platforms its front matter names.
 
     ---
@@ -21,6 +25,8 @@ def post_from_markdown(source: str | Path) -> tuple[Post, list[str]]:
     to: [mastodon, bluesky]
     ---
     The text of the post.
+
+    `values` fill the names of a template (a dollar and the name), after parsing: they can't change the settings.
     """
 
     text = source.read_text() if isinstance(source, Path) else source
@@ -39,6 +45,17 @@ def post_from_markdown(source: str | Path) -> tuple[Post, list[str]]:
         "to",
         [],
     )
+
+    if values:
+        text = fill(
+            text,
+            values,
+        )
+
+        meta = fill(
+            meta,
+            values,
+        )
 
     return Post(text=text.strip(), **meta), [to] if isinstance(
         to, str
