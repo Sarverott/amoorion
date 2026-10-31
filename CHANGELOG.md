@@ -1,3 +1,11 @@
+## v0.4.28 (2026-10-31)
+
+**Packages:** amoorion 0.4.28
+
+### Fix
+
+- **examples**: marimo builds skip raw cells, and the gate runs them
+
 ## v0.4.27 (2026-10-31)
 
 **Packages:** amoorion 0.4.27
