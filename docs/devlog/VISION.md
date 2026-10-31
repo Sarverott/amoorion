@@ -151,7 +151,7 @@ Google Drive, SSHFS, zip, git) and a vector database to phase 8; the model of ho
 submodels and flags, the graph of who follows whom, and methods for media programs
 (ffmpeg, yt-download, GIMP, ADB, browsers, Blender, OBS) to phase 9; Scalar and
 gRPC to phase 7, Cosmos SDK with phase 7's carrier of trust; the web app (mobile web app first,
-browser extension second, Obsidian plugin last) to phase 7; the society as a simulation of lives
+browser extension second, Obsidian plugin last, a view injected by Playwright for the inbox) to phase 7; the society as a simulation of lives
 (biblical names, born and dead, tarot, narrator, emotional drivers) to a phase of its own, once
 the author gives their sets of names.
 

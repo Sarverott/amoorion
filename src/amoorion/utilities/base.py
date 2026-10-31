@@ -6,10 +6,39 @@ from typing import Any
 
 import yaml
 
+from dotenv import dotenv_values, set_key
+
 from amoorion.workflows.base import fill
 from amoorion.core import AmoorionError
 from amoorion.models import Post
 from amoorion.vault import Vault
+
+
+def read_env(path: str | Path) -> dict[str, str | None]:
+    """An env file as a dict; comments and quotes dealt with."""
+
+    return dotenv_values(path)
+
+
+def write_env(
+    path: str | Path,
+    **values: str,
+) -> Path:
+    """Set values in an env file, made if missing; other lines and comments stay as they are."""
+
+    path = Path(path).expanduser()
+
+    path.touch()
+
+    for name, value in values.items():
+        set_key(
+            path,
+            name,
+            value,
+            quote_mode="auto",
+        )
+
+    return path
 
 
 def post_from_markdown(
