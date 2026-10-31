@@ -14,7 +14,10 @@ from amoorion.nats import NatsService, enabled
 
 
 class Service(Controller):
+    """One long-running part of the daemon. It runs until stopped; see `Daemon`."""
+
     async def run(self) -> None:
+        """Work until stopped; returning or raising ends the whole daemon."""
 
         raise NotImplementedError
 
@@ -23,6 +26,8 @@ class Service(Controller):
 
 
 class ApiService(Service):
+    """The HTTP API with its hooks, as a service of the daemon."""
+
     name: ClassVar[str] = "api"
     description: ClassVar[str] = "HTTP API and hooks"
 
@@ -31,6 +36,7 @@ class ApiService(Service):
         host: str,
         port: int,
     ) -> None:
+        """Prepare the server; uvicorn loads here since not every daemon has this service."""
 
         super().__init__()
 
@@ -47,27 +53,37 @@ class ApiService(Service):
         )
 
     async def run(self) -> None:
+        """Serve until `stop` is called."""
 
         await self.server.serve()
 
     async def stop(self) -> None:
+        """Ask the server to finish what it is doing and exit."""
 
         self.server.should_exit = True
 
 
 class Daemon(Controller):
+    """Runs the services together; when one ends, all are stopped.
+
+    A half-working daemon is worse than a stopped one, as something restarts it from
+    outside (systemd, a container).
+    """
+
     name: ClassVar[str] = "daemon"
 
     def __init__(
         self,
         services: list[Service],
     ) -> None:
+        """The services to run."""
 
         super().__init__()
 
         self.services = services
 
     async def run(self) -> None:
+        """Start every service, wait for the first to end, stop the rest, raise its failure if any."""
 
         tasks = [
             asyncio.create_task(service.run(), name=service.name)
@@ -112,6 +128,7 @@ def services(
 
 
 def serve(args: argparse.Namespace) -> None:
+    """Run the daemon until stopped: `amoorion daemon`."""
 
     asyncio.run(
         Daemon(

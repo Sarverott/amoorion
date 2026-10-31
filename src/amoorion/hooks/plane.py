@@ -17,6 +17,8 @@ from amoorion.models import Message
 
 @HOOKS.register
 class PlaneHook(Hook):
+    """Events of Plane (the project tracker) as messages."""
+
     name: ClassVar[str] = "plane"
     description: ClassVar[str] = "Plane webhooks, signed (X-Plane-Signature)"
     secrets: ClassVar[dict[str, str]] = {"secret": "The webhook's secret"}
@@ -26,6 +28,7 @@ class PlaneHook(Hook):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Compare the HMAC-SHA256 of the body with Plane's signature, in constant time."""
 
         expected = hmac.new(
             self.secret("secret").encode(),
@@ -42,6 +45,7 @@ class PlaneHook(Hook):
         self,
         payload: Any,
     ) -> Message:
+        """The event and the name of what it is about."""
 
         if not isinstance(payload, dict):
             raise AmoorionError("plane hook expects a JSON object")

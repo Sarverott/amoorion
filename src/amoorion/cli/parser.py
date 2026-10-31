@@ -32,7 +32,12 @@ def _add_option(
     name: str,
     field: FieldInfo,
 ) -> None:
-    """add option? please explain"""
+    """Turn one parameter of a method into a command line option: `to` into `--to`.
+
+    The type decides the rest: a list takes several values, numbers get converted, a
+    required field is required. An unset optional stays out of the parsed arguments
+    (`SUPPRESS`), so that the method's own default applies.
+    """
 
     annotation = field.annotation
 
@@ -67,6 +72,10 @@ def _add_option(
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """The whole command line, made from the methods: one subcommand per method.
+
+    The servers (`api`, `mcp`, `daemon`) come after them, with their address options.
+    """
 
     parser = argparse.ArgumentParser(
         prog="amoorion",

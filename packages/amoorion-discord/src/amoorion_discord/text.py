@@ -11,6 +11,7 @@ NO_PINGS = {"allowed_mentions": {"parse": []}}
 
 
 def compose(post: Post) -> str:
+    """A post as this platform's text: title, text, links and tags."""
 
     parts = [
         f"**{post.title}**" if post.title else None,
@@ -29,6 +30,7 @@ def compose(post: Post) -> str:
 
 
 def checked(text: str) -> str:
+    """The text if the platform takes that length, an error otherwise."""
 
     if len(text) > LIMIT:
         raise AmoorionError(
@@ -43,6 +45,7 @@ def message(
     data: dict[str, Any],
     guild: str | None,
 ) -> Message:
+    """Discord's JSON of a message as a `Message`."""
 
     author = data.get("author") or {}
 

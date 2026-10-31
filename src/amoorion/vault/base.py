@@ -36,6 +36,7 @@ class VaultLink(Model):
         cls,
         env_file: Path | None = None,
     ) -> "VaultLink":
+        """The link of the environment; `.env` fills in what isn't set, without overriding."""
 
         load_dotenv(
             env_file or Path.cwd() / ".env",
@@ -60,6 +61,7 @@ class Vault(Controller):
         self,
         link: VaultLink,
     ) -> None:
+        """A vault reached through `link`."""
 
         super().__init__()
 
@@ -80,6 +82,7 @@ class Vault(Controller):
         self,
         name: str,
     ) -> str:
+        """The secret `name` (`<platform>/<key>`); an error if it isn't there."""
 
         raise NotImplementedError
 
@@ -88,6 +91,7 @@ BACKENDS: Registry[type[Vault]] = Registry("vault backend")
 
 
 def open_vault(link: VaultLink | None = None) -> Vault:
+    """The vault a link points to; by default the one of the environment."""
 
     link = link or VaultLink.from_env()
 

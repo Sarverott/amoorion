@@ -31,6 +31,8 @@ STANDARD_KEYS = (
 
 @BACKENDS.register
 class KeePassXCVault(Vault):
+    """A KeePassXC file on disk: an entry per platform in the group of amoorion."""
+
     name: ClassVar[str] = "keepassxc"
     description: ClassVar[str] = "KeePassXC database file (.kdbx)"
 
@@ -38,6 +40,7 @@ class KeePassXCVault(Vault):
         self,
         link: VaultLink,
     ) -> None:
+        """Check the link; the file opens on the first secret."""
 
         super().__init__(link)
 
@@ -49,6 +52,7 @@ class KeePassXCVault(Vault):
         self._db: Any = None
 
     def _open(self) -> Any:
+        """Open the file once, with AMOORION_VAULT_TOKEN as its password; failures say what to do."""
 
         if self._db is None:
             try:
@@ -71,6 +75,7 @@ class KeePassXCVault(Vault):
         self,
         name: str,
     ) -> str:
+        """A field of the platform's entry."""
 
         platform, key = self.split(name)
 

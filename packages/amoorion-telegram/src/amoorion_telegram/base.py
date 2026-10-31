@@ -21,6 +21,12 @@ SERVICE = "https://api.telegram.org"
 
 
 class Telegram(HttpPlugin):
+    """A Telegram bot in one chat, through the Bot API.
+
+    The token is part of every URL, which is why it is `hidden` from errors. A bot can
+    only read updates it hasn't confirmed yet, not a chat's history.
+    """
+
     name: ClassVar[str] = "telegram"
     description: ClassVar[str] = (
         "Telegram bot in one chat (Bot API): post, read, reply, delete"
@@ -32,6 +38,7 @@ class Telegram(HttpPlugin):
     )
 
     def hidden(self) -> list[str]:
+        """What must never appear in an error: it is in the URLs."""
 
         return [self.secret("token")]
 
@@ -39,6 +46,7 @@ class Telegram(HttpPlugin):
         self,
         response: requests.Response,
     ) -> str:
+        """What went wrong, from this platform's own form of errors."""
 
         try:
             return str(response.json()["description"])
@@ -50,6 +58,7 @@ class Telegram(HttpPlugin):
         method: str,
         **body: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         try:
             base = self.secret("uri").rstrip("/")
@@ -73,6 +82,7 @@ class Telegram(HttpPlugin):
         self,
         chat: dict[str, Any],
     ) -> bool:
+        """Whether an update comes from the chat of the vault, by id or `@name`."""
 
         wanted = self.secret("chat")
 
@@ -85,6 +95,7 @@ class Telegram(HttpPlugin):
         self,
         data: dict[str, Any],
     ) -> Message:
+        """The platform's answer as a `Message`."""
 
         sender = data.get("from") or {}
 
@@ -129,6 +140,7 @@ class Telegram(HttpPlugin):
         text: str,
         reply_to: str | None = None,
     ) -> Message:
+        """Send a text, optionally as a reply; answers the message."""
 
         if len(text) > LIMIT:
             raise AmoorionError(
@@ -154,6 +166,7 @@ class Telegram(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         return self._send(compose(post))
 
@@ -161,6 +174,7 @@ class Telegram(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         updates = self._call(
             "getUpdates",
@@ -186,6 +200,7 @@ class Telegram(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id or not to.id.isdigit():
             raise AmoorionError(
@@ -215,5 +230,6 @@ class Telegram(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return f"chat{self.secret('chat')}"

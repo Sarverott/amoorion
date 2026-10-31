@@ -6,7 +6,10 @@ from amoorion.core import AmoorionError
 
 
 class FrontEnds:
+    """The ways to reach one `Amoorion` from outside; imported late, as each pulls in its own libraries."""
+
     def api(self) -> Any:
+        """The HTTP API of this setup, an ASGI application for any server."""
 
         from amoorion.api import create_app
 
@@ -17,6 +20,7 @@ class FrontEnds:
         )
 
     def mcp(self) -> Any:
+        """The MCP server of this setup, its methods as tools for agents."""
 
         from amoorion.mcp import create_server
 
@@ -30,6 +34,7 @@ class FrontEnds:
         self,
         *argv: str,
     ) -> int:
+        """Run a command line with this setup, as `amo.cli("--json", "plugins")`; answers the exit code."""
 
         from amoorion.cli import main
 

@@ -11,6 +11,8 @@ from amoorion.plugins import open_plugin
 
 
 class ReplyParams(Model):
+    """What to answer, and where."""
+
     platform: str
     to: str = Field(
         description="id of the message to answer, as read or publish gave it"
@@ -20,6 +22,8 @@ class ReplyParams(Model):
 
 @METHODS.register
 class Reply(Method):
+    """Answers one message on its platform."""
+
     name: ClassVar[str] = "reply"
     description: ClassVar[str] = "Answer one message on its platform"
     Params: ClassVar[type[Model]] = ReplyParams
@@ -28,6 +32,7 @@ class Reply(Method):
         self,
         params: ReplyParams,
     ) -> Message:
+        """A reply needs only the id, so the message is rebuilt from it instead of fetched."""
 
         to = Message(
             platform=params.platform,

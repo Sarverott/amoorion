@@ -39,6 +39,7 @@ def write(
     repo: Repo,
     versions: dict[str, str],
 ) -> None:
+    """Write the versions into the packages' pyproject.toml, only where they differ."""
 
     for package in packages(repo):
         if (
@@ -67,6 +68,7 @@ def commit(
     before: str,
     after: str,
 ) -> str:
+    """Commit the bump, with commitizen's form of message."""
 
     # Same version: an earlier `final` set it, only the changelog section is renewed.
     message = (
@@ -137,6 +139,7 @@ def _at(
     name: str,
     base: str,
 ) -> str | None:
+    """A package's version at a release."""
 
     package = next(
         package for package in packages(repo) if package.name == name
@@ -149,6 +152,10 @@ def _at(
 
 
 def mark(repo: Repo) -> str:
+    """After a release: the next pre-release, X.Y.(Z+1)a0. An unreleased version stays.
+
+    Answers what it did, for the log.
+    """
 
     version = current(repo)
 
@@ -172,6 +179,10 @@ def mark(repo: Repo) -> str:
 
 
 def final(repo: Repo) -> str:
+    """Before a release: finalize the versions of what changed, and write the changelog.
+
+    Runs in the flow; answers what it did, for the log.
+    """
 
     version = current(repo)
 

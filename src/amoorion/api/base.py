@@ -32,6 +32,11 @@ def create_app(
     inbox: Inbox | None = None,
     dataset: Dataset | None = None,
 ) -> FastAPI:
+    """The FastAPI application: one route per method, the hooks, and a token check.
+
+    Routes are made from `METHODS`, so a new method needs nothing here. Whatever isn't
+    passed comes from the environment: the vault of `.env` and the default inbox.
+    """
 
     vault = vault or open_vault()
 
@@ -172,6 +177,7 @@ def create_app(
 
 
 def serve(args: argparse.Namespace) -> None:
+    """Run the API until stopped: `amoorion api`."""
 
     import uvicorn
 

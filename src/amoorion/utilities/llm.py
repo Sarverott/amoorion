@@ -18,6 +18,8 @@ TIMEOUT = 300
 
 
 class Composition(Model):
+    """What the model wrote, and which model it was."""
+
     text: str
     model: str
 
@@ -26,6 +28,7 @@ def _optional(
     vault: Vault,
     name: str,
 ) -> str | None:
+    """A secret that may be missing: local servers usually want no token."""
 
     try:
         return vault.get(name)
@@ -39,6 +42,10 @@ def complete(
     system: str | None = None,
     model: str | None = None,
 ) -> Composition:
+    """One answer of an OpenAI-compatible server (Ollama, LiteLLM, llama.cpp, OpenAI…).
+
+    Its address and model come from the vault: `llm/url`, `llm/model`, optionally `llm/token`.
+    """
 
     url = vault.get("llm/url").rstrip("/")
 

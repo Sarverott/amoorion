@@ -20,6 +20,11 @@ SERVICE = "https://api.x.com"
 
 
 class X(HttpPlugin):
+    """X (Twitter) through API v2, signed with OAuth 1 by four keys from the vault.
+
+    Reading needs a paid tier of the API; posting works on the free one.
+    """
+
     name: ClassVar[str] = "x"
     description: ClassVar[str] = "X (twitter) API v2: post, read, reply, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(Capability)
@@ -36,6 +41,7 @@ class X(HttpPlugin):
         self,
         response: requests.Response,
     ) -> str:
+        """What went wrong, from this platform's own form of errors."""
 
         try:
             errors = response.json().get("errors")
@@ -58,6 +64,7 @@ class X(HttpPlugin):
         path: str,
         **kwargs: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         try:
             base = self.secret("uri").rstrip("/")
@@ -79,6 +86,7 @@ class X(HttpPlugin):
         )
 
     def _user(self) -> dict[str, Any]:
+        """The account of the keys, asked once."""
 
         if self._me is None:
             self._me = self._call("GET", "/2/users/me")["data"]
@@ -91,6 +99,7 @@ class X(HttpPlugin):
         links: list[str],
         reply_to: str | None = None,
     ) -> Message:
+        """Publish one post, after checking its weighted length."""
 
         if weight(text, links) > LIMIT:
             raise AmoorionError(
@@ -124,6 +133,7 @@ class X(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         return self._tweet(
             compose(post),
@@ -134,6 +144,7 @@ class X(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         user = self._user()
 
@@ -187,6 +198,7 @@ class X(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id:
             raise AmoorionError("x needs the id of the post to reply to")
@@ -201,6 +213,7 @@ class X(HttpPlugin):
         self,
         message: Message,
     ) -> None:
+        """Delete a message by its id."""
 
         if not message.id:
             raise AmoorionError("x needs the id of the post to delete")
@@ -213,5 +226,6 @@ class X(HttpPlugin):
             raise AmoorionError(f"x did not delete {message.id}")
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return self._user()["username"]

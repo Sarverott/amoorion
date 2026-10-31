@@ -22,6 +22,8 @@ ITEM = re.compile(
 
 @dataclass
 class Phase:
+    """One phase of TODO.md, by its counted checkboxes."""
+
     number: int
     title: str
     done: int
@@ -29,11 +31,13 @@ class Phase:
 
     @property
     def complete(self) -> bool:
+        """Everything ticked, and there is something to tick."""
 
         return self.total > 0 and self.done == self.total
 
 
 def parse(text: str) -> list[Phase]:
+    """The phases in the text of TODO.md, by its headings and checkboxes."""
 
     headings = list(HEADING.finditer(text))
 
@@ -71,6 +75,7 @@ def phases(
     repo: Repo,
     revision: str | None = None,
 ) -> list[Phase]:
+    """The phases at a revision, by default now."""
 
     return parse(
         repo.read(

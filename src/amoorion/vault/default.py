@@ -13,6 +13,8 @@ from amoorion.vault.base import BACKENDS, Vault
 
 @BACKENDS.register
 class EnvVault(Vault):
+    """Secrets in AMOORION_SECRET_* variables: for development and sandboxes, not real accounts."""
+
     name: ClassVar[str] = "env"
     description: ClassVar[str] = (
         "secrets from environment variables (development only)"
@@ -20,6 +22,7 @@ class EnvVault(Vault):
 
     @staticmethod
     def variable(name: str) -> str:
+        """The variable of a secret: `x/api-key` is AMOORION_SECRET_X_API_KEY."""
 
         return (
             "AMOORION_SECRET_"
@@ -30,6 +33,7 @@ class EnvVault(Vault):
         self,
         name: str,
     ) -> str:
+        """The variable's value; the error names the variable to set."""
 
         self.split(name)
 

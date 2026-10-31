@@ -13,6 +13,11 @@ from amoorion_discord.text import NO_PINGS, checked, compose, message
 
 
 class DiscordWebhook(HttpPlugin):
+    """A Discord channel webhook: no bot needed, only its URL.
+
+    It can post and delete what it posted, but it can't read.
+    """
+
     name: ClassVar[str] = "discord-webhook"
     description: ClassVar[str] = (
         "Discord channel webhook, no bot: post, delete what it posted"
@@ -26,6 +31,7 @@ class DiscordWebhook(HttpPlugin):
     secrets: ClassVar[tuple[str, ...]] = ("url",)
 
     def hidden(self) -> list[str]:
+        """What must never appear in an error: it is in the URLs."""
 
         # .../webhooks/<id>/<token>: the token is the secret part.
         return [self.secret("url").rstrip("/").rsplit("/", 1)[-1]]
@@ -34,6 +40,7 @@ class DiscordWebhook(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         body = {"content": checked(compose(post))} | NO_PINGS
 
@@ -55,6 +62,7 @@ class DiscordWebhook(HttpPlugin):
         self,
         message: Message,
     ) -> None:
+        """Delete a message by its id."""
 
         if not message.id:
             raise AmoorionError(
@@ -67,6 +75,7 @@ class DiscordWebhook(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         # .../webhooks/<id>/<token>: the id names it, the token stays secret.
         return "webhook-" + self.secret("url").rstrip("/").rsplit("/", 2)[-2]

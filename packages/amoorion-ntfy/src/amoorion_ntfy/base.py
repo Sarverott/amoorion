@@ -19,6 +19,11 @@ SERVER = "https://ntfy.sh"
 
 
 class Ntfy(HttpPlugin):
+    """A topic of ntfy: push notifications to phones and desktops.
+
+    Anyone knowing a public topic's name can read it, so a token is optional.
+    """
+
     name: ClassVar[str] = "ntfy"
     description: ClassVar[str] = (
         "ntfy: push notifications to one topic, and read them"
@@ -35,6 +40,7 @@ class Ntfy(HttpPlugin):
         self,
         key: str,
     ) -> str | None:
+        """A secret that may be missing; then the default."""
 
         try:
             return self.secret(key)
@@ -43,10 +49,12 @@ class Ntfy(HttpPlugin):
 
     @property
     def server(self) -> str:
+        """The server: ntfy.sh unless the `uri` secret says otherwise."""
 
         return (self._optional("uri") or SERVER).rstrip("/")
 
     def _headers(self) -> dict[str, str]:
+        """The login, when there is a token."""
 
         token = self._optional("token")
 
@@ -56,6 +64,7 @@ class Ntfy(HttpPlugin):
         self,
         event: dict[str, Any],
     ) -> Message:
+        """The platform's answer as a `Message`."""
 
         return Message(
             platform=self.name,
@@ -77,6 +86,7 @@ class Ntfy(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         body: dict[str, Any] = {
             "topic": self.secret("topic"),
@@ -108,6 +118,7 @@ class Ntfy(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         url = f"{self.server}/{self.secret('topic')}/json"
 
@@ -145,5 +156,6 @@ class Ntfy(HttpPlugin):
         return messages[-limit:][::-1]
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return self.secret("topic")

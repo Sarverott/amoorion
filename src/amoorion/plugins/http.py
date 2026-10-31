@@ -25,12 +25,18 @@ REASON_KEYS = (
 
 
 class HttpPlugin(Plugin):
+    """A plugin talking to an HTTP API: shared requests, errors and hiding of secrets.
+
+    Its errors say what the platform answered, and never contain a secret (`hidden`).
+    """
+
     timeout: ClassVar[float] = 30
 
     def reason(
         self,
         response: requests.Response,
     ) -> str:
+        """What the platform said went wrong: from the usual keys of its JSON, or the raw text."""
 
         try:
             body = response.json()
@@ -58,6 +64,7 @@ class HttpPlugin(Plugin):
         self,
         text: str,
     ) -> AmoorionError:
+        """An error with every secret masked: URLs and answers can contain them."""
 
         for secret in self.hidden():
             if secret:
@@ -74,6 +81,7 @@ class HttpPlugin(Plugin):
         url: str,
         **kwargs: Any,
     ) -> Any:
+        """One request with a timeout; a network failure or an error status raises `AmoorionError`."""
 
         try:
             response = requests.request(

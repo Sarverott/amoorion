@@ -16,6 +16,8 @@ NOT_A_STEP = {
 
 
 class WorkflowParams(Model):
+    """The steps to run in order."""
+
     steps: list[Step] = Field(
         min_length=1,
         description="methods with their params, one after another; $last is the text of the previous answer",
@@ -23,11 +25,14 @@ class WorkflowParams(Model):
 
 
 class StepsMethod(Method):
+    """A method that runs other methods, sharing its vault, inbox and dataset with them."""
+
     def _call(
         self,
         method: str,
         params: dict[str, Any],
     ) -> Any:
+        """One step. Methods running steps can't be steps: no loops."""
 
         if method in NOT_A_STEP:
             raise AmoorionError(f"a step can't be {method}")
@@ -43,6 +48,8 @@ class StepsMethod(Method):
 
 @METHODS.register
 class Workflow(StepsMethod):
+    """Methods one after another; each can use the previous answer as `$last`."""
+
     name: ClassVar[str] = "workflow"
     description: ClassVar[str] = (
         "Run methods one after another, until the end or the first failure"
@@ -53,6 +60,7 @@ class Workflow(StepsMethod):
         self,
         params: WorkflowParams,
     ) -> list[StepResult]:
+        """The result of each step run; it stops at the first failure."""
 
         return run_steps(
             params.steps,

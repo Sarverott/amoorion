@@ -31,6 +31,8 @@ KINDS = {
 
 @dataclass
 class State:
+    """Where development stands: its version, what is new, and what remote services say."""
+
     branch: str
     version: str
     stage: str
@@ -54,6 +56,7 @@ def stage(
     repo: Repo,
     version: str,
 ) -> str:
+    """A sentence on the stage of a version."""
 
     if versions.parse(version)[3] is not None:
         return "pre-release: the next release is being made"
@@ -81,6 +84,7 @@ def counts(
     repo: Repo,
     master: str,
 ) -> tuple[int | None, int | None]:
+    """How far this branch is from master: commits behind and ahead; `None` without master."""
 
     if not repo.git("rev-parse", "--verify", "-q", master):
         return None, None
@@ -97,6 +101,7 @@ def read(
     repo: Repo,
     online: bool = False,
 ) -> State:
+    """Gather the state; only with `online` does it ask GitHub and PyPI."""
 
     version = versions.current(repo)
 

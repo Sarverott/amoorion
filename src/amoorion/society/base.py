@@ -23,6 +23,8 @@ from amoorion.utilities.llm import complete
 
 
 class Persona(Model):
+    """Somebody in a simulation: a name, who they are, and what they think of things."""
+
     name: str = Field(min_length=1)
     bio: str = ""
     stance: str = Field(
@@ -86,12 +88,18 @@ def by_model(
 
 
 class Society:
+    """Personas reacting to a topic and to each other, in rounds, on a shared feed.
+
+    `think` decides what a persona says; nobody and nothing outside takes part.
+    """
+
     def __init__(
         self,
         personas: list[Persona],
         think: Think = scripted,
         run: str = "default",
     ) -> None:
+        """The people, the way they think, and the run that names this feed."""
 
         self.personas, self.think, self.platform = (
             personas,
@@ -104,6 +112,7 @@ class Society:
         topic: str,
         rounds: int = 3,
     ) -> list[Message]:
+        """Every persona in every round may add to the feed; returns the feed, oldest first."""
 
         feed: list[Message] = []
 

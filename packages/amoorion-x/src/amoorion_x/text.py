@@ -29,6 +29,7 @@ def weight(
     text: str,
     links: list[str],
 ) -> int:
+    """The length as X counts: most scripts twice, a link as a fixed length."""
 
     for link in links:
         text = text.replace(
@@ -46,6 +47,7 @@ def weight(
 
 
 def compose(post: Post) -> str:
+    """A post as this platform's text: title, text, links and tags."""
 
     text = "\n\n".join(part for part in (post.title, post.text) if part)
 

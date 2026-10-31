@@ -66,6 +66,8 @@ def describe(
 
 @HOOKS.register
 class GitHubHook(Hook):
+    """Events of a GitHub repository (pushes, issues, pull requests…) as messages."""
+
     name: ClassVar[str] = "github"
     description: ClassVar[str] = "GitHub webhooks, signed (X-Hub-Signature-256)"
     secrets: ClassVar[dict[str, str]] = {"secret": "The webhook's secret"}
@@ -75,6 +77,7 @@ class GitHubHook(Hook):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Compare the HMAC-SHA256 of the body with the signature GitHub sent, in constant time."""
 
         expected = (
             "sha256="
@@ -92,6 +95,7 @@ class GitHubHook(Hook):
         self,
         payload: Any,
     ) -> Message | None:
+        """One sentence on the event, by its sender; GitHub's `ping` is no message."""
 
         event = self.headers.get(
             "x-github-event",

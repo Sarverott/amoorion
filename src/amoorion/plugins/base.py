@@ -17,6 +17,8 @@ from amoorion.vault import Vault
 
 
 class Capability(StrEnum):
+    """What a platform can do; a method asks for one before calling the plugin."""
+
     POST = "post"
     READ = "read"
     REPLY = "reply"
@@ -28,6 +30,11 @@ class Unsupported(AmoorionError):
 
 
 class Plugin(Controller):
+    """One platform. A subclass says what it can do and overrides those operations.
+
+    The rest refuse with `Unsupported`. See docs/plugins.md for writing one.
+    """
+
     capabilities: ClassVar[frozenset[Capability]] = frozenset()
     # Keys this plugin reads from the vault as `<platform>/<key>`.
     secrets: ClassVar[tuple[str, ...]] = ()
@@ -37,6 +44,7 @@ class Plugin(Controller):
         vault: Vault,
         view: View | None = None,
     ) -> None:
+        """A plugin working with the secrets of `vault`."""
 
         super().__init__(view)
 
@@ -68,6 +76,7 @@ class Plugin(Controller):
         self,
         key: str,
     ) -> str:
+        """A secret of this platform: `token` is `<platform>/token` in the vault."""
 
         return self.vault.get(f"{self.name}/{key}")
 
@@ -75,6 +84,7 @@ class Plugin(Controller):
         self,
         capability: Capability,
     ) -> Unsupported:
+        """The error for an operation this platform doesn't have."""
 
         return Unsupported(f"{self.name} can't {capability}")
 
@@ -82,6 +92,7 @@ class Plugin(Controller):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         raise self._unsupported(Capability.POST)
 
@@ -89,6 +100,7 @@ class Plugin(Controller):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         raise self._unsupported(Capability.READ)
 
@@ -97,6 +109,7 @@ class Plugin(Controller):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message; answers the new message."""
 
         raise self._unsupported(Capability.REPLY)
 

@@ -40,6 +40,7 @@ def previous_release(
     repo: Repo,
     tag: str,
 ) -> str | None:
+    """The release before a tag, skipping pre-releases."""
 
     tags = repo.git(
         "tag",
@@ -124,6 +125,7 @@ def title(
     repo: Repo,
     tag: str,
 ) -> str:
+    """The title of a release; it names the phases it completed."""
 
     since = previous_release(
         repo,
@@ -150,6 +152,7 @@ def notes(
     repo: Repo,
     tag: str,
 ) -> str:
+    """The release notes: what changed, from the changelog, and the phases done."""
 
     since = previous_release(
         repo,

@@ -18,6 +18,8 @@ SCHEMA = Path(__file__).with_name("schema.handled.sql").read_text()
 
 
 class Rule(Model):
+    """What to do (`steps`) with which messages of the inbox (`platform`, `contains`)."""
+
     name: str = Field(min_length=1)
     steps: list[Step] = Field(min_length=1)
     platform: str | None = Field(
@@ -34,6 +36,7 @@ def matches(
     rule: Rule,
     message: Message,
 ) -> bool:
+    """Whether a rule is about a message; `contains` ignores case."""
 
     if rule.platform and message.platform != rule.platform:
         return False
@@ -44,6 +47,7 @@ def matches(
 
 
 def known_of(message: Message) -> dict[str, str]:
+    """What steps of a rule may use of the message: `$text`, `$author`, `$platform`, `$id`, `$url`."""
 
     return {
         "text": message.text,
@@ -55,6 +59,7 @@ def known_of(message: Message) -> dict[str, str]:
 
 
 def _connect(inbox: Inbox) -> sqlite3.Connection:
+    """A connection to the inbox, with the table of handled messages made when missing."""
 
     connection = inbox._connect()
 
@@ -68,6 +73,7 @@ def handled(
     rule: str,
     message: Message,
 ) -> bool:
+    """Whether this rule has already dealt with this message."""
 
     connection = _connect(inbox)
 
@@ -91,6 +97,7 @@ def mark_handled(
     rule: str,
     message: Message,
 ) -> None:
+    """Remember that it has; asking twice is harmless."""
 
     connection = _connect(inbox)
 

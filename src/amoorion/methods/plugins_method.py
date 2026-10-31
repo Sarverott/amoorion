@@ -8,6 +8,8 @@ from amoorion.plugins import FAILED, Capability, load_plugins
 
 
 class PluginInfo(Model):
+    """One platform and what it can do; `error` when its package failed to load."""
+
     name: str
     description: str
     capabilities: list[Capability]
@@ -16,6 +18,8 @@ class PluginInfo(Model):
 
 @METHODS.register
 class Plugins(Method):
+    """What is installed. Loads every plugin, and also reports those that failed."""
+
     name: ClassVar[str] = "plugins"
     description: ClassVar[str] = (
         "List the platform plugins and what they can do"
@@ -26,6 +30,7 @@ class Plugins(Method):
         self,
         params: Model,
     ) -> list[PluginInfo]:
+        """Working plugins by name, then the failed ones."""
 
         plugins = load_plugins()
 

@@ -28,6 +28,7 @@ PORTS = {
 
 
 def body_of(mail: EmailMessage) -> str:
+    """The text of a mail, plain if it has both."""
 
     part = mail.get_body(
         preferencelist=(
@@ -40,6 +41,11 @@ def body_of(mail: EmailMessage) -> str:
 
 
 class Email(Plugin):
+    """E-mail as a platform: sending by SMTP, reading by IMAP, replying in the thread.
+
+    A message's id is its Message-ID, as that is what a reply must refer to.
+    """
+
     name: ClassVar[str] = "email"
     description: ClassVar[str] = "E-mail: send by SMTP, read by IMAP, reply"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(
@@ -62,6 +68,7 @@ class Email(Plugin):
         key: str,
         default: str,
     ) -> str:
+        """A secret that may be missing; then the default."""
 
         try:
             return self.secret(key)
@@ -69,6 +76,7 @@ class Email(Plugin):
             return default
 
     def _sender(self) -> str:
+        """The `from` secret, or the login of the SMTP address."""
 
         return self._optional(
             "from",
@@ -82,6 +90,7 @@ class Email(Plugin):
         text: str,
         reply_to: str | None = None,
     ) -> Message:
+        """Build one mail with a new Message-ID and send it; a reply also refers to its original."""
 
         mail = EmailMessage()
 
@@ -117,6 +126,7 @@ class Email(Plugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         first, _, rest = post.text.partition("\n")
 
@@ -139,6 +149,7 @@ class Email(Plugin):
         )
 
     def _imap(self) -> imaplib.IMAP4:
+        """A logged-in IMAP connection, from `email/imap-uri` and its password."""
 
         uri = urlparse(self.secret("imap-uri"))
 
@@ -180,6 +191,7 @@ class Email(Plugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         messages = []
 
@@ -218,6 +230,7 @@ class Email(Plugin):
         self,
         raw: bytes,
     ) -> Message:
+        """The platform's answer as a `Message`."""
 
         mail = message_from_bytes(
             raw,
@@ -246,6 +259,7 @@ class Email(Plugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id or not to.author:
             raise AmoorionError(
@@ -266,5 +280,6 @@ class Email(Plugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return smtp_user(self.secret("smtp-uri"))

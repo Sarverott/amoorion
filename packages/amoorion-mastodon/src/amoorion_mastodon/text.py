@@ -11,6 +11,7 @@ class _Text(HTMLParser):
     """Status HTML to plain text: paragraphs and line breaks kept, tags dropped."""
 
     def __init__(self) -> None:
+        """Start with nothing collected."""
 
         super().__init__()
 
@@ -21,6 +22,7 @@ class _Text(HTMLParser):
         tag: str,
         attrs: list[tuple[str, str | None]],
     ) -> None:
+        """Line breaks and paragraphs become new lines."""
 
         if tag == "br":
             self.parts.append("\n")
@@ -32,11 +34,13 @@ class _Text(HTMLParser):
         self,
         data: str,
     ) -> None:
+        """Text stays as it is."""
 
         self.parts.append(data)
 
 
 def to_text(html: str) -> str:
+    """Mastodon's HTML of a status as plain text."""
 
     parser = _Text()
 
@@ -46,6 +50,7 @@ def to_text(html: str) -> str:
 
 
 def compose(post: Post) -> str:
+    """A post as this platform's text: title, text, links and tags."""
 
     parts = [part for part in (post.title, post.text) if part]
 
@@ -64,6 +69,7 @@ def length(
     text: str,
     links: list[str],
 ) -> int:
+    """The length as Mastodon counts: each link as a fixed number of characters."""
 
     for link in links:
         text = text.replace(

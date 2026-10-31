@@ -8,6 +8,8 @@ from amoorion.plugins import load_plugins
 
 
 class AccountStatus(Model):
+    """Whether a platform is ready: its missing secrets by name, never by value."""
+
     platform: str
     ready: bool
     missing: list[str] = []
@@ -16,6 +18,8 @@ class AccountStatus(Model):
 
 @METHODS.register
 class Accounts(Method):
+    """Tells which platforms can work right now. Asks the vault, not the platforms."""
+
     name: ClassVar[str] = "accounts"
     description: ClassVar[str] = (
         "Which platforms have their secrets in the vault (values never shown)"
@@ -26,6 +30,7 @@ class Accounts(Method):
         self,
         params: Model,
     ) -> list[AccountStatus]:
+        """Try every secret of every plugin; what can't be read counts as missing."""
 
         statuses = []
 

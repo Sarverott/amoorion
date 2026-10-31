@@ -44,7 +44,12 @@ def scratch_values(scratch: Path) -> dict[str, str]:
 
 
 class Amoorion(FrontEnds, States):
-    """heart of this project"""
+    """The heart of the project: one setup of amoorion as one object.
+
+    It holds where the secrets, the inbox and the dataset are, the flags, and the
+    platforms in use. Every method is callable by its name (`amo.publish(text="hi")`),
+    and the CLI, API and MCP server can be started from it, with this same setup.
+    """
 
     def __init__(
         self,
@@ -52,6 +57,11 @@ class Amoorion(FrontEnds, States):
         dataset: str | Path | None = None,
         flags: dict[str, Any] | None = None,
     ) -> None:
+        """Open a setup: `env` is its env file, none means a sandbox of its own.
+
+        `dataset` overrides where the env file keeps the dataset; `flags` are free values
+        of the caller, saved along with the state.
+        """
 
         self.flags: dict[str, Any] = dict(flags or {})
 
@@ -100,6 +110,7 @@ class Amoorion(FrontEnds, States):
         self,
         env: Path | None,
     ) -> None:
+        """Read the env file (or make the sandbox); the vault itself opens when first needed."""
 
         self.env = env
 
@@ -116,6 +127,7 @@ class Amoorion(FrontEnds, States):
         self,
         variable: str,
     ) -> Path | None:
+        """A path from this setup's values, with `~` expanded; `None` when it isn't set."""
 
         value = self._values.get(variable)
 
@@ -123,6 +135,7 @@ class Amoorion(FrontEnds, States):
 
     @property
     def link(self) -> VaultLink:
+        """Where this setup's secrets are: the vault's kind, address, token and path."""
 
         values = self._values
 
@@ -135,6 +148,7 @@ class Amoorion(FrontEnds, States):
 
     @property
     def vault(self) -> Vault:
+        """The vault, opened once on first use: opening may ask a service or read a file."""
 
         if self._vault is None:
             self._vault = open_vault(self.link)
@@ -149,6 +163,7 @@ class Amoorion(FrontEnds, States):
 
     @property
     def dataset(self) -> Dataset:
+        """The dataset; the path given to the constructor wins over the env file's."""
 
         return Dataset(self._dataset_path or self._path("AMOORION_DATASET"))
 
@@ -174,6 +189,7 @@ class Amoorion(FrontEnds, States):
         self,
         name: str,
     ) -> Method:
+        """One method, bound to this setup's vault, inbox and dataset."""
 
         return METHODS.get(name)(
             self.vault,
@@ -207,6 +223,7 @@ class Amoorion(FrontEnds, States):
         self,
         name: str,
     ) -> Any:
+        """`amo.publish(...)`: any method by its name. Only called for names not found otherwise."""
 
         if name.startswith("_") or name not in METHODS:
             raise AttributeError(name)
@@ -223,5 +240,6 @@ class Amoorion(FrontEnds, States):
         return call
 
     def __repr__(self) -> str:
+        """What it is at a glance; no secrets, the vault only by its kind."""
 
         return f"<Amoorion vault={self.link.kind} plugins={self.used} flags={self.flags}>"

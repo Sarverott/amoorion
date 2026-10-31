@@ -47,10 +47,12 @@ class _Lines:
         self,
         stream: TextIO,
     ) -> None:
+        """Wrap a text stream given by a test or a pipe."""
 
         self.stream = stream
 
     def readline(self) -> str:
+        """The next line; the end of the stream raises `EOFError`, as a closed terminal does."""
 
         line = self.stream.readline()
 
@@ -61,6 +63,7 @@ class _Lines:
 
 
 def _inner(annotation: Any) -> Any:
+    """The type inside `X | None`: optional parameters are asked the same way as the others."""
 
     if typing.get_origin(annotation) in (typing.Union, types.UnionType):
         return next(
@@ -71,11 +74,17 @@ def _inner(annotation: Any) -> Any:
 
 
 class Guide:
+    """`amoorion` alone: a dialogue that asks what to do and then each parameter.
+
+    It is built from the methods themselves, so a new method appears here by itself.
+    """
+
     def __init__(
         self,
         console: Console | None = None,
         stream: TextIO | None = None,
     ) -> None:
+        """`console` and `stream` are there for tests; a person uses the terminal."""
 
         self.console = console or Console()
 
@@ -86,6 +95,7 @@ class Guide:
         question: str,
         **kwargs: Any,
     ) -> str:
+        """One question on this console."""
 
         return Prompt.ask(
             question,
@@ -98,6 +108,7 @@ class Guide:
         self,
         method: str,
     ) -> list[str]:
+        """The platforms able to do what a method needs."""
 
         plugins = load_plugins()
 
@@ -110,6 +121,7 @@ class Guide:
         ]
 
     def choose(self) -> type[Method] | None:
+        """Show the table of methods and ask for one; `None` means leaving."""
 
         table = Table(
             "#",
@@ -156,6 +168,7 @@ class Guide:
         name: str,
         field: FieldInfo,
     ) -> Any:
+        """Ask for one parameter, in the way its type wants: a platform from a list, a list, a number."""
 
         annotation = _inner(field.annotation)
 
@@ -258,6 +271,7 @@ class Guide:
         return True
 
     def run(self) -> int:
+        """Keep asking until the person is done; a closed input ends the dialogue quietly."""
 
         self.console.print(
             "[bold]amoorion[/]: administration of chatting and communication platforms"

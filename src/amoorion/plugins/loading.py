@@ -54,5 +54,6 @@ def open_plugin(
     name: str,
     vault: Vault | None = None,
 ) -> Plugin:
+    """A working plugin by its name; with the vault of the environment if none is given."""
 
     return load_plugins().get(name)(vault or open_vault())

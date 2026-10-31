@@ -25,6 +25,11 @@ def main(
     inbox: Any = None,
     dataset: Any = None,
 ) -> int:
+    """The command line: parse, run one method, print the answer; returns the exit code.
+
+    Without a command it guides a person step by step, or prints the help when no
+    terminal is attached. Errors are printed as one line, not as a traceback.
+    """
 
     parser = build_parser()
 

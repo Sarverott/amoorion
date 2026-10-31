@@ -20,6 +20,11 @@ SERVICE = "https://bsky.social"
 
 
 class Bluesky(HttpPlugin):
+    """Bluesky over the AT Protocol: posts are records in the account's repository.
+
+    A session is opened on first use, with an app password from the vault.
+    """
+
     name: ClassVar[str] = "bluesky"
     description: ClassVar[str] = (
         "Bluesky (AT Protocol): post, read, reply, delete"
@@ -34,6 +39,7 @@ class Bluesky(HttpPlugin):
 
     @property
     def service(self) -> str:
+        """The server; another PDS can be set by the `uri` secret."""
 
         try:
             return self.secret("uri").rstrip("/")
@@ -46,6 +52,7 @@ class Bluesky(HttpPlugin):
         nsid: str,
         **kwargs: Any,
     ) -> dict[str, Any]:
+        """One XRPC request by its method name, with the session once there is one."""
 
         headers = (
             {"Authorization": f"Bearer {self._session['accessJwt']}"}
@@ -61,6 +68,7 @@ class Bluesky(HttpPlugin):
         )
 
     def _login(self) -> dict[str, Any]:
+        """Open the session once; its handle and tokens are kept."""
 
         if self._session is None:
             identifier, password = (
@@ -84,6 +92,7 @@ class Bluesky(HttpPlugin):
         uri: str,
         handle: str,
     ) -> str:
+        """The address of a post on bsky.app, made from its AT URI."""
 
         return (
             f"https://bsky.app/profile/{handle}/post/{uri.rsplit('/', 1)[-1]}"
@@ -93,6 +102,7 @@ class Bluesky(HttpPlugin):
         self,
         record: dict[str, Any],
     ) -> Message:
+        """Create a post record; its length limit counts graphemes, as Bluesky does."""
 
         session = self._login()
 
@@ -144,6 +154,7 @@ class Bluesky(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         text, facets = compose(post)
 
@@ -155,6 +166,7 @@ class Bluesky(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         session = self._login()
 
@@ -220,6 +232,7 @@ class Bluesky(HttpPlugin):
         to: Message,
         text: str,
     ) -> Message:
+        """Answer a message by its id; answers the new message."""
 
         if not to.id:
             raise AmoorionError(
@@ -275,6 +288,7 @@ class Bluesky(HttpPlugin):
         self,
         message: Message,
     ) -> None:
+        """Delete a message by its id."""
 
         if not message.id or not message.id.startswith("at://"):
             raise AmoorionError(
@@ -304,5 +318,6 @@ class Bluesky(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return self._login()["handle"]

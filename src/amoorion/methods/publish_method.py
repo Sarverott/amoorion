@@ -11,6 +11,8 @@ from amoorion.plugins import open_plugin
 
 
 class PublishParams(Post):
+    """A post, and where it goes."""
+
     to: list[str] = Field(
         min_length=1,
         description="platforms to publish on",
@@ -19,6 +21,8 @@ class PublishParams(Post):
 
 @METHODS.register
 class Publish(Method):
+    """One post to several platforms. One failing doesn't stop the others."""
+
     name: ClassVar[str] = "publish"
     description: ClassVar[str] = (
         "Publish one post on several platforms; one result per platform"
@@ -29,6 +33,7 @@ class Publish(Method):
         self,
         params: PublishParams,
     ) -> list[Result]:
+        """One `Result` per platform, whatever happens on each of them."""
 
         post = Post.model_validate(params.model_dump(exclude={"to"}))
 

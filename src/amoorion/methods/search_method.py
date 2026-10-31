@@ -10,6 +10,8 @@ from amoorion.models import Message
 
 
 class SearchParams(Model):
+    """What to look for, and where."""
+
     text: str = Field(min_length=1)
     platform: str | None = Field(
         None,
@@ -24,6 +26,8 @@ class SearchParams(Model):
 
 @METHODS.register
 class Search(Method):
+    """Finds messages already in the inbox; asks no platform."""
+
     name: ClassVar[str] = "search"
     description: ClassVar[str] = (
         "Find messages of the inbox by their text, newest first"
@@ -35,6 +39,7 @@ class Search(Method):
         self,
         params: SearchParams,
     ) -> list[Message]:
+        """The newest messages containing the text."""
 
         return self.inbox.search(
             params.text,

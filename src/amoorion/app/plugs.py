@@ -29,6 +29,7 @@ class Plug(str):
         cls,
         plugin: type[Plugin],
     ) -> Self:
+        """The plug is the plugin's name as a string, holding the plugin class weakly."""
 
         plug = super().__new__(
             cls,
@@ -41,6 +42,7 @@ class Plug(str):
 
     @property
     def plugin(self) -> type[Plugin]:
+        """The plugin class; an error if it has been unloaded since."""
 
         plugin = self._plugin()
 
@@ -51,16 +53,19 @@ class Plug(str):
 
     @property
     def name(self) -> str:
+        """The platform's name, what the string itself is."""
 
         return str(self)
 
     @property
     def description(self) -> str:
+        """One line on what the platform is."""
 
         return self.plugin.description
 
     @property
     def version(self) -> str:
+        """The version of the package that brought the plugin; `unknown` when not installed as one."""
 
         try:
             return version(
@@ -90,6 +95,7 @@ class Plug(str):
 
     @property
     def infoflags(self) -> dict[str, bool]:
+        """What it has, as flags: `creds` (its secrets are set) and `can_<capability>`."""
 
         can = {
             f"can_{capability}": capability in self.plugin.capabilities
@@ -100,6 +106,7 @@ class Plug(str):
 
     @property
     def info(self) -> PlugInfo:
+        """Description, version and flags together."""
 
         return PlugInfo(
             self.description,
@@ -108,6 +115,7 @@ class Plug(str):
         )
 
     def __repr__(self) -> str:
+        """The name, version and capabilities, for a notebook or a shell."""
 
         return f"<Plug {self.name} {self.version}: {', '.join(sorted(self.plugin.capabilities))}>"
 
@@ -120,6 +128,7 @@ class Plugs:
     """The installed platforms: `Plugins["x"]`, `list(Plugins)`, `dict(Plugins)`, `for p in Plugins`."""
 
     def __init__(self) -> None:
+        """No plug is kept alive by this: they live only as long as somebody uses them."""
 
         self._resting: weakref.WeakValueDictionary[str, Plug] = (
             weakref.WeakValueDictionary()
@@ -129,6 +138,7 @@ class Plugs:
         self,
         name: str,
     ) -> Plug:
+        """The plug of a name: the same object while in use, a new one if the plugin was reloaded."""
 
         plugin = load_plugins().get(name)
 
@@ -143,6 +153,7 @@ class Plugs:
         self,
         name: str,
     ) -> Plug | PlugInfo:
+        """`Plugins["x"]` is the plug; the keys of `dict(Plugins)` get its information instead."""
 
         return (
             self._plug(name).info
@@ -151,10 +162,12 @@ class Plugs:
         )
 
     def __iter__(self) -> Iterator[Plug]:
+        """A plug for every installed platform."""
 
         return iter([self._plug(name) for name in load_plugins().names()])
 
     def __len__(self) -> int:
+        """How many platforms are installed."""
 
         return len(load_plugins().names())
 
@@ -162,6 +175,7 @@ class Plugs:
         self,
         name: object,
     ) -> bool:
+        """Whether a platform of that name is installed."""
 
         return name in load_plugins()
 
@@ -171,6 +185,7 @@ class Plugs:
         return [_InfoKey(name) for name in load_plugins().names()]
 
     def __repr__(self) -> str:
+        """The names of the installed platforms."""
 
         return f"<Plugins {', '.join(load_plugins().names())}>"
 

@@ -11,6 +11,8 @@ from amoorion.plugins import open_plugin
 
 
 class ReadParams(Model):
+    """From which platform, and how many."""
+
     platform: str
     limit: int = Field(
         20,
@@ -21,6 +23,8 @@ class ReadParams(Model):
 
 @METHODS.register
 class Read(Method):
+    """Fetches the latest messages, and keeps them in the inbox and the dataset."""
+
     name: ClassVar[str] = "read"
     description: ClassVar[str] = (
         "Read the latest messages of one platform (and keep them in the inbox and the dataset)"
@@ -32,6 +36,7 @@ class Read(Method):
         self,
         params: ReadParams,
     ) -> list[Message]:
+        """Read, then keep; `keep` also tells which messages are known already."""
 
         plugin = open_plugin(
             params.platform,

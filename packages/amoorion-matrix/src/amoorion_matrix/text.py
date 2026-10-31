@@ -6,6 +6,7 @@ from amoorion.models import Post
 
 
 def compose(post: Post) -> str:
+    """A post as this platform's text: title, text, links and tags."""
 
     text = "\n\n".join(part for part in (post.title, post.text) if part)
 

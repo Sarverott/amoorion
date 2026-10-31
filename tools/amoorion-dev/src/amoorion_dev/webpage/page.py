@@ -12,6 +12,7 @@ LINK = re.compile(r'(href|src)="(?!https?:|mailto:|#)([^"]+)"')
 
 
 def render(markdown: str) -> str:
+    """Markdown as HTML."""
 
     return (
         MarkdownIt("commonmark")
@@ -51,6 +52,7 @@ def outward(
 
 
 def first_paragraph(markdown: str) -> str:
+    """The first paragraph as plain text, for descriptions."""
 
     paragraphs = [
         part.strip()

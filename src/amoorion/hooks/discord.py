@@ -19,6 +19,7 @@ PING, PONG, CHANNEL_MESSAGE, EPHEMERAL = 1, 1, 4, 64
 
 
 def command_text(data: dict[str, Any]) -> str:
+    """A slash command as text: `/name option=value`."""
 
     options = " ".join(
         f"{option.get('name')}={option.get('value')}"
@@ -30,6 +31,8 @@ def command_text(data: dict[str, Any]) -> str:
 
 @HOOKS.register
 class DiscordHook(Hook):
+    """Slash commands of a Discord application; Discord calls it, and checks it answers pings."""
+
     name: ClassVar[str] = "discord"
     description: ClassVar[str] = "Discord interactions, signed (Ed25519)"
     secrets: ClassVar[dict[str, str]] = {
@@ -41,6 +44,7 @@ class DiscordHook(Hook):
         body: bytes,
         headers: Mapping[str, str],
     ) -> None:
+        """Check the Ed25519 signature of the timestamp and body, with the application's public key."""
 
         try:
             key = Ed25519PublicKey.from_public_bytes(
@@ -65,6 +69,7 @@ class DiscordHook(Hook):
         self,
         payload: Any,
     ) -> Message | None:
+        """The command as a message; Discord's ping is no message."""
 
         if not isinstance(payload, dict) or "type" not in payload:
             raise AmoorionError("discord hook expects an interaction")
@@ -92,6 +97,7 @@ class DiscordHook(Hook):
         self,
         payload: Any,
     ) -> dict[str, Any]:
+        """The pong Discord demands, or a short "Received." only the caller sees."""
 
         if payload["type"] == PING:
             return {"type": PONG}

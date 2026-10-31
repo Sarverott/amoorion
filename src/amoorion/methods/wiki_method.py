@@ -12,6 +12,8 @@ from amoorion.models import Message
 
 
 class WikiParams(Model):
+    """The article, and the language of Wikipedia."""
+
     title: str = Field(min_length=1)
     lang: str = Field(
         "en",
@@ -21,6 +23,8 @@ class WikiParams(Model):
 
 @METHODS.register
 class Wiki(Method):
+    """A Wikipedia summary as a message, ready for a workflow to post on."""
+
     name: ClassVar[str] = "wiki"
     description: ClassVar[str] = (
         "The summary of a Wikipedia article, as a message"
@@ -32,6 +36,7 @@ class Wiki(Method):
         self,
         params: WikiParams,
     ) -> Message:
+        """Ask Wikipedia's public REST API; it wants a User-Agent saying who is asking."""
 
         url = f"https://{params.lang}.wikipedia.org/api/rest_v1/page/summary/{quote(params.title, safe='')}"
 

@@ -20,6 +20,11 @@ SERVICE = "https://api.tumblr.com"
 
 
 class Tumblr(HttpPlugin):
+    """A Tumblr blog through its API v2, with OAuth 1 keys from the vault.
+
+    Tumblr has no replies by API: posting, reading and deleting only.
+    """
+
     name: ClassVar[str] = "tumblr"
     description: ClassVar[str] = "Tumblr API v2: post, read, delete"
     capabilities: ClassVar[frozenset[Capability]] = frozenset(
@@ -41,6 +46,7 @@ class Tumblr(HttpPlugin):
         self,
         response: requests.Response,
     ) -> str:
+        """What went wrong, from this platform's own form of errors."""
 
         try:
             body = response.json()
@@ -60,6 +66,7 @@ class Tumblr(HttpPlugin):
 
     @property
     def blog(self) -> str:
+        """The blog's name, from the vault."""
 
         return self.secret("blog")
 
@@ -69,6 +76,7 @@ class Tumblr(HttpPlugin):
         path: str,
         **kwargs: Any,
     ) -> Any:
+        """One authorized request to the platform's API; its address can be replaced by the `uri` secret."""
 
         try:
             base = self.secret("uri").rstrip("/")
@@ -96,6 +104,7 @@ class Tumblr(HttpPlugin):
         self,
         name: str | None = None,
     ) -> Account:
+        """A blog as the author of a post."""
 
         return Account(
             platform=self.name,
@@ -106,6 +115,7 @@ class Tumblr(HttpPlugin):
         self,
         post: Post,
     ) -> Message:
+        """Publish a post; answers the message as the platform stored it."""
 
         body: dict[str, Any] = {
             "content": blocks(post),
@@ -138,6 +148,7 @@ class Tumblr(HttpPlugin):
         self,
         limit: int = 20,
     ) -> list[Message]:
+        """The latest messages, newest first, at most `limit`."""
 
         answer = self._call(
             "GET",
@@ -169,6 +180,7 @@ class Tumblr(HttpPlugin):
         self,
         message: Message,
     ) -> None:
+        """Delete a message by its id."""
 
         if not message.id or not message.id.isdigit():
             raise AmoorionError("tumblr needs the number of the post to delete")
@@ -180,5 +192,6 @@ class Tumblr(HttpPlugin):
         )
 
     def profile(self) -> str:
+        """The name this account gets in the dataset."""
 
         return self.blog.removesuffix(".tumblr.com")
