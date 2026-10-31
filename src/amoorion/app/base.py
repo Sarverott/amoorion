@@ -35,16 +35,35 @@ from amoorion.vault import Vault, VaultLink, open_vault
 
 def scratch_values(scratch: Path) -> dict[str, str]:
     """A sandbox's setup: no real secrets, an inbox and a dataset in the temporary directory `scratch`."""
-    return {"AMOORION_VAULT": "env", "AMOORION_INBOX": str(scratch / "inbox.sqlite3"), "AMOORION_DATASET": str(scratch / "dataset")}
+    
+    return {
+        "AMOORION_VAULT": "env", 
+        "AMOORION_INBOX": str(scratch / "inbox.sqlite3"), 
+        "AMOORION_DATASET": str(scratch / "dataset")
+    }
 
 
 class Amoorion(FrontEnds, States):
-    def __init__(self, env: str | Path | None = None, dataset: str | Path | None = None, flags: dict[str, Any] | None = None) -> None:
+    """heart of this project"""
+    def __init__(
+        self, 
+        env: str | Path | None = None, 
+        dataset: str | Path | None = None, 
+        flags: dict[str, Any] | None = None
+    ) -> None:
+
         self.flags: dict[str, Any] = dict(flags or {})
+
         self.used: list[str] = []
+
         self._hashes: dict[str, str] = {}
+
         self._dataset_path = Path(dataset).expanduser() if dataset else None
-        self._open(Path(env).expanduser() if env else None)
+
+        self._open(
+            Path(env).expanduser() if env else None
+        )
+
 
     @staticmethod
     def init() -> Path:
@@ -52,21 +71,43 @@ class Amoorion(FrontEnds, States):
 
         Returns its temporary directory, removed when the process ends. Examples start with it.
         """
+
         scratch = Path(tempfile.mkdtemp(prefix="amoorion-"))
+
         atexit.register(shutil.rmtree, scratch, ignore_errors=True)
+
         os.environ |= scratch_values(scratch)
+
         return scratch
+
 
     def _scratch(self) -> dict[str, str]:
         """This object's own sandbox, gone with it."""
-        scratch = Path(tempfile.mkdtemp(prefix="amoorion-"))
-        weakref.finalize(self, shutil.rmtree, scratch, ignore_errors=True)
-        return scratch_values(scratch)
+
+        scratch = Path(
+            tempfile.mkdtemp(prefix="amoorion-")
+        )
+
+        weakref.finalize(
+            self, 
+            shutil.rmtree, 
+            scratch, 
+            ignore_errors=True
+        )
+
+        return scratch_values(
+            scratch
+        )
 
     def _open(self, env: Path | None) -> None:
+
         self.env = env
+
         if env is not None and not env.is_file():
-            raise AmoorionError(f"no env file at {env}")
+            raise AmoorionError(
+                f"no env file at {env}"
+            )
+
         self._values: dict[str, str | None] = dotenv_values(env) if env else self._scratch()
         self._vault: Vault | None = None
 

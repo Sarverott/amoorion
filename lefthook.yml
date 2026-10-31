@@ -13,3 +13,6 @@ post-merge:
       run: |
         [ "$(git branch --show-current)" = development ] || exit 0
         uv run --frozen amoorion-dev version mark
+
+
+### write here more automations

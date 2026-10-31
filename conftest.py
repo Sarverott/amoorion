@@ -9,12 +9,22 @@ from dotenv import load_dotenv
 
 @pytest.fixture(autouse=True)
 def _local_data(request, tmp_path, monkeypatch):
+
     if request.node.get_closest_marker("live") is None:
-        monkeypatch.setenv("AMOORION_INBOX", str(tmp_path / "inbox.sqlite3"))
-        monkeypatch.setenv("AMOORION_DATASET", str(tmp_path / "dataset"))
+        monkeypatch.setenv(
+            "AMOORION_INBOX", 
+            str(tmp_path / "inbox.sqlite3")
+        )
+        monkeypatch.setenv(
+            "AMOORION_DATASET", 
+            str(tmp_path / "dataset")
+        )
         monkeypatch.setattr(
             "amoorion.vault.base.load_dotenv",
             lambda path, **kwargs: path != Path.cwd() / ".env" and load_dotenv(path, **kwargs),
         )
         for name in ("AMOORION_VAULT", "AMOORION_VAULT_ADDR", "AMOORION_VAULT_TOKEN", "AMOORION_VAULT_PATH"):
-            monkeypatch.delenv(name, raising=False)
+            monkeypatch.delenv(
+                name, 
+                raising=False
+            )

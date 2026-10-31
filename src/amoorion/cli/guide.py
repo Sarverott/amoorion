@@ -48,7 +48,12 @@ class _Lines:
 
 def _inner(annotation: Any) -> Any:
     if typing.get_origin(annotation) in (typing.Union, types.UnionType):
-        return next(arg for arg in typing.get_args(annotation) if arg is not type(None))
+        return next(
+            arg for arg in typing.get_args(
+                annotation
+            ) if arg is not type(None)
+        )
+
     return annotation
 
 
