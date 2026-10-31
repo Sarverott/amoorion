@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14'",
@@ -55,6 +55,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "mcp", extra = ["cli"] },
     { name = "nats-py" },
+    { name = "prompt-toolkit" },
     { name = "pydantic" },
     { name = "pykeepass" },
     { name = "python-dotenv" },
@@ -102,6 +103,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.162.0" },
     { name = "mcp", extras = ["cli"], specifier = ">=2.3.0" },
     { name = "nats-py", specifier = ">=2.10.0" },
+    { name = "prompt-toolkit", specifier = ">=3.0.53" },
     { name = "pydantic", specifier = ">=2.14.1" },
     { name = "pykeepass", specifier = ">=4.2.0" },
     { name = "python-dotenv", specifier = ">=1.2.4" },

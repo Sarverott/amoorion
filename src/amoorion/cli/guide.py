@@ -4,6 +4,10 @@ Pick a method from a table, answer one question per parameter (platforms
 are offered by what they can do), confirm anything that changes something
 on a platform, see the answer, go again or quit. The same methods as the
 subcommands; nothing here a subcommand couldn't do.
+
+At a terminal the questions are arrow menus and form fields, and going back
+returns to the previous question, up to the choice of the method. From a pipe
+they are plain lines.
 """
 
 import types
@@ -16,6 +20,7 @@ from rich.console import Console
 from rich.prompt import Confirm, Prompt
 from rich.table import Table
 
+from amoorion.cli.menu import BACK, field, menu
 from amoorion.cli.view import RichView
 from amoorion.core import AmoorionError
 from amoorion.methods import METHODS, Method
@@ -83,12 +88,57 @@ class Guide:
         self,
         console: Console | None = None,
         stream: TextIO | None = None,
+        menus: bool | None = None,
+        **streams: Any,
     ) -> None:
-        """`console` and `stream` are there for tests; a person uses the terminal."""
+        """`console`, `stream` and `streams` are there for tests; a person uses the terminal."""
 
         self.console = console or Console()
 
         self.stream = _Lines(stream) if stream is not None else None
+
+        self.menus = (
+            stream is None and self.console.is_terminal
+            if menus is None
+            else menus
+        )
+
+        self.streams = streams
+
+    def yes(
+        self,
+        question: str,
+        default: bool,
+    ) -> bool:
+        """A yes or no; going back from a menu means no."""
+
+        if not self.menus:
+            return Confirm.ask(
+                question,
+                console=self.console,
+                stream=self.stream,
+                default=default,
+            )
+
+        options = [
+            (
+                True,
+                "yes",
+            ),
+            (
+                False,
+                "no",
+            ),
+        ]
+
+        return (
+            menu(
+                question,
+                options if default else options[::-1],
+                **self.streams,
+            )
+            is True
+        )
 
     def ask(
         self,
@@ -122,6 +172,22 @@ class Guide:
 
     def choose(self) -> type[Method] | None:
         """Show the table of methods and ask for one; `None` means leaving."""
+
+        if self.menus:
+            answer = menu(
+                "What should amoorion do? (* changes something on a platform)",
+                [
+                    (
+                        name,
+                        f"{name}{'' if METHODS.get(name).read_only else ' *'}: "
+                        f"{METHODS.get(name).description}",
+                    )
+                    for name in METHODS.names()
+                ],
+                **self.streams,
+            )
+
+            return None if answer is BACK else METHODS.get(answer)
 
         table = Table(
             "#",
@@ -166,16 +232,23 @@ class Guide:
         self,
         method: str,
         name: str,
-        field: FieldInfo,
+        info: FieldInfo,
     ) -> Any:
         """Ask for one parameter, in the way its type wants: a platform from a list, a list, a number."""
 
-        annotation = _inner(field.annotation)
+        if self.menus:
+            return self.form_value(
+                method,
+                name,
+                info,
+            )
+
+        annotation = _inner(info.annotation)
 
         is_list = typing.get_origin(annotation) is list
 
         label = f"[bold]{name}[/]" + (
-            f" [dim]({field.description})[/]" if field.description else ""
+            f" [dim]({info.description})[/]" if info.description else ""
         )
 
         if name in PLATFORM_FIELDS:
@@ -187,8 +260,8 @@ class Guide:
 
         default = (
             None
-            if field.is_required()
-            else field.get_default(call_default_factory=True)
+            if info.is_required()
+            else info.get_default(call_default_factory=True)
         )
 
         shown = ", ".join(default) if isinstance(default, list) else default
@@ -200,7 +273,7 @@ class Guide:
             ).strip()
 
             if not answer:
-                if field.is_required():
+                if info.is_required():
                     self.console.print("[red]needed[/]")
 
                     continue
@@ -222,6 +295,132 @@ class Guide:
 
             return answer
 
+    def form_value(
+        self,
+        method: str,
+        name: str,
+        info: FieldInfo,
+    ) -> Any:
+        """One parameter as a menu or a field; `BACK` when going back."""
+
+        annotation = _inner(info.annotation)
+
+        is_list = typing.get_origin(annotation) is list
+
+        default = (
+            None
+            if info.is_required()
+            else info.get_default(call_default_factory=True)
+        )
+
+        label = name + (f" ({info.description})" if info.description else "")
+
+        if name in PLATFORM_FIELDS:
+            options = [(one, one) for one in self.platforms(method)]
+
+            if is_list:
+                return menu(
+                    label,
+                    options,
+                    many=True,
+                    marked=default,
+                    **self.streams,
+                )
+
+            return menu(
+                label,
+                options,
+                **self.streams,
+            )
+
+        if annotation is bool:
+            return menu(
+                label,
+                [
+                    (
+                        True,
+                        "yes",
+                    ),
+                    (
+                        False,
+                        "no",
+                    ),
+                ],
+                **self.streams,
+            )
+
+        shown = ", ".join(default) if isinstance(default, list) else default
+
+        while True:
+            answer = field(
+                label,
+                "" if shown in (None, []) else str(shown),
+                **self.streams,
+            )
+
+            if answer is BACK:
+                return BACK
+
+            answer = answer.strip()
+
+            if not answer:
+                if info.is_required():
+                    self.console.print("[red]needed[/]")
+
+                    continue
+
+                return default
+
+            if is_list:
+                return [
+                    part for part in answer.replace(",", " ").split() if part
+                ]
+
+            if annotation is int:
+                try:
+                    return int(answer)
+                except ValueError:
+                    self.console.print("[red]a number, please[/]")
+
+                    continue
+
+            return answer
+
+    def answers(
+        self,
+        method: type[Method],
+    ) -> dict[str, Any] | None:
+        """A method's parameters, one question at a time; going back returns to the previous one."""
+
+        fields = list(method.Params.model_fields.items())
+
+        params: dict[str, Any] = {}
+
+        at = 0
+
+        while at < len(fields):
+            name, info = fields[at]
+
+            answer = self.value(
+                method.name,
+                name,
+                info,
+            )
+
+            if answer is BACK:
+                if at == 0:
+                    return None
+
+                at -= 1
+
+                continue
+
+            params[name] = answer
+
+            at += 1
+
+        return params
+
     def once(
         self,
         method: type[Method],
@@ -230,10 +429,10 @@ class Guide:
 
         self.console.rule(f"[bold]{method.name}[/]: {method.description}")
 
-        params = {
-            name: self.value(method.name, name, field)
-            for name, field in method.Params.model_fields.items()
-        }
+        params = self.answers(method)
+
+        if params is None:
+            return False
 
         try:
             validated = method.Params(
@@ -251,16 +450,15 @@ class Guide:
 
             return False
 
-        if not method.read_only and not Confirm.ask(
+        if not method.read_only and not self.yes(
             f"Run {method.name} for real?",
-            console=self.console,
-            stream=self.stream,
-            default=False,
+            False,
         ):
             return False
 
         try:
-            result = method().run(validated)
+            with self.console.status(f"{method.name}…"):
+                result = method().run(validated)
         except AmoorionError as error:
             self.console.print(f"[red]{error}[/]")
 
@@ -286,11 +484,9 @@ class Guide:
 
                 self.once(method)
 
-                if not Confirm.ask(
+                if not self.yes(
                     "Anything else?",
-                    console=self.console,
-                    stream=self.stream,
-                    default=True,
+                    True,
                 ):
                     return 0
         except EOFError:  # the answers ended
