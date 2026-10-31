@@ -1,0 +1,16 @@
+{
+  "name": "amoorion",
+  "short_name": "amoorion",
+  "description": "Universal tool for administration of chatting and communication platforms",
+  "start_url": "./",
+  "display": "browser",
+  "background_color": "#07090e",
+  "theme_color": "#e14c62",
+  "icons": [
+    {
+      "src": "graphics/cupid.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

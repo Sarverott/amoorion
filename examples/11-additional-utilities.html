@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/apple-touch-icon.png" />
+    <link rel="manifest" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>11-additional-utilities.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>11-additional-utilities</title>
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-s-M1OXjs.js"></script>
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/rolldown-runtime-B0Z9INg1.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-DVplv7_D.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/compiler-runtime-BrajqUja.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEvent-Dfcbgjhg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-dom-_LrxgvjW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/schemas-Dv42wLFq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isObject-BCaOs5rp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isSymbol-oX0TOjjx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/now-Cmx0b_zA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/debounce-aFmHgJZY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isArrayLikeObject-DnwgSs_Z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseMerge-CQpUq7ep.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objects-snlMn4yk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEventListener-D9cftcHj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/invariant-Ci2dTZ72.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-VPSq73n8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-B4K466FK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/session-DqoWmb7X.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Deferred-CrTnjj37.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-DX8Y2WbJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/clsx-DB0hHKMi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cn-ldLVeaqm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/jsx-runtime-B74pBk57.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fullscreen-B9tHcfpV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-iaThVDkA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/menu-items-BrwnTgyK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-restore-focus-BxEGwIbk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createLucideIcon-DfJ2oMlA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/circle-DXf-VWZG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/button-COI-NGrx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/check-BQNapYaf.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/I18nProvider-Cg2I_s1_.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useNumberFormatter-D7O_26UI.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/select-DTBn5eTb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toast-BGzLGnvw.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-C9TuY18o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/paths-bkIFVj8h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useLifecycle-Mq4gc5kS.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toDate-DOj9Q6uC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/database-zap-B_PMVg8T.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-dialog-BaPGzeOK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/arrays-BqUx5USx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/once-Haz_uxEL.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/numbers-Mk3-CcoU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDebounce-B_ccBZTp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/input-BoBxR50a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-toast-Wu434mLr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/requests-lt0JK8Jt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/uuid-k9DpjH68.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/write-secret-modal-DzKAInL2.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/plus-C5silF6g.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/trash-2-DcgaW8fn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/preload-helper-uBIymjUX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-Cny7_yZb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DBMV4gqt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/capabilities-BJvf-MD4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cjs-C49f7GXV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createReducer-DgRODTW6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-qhAY4L2r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/marked.esm-B_3iMIUq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/strings-B2vv-ENv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BOfh4hMd.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/badge-crT3E0Rm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DtH-7lot.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BmExfiwX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-1tmpVXyz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-LSsCJjA3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DusFODSa.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/stex-Dc5bKD4z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useTheme-COhSHkCj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAsyncData-C7aJJz0Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/purify.es--06brOip.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-BRkCaSsh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/coerce-CpE6kUdX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/get-DjNf4SIX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_hasPath-BmRQipI0.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hasIn-yw4sIeJR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseSet-Bpdo9AvU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pick-DKIID_Mo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-BAJYRhmO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-C3oDoyFe.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/LazyAnyLanguageCodeMirror-CKcCbG2G.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-D8O_CYCG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/micromark-factory-space-D9Dr-k4J.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chunk-YOKDWASO-BIpRENEC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-BG3sp2rs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-Djr5m5ac.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-icon-BIiRXh_3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useRunCells-B2vUhREg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/RenderHTML-BbOqmHy3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/blob-D5nfNHOo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/kbd-pdKBv96t.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useInstallPackage-iX1eufdl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/errors-DCrsa1nH.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/api-BeC_VSGv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/share-BZW3tzEX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/events-CbeVJ6OD.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-_Qai_QyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pair-CaQyK6En.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ErrorBoundary-Gl5nCA8C.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-BOKzA3tF.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chevron-right-eAtVhbNZ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dropdown-menu-C1rnl-0o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/html-to-image-DK9Zl1lU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/download-DCJXy66H.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/switch-CTaiAjrz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tabs-BuQlZFbt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-DG7Ap4H4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/eye-off-CxVozGAC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/refresh-cw-Qw1f8Jhy.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tree-actions-GM5E_bUs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ellipsis-63DyBLHQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/external-link-UrX9KO36.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spinner-DyNE-o8o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/message-circle-C3rKm8_a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hat-glasses-C8RhSVii.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-GSoSTiIK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/datasource-Cq6x_5ML.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-DTaqCu_d.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-XsPO8hNi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cell-link-LSth_8hT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/MarimoErrorOutput-D60XkCny.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDateFormatter-DA-62E-Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/en-US-Buu61juQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isValid-q_Ad80ug.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dates-BbFQ2oE4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-CNPGWpMu.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/precisionRound-Bq_nmf5u.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-D5bOh7g6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/vega-loader.browser-CLRkNgm7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-mT3CGest.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-icons.esm-D6tfmvq8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/extends-CvVTau-c.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objectWithoutPropertiesLoose-Do6ywDBO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useIframeCapabilities-CwTkczVN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/error-banner-Cd69vvyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-CaQYvazl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/formats-yZ06h1Pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-vrvqpuKJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-resizable-panels.browser.esm-Dbe0MrFr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-D6HIIsCb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chart-no-axes-column-C4_v6fQW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-function-_W_Lo0P4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spec-BfSBcO5B.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/semaphore-BjoL5P0h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fileToBase64-BgBraYAr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useBoolean-BDD6_xQQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/code-xml-SQaZqvcO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-headphone-Dl35U6h3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-BPBVl9pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/image-wZvTj8WY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-icons-CdJgUy-I.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/globe-UdPdIbF7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/esm-CI_o7NhW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAddCell-GR7eEQrT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/readonly-python-code-DCSMIsTX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/data-grid-types-DgHVN_Zz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/glide-utils-CIrAxdjv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/column-preview-Cm2D6vyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-BPmgQFnh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/triangle-alert-DmIqR8sY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/prop-types-Djf4O40e.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/es-Cqst59WX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-data-dv4FBHxR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-export-DzhB1FrN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/renderShortcut-BkVJQ_Zh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/bundle.esm-D3tw5rqW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/icons-CiZ_8zS-.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDeepCompareMemoize-DFIVN9dn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pathUtils-DPmlLd-r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/floating-outline-XD9FAV-f.js">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-0PFKL3SH.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-DjIHoF9Z.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-B0GmlMnR.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-Bcdzex-3.css">
+  
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_STATIC__", {
+        value: Object.freeze({
+            files: Object.freeze({}),
+            modelNotifications: Object.freeze([]),
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.25.2\"\napp = marimo.App()\n\n\n@app.cell\ndef _():\n    import marimo as mo\n\n    return (mo,)\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    # Additional utilities\n\n    Small things around the methods: asking a language model, Wikipedia, posts from\n    Markdown, a tunnel for hooks.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _():\n    import os\n\n    from amoorion import Amoorion\n\n    # A sandbox for this whole notebook: secrets only from variables, the inbox and\n    # the dataset in a temporary folder. Nothing here can touch your real setup.\n    Amoorion.init()\n    return Amoorion, os\n\n\n@app.cell\ndef _(os):\n    # A small fake of a language model, so nothing leaves this machine.\n    import json, threading\n\n    from http.server import BaseHTTPRequestHandler, HTTPServer\n\n\n    # It answers every request with the same short text.\n    class FakeModel(BaseHTTPRequestHandler):\n        \"\"\"Speaks the chat completions API, as Ollama or a LiteLLM proxy would.\"\"\"\n\n        def do_POST(self):\n\n            asked = json.loads(self.rfile.read(int(self.headers[\"Content-Length\"])))\n\n            said = asked[\"messages\"][-1][\"content\"].splitlines()[0][:50]\n\n            answer = {\n                \"choices\": [\n                    {\"message\": {\"content\": f\"(a model's words about: {said})\"}}\n                ]\n            }\n\n            self.send_response(200)\n\n            self.end_headers()\n\n            self.wfile.write(json.dumps(answer).encode())\n\n        def log_message(\n            self,\n            *args,\n        ):\n\n            pass\n\n\n    # Port 0: the system picks a free one.\n    model_server = HTTPServer(\n        (\n            \"127.0.0.1\",\n            0,\n        ),\n        FakeModel,\n    )\n\n    # In the background, for the rest of the notebook.\n    threading.Thread(\n        target=model_server.serve_forever,\n        daemon=True,\n    ).start()\n\n    # Where amoorion finds the model. Really these are `llm/url` and `llm/model` in your vault.\n    os.environ[\"AMOORION_SECRET_LLM_URL\"] = (\n        f\"http://127.0.0.1:{model_server.server_port}/v1\"\n    )\n\n    os.environ[\"AMOORION_SECRET_LLM_MODEL\"] = \"fake\"\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ### `compose`: one call for many models\n\n    Ollama, llama.cpp's server, a LiteLLM proxy, OpenAI, Claude and Hugging Face's router\n    all speak this API, so `llm/url`, `llm/model` and `llm/token` in the vault choose one.\n    Each secret stays in the vault; a local server needs no token.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(Amoorion):\n    amo = Amoorion().use(\"dryrun\")\n\n    # `system` says how to behave, `prompt` what to do. It writes; it posts nothing.\n    amo.compose(\n        prompt=\"Announce our new release\",\n        system=\"Write one short sentence.\",\n    )\n    return (amo,)\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    It chains with the rest in a workflow:\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(amo):\n    # Write, then publish: `$last` is the text of the previous step.\n    steps = [\n        {\n            \"method\": \"compose\",\n            \"params\": {\"prompt\": \"Announce our new release\"},\n        },\n        {\n            \"method\": \"publish\",\n            \"params\": {\n                \"text\": \"$last\",\n                \"to\": [\"dryrun\"],\n            },\n        },\n    ]\n\n\n    # The result of each step; [1] is publish.\n    amo.workflow(steps=steps)[1][\"result\"][0][\"message\"][\"text\"]\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ### Posts from Markdown\n\n    Front matter gives the title, tags, links and platforms:\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(amo):\n    from amoorion.utilities import post_from_markdown\n\n    # A post with its settings at the head of a Markdown file.\n    post, to = post_from_markdown(\n        \"\"\"---\n    title: Hello\n    tags: [news]\n    to: [dryrun]\n    ---\n    Written once.\n    \"\"\"\n    )\n\n    print(\n        post,\n        to,\n    )\n\n\n    # The parsed post goes on to publish.\n    amo.publish(to=to, **post.model_dump())[0][\"ok\"]\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ### `wiki`\n\n    A Wikipedia summary, as a message to quote or to feed a workflow. It needs the\n    network, so it is shown here and not run:\n\n    ```python\n    amo.wiki(title=\"Blacksmith\", lang=\"en\")[\"text\"]\n    ```\n\n    ### A tunnel for hooks\n\n    Hooks need an address reachable from outside. With `pip install ngrok` and\n    `ngrok/token` in the vault:\n\n    ```python\n    from amoorion.utilities import open_tunnel\n\n    listener = open_tunnel(8000, amo.vault)\n    print(listener.url())   # give this to GitHub, plus /hooks/github\n    ```\n\n    Anyone with that address reaches the port, so only the API belongs behind it: its\n    methods need their token and its hooks verify themselves.\n    \"\"\")\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "11-additional-utilities.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.25.2",
+            "serverToken": "static",
+            "config": {"ai": {"allow_provider_config": true, "custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "code_lens": true, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "after_delay", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "compact"},
+            "layout": null,
+            "view": {"showAppCode": true},
+            "notebook": {"cells": [{"code": "import marimo as mo", "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "Hbol", "name": "_"}, {"code": "mo.md(r\"\"\"\n# Additional utilities\n\nSmall things around the methods: asking a language model, Wikipedia, posts from\nMarkdown, a tunnel for hooks.\n\"\"\")", "code_hash": "0ae45369a8a4f3b7729d7e25a0716816", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "MJUe", "name": "_"}, {"code": "import os\n\nfrom amoorion import Amoorion\n\n# A sandbox for this whole notebook: secrets only from variables, the inbox and\n# the dataset in a temporary folder. Nothing here can touch your real setup.\nAmoorion.init()", "code_hash": "a19215d0b1f94eb0e14aace8ca963cd1", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "vblA", "name": "_"}, {"code": "# A small fake of a language model, so nothing leaves this machine.\nimport json, threading\n\nfrom http.server import BaseHTTPRequestHandler, HTTPServer\n\n\n# It answers every request with the same short text.\nclass FakeModel(BaseHTTPRequestHandler):\n    \"\"\"Speaks the chat completions API, as Ollama or a LiteLLM proxy would.\"\"\"\n\n    def do_POST(self):\n\n        asked = json.loads(self.rfile.read(int(self.headers[\"Content-Length\"])))\n\n        said = asked[\"messages\"][-1][\"content\"].splitlines()[0][:50]\n\n        answer = {\n            \"choices\": [\n                {\"message\": {\"content\": f\"(a model's words about: {said})\"}}\n            ]\n        }\n\n        self.send_response(200)\n\n        self.end_headers()\n\n        self.wfile.write(json.dumps(answer).encode())\n\n    def log_message(\n        self,\n        *args,\n    ):\n\n        pass\n\n\n# Port 0: the system picks a free one.\nmodel_server = HTTPServer(\n    (\n        \"127.0.0.1\",\n        0,\n    ),\n    FakeModel,\n)\n\n# In the background, for the rest of the notebook.\nthreading.Thread(\n    target=model_server.serve_forever,\n    daemon=True,\n).start()\n\n# Where amoorion finds the model. Really these are `llm/url` and `llm/model` in your vault.\nos.environ[\"AMOORION_SECRET_LLM_URL\"] = (\n    f\"http://127.0.0.1:{model_server.server_port}/v1\"\n)\n\nos.environ[\"AMOORION_SECRET_LLM_MODEL\"] = \"fake\"", "code_hash": "57f7d6fbb2bf5169ae5fb61d25fa8668", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "bkHC", "name": "_"}, {"code": "mo.md(r\"\"\"\n### `compose`: one call for many models\n\nOllama, llama.cpp's server, a LiteLLM proxy, OpenAI, Claude and Hugging Face's router\nall speak this API, so `llm/url`, `llm/model` and `llm/token` in the vault choose one.\nEach secret stays in the vault; a local server needs no token.\n\"\"\")", "code_hash": "146361f1cad450979e8143a4bd70e864", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "lEQa", "name": "_"}, {"code": "amo = Amoorion().use(\"dryrun\")\n\n# `system` says how to behave, `prompt` what to do. It writes; it posts nothing.\namo.compose(\n    prompt=\"Announce our new release\",\n    system=\"Write one short sentence.\",\n)", "code_hash": "f88896fa03b0d3c215463521feef6396", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "PKri", "name": "_"}, {"code": "mo.md(r\"\"\"\nIt chains with the rest in a workflow:\n\"\"\")", "code_hash": "b61928a69a67416edfbbb4252dbd60dc", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "Xref", "name": "_"}, {"code": "# Write, then publish: `$last` is the text of the previous step.\nsteps = [\n    {\n        \"method\": \"compose\",\n        \"params\": {\"prompt\": \"Announce our new release\"},\n    },\n    {\n        \"method\": \"publish\",\n        \"params\": {\n            \"text\": \"$last\",\n            \"to\": [\"dryrun\"],\n        },\n    },\n]\n\n\n# The result of each step; [1] is publish.\namo.workflow(steps=steps)[1][\"result\"][0][\"message\"][\"text\"]", "code_hash": "af1b05e3bfdd2f3478c0210b5b9c3477", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "SFPL", "name": "_"}, {"code": "mo.md(r\"\"\"\n### Posts from Markdown\n\nFront matter gives the title, tags, links and platforms:\n\"\"\")", "code_hash": "d598341a5bf909dcd1b123203abf993b", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "BYtC", "name": "_"}, {"code": "from amoorion.utilities import post_from_markdown\n\n# A post with its settings at the head of a Markdown file.\npost, to = post_from_markdown(\n    \"\"\"---\ntitle: Hello\ntags: [news]\nto: [dryrun]\n---\nWritten once.\n\"\"\"\n)\n\nprint(\n    post,\n    to,\n)\n\n\n# The parsed post goes on to publish.\namo.publish(to=to, **post.model_dump())[0][\"ok\"]", "code_hash": "fbcba3dfe5672201ec70b0e6b61e8fa0", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "RGSE", "name": "_"}, {"code": "mo.md(r\"\"\"\n### `wiki`\n\nA Wikipedia summary, as a message to quote or to feed a workflow. It needs the\nnetwork, so it is shown here and not run:\n\n```python\namo.wiki(title=\"Blacksmith\", lang=\"en\")[\"text\"]\n```\n\n### A tunnel for hooks\n\nHooks need an address reachable from outside. With `pip install ngrok` and\n`ngrok/token` in the vault:\n\n```python\nfrom amoorion.utilities import open_tunnel\n\nlistener = open_tunnel(8000, amo.vault)\nprint(listener.url())   # give this to GitHub, plus /hooks/github\n```\n\nAnyone with that address reaches the port, so only the API belongs behind it: its\nmethods need their token and its hooks verify themselves.\n\"\"\")", "code_hash": "4aeabf3a4a0ff6e46be6aaef967807a1", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "Kclp", "name": "_"}], "metadata": {"marimo_version": "0.25.2"}, "version": "1"},
+            "session": {"cells": [{"code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "console": [], "id": "Hbol", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "0ae45369a8a4f3b7729d7e25a0716816", "console": [], "id": "MJUe", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch1 id=\"additional-utilities\"\u003EAdditional utilities\u003C/h1\u003E\n\u003Cspan class=\"paragraph\"\u003ESmall things around the methods: asking a language model, Wikipedia, posts from\nMarkdown, a tunnel for hooks.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "a19215d0b1f94eb0e14aace8ca963cd1", "console": [], "id": "vblA", "outputs": [{"data": {"text/html": "\u003Cpre class='text-xs'\u003EPosixPath(\u0026#x27;/tmp/amoorion-ebphszad\u0026#x27;)\u003C/pre\u003E"}, "type": "data"}]}, {"code_hash": "57f7d6fbb2bf5169ae5fb61d25fa8668", "console": [], "id": "bkHC", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "146361f1cad450979e8143a4bd70e864", "console": [], "id": "lEQa", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch3 id=\"compose-one-call-for-many-models\"\u003E\u003Ccode\u003Ecompose\u003C/code\u003E: one call for many models\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003EOllama, llama.cpp's server, a LiteLLM proxy, OpenAI, Claude and Hugging Face's router\nall speak this API, so \u003Ccode\u003Ellm/url\u003C/code\u003E, \u003Ccode\u003Ellm/model\u003C/code\u003E and \u003Ccode\u003Ellm/token\u003C/code\u003E in the vault choose one.\nEach secret stays in the vault; a local server needs no token.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "f88896fa03b0d3c215463521feef6396", "console": [], "id": "PKri", "outputs": [{"data": {"application/json": "{\"text\": \"(a model's words about: Announce our new release)\", \"model\": \"fake\"}"}, "type": "data"}]}, {"code_hash": "b61928a69a67416edfbbb4252dbd60dc", "console": [], "id": "Xref", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003EIt chains with the rest in a workflow:\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "af1b05e3bfdd2f3478c0210b5b9c3477", "console": [], "id": "SFPL", "outputs": [{"data": {"text/html": "\u003Cpre class='text-xs'\u003E\u0026quot;(a model\u0026#x27;s words about: Announce our new release)\u0026quot;\u003C/pre\u003E"}, "type": "data"}]}, {"code_hash": "d598341a5bf909dcd1b123203abf993b", "console": [], "id": "BYtC", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch3 id=\"posts-from-markdown\"\u003EPosts from Markdown\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003EFront matter gives the title, tags, links and platforms:\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "fbcba3dfe5672201ec70b0e6b61e8fa0", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "text='Written once.' title='Hello' links=[] tags=['news'] ['dryrun']\n", "type": "stream"}], "id": "RGSE", "outputs": [{"data": {"text/html": "\u003Cpre class='text-xs'\u003ETrue\u003C/pre\u003E"}, "type": "data"}]}, {"code_hash": "4aeabf3a4a0ff6e46be6aaef967807a1", "console": [], "id": "Kclp", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch3 id=\"wiki\"\u003E\u003Ccode\u003Ewiki\u003C/code\u003E\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003EA Wikipedia summary, as a message to quote or to feed a workflow. It needs the\nnetwork, so it is shown here and not run:\u003C/span\u003E\n\u003Cdiv class=\"language-python codehilite\"\u003E\u003Cpre\u003E\u003Cspan\u003E\u003C/span\u003E\u003Ccode\u003E\u003Cspan class=\"n\"\u003Eamo\u003C/span\u003E\u003Cspan class=\"o\"\u003E.\u003C/span\u003E\u003Cspan class=\"n\"\u003Ewiki\u003C/span\u003E\u003Cspan class=\"p\"\u003E(\u003C/span\u003E\u003Cspan class=\"n\"\u003Etitle\u003C/span\u003E\u003Cspan class=\"o\"\u003E=\u003C/span\u003E\u003Cspan class=\"s2\"\u003E\"Blacksmith\"\u003C/span\u003E\u003Cspan class=\"p\"\u003E,\u003C/span\u003E \u003Cspan class=\"n\"\u003Elang\u003C/span\u003E\u003Cspan class=\"o\"\u003E=\u003C/span\u003E\u003Cspan class=\"s2\"\u003E\"en\"\u003C/span\u003E\u003Cspan class=\"p\"\u003E)[\u003C/span\u003E\u003Cspan class=\"s2\"\u003E\"text\"\u003C/span\u003E\u003Cspan class=\"p\"\u003E]\u003C/span\u003E\n\u003C/code\u003E\u003C/pre\u003E\u003C/div\u003E\n\u003Ch3 id=\"a-tunnel-for-hooks\"\u003EA tunnel for hooks\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003EHooks need an address reachable from outside. With \u003Ccode\u003Epip install ngrok\u003C/code\u003E and\n\u003Ccode\u003Engrok/token\u003C/code\u003E in the vault:\u003C/span\u003E\n\u003Cdiv class=\"language-python codehilite\"\u003E\u003Cpre\u003E\u003Cspan\u003E\u003C/span\u003E\u003Ccode\u003E\u003Cspan class=\"kn\"\u003Efrom\u003C/span\u003E\u003Cspan class=\"w\"\u003E \u003C/span\u003E\u003Cspan class=\"nn\"\u003Eamoorion.utilities\u003C/span\u003E\u003Cspan class=\"w\"\u003E \u003C/span\u003E\u003Cspan class=\"kn\"\u003Eimport\u003C/span\u003E \u003Cspan class=\"n\"\u003Eopen_tunnel\u003C/span\u003E\n\n\u003Cspan class=\"n\"\u003Elistener\u003C/span\u003E \u003Cspan class=\"o\"\u003E=\u003C/span\u003E \u003Cspan class=\"n\"\u003Eopen_tunnel\u003C/span\u003E\u003Cspan class=\"p\"\u003E(\u003C/span\u003E\u003Cspan class=\"mi\"\u003E8000\u003C/span\u003E\u003Cspan class=\"p\"\u003E,\u003C/span\u003E \u003Cspan class=\"n\"\u003Eamo\u003C/span\u003E\u003Cspan class=\"o\"\u003E.\u003C/span\u003E\u003Cspan class=\"n\"\u003Evault\u003C/span\u003E\u003Cspan class=\"p\"\u003E)\u003C/span\u003E\n\u003Cspan class=\"nb\"\u003Eprint\u003C/span\u003E\u003Cspan class=\"p\"\u003E(\u003C/span\u003E\u003Cspan class=\"n\"\u003Elistener\u003C/span\u003E\u003Cspan class=\"o\"\u003E.\u003C/span\u003E\u003Cspan class=\"n\"\u003Eurl\u003C/span\u003E\u003Cspan class=\"p\"\u003E())\u003C/span\u003E   \u003Cspan class=\"c1\"\u003E# give this to GitHub, plus /hooks/github\u003C/span\u003E\n\u003C/code\u003E\u003C/pre\u003E\u003C/div\u003E\n\u003Cspan class=\"paragraph\"\u003EAnyone with that address reaches the port, so only the API belongs behind it: its\nmethods need their token and its hooks verify themselves.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}], "metadata": {"marimo_version": "0.25.2", "script_metadata_hash": null}, "version": "1"},
+            "runtimeConfig": null
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  
+<marimo-code hidden="">
+    import%20marimo%0A%0A__generated_with%20%3D%20%220.25.2%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%20Additional%20utilities%0A%0A%20%20%20%20Small%20things%20around%20the%20methods%3A%20asking%20a%20language%20model%2C%20Wikipedia%2C%20posts%20from%0A%20%20%20%20Markdown%2C%20a%20tunnel%20for%20hooks.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20os%0A%0A%20%20%20%20from%20amoorion%20import%20Amoorion%0A%0A%20%20%20%20%23%20A%20sandbox%20for%20this%20whole%20notebook%3A%20secrets%20only%20from%20variables%2C%20the%20inbox%20and%0A%20%20%20%20%23%20the%20dataset%20in%20a%20temporary%20folder.%20Nothing%20here%20can%20touch%20your%20real%20setup.%0A%20%20%20%20Amoorion.init()%0A%20%20%20%20return%20Amoorion%2C%20os%0A%0A%0A%40app.cell%0Adef%20_(os)%3A%0A%20%20%20%20%23%20A%20small%20fake%20of%20a%20language%20model%2C%20so%20nothing%20leaves%20this%20machine.%0A%20%20%20%20import%20json%2C%20threading%0A%0A%20%20%20%20from%20http.server%20import%20BaseHTTPRequestHandler%2C%20HTTPServer%0A%0A%0A%20%20%20%20%23%20It%20answers%20every%20request%20with%20the%20same%20short%20text.%0A%20%20%20%20class%20FakeModel(BaseHTTPRequestHandler)%3A%0A%20%20%20%20%20%20%20%20%22%22%22Speaks%20the%20chat%20completions%20API%2C%20as%20Ollama%20or%20a%20LiteLLM%20proxy%20would.%22%22%22%0A%0A%20%20%20%20%20%20%20%20def%20do_POST(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20asked%20%3D%20json.loads(self.rfile.read(int(self.headers%5B%22Content-Length%22%5D)))%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20said%20%3D%20asked%5B%22messages%22%5D%5B-1%5D%5B%22content%22%5D.splitlines()%5B0%5D%5B%3A50%5D%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20answer%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22choices%22%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7B%22message%22%3A%20%7B%22content%22%3A%20f%22(a%20model's%20words%20about%3A%20%7Bsaid%7D)%22%7D%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.send_response(200)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.end_headers()%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.wfile.write(json.dumps(answer).encode())%0A%0A%20%20%20%20%20%20%20%20def%20log_message(%0A%20%20%20%20%20%20%20%20%20%20%20%20self%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20*args%2C%0A%20%20%20%20%20%20%20%20)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20pass%0A%0A%0A%20%20%20%20%23%20Port%200%3A%20the%20system%20picks%20a%20free%20one.%0A%20%20%20%20model_server%20%3D%20HTTPServer(%0A%20%20%20%20%20%20%20%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%22127.0.0.1%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%200%2C%0A%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20FakeModel%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20In%20the%20background%2C%20for%20the%20rest%20of%20the%20notebook.%0A%20%20%20%20threading.Thread(%0A%20%20%20%20%20%20%20%20target%3Dmodel_server.serve_forever%2C%0A%20%20%20%20%20%20%20%20daemon%3DTrue%2C%0A%20%20%20%20).start()%0A%0A%20%20%20%20%23%20Where%20amoorion%20finds%20the%20model.%20Really%20these%20are%20%60llm%2Furl%60%20and%20%60llm%2Fmodel%60%20in%20your%20vault.%0A%20%20%20%20os.environ%5B%22AMOORION_SECRET_LLM_URL%22%5D%20%3D%20(%0A%20%20%20%20%20%20%20%20f%22http%3A%2F%2F127.0.0.1%3A%7Bmodel_server.server_port%7D%2Fv1%22%0A%20%20%20%20)%0A%0A%20%20%20%20os.environ%5B%22AMOORION_SECRET_LLM_MODEL%22%5D%20%3D%20%22fake%22%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%23%20%60compose%60%3A%20one%20call%20for%20many%20models%0A%0A%20%20%20%20Ollama%2C%20llama.cpp's%20server%2C%20a%20LiteLLM%20proxy%2C%20OpenAI%2C%20Claude%20and%20Hugging%20Face's%20router%0A%20%20%20%20all%20speak%20this%20API%2C%20so%20%60llm%2Furl%60%2C%20%60llm%2Fmodel%60%20and%20%60llm%2Ftoken%60%20in%20the%20vault%20choose%20one.%0A%20%20%20%20Each%20secret%20stays%20in%20the%20vault%3B%20a%20local%20server%20needs%20no%20token.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(Amoorion)%3A%0A%20%20%20%20amo%20%3D%20Amoorion().use(%22dryrun%22)%0A%0A%20%20%20%20%23%20%60system%60%20says%20how%20to%20behave%2C%20%60prompt%60%20what%20to%20do.%20It%20writes%3B%20it%20posts%20nothing.%0A%20%20%20%20amo.compose(%0A%20%20%20%20%20%20%20%20prompt%3D%22Announce%20our%20new%20release%22%2C%0A%20%20%20%20%20%20%20%20system%3D%22Write%20one%20short%20sentence.%22%2C%0A%20%20%20%20)%0A%20%20%20%20return%20(amo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20It%20chains%20with%20the%20rest%20in%20a%20workflow%3A%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(amo)%3A%0A%20%20%20%20%23%20Write%2C%20then%20publish%3A%20%60%24last%60%20is%20the%20text%20of%20the%20previous%20step.%0A%20%20%20%20steps%20%3D%20%5B%0A%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22method%22%3A%20%22compose%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22params%22%3A%20%7B%22prompt%22%3A%20%22Announce%20our%20new%20release%22%7D%2C%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22method%22%3A%20%22publish%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22params%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22text%22%3A%20%22%24last%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22to%22%3A%20%5B%22dryrun%22%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%5D%0A%0A%0A%20%20%20%20%23%20The%20result%20of%20each%20step%3B%20%5B1%5D%20is%20publish.%0A%20%20%20%20amo.workflow(steps%3Dsteps)%5B1%5D%5B%22result%22%5D%5B0%5D%5B%22message%22%5D%5B%22text%22%5D%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%23%20Posts%20from%20Markdown%0A%0A%20%20%20%20Front%20matter%20gives%20the%20title%2C%20tags%2C%20links%20and%20platforms%3A%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(amo)%3A%0A%20%20%20%20from%20amoorion.utilities%20import%20post_from_markdown%0A%0A%20%20%20%20%23%20A%20post%20with%20its%20settings%20at%20the%20head%20of%20a%20Markdown%20file.%0A%20%20%20%20post%2C%20to%20%3D%20post_from_markdown(%0A%20%20%20%20%20%20%20%20%22%22%22---%0A%20%20%20%20title%3A%20Hello%0A%20%20%20%20tags%3A%20%5Bnews%5D%0A%20%20%20%20to%3A%20%5Bdryrun%5D%0A%20%20%20%20---%0A%20%20%20%20Written%20once.%0A%20%20%20%20%22%22%22%0A%20%20%20%20)%0A%0A%20%20%20%20print(%0A%20%20%20%20%20%20%20%20post%2C%0A%20%20%20%20%20%20%20%20to%2C%0A%20%20%20%20)%0A%0A%0A%20%20%20%20%23%20The%20parsed%20post%20goes%20on%20to%20publish.%0A%20%20%20%20amo.publish(to%3Dto%2C%20**post.model_dump())%5B0%5D%5B%22ok%22%5D%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%23%20%60wiki%60%0A%0A%20%20%20%20A%20Wikipedia%20summary%2C%20as%20a%20message%20to%20quote%20or%20to%20feed%20a%20workflow.%20It%20needs%20the%0A%20%20%20%20network%2C%20so%20it%20is%20shown%20here%20and%20not%20run%3A%0A%0A%20%20%20%20%60%60%60python%0A%20%20%20%20amo.wiki(title%3D%22Blacksmith%22%2C%20lang%3D%22en%22)%5B%22text%22%5D%0A%20%20%20%20%60%60%60%0A%0A%20%20%20%20%23%23%23%20A%20tunnel%20for%20hooks%0A%0A%20%20%20%20Hooks%20need%20an%20address%20reachable%20from%20outside.%20With%20%60pip%20install%20ngrok%60%20and%0A%20%20%20%20%60ngrok%2Ftoken%60%20in%20the%20vault%3A%0A%0A%20%20%20%20%60%60%60python%0A%20%20%20%20from%20amoorion.utilities%20import%20open_tunnel%0A%0A%20%20%20%20listener%20%3D%20open_tunnel(8000%2C%20amo.vault)%0A%20%20%20%20print(listener.url())%20%20%20%23%20give%20this%20to%20GitHub%2C%20plus%20%2Fhooks%2Fgithub%0A%20%20%20%20%60%60%60%0A%0A%20%20%20%20Anyone%20with%20that%20address%20reaches%20the%20port%2C%20so%20only%20the%20API%20belongs%20behind%20it%3A%20its%0A%20%20%20%20methods%20need%20their%20token%20and%20its%20hooks%20verify%20themselves.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A
+</marimo-code>
+
+<marimo-code-hash hidden="">12c5601bed310dba5f4c7ca596989f8e</marimo-code-hash>
+</body>
+</html>

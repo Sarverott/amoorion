@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>amoorion releases</title>
+<link rel="icon" href="graphics/cupid.png">
+<link rel="manifest" href="site.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #07090e; --fg: #f2e9e4; --muted: #b9a9a3; --line: rgba(226, 168, 147, 0.22);
+  --rose: #e14c62; --gold: #e2a893; --card: #0d101a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(ellipse at top, #1a0f18 0%, var(--bg) 55%) fixed; color: var(--fg);
+  font: 16px/1.65 "Plus Jakarta Sans", system-ui, -apple-system, sans-serif; }
+main, header, footer { max-width: 56rem; margin: 0 auto; padding: 0 1rem; }
+header { padding-top: 2.2rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line); text-align: center; }
+header img { max-width: min(30rem, 90%); height: auto; }
+header p { color: var(--muted); margin: 0.3rem 0 1rem; }
+h1, h2, h3 { font-family: "Cormorant Garamond", Georgia, serif; color: var(--gold); line-height: 1.2; }
+h2 { font-size: 2rem; margin-top: 2.4rem; }
+nav a { margin: 0 0.6rem; color: var(--gold); text-decoration: none; font-family: Cinzel, serif;
+  font-size: 0.9rem; letter-spacing: 0.08em; }
+nav a:hover { color: var(--rose); }
+.version { display: inline-block; padding: 0.1rem 0.7rem; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 0.85rem; color: var(--gold); }
+pre, code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem; overflow-x: auto; }
+a { color: var(--rose); }
+table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.9rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem;
+  text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+.card:hover { border-color: rgba(225, 76, 98, 0.6); box-shadow: 0 0 20px rgba(225, 76, 98, 0.2); }
+.card h3 { margin: 0 0 0.3rem; font-size: 1.3rem; }
+.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem;
+  border-top: 1px solid var(--line); margin-top: 3rem; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+<a href="index.html"><img src="graphics/wordmark.png" alt="amoorion"></a>
+<p>Universal tool for administration of chatting and communication platforms
+<span class="version">v0.4.36</span></p>
+<nav><a href="index.html">Home</a><a href="project.html">Project</a><a href="examples/index.html">Examples</a><a href="releases.html">Releases</a><a href="https://amoorion.readthedocs.io/">Docs</a><a href="https://pypi.org/project/amoorion/">PyPI</a><a href="https://github.com/Sarverott/amoorion">GitHub</a></nav>
+</header>
+<main>
+<h2>Releases</h2>
+<h2>v0.4.36 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.36</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>site</strong>: build amoorion-website by its own npm run build, with amoorion's data</li>
+</ul>
+<h2>v0.4.35 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.35</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>site</strong>: openapi.json, platforms and a schema of the manifest at every release</li>
+</ul>
+<h2>v0.4.34 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.34</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>api</strong>: every method says in OpenAPI what it answers</li>
+</ul>
+<h2>v0.4.33 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.33</p>
+<h3>Refactor</h3>
+<ul>
+<li><strong>dev</strong>: git through GitPython, and every outside program a method</li>
+</ul>
+<h2>v0.4.32 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.32</p>
+<h2>v0.4.31 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.31</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>cli</strong>: arrow menus, forms and going back in the guide</li>
+</ul>
+<h2>v0.4.30 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.30</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>mcp</strong>: resources, and a client of the server in memory</li>
+</ul>
+<h2>v0.4.29 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.29</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>workflows</strong>: workflows in Python, rules in files; automate is part of workflow</li>
+</ul>
+<h2>v0.4.28 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.28</p>
+<h3>Fix</h3>
+<ul>
+<li><strong>examples</strong>: marimo builds skip raw cells, and the gate runs them</li>
+</ul>
+<h2>v0.4.27 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.27</p>
+<h2>v0.4.26 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.26</p>
+<h3>Fix</h3>
+<ul>
+<li><strong>docs</strong>: the PDF of Read the Docs survives notebook outputs</li>
+</ul>
+<h2>v0.4.25 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.25, amoorion-mastodon 0.4.6, amoorion-x 0.4.6</p>
+<h2>v0.4.24 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.24, amoorion-blogger 0.4.4, amoorion-bluesky 0.4.5, amoorion-discord 0.4.5, amoorion-email 0.4.10, amoorion-facebook 0.4.4, amoorion-mastodon 0.4.5, amoorion-matrix 0.4.5, amoorion-ntfy 0.4.8, amoorion-telegram 0.4.5, amoorion-tumblr 0.4.5, amoorion-x 0.4.5</p>
+<h2>v0.4.23 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.23</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>methods</strong>: skill, amoorion as an agent skill itself</li>
+</ul>
+<h2>v0.4.22 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.22</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>dev</strong>: more hooks, a real .vscode, notebooks refreshed by task or launcher</li>
+</ul>
+<h2>v0.4.21 (2026-10-31)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.21, amoorion-blogger 0.4.3, amoorion-bluesky 0.4.4, amoorion-discord 0.4.4, amoorion-email 0.4.9, amoorion-facebook 0.4.3, amoorion-mastodon 0.4.4, amoorion-matrix 0.4.4, amoorion-ntfy 0.4.7, amoorion-telegram 0.4.4, amoorion-tumblr 0.4.4, amoorion-x 0.4.4</p>
+<h3>Fix</h3>
+<ul>
+<li><strong>dev</strong>: shape also sees files not yet committed, its own two in shape</li>
+</ul>
+<h2>v0.4.20 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.20</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>app</strong>: Amoorion.init() puts the whole process in a sandbox</li>
+</ul>
+<h2>v0.4.19 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.19</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>app</strong>: Amoorion() without an env file is a sandbox of its own</li>
+</ul>
+<h3>Refactor</h3>
+<ul>
+<li><strong>inbox</strong>: the schemas in .sql files beside their code</li>
+</ul>
+<h2>v0.4.18 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.18, amoorion-bluesky 0.4.3, amoorion-discord 0.4.3, amoorion-mastodon 0.4.3, amoorion-matrix 0.4.3, amoorion-telegram 0.4.3, amoorion-tumblr 0.4.3, amoorion-x 0.4.3</p>
+<h3>Refactor</h3>
+<ul>
+<li><strong>discord</strong>: bot, webhook and text in files of their own</li>
+<li><strong>tumblr</strong>: what shapes a post's text in text.py</li>
+<li><strong>matrix</strong>: what shapes a post's text in text.py</li>
+<li><strong>telegram</strong>: what shapes a post's text in text.py</li>
+<li><strong>mastodon</strong>: what shapes a post's text in text.py</li>
+<li><strong>x</strong>: what shapes a post's text in text.py</li>
+<li><strong>bluesky</strong>: what shapes a post's text in text.py</li>
+<li><strong>docs</strong>: the build's hooks apart from the configuration</li>
+<li><strong>dev</strong>: commands, state, bump, remote and web page in short files</li>
+</ul>
+<h2>v0.4.17 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.17</p>
+<h3>Refactor</h3>
+<ul>
+<li><strong>inbox</strong>: list and search ask the same way</li>
+<li><strong>hooks</strong>: the generic hook in its own file like the others</li>
+<li><strong>plugins</strong>: finding plugins apart from what a plugin is</li>
+<li><strong>cli</strong>: parser and view apart from running</li>
+<li><strong>nats</strong>: names, publishing and the service in three files</li>
+<li><strong>dataset</strong>: the index entry and file names apart</li>
+<li><strong>workflows</strong>: rules apart from steps</li>
+<li><strong>app</strong>: plugs, states and front-ends in files of their own</li>
+</ul>
+<h2>v0.4.16 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.16</p>
+<h3>Refactor</h3>
+<ul>
+<li><strong>methods</strong>: finish the author's split, one file per method</li>
+</ul>
+<h2>v0.4.15 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.15</p>
+<h2>v0.4.14 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.14</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>examples</strong>: the advanced use cases and web apps for Hugging Face Spaces</li>
+</ul>
+<h2>v0.4.13 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.13</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>methods</strong>: compose, simulate, wiki; hooks for Sentry and Plane; the notebooks filled</li>
+</ul>
+<h2>v0.4.12 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.12</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>workflows</strong>: workflow, automate and search methods</li>
+</ul>
+<h2>v0.4.11 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.11</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>app</strong>: Amoorion and Plugins, the author's way of using amoorion from Python</li>
+</ul>
+<h2>v0.4.10 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.10</p>
+<h3>Refactor</h3>
+<ul>
+<li><strong>examples</strong>: the notebooks become old.<NAME>.ipynb, making room for the author's new list; the changelog of phase 5</li>
+</ul>
+<h2>v0.4.9 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.9, amoorion-blogger 0.4.2, amoorion-email 0.4.8</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>email</strong>: an e-mail client: send by SMTP, read by IMAP, reply; Blogger sends through the same code</li>
+</ul>
+<h2>v0.4.8 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.8</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>nats</strong>: results of methods that change something published, and a daemon service keeping what comes in in the inbox; off unless AMOORION_NATS names a server</li>
+</ul>
+<h2>v0.4.7 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.7, amoorion-ntfy 0.4.6</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>ntfy</strong>: plugin (post, read) and a notification target: the method notify sends to the platforms of AMOORION_NOTIFY, and everything the hooks receive goes there</li>
+</ul>
+<h2>v0.4.6 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.6</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>hooks</strong>: GitHub (signed), GitLab (token) and Discord interactions (Ed25519), each a module of hooks/; vault:new makes their entry</li>
+</ul>
+<h2>v0.4.5 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.5</p>
+<h2>v0.4.4 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.4, amoorion-blogger 0.4.1, amoorion-bluesky 0.4.2, amoorion-discord 0.4.2, amoorion-facebook 0.4.2, amoorion-mastodon 0.4.2, amoorion-matrix 0.4.2, amoorion-telegram 0.4.2, amoorion-tumblr 0.4.2, amoorion-x 0.4.2</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>vault</strong>: task vault:new makes an empty entry per platform from schema.vault.json, with what each field is in its notes</li>
+<li><strong>plugins</strong>: schema.vault.json in every package says what its vault entry holds, like the scopes of OpenAPI; Plugin.schema() reads it</li>
+</ul>
+<h2>v0.4.3 (2026-10-30)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.3</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>vault</strong>: task vault:new and vault:status for KeePassXC, the vault for now: the file of AMOORION_VAULT_PATH, never overwritten; example.env links to it</li>
+<li><strong>vault</strong>: KeePassXC is a dependency of amoorion, not an extra: pykeepass always there, ~ in the path of the file</li>
+</ul>
+<h3>Fix</h3>
+<ul>
+<li><strong>tests</strong>: no test reads the vault of the user's .env; vault.sh trusts .env over what it inherits</li>
+</ul>
+<h3>Refactor</h3>
+<ul>
+<li><strong>tasks</strong>: the root Taskfile splits into a tree: each directory keeps the tasks of its own context, every name stays</li>
+</ul>
+<h2>v0.4.2 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.2</p>
+<h2>v0.4.1 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.1, amoorion-bluesky 0.4.1, amoorion-discord 0.4.1, amoorion-facebook 0.4.1, amoorion-mastodon 0.4.1, amoorion-matrix 0.4.1, amoorion-telegram 0.4.1, amoorion-tumblr 0.4.1, amoorion-x 0.4.1</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>dev</strong>: the state shows every package with its version now and in the next release, and what kind the next release is (Z, Y or X)</li>
+<li><strong>vault</strong>: the Bitwarden vault through bw from tools/ (npm); task vault:login logs in, unlocks and writes the session into .env (Q13), vault:lock empties it, vault:status shows it</li>
+<li><strong>matrix</strong>: delete by redacting the event; read skips redacted events; its profile is the room</li>
+<li><strong>telegram</strong>: delete a message in its chat; its profile is chat<id></li>
+<li><strong>discord</strong>: the bot deletes messages in its channel, the webhook deletes what it posted; profiles channel-<id> and webhook-<id></li>
+<li><strong>facebook</strong>: delete a post or comment of the page; its profile is the page id</li>
+<li><strong>tumblr</strong>: delete a post; its profile is the blog</li>
+<li><strong>x</strong>: delete a post; its profile is the username</li>
+<li><strong>mastodon</strong>: delete a status; its profile is acct@server</li>
+<li><strong>bluesky</strong>: delete its own posts (com.atproto.repo.deleteRecord); its profile is the handle</li>
+<li><strong>dataset</strong>: the posts of every profile on every platform as JSON files with an index, dataset/<platform>/<profile>/ (Q14); snapshot reads them, read keeps what it saw, delete keeps a copy before deleting</li>
+</ul>
+<h3>Fix</h3>
+<ul>
+<li><strong>dataset</strong>: the dataset package itself into git: dataset/ in .gitignore had kept src/amoorion/dataset/ out</li>
+<li><strong>live</strong>: a platform skipped for missing secrets tells the vault's reason; a locked vault points to task vault:login</li>
+</ul>
+<h3>Refactor</h3>
+<ul>
+<li><strong>plugins</strong>: every plugin names its capabilities, so a new capability is never claimed by accident</li>
+</ul>
+<h2>v0.4.0 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.4.0, amoorion-blogger 0.4.0, amoorion-bluesky 0.4.0, amoorion-discord 0.4.0, amoorion-facebook 0.4.0, amoorion-mastodon 0.4.0, amoorion-matrix 0.4.0, amoorion-telegram 0.4.0, amoorion-tumblr 0.4.0, amoorion-x 0.4.0</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>site</strong>: the web page gets a 404 page, robots.txt and llms.txt</li>
+</ul>
+<h2>v0.3.5 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.3.5</p>
+<h2>v0.3.4 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.3.4</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>site</strong>: the web page is the presentation page of amoorion-website (built by vite for /amoorion/) with the marimo examples, project and releases pages in its style, and manifest files</li>
+</ul>
+<h2>v0.3.3 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.3.3</p>
+<h3>Fix</h3>
+<ul>
+<li><strong>dev</strong>: a final that only renews the changelog commits as &quot;bump: changelog of X&quot;, not &quot;X → X&quot;</li>
+</ul>
+<h2>v0.3.2 (2026-10-27)</h2>
+<p><strong>Packages:</strong> amoorion 0.3.2</p>
+<h3>Feat</h3>
+<ul>
+<li><strong>dev</strong>: a version per package (Q15): Z bumps amoorion and the packages changed since the last release, Y (a phase) and X (the last phase) all; packages --released lists what a release bumped</li>
+</ul>
+<h3>Fix</h3>
+<ul>
+<li><strong>commits</strong>: the flow's merges of release pull requests (&quot;Release v…&quot;) pass commitizen's check</li>
+</ul>
+<h2>v0.3.1 (2026-10-27)</h2>
+<h3>Fix</h3>
+<ul>
+<li><strong>gh-pages</strong>: keep the page in the github-pages branch before asking for Pages</li>
+</ul>
+<h2>v0.3.0 (2026-10-27)</h2>
+<h3>Feat</h3>
+<ul>
+<li><strong>cli</strong>: amoorion alone asks step by step: the method, its parameters, platforms by what they can do, a confirmation before changing anything; results show messages as text</li>
+<li><strong>tools</strong>: amoorion-dev, the development tools: state of development, versions of the loop, phases, release notes, web page; settings in .github/flow.toml</li>
+</ul>
+<h3>Fix</h3>
+<ul>
+<li><strong>publish</strong>: PyPI gets one package at a time, skipping files already there, and waits out its limit on new projects (429 stopped v0.2.1 after four)</li>
+</ul>
+<h2>v0.2.1 (2026-10-26)</h2>
+<h3>Fix</h3>
+<ul>
+<li><strong>version</strong> comes from the installed package; it stayed 0.1.0 while the package was 0.2.0, so the docs showed another version</li>
+</ul>
+<h2>v0.2.0 (2026-10-26)</h2>
+<h3>Feat</h3>
+<ul>
+<li><strong>plugins</strong>: Matrix plugin package: posts, reads and replies in one room (client-server API)</li>
+<li><strong>plugins</strong>: Telegram plugin package: a bot posts, reads and replies in one chat (Bot API)</li>
+<li><strong>plugins</strong>: Discord plugin package: a bot (post, read, reply) and a channel webhook (post), Q12</li>
+<li><strong>plugins</strong>: HttpPlugin hides secrets that are part of URLs from its errors</li>
+<li><strong>inbox</strong>: received messages kept in SQLite; read and hooks fill it, the inbox method lists it (Q11)</li>
+<li><strong>plugins</strong>: Facebook plugin package: Page posts, read, replies as comments (Graph API)</li>
+<li><strong>plugins</strong>: Blogger plugin package: posting by mail, TLS only</li>
+<li><strong>plugins</strong>: Tumblr plugin package: post in the Neue Post Format with tags, read</li>
+<li><strong>plugins</strong>: X (twitter) plugin package: API v2 with OAuth 1.0a, weighted 280 characters</li>
+<li><strong>plugins</strong>: Mastodon plugin package: post, read, reply, the server's own character limit</li>
+<li><strong>methods</strong>: reply method, answering one message by its id</li>
+<li><strong>plugins</strong>: Bluesky plugin over the AT Protocol: post with link and tag facets, read, reply</li>
+<li><strong>methods</strong>: accounts method, which platforms have their secrets in the vault</li>
+<li><strong>plugins</strong>: plugins found through the amoorion.plugins entry points, dryrun included (Q7)</li>
+<li><strong>vault</strong>: KeePassXC database file backend, pykeepass as the keepassxc extra (Q6)</li>
+<li><strong>vault</strong>: HashiCorp Vault / OpenBao backend, KV v2 over HTTP (Q6)</li>
+<li><strong>vault</strong>: Bitwarden / Vaultwarden backend through the bw CLI (Q6, first)</li>
+<li><strong>daemon</strong>: services run side by side, one ending stops the rest; the API as first service</li>
+<li><strong>mcp</strong>: the methods as MCP tools, read-only ones marked so</li>
+<li><strong>api</strong>: FastAPI over the methods (bearer token from the vault) and the hooks</li>
+<li><strong>hooks</strong>: webhook base verifying calls before reading them; token-guarded generic hook</li>
+<li><strong>cli</strong>: subcommands built from the methods, rich tables or --json, server subcommands</li>
+<li><strong>methods</strong>: plugins, publish and read methods with typed params for every front-end</li>
+<li><strong>plugins</strong>: plugin base with capabilities and vault secrets; dryrun platform for development</li>
+<li><strong>vault</strong>: link to the secrets vault from .env, development env backend (backend choice is Q6)</li>
+<li><strong>models</strong>: accounts, posts, messages and results shared by every namespace</li>
+<li><strong>core</strong>: model, view and controller bases with a registry, from the author's sketch</li>
+<li>the author's namespace sketch (core.py), runtime dependencies and orders on Q1-Q5</li>
+<li>uv package skeleton with the amoorion CLI entry point</li>
+</ul>
+<h3>Fix</h3>
+<ul>
+<li><strong>docs</strong>: the requirements check compares only the pins, as uv versions word markers differently (CI failed on it)</li>
+<li>importing a <strong>main</strong> module starts nothing (the API reference imports every module)</li>
+<li><strong>plugins</strong>: load plugins on first use, not when amoorion.plugins is imported</li>
+</ul>
+<h3>Refactor</h3>
+<ul>
+<li><strong>plugins</strong>: HttpPlugin shares the HTTP calls and error reasons of the platform plugins</li>
+<li><strong>plugins</strong>: uv workspace; Bluesky moved into its own package, packages/amoorion-bluesky (Q10)</li>
+<li><strong>vault</strong>: one module per backend, the .env setup in default.py; path in the link</li>
+</ul>
+
+</main>
+<footer>MIT License, © 2024–present Sett Sarverott. Built from the repository at v0.4.36.</footer>
+</body>
+</html>

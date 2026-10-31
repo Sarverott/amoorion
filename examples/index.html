@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>amoorion examples</title>
+<link rel="icon" href="../graphics/cupid.png">
+<link rel="manifest" href="../site.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #07090e; --fg: #f2e9e4; --muted: #b9a9a3; --line: rgba(226, 168, 147, 0.22);
+  --rose: #e14c62; --gold: #e2a893; --card: #0d101a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(ellipse at top, #1a0f18 0%, var(--bg) 55%) fixed; color: var(--fg);
+  font: 16px/1.65 "Plus Jakarta Sans", system-ui, -apple-system, sans-serif; }
+main, header, footer { max-width: 56rem; margin: 0 auto; padding: 0 1rem; }
+header { padding-top: 2.2rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line); text-align: center; }
+header img { max-width: min(30rem, 90%); height: auto; }
+header p { color: var(--muted); margin: 0.3rem 0 1rem; }
+h1, h2, h3 { font-family: "Cormorant Garamond", Georgia, serif; color: var(--gold); line-height: 1.2; }
+h2 { font-size: 2rem; margin-top: 2.4rem; }
+nav a { margin: 0 0.6rem; color: var(--gold); text-decoration: none; font-family: Cinzel, serif;
+  font-size: 0.9rem; letter-spacing: 0.08em; }
+nav a:hover { color: var(--rose); }
+.version { display: inline-block; padding: 0.1rem 0.7rem; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 0.85rem; color: var(--gold); }
+pre, code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem; overflow-x: auto; }
+a { color: var(--rose); }
+table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.9rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem;
+  text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+.card:hover { border-color: rgba(225, 76, 98, 0.6); box-shadow: 0 0 20px rgba(225, 76, 98, 0.2); }
+.card h3 { margin: 0 0 0.3rem; font-size: 1.3rem; }
+.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem;
+  border-top: 1px solid var(--line); margin-top: 3rem; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+<a href="../index.html"><img src="../graphics/wordmark.png" alt="amoorion"></a>
+<p>Universal tool for administration of chatting and communication platforms
+<span class="version">v0.4.36</span></p>
+<nav><a href="../index.html">Home</a><a href="../project.html">Project</a><a href="../examples/index.html">Examples</a><a href="../releases.html">Releases</a><a href="https://amoorion.readthedocs.io/">Docs</a><a href="https://pypi.org/project/amoorion/">PyPI</a><a href="https://github.com/Sarverott/amoorion">GitHub</a></nav>
+</header>
+<main>
+<h2>Examples</h2>
+<div class="cards"><a class="card" href="01-getting-started.html"><h3>getting started</h3><p>a marimo notebook</p></a><a class="card" href="02-config-and-setup.html"><h3>config and setup</h3><p>a marimo notebook</p></a><a class="card" href="03-data-object-modeling.html"><h3>data object modeling</h3><p>a marimo notebook</p></a><a class="card" href="04-identity-vaults.html"><h3>identity vaults</h3><p>a marimo notebook</p></a><a class="card" href="05-cli-and-terminals.html"><h3>cli and terminals</h3><p>a marimo notebook</p></a><a class="card" href="06-getting-over-dataset.html"><h3>getting over dataset</h3><p>a marimo notebook</p></a><a class="card" href="07-summoning-daemons.html"><h3>summoning daemons</h3><p>a marimo notebook</p></a><a class="card" href="08-using-nats.html"><h3>using nats</h3><p>a marimo notebook</p></a><a class="card" href="09-how-to-use-packages.html"><h3>how to use packages</h3><p>a marimo notebook</p></a><a class="card" href="10-webapp-interfacing.html"><h3>webapp interfacing</h3><p>a marimo notebook</p></a><a class="card" href="11-additional-utilities.html"><h3>additional utilities</h3><p>a marimo notebook</p></a><a class="card" href="12-rest-api.html"><h3>rest api</h3><p>a marimo notebook</p></a><a class="card" href="13-mcp-in-action.html"><h3>mcp in action</h3><p>a marimo notebook</p></a><a class="card" href="14-hooks-as-event-listeners.html"><h3>hooks as event listeners</h3><p>a marimo notebook</p></a><a class="card" href="15-calling-procedures-by-methods.html"><h3>calling procedures by methods</h3><p>a marimo notebook</p></a><a class="card" href="16-defining-own-plugins.html"><h3>defining own plugins</h3><p>a marimo notebook</p></a><a class="card" href="17-unified-inbox.html"><h3>unified inbox</h3><p>a marimo notebook</p></a><a class="card" href="18-automation-workflowing.html"><h3>automation workflowing</h3><p>a marimo notebook</p></a><a class="card" href="19-trying-society-emulations.html"><h3>trying society emulations</h3><p>a marimo notebook</p></a><a class="card" href="20-all-socialmedia-posting-from-one-script.html"><h3>all socialmedia posting from one script</h3><p>a marimo notebook</p></a><a class="card" href="old.01-first-steps.html"><h3>first steps</h3><p>a marimo notebook</p></a><a class="card" href="old.02-vault-and-accounts.html"><h3>vault and accounts</h3><p>a marimo notebook</p></a><a class="card" href="old.03-api-hooks-inbox.html"><h3>api hooks inbox</h3><p>a marimo notebook</p></a><a class="card" href="old.04-own-plugin.html"><h3>own plugin</h3><p>a marimo notebook</p></a></div>
+</main>
+<footer>MIT License, © 2024–present Sett Sarverott. Built from the repository at v0.4.36.</footer>
+</body>
+</html>

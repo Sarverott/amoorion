@@ -1,5 +1,0 @@
-# amoorion's docs: everything may be read and indexed, by people and agents.
-User-agent: *
-Allow: /
-
-Sitemap: https://amoorion.readthedocs.io/sitemap.xml

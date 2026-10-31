@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>amoorion</title>
+<link rel="icon" href="graphics/cupid.png">
+<link rel="manifest" href="site.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #07090e; --fg: #f2e9e4; --muted: #b9a9a3; --line: rgba(226, 168, 147, 0.22);
+  --rose: #e14c62; --gold: #e2a893; --card: #0d101a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(ellipse at top, #1a0f18 0%, var(--bg) 55%) fixed; color: var(--fg);
+  font: 16px/1.65 "Plus Jakarta Sans", system-ui, -apple-system, sans-serif; }
+main, header, footer { max-width: 56rem; margin: 0 auto; padding: 0 1rem; }
+header { padding-top: 2.2rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line); text-align: center; }
+header img { max-width: min(30rem, 90%); height: auto; }
+header p { color: var(--muted); margin: 0.3rem 0 1rem; }
+h1, h2, h3 { font-family: "Cormorant Garamond", Georgia, serif; color: var(--gold); line-height: 1.2; }
+h2 { font-size: 2rem; margin-top: 2.4rem; }
+nav a { margin: 0 0.6rem; color: var(--gold); text-decoration: none; font-family: Cinzel, serif;
+  font-size: 0.9rem; letter-spacing: 0.08em; }
+nav a:hover { color: var(--rose); }
+.version { display: inline-block; padding: 0.1rem 0.7rem; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 0.85rem; color: var(--gold); }
+pre, code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em; }
+pre { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem; overflow-x: auto; }
+a { color: var(--rose); }
+table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+th, td { border-bottom: 1px solid var(--line); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.9rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem;
+  text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+.card:hover { border-color: rgba(225, 76, 98, 0.6); box-shadow: 0 0 20px rgba(225, 76, 98, 0.2); }
+.card h3 { margin: 0 0 0.3rem; font-size: 1.3rem; }
+.card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+footer { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 3rem;
+  border-top: 1px solid var(--line); margin-top: 3rem; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+<a href="index.html"><img src="graphics/wordmark.png" alt="amoorion"></a>
+<p>Universal tool for administration of chatting and communication platforms
+<span class="version">v0.4.36</span></p>
+<nav><a href="index.html">Home</a><a href="project.html">Project</a><a href="examples/index.html">Examples</a><a href="releases.html">Releases</a><a href="https://amoorion.readthedocs.io/">Docs</a><a href="https://pypi.org/project/amoorion/">PyPI</a><a href="https://github.com/Sarverott/amoorion">GitHub</a></nav>
+</header>
+<main>
+<h2>Install</h2>
+<pre><code>pip install amoorion amoorion-bluesky   # the core and the platforms you use</code></pre>
+<!--
+## **EARLY STAGE OF PROJECT**
+
+The core works end to end, with plugins for Bluesky, Mastodon, X, Tumblr,
+Blogger, Facebook, Discord (bot or webhook), Telegram and Matrix, tested
+only against fakes of their APIs so far, not yet against real accounts. `dryrun` sends nothing, for trying.
+Plan: [docs/devlog/VISION.md](docs/devlog/VISION.md).
+
+---
+
+## What it will do
+
+Write once, post everywhere, read and answer from one place, and link it
+with the services around it.
+
+#### Publication platforms
+- twitter (x.com) posting by api
+- bluesky posting
+- tumblr posting by api
+- blogger posting by mail
+- facebook posting
+- mastodon posting
+
+#### Communication platforms
+- discord
+- telegram
+- matrix
+- ~whatsapp~
+- ~signal~
+
+#### Additional functionality
+- email client
+- ~rss feed receiver~
+- ~phone manage by adb~
+- webhooks - standard linkings with services like gitlab, github, discord etc.
+- ntfy notifications
+- nats.io
+
+-->
+<h2>Getting started</h2>
+<h4>documentation: https://amoorion.readthedocs.io</h4>
+<pre><code class="language-sh">pip install amoorion amoorion-bluesky        # the core and the platforms you use
+amoorion                                     # asks step by step what to do
+amoorion publish --text &quot;hello&quot; --to dryrun  # dryrun sends nothing: try it first
+</code></pre>
+<h2>What it does</h2>
+<img src="https://raw.githubusercontent.com/Sarverott/amoorion/master/resources/images/Amoorion%E2%80%99s%20Cupid%20Bot%20Sends%20Heart%20Messages-2-mini.png" alt="Amoorion's cupid bot" width="220" align="right">
+<ul>
+<li><strong>Publish:</strong> write once, post to every platform you name.</li>
+<li><strong>Read &amp; reply:</strong> read what came in, in one inbox, and answer from there.</li>
+<li><strong>Keep:</strong> every profile's posts as JSON files in <code>dataset/</code>; <code>delete</code>
+keeps a copy of what it removes.</li>
+<li><strong>Connect:</strong> link the platforms with each other and with the services
+around them (webhooks, ntfy, NATS, e-mail: phase 5 of the plan).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Package</th>
+<th style="text-align:center">Post</th>
+<th style="text-align:center">Read</th>
+<th style="text-align:center">Reply</th>
+<th style="text-align:center">Delete</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bluesky</td>
+<td><code>amoorion-bluesky</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>Mastodon</td>
+<td><code>amoorion-mastodon</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>ntfy</td>
+<td><code>amoorion-ntfy</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>E-mail</td>
+<td><code>amoorion-email</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>X (twitter)</td>
+<td><code>amoorion-x</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>Tumblr</td>
+<td><code>amoorion-tumblr</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>Blogger (by mail)</td>
+<td><code>amoorion-blogger</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>Facebook Page</td>
+<td><code>amoorion-facebook</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓ (comment)</td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>Discord bot / webhook</td>
+<td><code>amoorion-discord</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓ (bot)</td>
+<td style="text-align:center">✓ (bot)</td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>Telegram bot</td>
+<td><code>amoorion-telegram</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+</tr>
+<tr>
+<td>Matrix room</td>
+<td><code>amoorion-matrix</code></td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓</td>
+<td style="text-align:center">✓ (redact)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Early stage:</strong> every platform is tested against fakes of its API; trying
+them against real accounts is under way.</p>
+<h2>How it is built</h2>
+<p>One core (model, view, controller) and namespaces on it: <strong>plugins</strong> (one
+per platform), <strong>methods</strong> (what amoorion can do), and the faces that expose
+the methods: <strong>CLI</strong>, <strong>HTTP API</strong>, <strong>MCP</strong> server for AI agents, and a
+<strong>daemon</strong> for long-running services. Secrets come only from a <strong>vault</strong>
+(Bitwarden / Vaultwarden, HashiCorp Vault / OpenBao, or a KeePassXC file);
+<code>.env</code> holds just the link to it. Each platform is its own package in
+<code>packages/</code> (a uv workspace). Details: <a href="https://github.com/Sarverott/amoorion/blob/master/docs/structure.md">docs/structure.md</a>, writing a plugin:
+<a href="https://github.com/Sarverott/amoorion/blob/master/docs/plugins.md">docs/plugins.md</a>.</p>
+<h2>Usage</h2>
+<pre><code class="language-sh">uv sync
+cp example.env .env                          # the link to the vault
+
+uv run amoorion                              # asks step by step what to do (or: amoorion -i)
+uv run amoorion plugins                      # platforms and what they can do
+uv run amoorion accounts                     # which have their secrets in the vault
+uv run amoorion publish --text &quot;hello&quot; --to dryrun bluesky
+uv run amoorion --json read --platform bluesky
+uv run amoorion reply --platform bluesky --to &quot;at://…&quot; --text &quot;thanks&quot;
+uv run amoorion inbox                        # everything read or received so far
+uv run amoorion snapshot --platform bluesky  # its posts into dataset/bluesky/&lt;profile&gt;/ (JSON, indexed)
+uv run amoorion delete --platform bluesky --id &quot;at://…&quot;   # keeps a copy in the dataset first
+uv run task help                             # help of every command
+
+uv run amoorion api                          # HTTP API on 127.0.0.1:8000
+uv run amoorion mcp                          # MCP server (stdio) for agents
+uv run amoorion daemon                       # long-running services
+</code></pre>
+<p>The API needs the secret <code>api/token</code> in the vault (sent as <code>Authorization: Bearer</code>), and every hook its own secret; without them they refuse calls.
+Where each backend keeps a secret: <a href="https://github.com/Sarverott/amoorion/blob/master/docs/structure.md#vault">docs/structure.md</a>.
+Each platform's secrets are listed in its package's README, e.g.
+<a href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-bluesky/README.md">packages/amoorion-bluesky</a>.</p>
+<p>Run locally first; a Dockerfile and compose come next (phase 6 of the plan).</p>
+<h2>Development</h2>
+<pre><code class="language-sh">uv run task init               # tools, git hooks, .env, then check
+uv run task vault:new          # KeePassXC: the file of AMOORION_VAULT_PATH, an empty entry per platform
+uv run task vault:status       # the vault's state, and which platforms have their secrets
+uv run task vault:tools        # Bitwarden instead: bw by npm into tools/, then vault:login
+uv run task check              # tests, YAML, commit messages, docs (= CI)
+uv run task docs:build         # the docs site into docs/_build/html
+uv run task plugin:new -- &lt;platform&gt; &lt;Class&gt; &quot;&lt;description&gt;&quot;   # a new platform
+uv run task test:connect       # read-only: log in to every platform with its secrets, read a few posts
+uv run task test:live          # a real test post on each (or: -- bluesky mastodon), read, replied, deleted
+</code></pre>
+<p>Examples of usage: Jupyter notebooks in <a href="https://github.com/Sarverott/amoorion/blob/master/examples">examples/</a>
+(<code>uv run task examples:build</code> makes marimo notebooks and pages of them). The docs
+(this README, the guides, the plan and an API reference generated from the
+code) are built by Sphinx from <a href="https://github.com/Sarverott/amoorion/blob/master/docs">docs/</a> for Read the Docs.
+Plan and open questions: <a href="https://github.com/Sarverott/amoorion/blob/master/docs/devlog">docs/devlog/</a>. Guide for agents and
+contributors: <a href="https://github.com/Sarverott/amoorion/blob/master/AGENTS.md">AGENTS.md</a>.</p>
+<h2>Reference</h2>
+<ul>
+<li>https://pl.wikipedia.org/wiki/(1221)_Amor</li>
+<li>https://github.com/sarverott/amoorion/</li>
+<li>https://amoorion.readthedocs.io</li>
+<li>https://pypi.org/project/amoorion/</li>
+<li>https://sarverott.github.io/amoorion</li>
+<li>https://sarverott.tumblr.com/post/831595954743459840/github-sarverottamoorion-universal-tool-for</li>
+<li>https://x.com/sarverott/status/2114859609823301649</li>
+</ul>
+<h2>License</h2>
+<p>Free, under the MIT License, © 2024–present Sett Sarverott:
+<a href="https://github.com/Sarverott/amoorion/blob/master/LICENSE">LICENSE</a>, https://sett.mit-license.org</p>
+<h2>For agents</h2>
+<p>amoorion comes with an agent skill: <code>amoorion --json skill</code> gives it to any agent.
+In Claude Code:</p>
+<pre><code class="language-sh">/plugin install amoorion --marketplace Sarverott/amoorion
+</code></pre>
+<h2>Platforms</h2>
+<div class="cards"><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-blogger/README.md"><h3>amoorion-blogger</h3><p>Blogger plugin of amoorion: posts by e-mail to the blog&#x27;s secret posting address (Blogger → Settings → Email → Post using email).</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-bluesky/README.md"><h3>amoorion-bluesky</h3><p>Bluesky plugin of amoorion: post (links and tags as clickable facets), read, reply and delete (only its own posts) through the AT Protocol.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-discord/README.md"><h3>amoorion-discord</h3><p>Discord plugins of amoorion, both ways of decision Q12:</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-email/README.md"><h3>amoorion-email</h3><p>E-mail plugin of amoorion: post (send to one address), read a mailbox and reply to the sender. Mail only ever goes encrypted.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-facebook/README.md"><h3>amoorion-facebook</h3><p>Facebook plugin of amoorion: post on a Facebook Page, read its posts, reply as comments, and delete posts or comments, through the Graph API.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-mastodon/README.md"><h3>amoorion-mastodon</h3><p>Mastodon plugin of amoorion: post, read, reply and delete through the REST API of a Mastodon (or compatible) server.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-matrix/README.md"><h3>amoorion-matrix</h3><p>Matrix plugin of amoorion: posts, reads, replies and deletes (redacts) in one room through the client-server API of any homeserver.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-ntfy/README.md"><h3>amoorion-ntfy</h3><p>ntfy plugin of amoorion: push notifications to one topic, and read what the topic holds. Also a notification target: set `AMOORION_NOTIFY=ntfy` in `.env` and everything the hooks receive is sent there too.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-telegram/README.md"><h3>amoorion-telegram</h3><p>Telegram plugin of amoorion: a bot posts, reads, replies and deletes in one chat (a group, a channel or a private chat) through the Bot API.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-tumblr/README.md"><h3>amoorion-tumblr</h3><p>Tumblr plugin of amoorion: post, read and delete through the Tumblr API v2 (Neue Post Format), signed with OAuth 1.0a.</p></a><a class="card" href="https://github.com/Sarverott/amoorion/blob/master/packages/amoorion-x/README.md"><h3>amoorion-x</h3><p>X (twitter) plugin of amoorion: post, read, reply and delete through the X API v2, signed with OAuth 1.0a for the account itself.</p></a></div>
+<h2>Examples</h2>
+<p><a href="examples/index.html">Notebooks, run with marimo</a></p>
+
+</main>
+<footer>MIT License, © 2024–present Sett Sarverott. Built from the repository at v0.4.36.</footer>
+</body>
+</html>

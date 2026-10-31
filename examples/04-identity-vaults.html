@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/apple-touch-icon.png" />
+    <link rel="manifest" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>04-identity-vaults.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>04-identity-vaults</title>
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-s-M1OXjs.js"></script>
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/rolldown-runtime-B0Z9INg1.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-DVplv7_D.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/compiler-runtime-BrajqUja.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEvent-Dfcbgjhg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-dom-_LrxgvjW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/schemas-Dv42wLFq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isObject-BCaOs5rp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isSymbol-oX0TOjjx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/now-Cmx0b_zA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/debounce-aFmHgJZY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isArrayLikeObject-DnwgSs_Z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseMerge-CQpUq7ep.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objects-snlMn4yk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEventListener-D9cftcHj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/invariant-Ci2dTZ72.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-VPSq73n8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-B4K466FK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/session-DqoWmb7X.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Deferred-CrTnjj37.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-DX8Y2WbJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/clsx-DB0hHKMi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cn-ldLVeaqm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/jsx-runtime-B74pBk57.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fullscreen-B9tHcfpV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-iaThVDkA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/menu-items-BrwnTgyK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-restore-focus-BxEGwIbk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createLucideIcon-DfJ2oMlA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/circle-DXf-VWZG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/button-COI-NGrx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/check-BQNapYaf.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/I18nProvider-Cg2I_s1_.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useNumberFormatter-D7O_26UI.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/select-DTBn5eTb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toast-BGzLGnvw.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-C9TuY18o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/paths-bkIFVj8h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useLifecycle-Mq4gc5kS.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toDate-DOj9Q6uC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/database-zap-B_PMVg8T.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-dialog-BaPGzeOK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/arrays-BqUx5USx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/once-Haz_uxEL.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/numbers-Mk3-CcoU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDebounce-B_ccBZTp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/input-BoBxR50a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-toast-Wu434mLr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/requests-lt0JK8Jt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/uuid-k9DpjH68.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/write-secret-modal-DzKAInL2.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/plus-C5silF6g.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/trash-2-DcgaW8fn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/preload-helper-uBIymjUX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-Cny7_yZb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DBMV4gqt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/capabilities-BJvf-MD4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cjs-C49f7GXV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createReducer-DgRODTW6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-qhAY4L2r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/marked.esm-B_3iMIUq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/strings-B2vv-ENv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BOfh4hMd.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/badge-crT3E0Rm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DtH-7lot.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BmExfiwX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-1tmpVXyz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-LSsCJjA3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DusFODSa.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/stex-Dc5bKD4z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useTheme-COhSHkCj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAsyncData-C7aJJz0Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/purify.es--06brOip.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-BRkCaSsh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/coerce-CpE6kUdX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/get-DjNf4SIX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_hasPath-BmRQipI0.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hasIn-yw4sIeJR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseSet-Bpdo9AvU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pick-DKIID_Mo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-BAJYRhmO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-C3oDoyFe.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/LazyAnyLanguageCodeMirror-CKcCbG2G.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-D8O_CYCG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/micromark-factory-space-D9Dr-k4J.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chunk-YOKDWASO-BIpRENEC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-BG3sp2rs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-Djr5m5ac.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-icon-BIiRXh_3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useRunCells-B2vUhREg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/RenderHTML-BbOqmHy3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/blob-D5nfNHOo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/kbd-pdKBv96t.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useInstallPackage-iX1eufdl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/errors-DCrsa1nH.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/api-BeC_VSGv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/share-BZW3tzEX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/events-CbeVJ6OD.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-_Qai_QyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pair-CaQyK6En.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ErrorBoundary-Gl5nCA8C.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-BOKzA3tF.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chevron-right-eAtVhbNZ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dropdown-menu-C1rnl-0o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/html-to-image-DK9Zl1lU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/download-DCJXy66H.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/switch-CTaiAjrz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tabs-BuQlZFbt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-DG7Ap4H4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/eye-off-CxVozGAC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/refresh-cw-Qw1f8Jhy.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tree-actions-GM5E_bUs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ellipsis-63DyBLHQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/external-link-UrX9KO36.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spinner-DyNE-o8o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/message-circle-C3rKm8_a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hat-glasses-C8RhSVii.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-GSoSTiIK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/datasource-Cq6x_5ML.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-DTaqCu_d.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-XsPO8hNi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cell-link-LSth_8hT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/MarimoErrorOutput-D60XkCny.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDateFormatter-DA-62E-Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/en-US-Buu61juQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isValid-q_Ad80ug.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dates-BbFQ2oE4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-CNPGWpMu.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/precisionRound-Bq_nmf5u.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-D5bOh7g6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/vega-loader.browser-CLRkNgm7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-mT3CGest.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-icons.esm-D6tfmvq8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/extends-CvVTau-c.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objectWithoutPropertiesLoose-Do6ywDBO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useIframeCapabilities-CwTkczVN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/error-banner-Cd69vvyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-CaQYvazl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/formats-yZ06h1Pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-vrvqpuKJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-resizable-panels.browser.esm-Dbe0MrFr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-D6HIIsCb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chart-no-axes-column-C4_v6fQW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-function-_W_Lo0P4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spec-BfSBcO5B.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/semaphore-BjoL5P0h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fileToBase64-BgBraYAr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useBoolean-BDD6_xQQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/code-xml-SQaZqvcO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-headphone-Dl35U6h3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-BPBVl9pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/image-wZvTj8WY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-icons-CdJgUy-I.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/globe-UdPdIbF7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/esm-CI_o7NhW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAddCell-GR7eEQrT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/readonly-python-code-DCSMIsTX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/data-grid-types-DgHVN_Zz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/glide-utils-CIrAxdjv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/column-preview-Cm2D6vyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-BPmgQFnh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/triangle-alert-DmIqR8sY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/prop-types-Djf4O40e.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/es-Cqst59WX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-data-dv4FBHxR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-export-DzhB1FrN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/renderShortcut-BkVJQ_Zh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/bundle.esm-D3tw5rqW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/icons-CiZ_8zS-.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDeepCompareMemoize-DFIVN9dn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pathUtils-DPmlLd-r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/floating-outline-XD9FAV-f.js">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-0PFKL3SH.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-DjIHoF9Z.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-B0GmlMnR.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-Bcdzex-3.css">
+  
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_STATIC__", {
+        value: Object.freeze({
+            files: Object.freeze({}),
+            modelNotifications: Object.freeze([]),
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.25.2\"\napp = marimo.App()\n\n\n@app.cell\ndef _():\n    import marimo as mo\n\n    return (mo,)\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    # Vault with identities and creds\n\n    `.env` holds only the link to a vault. Secrets are named `\u003Cplatform\u003E/\u003Ckey\u003E` and a\n    plugin says which it needs. Here KeePassXC, in a temporary file with a made-up\n    password, so nothing else is needed.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _():\n    from amoorion import Amoorion\n\n    # We need its folder for the vault file.\n    # A sandbox for this whole notebook: secrets only from variables, the inbox and\n    # the dataset in a temporary folder. Nothing here can touch your real setup.\n    scratch = Amoorion.init()\n    return Amoorion, scratch\n\n\n@app.cell\ndef _(scratch):\n    # The library that reads KeePassXC files, only to look inside afterwards.\n    from pykeepass import PyKeePass\n\n    from amoorion import Plugins\n\n    # Each plugin says which secrets it needs.\n    from amoorion.plugins import load_plugins\n\n    from amoorion.vault import VaultLink\n\n    from amoorion.vault import kpxc_db_file\n\n    # A made-up password and a file in the sandbox: nothing real here.\n    filepath = scratch / \"identity.kdbx\"\n\n    # The link: which kind of vault, where, and its password.\n    link = VaultLink(\n        kind=\"keepassxc\",\n        path=str(filepath),\n        token=\"made-up\",\n    )\n\n    # Make the file, with an empty entry per platform. `task vault:new` does this for real.\n    kpxc_db_file.initialize(\n        link,\n        {\"ntfy\": load_plugins().get(\"ntfy\").schema()},\n    )\n    return Plugins, PyKeePass, filepath\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    That is what `task vault:new` does. Each entry's notes say what its fields are:\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(PyKeePass, filepath):\n    # Open it as KeePassXC itself would.\n    entry = PyKeePass(\n        filepath,\n        password=\"made-up\",\n    ).find_entries(\n        title=\"ntfy\",\n        first=True,\n    )\n\n    # The entry explains, in its notes, which secret is what.\n    print(entry.notes)\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    An identity is one env file pointing at one vault. Whether the secrets are there\n    shows as a flag, and values never:\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(Amoorion, Plugins, filepath, scratch):\n    # The env file is the only thing pointing at the vault.\n    env_file = scratch / 'identity.env'\n    env_file.write_text(f'AMOORION_VAULT=keepassxc\\nAMOORION_VAULT_PATH={filepath}\\nAMOORION_VAULT_TOKEN=made-up\\n')\n    _amo = Amoorion(env_file)\n\n    def ntfy_ready():\n        return next((status['ready'] for status in _amo.accounts() if status['platform'] == 'ntfy'))\n    # This object takes its secrets from that file.\n    # `accounts` asks the vault whether a platform has what it needs.\n    # The entry exists, yet it is empty: not ready.\n    print(ntfy_ready(), Plugins['ntfy'].has_secrets(_amo.vault))\n    return env_file, ntfy_ready\n\n\n@app.cell\ndef _(Amoorion, Plugins, PyKeePass, env_file, filepath, ntfy_ready):\n    db = PyKeePass(filepath, password='made-up')\n    db.find_entries(title='ntfy', first=True).set_custom_property('topic', 'my-topic')\n    db.save()\n    _amo = Amoorion(env_file)\n    # Fill in the secret, as you would in KeePassXC's window.\n    # Written to the file\u2026\n    # \u2026and a new object sees it.\n    # Ready now.\n    print(ntfy_ready(), Plugins['ntfy'].has_secrets(_amo.vault))\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    In a terminal, `amoorion` alone asks everything with arrow menus: up and down choose, Enter confirms,\n    Esc or left goes back to the previous question. `amoorion accounts` is there too, to see which\n    platforms already have their secrets. Terminals only: a notebook has no keys to steer with.\n    \"\"\")\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    `Amoorion(\"work.env\")` and `Amoorion(\"private.env\")` can live side by side:\n    `examples/advanced-usecases/scoping-of-identities-handling/`.\n    \"\"\")\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "04-identity-vaults.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.25.2",
+            "serverToken": "static",
+            "config": {"ai": {"allow_provider_config": true, "custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "code_lens": true, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "after_delay", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "compact"},
+            "layout": null,
+            "view": {"showAppCode": true},
+            "notebook": {"cells": [{"code": "import marimo as mo", "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "Hbol", "name": "_"}, {"code": "mo.md(r\"\"\"\n# Vault with identities and creds\n\n`.env` holds only the link to a vault. Secrets are named `\u003Cplatform\u003E/\u003Ckey\u003E` and a\nplugin says which it needs. Here KeePassXC, in a temporary file with a made-up\npassword, so nothing else is needed.\n\"\"\")", "code_hash": "05bc2de6294b5170d3977428b22d1fb0", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "MJUe", "name": "_"}, {"code": "from amoorion import Amoorion\n\n# We need its folder for the vault file.\n# A sandbox for this whole notebook: secrets only from variables, the inbox and\n# the dataset in a temporary folder. Nothing here can touch your real setup.\nscratch = Amoorion.init()", "code_hash": "bdd415635f9b406dda19abfdad57b02d", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "vblA", "name": "_"}, {"code": "# The library that reads KeePassXC files, only to look inside afterwards.\nfrom pykeepass import PyKeePass\n\nfrom amoorion import Plugins\n\n# Each plugin says which secrets it needs.\nfrom amoorion.plugins import load_plugins\n\nfrom amoorion.vault import VaultLink\n\nfrom amoorion.vault import kpxc_db_file\n\n# A made-up password and a file in the sandbox: nothing real here.\nfilepath = scratch / \"identity.kdbx\"\n\n# The link: which kind of vault, where, and its password.\nlink = VaultLink(\n    kind=\"keepassxc\",\n    path=str(filepath),\n    token=\"made-up\",\n)\n\n# Make the file, with an empty entry per platform. `task vault:new` does this for real.\nkpxc_db_file.initialize(\n    link,\n    {\"ntfy\": load_plugins().get(\"ntfy\").schema()},\n)", "code_hash": "5f55cc81d8f99f5d68e005a9747f0c30", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "bkHC", "name": "_"}, {"code": "mo.md(r\"\"\"\nThat is what `task vault:new` does. Each entry's notes say what its fields are:\n\"\"\")", "code_hash": "585ca2960ce91d5c9c1be86038d8135b", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "lEQa", "name": "_"}, {"code": "# Open it as KeePassXC itself would.\nentry = PyKeePass(\n    filepath,\n    password=\"made-up\",\n).find_entries(\n    title=\"ntfy\",\n    first=True,\n)\n\n# The entry explains, in its notes, which secret is what.\nprint(entry.notes)", "code_hash": "e0a262ac368a0fa4c21d7be8fb089a1d", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "PKri", "name": "_"}, {"code": "mo.md(r\"\"\"\nAn identity is one env file pointing at one vault. Whether the secrets are there\nshows as a flag, and values never:\n\"\"\")", "code_hash": "01e5fa6179f1d42a3a8ce9e48e47ce01", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "Xref", "name": "_"}, {"code": "# The env file is the only thing pointing at the vault.\nenv_file = scratch / 'identity.env'\nenv_file.write_text(f'AMOORION_VAULT=keepassxc\\nAMOORION_VAULT_PATH={filepath}\\nAMOORION_VAULT_TOKEN=made-up\\n')\n_amo = Amoorion(env_file)\n\ndef ntfy_ready():\n    return next((status['ready'] for status in _amo.accounts() if status['platform'] == 'ntfy'))\n# This object takes its secrets from that file.\n# `accounts` asks the vault whether a platform has what it needs.\n# The entry exists, yet it is empty: not ready.\nprint(ntfy_ready(), Plugins['ntfy'].has_secrets(_amo.vault))", "code_hash": "c2e50518c352b0b1e4ee0f9fe8523ceb", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "SFPL", "name": "_"}, {"code": "db = PyKeePass(filepath, password='made-up')\ndb.find_entries(title='ntfy', first=True).set_custom_property('topic', 'my-topic')\ndb.save()\n_amo = Amoorion(env_file)\n# Fill in the secret, as you would in KeePassXC's window.\n# Written to the file\u2026\n# \u2026and a new object sees it.\n# Ready now.\nprint(ntfy_ready(), Plugins['ntfy'].has_secrets(_amo.vault))", "code_hash": "6ca4ec0b119acd123016feb3071c72f8", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "BYtC", "name": "_"}, {"code": "mo.md(r\"\"\"\nIn a terminal, `amoorion` alone asks everything with arrow menus: up and down choose, Enter confirms,\nEsc or left goes back to the previous question. `amoorion accounts` is there too, to see which\nplatforms already have their secrets. Terminals only: a notebook has no keys to steer with.\n\"\"\")", "code_hash": "f5e4d08c8a4350696cd4ed220cd52516", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "RGSE", "name": "_"}, {"code": "mo.md(r\"\"\"\n`Amoorion(\"work.env\")` and `Amoorion(\"private.env\")` can live side by side:\n`examples/advanced-usecases/scoping-of-identities-handling/`.\n\"\"\")", "code_hash": "4fea76ce24d9dc1b7323f1be27d5e558", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "Kclp", "name": "_"}], "metadata": {"marimo_version": "0.25.2"}, "version": "1"},
+            "session": {"cells": [{"code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "console": [], "id": "Hbol", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "05bc2de6294b5170d3977428b22d1fb0", "console": [], "id": "MJUe", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch1 id=\"vault-with-identities-and-creds\"\u003EVault with identities and creds\u003C/h1\u003E\n\u003Cspan class=\"paragraph\"\u003E\u003Ccode\u003E.env\u003C/code\u003E holds only the link to a vault. Secrets are named \u003Ccode\u003E\u0026lt;platform\u0026gt;/\u0026lt;key\u0026gt;\u003C/code\u003E and a\nplugin says which it needs. Here KeePassXC, in a temporary file with a made-up\npassword, so nothing else is needed.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "bdd415635f9b406dda19abfdad57b02d", "console": [], "id": "vblA", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "5f55cc81d8f99f5d68e005a9747f0c30", "console": [], "id": "bkHC", "outputs": [{"data": {"application/json": "[\"/tmp/amoorion-dq_atfmp/identity.kdbx\", \"group amoorion\", \"entry ntfy\", \"ntfy/topic\", \"ntfy/uri\", \"ntfy/token\", \"ntfy: notes\"]"}, "type": "data"}]}, {"code_hash": "585ca2960ce91d5c9c1be86038d8135b", "console": [], "id": "lEQa", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003EThat is what \u003Ccode\u003Etask vault:new\u003C/code\u003E does. Each entry's notes say what its fields are:\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "e0a262ac368a0fa4c21d7be8fb089a1d", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "One topic of an ntfy server\n\ntopic: The topic; on a public server anyone who knows it can read, so pick a long one\nuri (optional): The server; default: https://ntfy.sh\ntoken (optional): Access token, for protected topics\n", "type": "stream"}], "id": "PKri", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "01e5fa6179f1d42a3a8ce9e48e47ce01", "console": [], "id": "Xref", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003EAn identity is one env file pointing at one vault. Whether the secrets are there\nshows as a flag, and values never:\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "c2e50518c352b0b1e4ee0f9fe8523ceb", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "False False\n", "type": "stream"}], "id": "SFPL", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "6ca4ec0b119acd123016feb3071c72f8", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "False True\n", "type": "stream"}], "id": "BYtC", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "f5e4d08c8a4350696cd4ed220cd52516", "console": [], "id": "RGSE", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003EIn a terminal, \u003Ccode\u003Eamoorion\u003C/code\u003E alone asks everything with arrow menus: up and down choose, Enter confirms,\nEsc or left goes back to the previous question. \u003Ccode\u003Eamoorion accounts\u003C/code\u003E is there too, to see which\nplatforms already have their secrets. Terminals only: a notebook has no keys to steer with.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "4fea76ce24d9dc1b7323f1be27d5e558", "console": [], "id": "Kclp", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003E\u003Ccode\u003EAmoorion(\"work.env\")\u003C/code\u003E and \u003Ccode\u003EAmoorion(\"private.env\")\u003C/code\u003E can live side by side:\n\u003Ccode\u003Eexamples/advanced-usecases/scoping-of-identities-handling/\u003C/code\u003E.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}], "metadata": {"marimo_version": "0.25.2", "script_metadata_hash": null}, "version": "1"},
+            "runtimeConfig": null
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  
+<marimo-code hidden="">
+    import%20marimo%0A%0A__generated_with%20%3D%20%220.25.2%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%20Vault%20with%20identities%20and%20creds%0A%0A%20%20%20%20%60.env%60%20holds%20only%20the%20link%20to%20a%20vault.%20Secrets%20are%20named%20%60%3Cplatform%3E%2F%3Ckey%3E%60%20and%20a%0A%20%20%20%20plugin%20says%20which%20it%20needs.%20Here%20KeePassXC%2C%20in%20a%20temporary%20file%20with%20a%20made-up%0A%20%20%20%20password%2C%20so%20nothing%20else%20is%20needed.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20from%20amoorion%20import%20Amoorion%0A%0A%20%20%20%20%23%20We%20need%20its%20folder%20for%20the%20vault%20file.%0A%20%20%20%20%23%20A%20sandbox%20for%20this%20whole%20notebook%3A%20secrets%20only%20from%20variables%2C%20the%20inbox%20and%0A%20%20%20%20%23%20the%20dataset%20in%20a%20temporary%20folder.%20Nothing%20here%20can%20touch%20your%20real%20setup.%0A%20%20%20%20scratch%20%3D%20Amoorion.init()%0A%20%20%20%20return%20Amoorion%2C%20scratch%0A%0A%0A%40app.cell%0Adef%20_(scratch)%3A%0A%20%20%20%20%23%20The%20library%20that%20reads%20KeePassXC%20files%2C%20only%20to%20look%20inside%20afterwards.%0A%20%20%20%20from%20pykeepass%20import%20PyKeePass%0A%0A%20%20%20%20from%20amoorion%20import%20Plugins%0A%0A%20%20%20%20%23%20Each%20plugin%20says%20which%20secrets%20it%20needs.%0A%20%20%20%20from%20amoorion.plugins%20import%20load_plugins%0A%0A%20%20%20%20from%20amoorion.vault%20import%20VaultLink%0A%0A%20%20%20%20from%20amoorion.vault%20import%20kpxc_db_file%0A%0A%20%20%20%20%23%20A%20made-up%20password%20and%20a%20file%20in%20the%20sandbox%3A%20nothing%20real%20here.%0A%20%20%20%20filepath%20%3D%20scratch%20%2F%20%22identity.kdbx%22%0A%0A%20%20%20%20%23%20The%20link%3A%20which%20kind%20of%20vault%2C%20where%2C%20and%20its%20password.%0A%20%20%20%20link%20%3D%20VaultLink(%0A%20%20%20%20%20%20%20%20kind%3D%22keepassxc%22%2C%0A%20%20%20%20%20%20%20%20path%3Dstr(filepath)%2C%0A%20%20%20%20%20%20%20%20token%3D%22made-up%22%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20Make%20the%20file%2C%20with%20an%20empty%20entry%20per%20platform.%20%60task%20vault%3Anew%60%20does%20this%20for%20real.%0A%20%20%20%20kpxc_db_file.initialize(%0A%20%20%20%20%20%20%20%20link%2C%0A%20%20%20%20%20%20%20%20%7B%22ntfy%22%3A%20load_plugins().get(%22ntfy%22).schema()%7D%2C%0A%20%20%20%20)%0A%20%20%20%20return%20Plugins%2C%20PyKeePass%2C%20filepath%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20That%20is%20what%20%60task%20vault%3Anew%60%20does.%20Each%20entry's%20notes%20say%20what%20its%20fields%20are%3A%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(PyKeePass%2C%20filepath)%3A%0A%20%20%20%20%23%20Open%20it%20as%20KeePassXC%20itself%20would.%0A%20%20%20%20entry%20%3D%20PyKeePass(%0A%20%20%20%20%20%20%20%20filepath%2C%0A%20%20%20%20%20%20%20%20password%3D%22made-up%22%2C%0A%20%20%20%20).find_entries(%0A%20%20%20%20%20%20%20%20title%3D%22ntfy%22%2C%0A%20%20%20%20%20%20%20%20first%3DTrue%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20The%20entry%20explains%2C%20in%20its%20notes%2C%20which%20secret%20is%20what.%0A%20%20%20%20print(entry.notes)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20An%20identity%20is%20one%20env%20file%20pointing%20at%20one%20vault.%20Whether%20the%20secrets%20are%20there%0A%20%20%20%20shows%20as%20a%20flag%2C%20and%20values%20never%3A%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(Amoorion%2C%20Plugins%2C%20filepath%2C%20scratch)%3A%0A%20%20%20%20%23%20The%20env%20file%20is%20the%20only%20thing%20pointing%20at%20the%20vault.%0A%20%20%20%20env_file%20%3D%20scratch%20%2F%20'identity.env'%0A%20%20%20%20env_file.write_text(f'AMOORION_VAULT%3Dkeepassxc%5CnAMOORION_VAULT_PATH%3D%7Bfilepath%7D%5CnAMOORION_VAULT_TOKEN%3Dmade-up%5Cn')%0A%20%20%20%20_amo%20%3D%20Amoorion(env_file)%0A%0A%20%20%20%20def%20ntfy_ready()%3A%0A%20%20%20%20%20%20%20%20return%20next((status%5B'ready'%5D%20for%20status%20in%20_amo.accounts()%20if%20status%5B'platform'%5D%20%3D%3D%20'ntfy'))%0A%20%20%20%20%23%20This%20object%20takes%20its%20secrets%20from%20that%20file.%0A%20%20%20%20%23%20%60accounts%60%20asks%20the%20vault%20whether%20a%20platform%20has%20what%20it%20needs.%0A%20%20%20%20%23%20The%20entry%20exists%2C%20yet%20it%20is%20empty%3A%20not%20ready.%0A%20%20%20%20print(ntfy_ready()%2C%20Plugins%5B'ntfy'%5D.has_secrets(_amo.vault))%0A%20%20%20%20return%20env_file%2C%20ntfy_ready%0A%0A%0A%40app.cell%0Adef%20_(Amoorion%2C%20Plugins%2C%20PyKeePass%2C%20env_file%2C%20filepath%2C%20ntfy_ready)%3A%0A%20%20%20%20db%20%3D%20PyKeePass(filepath%2C%20password%3D'made-up')%0A%20%20%20%20db.find_entries(title%3D'ntfy'%2C%20first%3DTrue).set_custom_property('topic'%2C%20'my-topic')%0A%20%20%20%20db.save()%0A%20%20%20%20_amo%20%3D%20Amoorion(env_file)%0A%20%20%20%20%23%20Fill%20in%20the%20secret%2C%20as%20you%20would%20in%20KeePassXC's%20window.%0A%20%20%20%20%23%20Written%20to%20the%20file%E2%80%A6%0A%20%20%20%20%23%20%E2%80%A6and%20a%20new%20object%20sees%20it.%0A%20%20%20%20%23%20Ready%20now.%0A%20%20%20%20print(ntfy_ready()%2C%20Plugins%5B'ntfy'%5D.has_secrets(_amo.vault))%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20In%20a%20terminal%2C%20%60amoorion%60%20alone%20asks%20everything%20with%20arrow%20menus%3A%20up%20and%20down%20choose%2C%20Enter%20confirms%2C%0A%20%20%20%20Esc%20or%20left%20goes%20back%20to%20the%20previous%20question.%20%60amoorion%20accounts%60%20is%20there%20too%2C%20to%20see%20which%0A%20%20%20%20platforms%20already%20have%20their%20secrets.%20Terminals%20only%3A%20a%20notebook%20has%20no%20keys%20to%20steer%20with.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%60Amoorion(%22work.env%22)%60%20and%20%60Amoorion(%22private.env%22)%60%20can%20live%20side%20by%20side%3A%0A%20%20%20%20%60examples%2Fadvanced-usecases%2Fscoping-of-identities-handling%2F%60.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A
+</marimo-code>
+
+<marimo-code-hash hidden="">b56e9985e9d73bafdf3e317033e029fc</marimo-code-hash>
+</body>
+</html>

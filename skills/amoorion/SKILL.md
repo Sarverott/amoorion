@@ -1,1 +1,0 @@
-../../src/amoorion/SKILL.md

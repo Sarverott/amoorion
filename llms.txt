@@ -1,0 +1,47 @@
+# amoorion
+
+> Universal tool for administration of chatting and communication platforms: publish, read and reply on many platforms from one CLI, HTTP API or MCP server. Version 0.4.36.
+
+## Docs
+
+- [Documentation, as an index for agents](https://amoorion.readthedocs.io/llms.txt)
+- [Agent skill](https://amoorion.readthedocs.io/skills/amoorion/SKILL.md)
+
+## This site
+
+- [Project](https://sarverott.github.io/amoorion/project.html)
+- [Releases](https://sarverott.github.io/amoorion/releases.html)
+- [What the site holds](https://sarverott.github.io/amoorion/manifest.json)
+- [The HTTP API, as OpenAPI](https://sarverott.github.io/amoorion/openapi.json)
+
+## Examples (marimo)
+
+- [getting started](https://sarverott.github.io/amoorion/examples/01-getting-started.html)
+- [config and setup](https://sarverott.github.io/amoorion/examples/02-config-and-setup.html)
+- [data object modeling](https://sarverott.github.io/amoorion/examples/03-data-object-modeling.html)
+- [identity vaults](https://sarverott.github.io/amoorion/examples/04-identity-vaults.html)
+- [cli and terminals](https://sarverott.github.io/amoorion/examples/05-cli-and-terminals.html)
+- [getting over dataset](https://sarverott.github.io/amoorion/examples/06-getting-over-dataset.html)
+- [summoning daemons](https://sarverott.github.io/amoorion/examples/07-summoning-daemons.html)
+- [using nats](https://sarverott.github.io/amoorion/examples/08-using-nats.html)
+- [how to use packages](https://sarverott.github.io/amoorion/examples/09-how-to-use-packages.html)
+- [webapp interfacing](https://sarverott.github.io/amoorion/examples/10-webapp-interfacing.html)
+- [additional utilities](https://sarverott.github.io/amoorion/examples/11-additional-utilities.html)
+- [rest api](https://sarverott.github.io/amoorion/examples/12-rest-api.html)
+- [mcp in action](https://sarverott.github.io/amoorion/examples/13-mcp-in-action.html)
+- [hooks as event listeners](https://sarverott.github.io/amoorion/examples/14-hooks-as-event-listeners.html)
+- [calling procedures by methods](https://sarverott.github.io/amoorion/examples/15-calling-procedures-by-methods.html)
+- [defining own plugins](https://sarverott.github.io/amoorion/examples/16-defining-own-plugins.html)
+- [unified inbox](https://sarverott.github.io/amoorion/examples/17-unified-inbox.html)
+- [automation workflowing](https://sarverott.github.io/amoorion/examples/18-automation-workflowing.html)
+- [trying society emulations](https://sarverott.github.io/amoorion/examples/19-trying-society-emulations.html)
+- [all socialmedia posting from one script](https://sarverott.github.io/amoorion/examples/20-all-socialmedia-posting-from-one-script.html)
+- [first steps](https://sarverott.github.io/amoorion/examples/old.01-first-steps.html)
+- [vault and accounts](https://sarverott.github.io/amoorion/examples/old.02-vault-and-accounts.html)
+- [api hooks inbox](https://sarverott.github.io/amoorion/examples/old.03-api-hooks-inbox.html)
+- [own plugin](https://sarverott.github.io/amoorion/examples/old.04-own-plugin.html)
+
+## Code
+
+- [GitHub](https://github.com/Sarverott/amoorion)
+- [PyPI](https://pypi.org/project/amoorion/)

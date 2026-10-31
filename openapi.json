@@ -1,0 +1,1731 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "amoorion",
+    "version": "0.4.36"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Index",
+        "operationId": "index__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Index  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/methods/accounts": {
+      "post": {
+        "summary": "Which platforms have their secrets in the vault (values never shown)",
+        "operationId": "accounts_methods_accounts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AccountStatus"
+                  },
+                  "type": "array",
+                  "title": "Response Accounts Methods Accounts Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/compose": {
+      "post": {
+        "summary": "Ask a language model (llm/url of the vault, any OpenAI-compatible server) to write something",
+        "operationId": "compose_methods_compose_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComposeParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Composition"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/delete": {
+      "post": {
+        "summary": "Delete one message on its platform, keeping a copy in the dataset first",
+        "operationId": "delete_methods_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/inbox": {
+      "post": {
+        "summary": "Messages received so far, of every platform and hook, newest first",
+        "operationId": "inbox_methods_inbox_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InboxParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  },
+                  "type": "array",
+                  "title": "Response Inbox Methods Inbox Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/notify": {
+      "post": {
+        "summary": "Send a notification to the platforms of AMOORION_NOTIFY; one result per platform",
+        "operationId": "notify_methods_notify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotifyParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Result"
+                  },
+                  "type": "array",
+                  "title": "Response Notify Methods Notify Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/plugins": {
+      "post": {
+        "summary": "List the platform plugins and what they can do",
+        "operationId": "plugins_methods_plugins_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PluginInfo"
+                  },
+                  "type": "array",
+                  "title": "Response Plugins Methods Plugins Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/publish": {
+      "post": {
+        "summary": "Publish one post on several platforms; one result per platform",
+        "operationId": "publish_methods_publish_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Result"
+                  },
+                  "type": "array",
+                  "title": "Response Publish Methods Publish Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/read": {
+      "post": {
+        "summary": "Read the latest messages of one platform (and keep them in the inbox and the dataset)",
+        "operationId": "read_methods_read_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  },
+                  "type": "array",
+                  "title": "Response Read Methods Read Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/reply": {
+      "post": {
+        "summary": "Answer one message on its platform",
+        "operationId": "reply_methods_reply_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/search": {
+      "post": {
+        "summary": "Find messages of the inbox by their text, newest first",
+        "operationId": "search_methods_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  },
+                  "type": "array",
+                  "title": "Response Search Methods Search Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/simulate": {
+      "post": {
+        "summary": "Simulate personas reacting to a topic, locally: nothing reaches any platform",
+        "operationId": "simulate_methods_simulate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulateParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Message"
+                  },
+                  "type": "array",
+                  "title": "Response Simulate Methods Simulate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/skill": {
+      "post": {
+        "summary": "The agent skill of amoorion: how an AI agent should use it",
+        "operationId": "skill_methods_skill_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillText"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/snapshot": {
+      "post": {
+        "summary": "Read the posts of one platform's profile into the dataset (JSON files with an index)",
+        "operationId": "snapshot_methods_snapshot_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SnapshotParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/wiki": {
+      "post": {
+        "summary": "The summary of a Wikipedia article, as a message",
+        "operationId": "wiki_methods_wiki_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WikiParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/methods/workflow": {
+      "post": {
+        "summary": "Run methods one after another, until the first failure; or rules on the messages of the inbox, once per message",
+        "operationId": "workflow_methods_workflow_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/StepResult"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "items": {
+                        "$ref": "#/components/schemas/Handled"
+                      },
+                      "type": "array"
+                    }
+                  ],
+                  "title": "Response Workflow Methods Workflow Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/hooks/{name}": {
+      "post": {
+        "summary": "Hook",
+        "operationId": "hook_hooks__name__post",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Hook Hooks  Name  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "handle": {
+            "type": "string",
+            "title": "Handle"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "handle"
+        ],
+        "title": "Account",
+        "description": "Who speaks on a platform."
+      },
+      "AccountStatus": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "ready": {
+            "type": "boolean",
+            "title": "Ready"
+          },
+          "missing": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing",
+            "default": []
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "ready"
+        ],
+        "title": "AccountStatus",
+        "description": "Whether a platform is ready: its missing secrets by name, never by value."
+      },
+      "Capability": {
+        "type": "string",
+        "enum": [
+          "post",
+          "read",
+          "reply",
+          "delete"
+        ],
+        "title": "Capability",
+        "description": "What a platform can do; a method asks for one before calling the plugin."
+      },
+      "ComposeParams": {
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Prompt"
+          },
+          "system": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "System",
+            "description": "how the model should behave"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "else llm/model of the vault"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "prompt"
+        ],
+        "title": "ComposeParams",
+        "description": "What to ask the model, and optionally how it should behave and which model."
+      },
+      "Composition": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text",
+          "model"
+        ],
+        "title": "Composition",
+        "description": "What the model wrote, and which model it was."
+      },
+      "DeleteParams": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "id of the message to delete, as read or publish gave it"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "id"
+        ],
+        "title": "DeleteParams",
+        "description": "Which message on which platform."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Handled": {
+        "properties": {
+          "rule": {
+            "type": "string",
+            "title": "Rule"
+          },
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "message_id": {
+            "type": "string",
+            "title": "Message Id"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/StepResult"
+            },
+            "type": "array",
+            "title": "Steps"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule",
+          "platform",
+          "message_id",
+          "ok",
+          "steps"
+        ],
+        "title": "Handled",
+        "description": "One rule run on one message, and how its steps went."
+      },
+      "InboxParams": {
+        "properties": {
+          "platform": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Platform",
+            "description": "only this platform (a hook is hook:<name>)"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 20
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "InboxParams",
+        "description": "Which messages of the inbox, and how many."
+      },
+      "Message": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Account"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reply_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reply To"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "text"
+        ],
+        "title": "Message",
+        "description": "Something said on a platform: a published post, a chat line, a hook event."
+      },
+      "NoParams": {
+        "properties": {},
+        "additionalProperties": false,
+        "type": "object",
+        "title": "NoParams",
+        "description": "For a method that takes nothing."
+      },
+      "NotifyParams": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "links": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Links",
+            "default": []
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "NotifyParams",
+        "description": "The same as a post."
+      },
+      "Persona": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name"
+          },
+          "bio": {
+            "type": "string",
+            "title": "Bio",
+            "default": ""
+          },
+          "stance": {
+            "type": "string",
+            "title": "Stance",
+            "description": "supportive, critical, neutral or silent: what `scripted` goes by",
+            "default": "neutral"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "Persona",
+        "description": "Somebody in a simulation: a name, who they are, and what they think of things."
+      },
+      "PluginInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "capabilities": {
+            "items": {
+              "$ref": "#/components/schemas/Capability"
+            },
+            "type": "array",
+            "title": "Capabilities"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "capabilities"
+        ],
+        "title": "PluginInfo",
+        "description": "One platform and what it can do; `error` when its package failed to load."
+      },
+      "PublishParams": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "links": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Links",
+            "default": []
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "To",
+            "description": "platforms to publish on"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text",
+          "to"
+        ],
+        "title": "PublishParams",
+        "description": "A post, and where it goes."
+      },
+      "ReadParams": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 20
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform"
+        ],
+        "title": "ReadParams",
+        "description": "From which platform, and how many."
+      },
+      "ReplyParams": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "to": {
+            "type": "string",
+            "title": "To",
+            "description": "id of the message to answer, as read or publish gave it"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "to",
+          "text"
+        ],
+        "title": "ReplyParams",
+        "description": "What to answer, and where."
+      },
+      "Result": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Message"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "ok"
+        ],
+        "title": "Result",
+        "description": "Outcome of one platform's part of a method."
+      },
+      "Rule": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/Step"
+            },
+            "type": "array",
+            "title": "Steps",
+            "description": "methods to run; a rule of a Python workflow may have none",
+            "default": []
+          },
+          "platform": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Platform",
+            "description": "only messages of this platform (a hook is hook:<name>)"
+          },
+          "contains": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contains",
+            "description": "only messages with this text, in any case"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "Rule",
+        "description": "What to do (`steps`) with which messages of the inbox (`platform`, `contains`)."
+      },
+      "SearchParams": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text"
+          },
+          "platform": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Platform",
+            "description": "only this platform (a hook is hook:<name>)"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 20
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "SearchParams",
+        "description": "What to look for, and where."
+      },
+      "SimulateParams": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Topic"
+          },
+          "personas": {
+            "items": {
+              "$ref": "#/components/schemas/Persona"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Personas"
+          },
+          "rounds": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Rounds",
+            "default": 3
+          },
+          "run": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$",
+            "title": "Run",
+            "description": "kept in the inbox as society:<run>",
+            "default": "default"
+          },
+          "llm": {
+            "type": "boolean",
+            "title": "Llm",
+            "description": "reactions from a language model instead of scripted lines",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "topic",
+          "personas"
+        ],
+        "title": "SimulateParams",
+        "description": "A topic, who reacts to it, for how long, and whether a language model does the talking."
+      },
+      "SkillText": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path",
+          "text"
+        ],
+        "title": "SkillText",
+        "description": "The skill's file: `path` to copy it into an agent's skills, `text` to read it."
+      },
+      "Snapshot": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "profile": {
+            "type": "string",
+            "title": "Profile"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "read": {
+            "type": "integer",
+            "title": "Read"
+          },
+          "complete": {
+            "type": "boolean",
+            "title": "Complete"
+          },
+          "present": {
+            "type": "integer",
+            "title": "Present"
+          },
+          "gone": {
+            "type": "integer",
+            "title": "Gone"
+          },
+          "deleted": {
+            "type": "integer",
+            "title": "Deleted"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform",
+          "profile",
+          "path",
+          "read",
+          "complete",
+          "present",
+          "gone",
+          "deleted"
+        ],
+        "title": "Snapshot",
+        "description": "What a snapshot found: read now, present, gone from the platform, and deleted by amoorion."
+      },
+      "SnapshotParams": {
+        "properties": {
+          "platform": {
+            "type": "string",
+            "title": "Platform"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "description": "at most this many posts; fewer read means all were read",
+            "default": 100
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "platform"
+        ],
+        "title": "SnapshotParams",
+        "description": "Which platform, and how many posts at most."
+      },
+      "Step": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "params": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Params",
+            "default": {}
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "method"
+        ],
+        "title": "Step",
+        "description": "One method to run, and its parameters (which may use `$last` and known values)."
+      },
+      "StepResult": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "result": {
+            "title": "Result"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "method",
+          "ok"
+        ],
+        "title": "StepResult",
+        "description": "How a step went: its plain result, or the error."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WikiParams": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Title"
+          },
+          "lang": {
+            "type": "string",
+            "pattern": "^[a-z-]{2,20}$",
+            "title": "Lang",
+            "default": "en"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "WikiParams",
+        "description": "The article, and the language of Wikipedia."
+      },
+      "WorkflowParams": {
+        "properties": {
+          "steps": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Step"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps",
+            "description": "methods with their params, one after another; $last is the text of the previous answer"
+          },
+          "rules": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Rule"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rules",
+            "description": "what to do with which messages of the inbox, once per message; a failure is tried again next time"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "description": "with rules: look at this many of the newest messages",
+            "default": 100
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "WorkflowParams",
+        "description": "The steps to run in order, or the rules to apply to the inbox."
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/apple-touch-icon.png" />
+    <link rel="manifest" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>02-config-and-setup.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>02-config-and-setup</title>
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-s-M1OXjs.js"></script>
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/rolldown-runtime-B0Z9INg1.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-DVplv7_D.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/compiler-runtime-BrajqUja.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEvent-Dfcbgjhg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-dom-_LrxgvjW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/schemas-Dv42wLFq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isObject-BCaOs5rp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isSymbol-oX0TOjjx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/now-Cmx0b_zA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/debounce-aFmHgJZY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isArrayLikeObject-DnwgSs_Z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseMerge-CQpUq7ep.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objects-snlMn4yk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEventListener-D9cftcHj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/invariant-Ci2dTZ72.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-VPSq73n8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-B4K466FK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/session-DqoWmb7X.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Deferred-CrTnjj37.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-DX8Y2WbJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/clsx-DB0hHKMi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cn-ldLVeaqm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/jsx-runtime-B74pBk57.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fullscreen-B9tHcfpV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-iaThVDkA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/menu-items-BrwnTgyK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-restore-focus-BxEGwIbk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createLucideIcon-DfJ2oMlA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/circle-DXf-VWZG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/button-COI-NGrx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/check-BQNapYaf.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/I18nProvider-Cg2I_s1_.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useNumberFormatter-D7O_26UI.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/select-DTBn5eTb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toast-BGzLGnvw.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-C9TuY18o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/paths-bkIFVj8h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useLifecycle-Mq4gc5kS.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toDate-DOj9Q6uC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/database-zap-B_PMVg8T.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-dialog-BaPGzeOK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/arrays-BqUx5USx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/once-Haz_uxEL.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/numbers-Mk3-CcoU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDebounce-B_ccBZTp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/input-BoBxR50a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-toast-Wu434mLr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/requests-lt0JK8Jt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/uuid-k9DpjH68.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/write-secret-modal-DzKAInL2.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/plus-C5silF6g.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/trash-2-DcgaW8fn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/preload-helper-uBIymjUX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-Cny7_yZb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DBMV4gqt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/capabilities-BJvf-MD4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cjs-C49f7GXV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createReducer-DgRODTW6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-qhAY4L2r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/marked.esm-B_3iMIUq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/strings-B2vv-ENv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BOfh4hMd.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/badge-crT3E0Rm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DtH-7lot.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BmExfiwX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-1tmpVXyz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-LSsCJjA3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DusFODSa.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/stex-Dc5bKD4z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useTheme-COhSHkCj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAsyncData-C7aJJz0Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/purify.es--06brOip.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-BRkCaSsh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/coerce-CpE6kUdX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/get-DjNf4SIX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_hasPath-BmRQipI0.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hasIn-yw4sIeJR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseSet-Bpdo9AvU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pick-DKIID_Mo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-BAJYRhmO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-C3oDoyFe.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/LazyAnyLanguageCodeMirror-CKcCbG2G.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-D8O_CYCG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/micromark-factory-space-D9Dr-k4J.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chunk-YOKDWASO-BIpRENEC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-BG3sp2rs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-Djr5m5ac.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-icon-BIiRXh_3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useRunCells-B2vUhREg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/RenderHTML-BbOqmHy3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/blob-D5nfNHOo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/kbd-pdKBv96t.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useInstallPackage-iX1eufdl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/errors-DCrsa1nH.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/api-BeC_VSGv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/share-BZW3tzEX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/events-CbeVJ6OD.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-_Qai_QyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pair-CaQyK6En.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ErrorBoundary-Gl5nCA8C.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-BOKzA3tF.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chevron-right-eAtVhbNZ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dropdown-menu-C1rnl-0o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/html-to-image-DK9Zl1lU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/download-DCJXy66H.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/switch-CTaiAjrz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tabs-BuQlZFbt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-DG7Ap4H4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/eye-off-CxVozGAC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/refresh-cw-Qw1f8Jhy.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tree-actions-GM5E_bUs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ellipsis-63DyBLHQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/external-link-UrX9KO36.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spinner-DyNE-o8o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/message-circle-C3rKm8_a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hat-glasses-C8RhSVii.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-GSoSTiIK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/datasource-Cq6x_5ML.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-DTaqCu_d.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-XsPO8hNi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cell-link-LSth_8hT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/MarimoErrorOutput-D60XkCny.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDateFormatter-DA-62E-Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/en-US-Buu61juQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isValid-q_Ad80ug.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dates-BbFQ2oE4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-CNPGWpMu.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/precisionRound-Bq_nmf5u.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-D5bOh7g6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/vega-loader.browser-CLRkNgm7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-mT3CGest.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-icons.esm-D6tfmvq8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/extends-CvVTau-c.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objectWithoutPropertiesLoose-Do6ywDBO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useIframeCapabilities-CwTkczVN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/error-banner-Cd69vvyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-CaQYvazl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/formats-yZ06h1Pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-vrvqpuKJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-resizable-panels.browser.esm-Dbe0MrFr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-D6HIIsCb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chart-no-axes-column-C4_v6fQW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-function-_W_Lo0P4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spec-BfSBcO5B.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/semaphore-BjoL5P0h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fileToBase64-BgBraYAr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useBoolean-BDD6_xQQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/code-xml-SQaZqvcO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-headphone-Dl35U6h3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-BPBVl9pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/image-wZvTj8WY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-icons-CdJgUy-I.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/globe-UdPdIbF7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/esm-CI_o7NhW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAddCell-GR7eEQrT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/readonly-python-code-DCSMIsTX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/data-grid-types-DgHVN_Zz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/glide-utils-CIrAxdjv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/column-preview-Cm2D6vyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-BPmgQFnh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/triangle-alert-DmIqR8sY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/prop-types-Djf4O40e.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/es-Cqst59WX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-data-dv4FBHxR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-export-DzhB1FrN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/renderShortcut-BkVJQ_Zh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/bundle.esm-D3tw5rqW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/icons-CiZ_8zS-.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDeepCompareMemoize-DFIVN9dn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pathUtils-DPmlLd-r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/floating-outline-XD9FAV-f.js">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-0PFKL3SH.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-DjIHoF9Z.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-B0GmlMnR.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-Bcdzex-3.css">
+  
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_STATIC__", {
+        value: Object.freeze({
+            files: Object.freeze({}),
+            modelNotifications: Object.freeze([]),
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.25.2\"\napp = marimo.App()\n\n\n@app.cell\ndef _():\n    import marimo as mo\n\n    return (mo,)\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    # Config and setup\n\n    ### Before we begin\n\n    - `uv sync` (or `pip install amoorion` and the packages of your platforms)\n    - `cp example.env .env`: this file only says where the vault is. Secrets never go\n      in it, nor in the repository.\n    - `uv run task vault:new` when you use KeePassXC: it makes the file and an empty\n      entry per platform.\n\n    ### Basic, simple\n\n    With no arguments it takes `.env` of the current directory, as the CLI does.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _():\n    from amoorion import Amoorion\n\n    # init() answers its temporary folder: we will write files there.\n    # A sandbox for this whole notebook: secrets only from variables, the inbox and\n    # the dataset in a temporary folder. Nothing here can touch your real setup.\n    scratch = Amoorion.init()\n    return Amoorion, scratch\n\n\n@app.cell\ndef _(Amoorion):\n    # Without an env file: the sandbox. Look at what it says about its vault.\n    amo = Amoorion()\n\n    amo\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ### Three variants of config, three vaults\n\n    An env file belongs to one object and doesn't touch the environment of the\n    process. Opening the vault waits for its first use, so these three can be looked\n    at without any server.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(Amoorion, scratch):\n    from amoorion.utilities import read_env, write_env\n\n    # The three kinds of vault. An env file holds only the link to a vault, never the\n    # secrets themselves.\n    variants = {\n        \"keepassxc\": {\n            \"AMOORION_VAULT\": \"keepassxc\",\n            \"AMOORION_VAULT_PATH\": \"./dataset/.secrets.kdbx\",\n        },\n        \"bitwarden\": {\n            \"AMOORION_VAULT\": \"bitwarden\",\n            \"AMOORION_VAULT_ADDR\": \"https://vault.example.org\",\n        },\n        \"openbao\": {\n            \"AMOORION_VAULT\": \"http\",\n            \"AMOORION_VAULT_ADDR\": \"https://bao.example.org\",\n            \"AMOORION_VAULT_PATH\": \"secret/amoorion\",\n        },\n    }\n\n    # Each goes into a file of its own, in the sandbox; other lines of a file would stay.\n    for label, values in variants.items():\n        write_env(\n            scratch / f\"{label}.env\",\n            **values,\n        )\n\n    # Read back as a dict.\n    print(read_env(scratch / \"openbao.env\"))\n\n\n    # An env file gives the object its real setup. No vault is opened yet: that\n    # happens at the first secret, so these don't need the vaults to exist.\n    amo1 = Amoorion(scratch / \"keepassxc.env\")\n\n    # The second argument overrides where the dataset goes.\n    amo2 = Amoorion(\n        scratch / \"bitwarden.env\",\n        scratch / \"dataset-two\",\n    )\n\n    # Flags are free values of yours, saved along with the state.\n    amo3 = Amoorion(\n        scratch / \"openbao.env\",\n        scratch / \"dataset-three\",\n        flags={\"mode\": \"mcp\"},\n    )\n\n    # Three identities side by side: the objects leave the process environment alone.\n    for one in (amo1, amo2, amo3):\n        print(one)\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ### Flags\n\n    `mode` says which front-end `amo.run()` starts: `cli` (default), `api` or `mcp`.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(Amoorion):\n    # The same flags work for any front-end.\n    cli = Amoorion(flags={\"mode\": \"cli\"})\n\n    # `run` is the command line of this setup; 0 is its exit code for success.\n    cli.run(\"--json\", \"inbox\") == 0\n    return (cli,)\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ### States\n\n    `save` writes where things are, and hashes to detect changes; `load` takes it back.\n    No secret is written: of the vault only its kind, address and path are hashed.\n    \"\"\")\n    return\n\n\n@app.cell\ndef _(cli, scratch):\n    # Platforms can be named as plain strings too.\n    cli.use(\"dryrun\")\n\n    # The state is a YAML file with where things are and their hashes.\n    state = scratch / \"state.yaml\"\n\n    # Saving remembers the hashes as they are now.\n    cli.save(state)\n\n    # No secret in there: read it and see.\n    print(state.read_text())\n    return (state,)\n\n\n@app.cell\ndef _(Amoorion, state):\n    # Back to the same setup, from the file.\n    restored = Amoorion().load(state)\n\n    # Nothing has happened since saving.\n    print(\n        \"changed so far:\",\n        restored.changes(),\n    )\n\n    # Now something does: a post\u2026\n    restored.publish(text=\"something happens\")\n\n    # \u2026and reading it writes the inbox and the dataset.\n    restored.read(limit=1)\n\n    # The hashes tell what changed.\n    print(\n        \"changed now:\",\n        restored.changes(),\n    )\n\n    # Saving again makes the current state the new base.\n    print(\n        \"after saving:\",\n        restored.load(state).save(state).changes(),\n    )\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "02-config-and-setup.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.25.2",
+            "serverToken": "static",
+            "config": {"ai": {"allow_provider_config": true, "custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "code_lens": true, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "after_delay", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "compact"},
+            "layout": null,
+            "view": {"showAppCode": true},
+            "notebook": {"cells": [{"code": "import marimo as mo", "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "Hbol", "name": "_"}, {"code": "mo.md(r\"\"\"\n# Config and setup\n\n### Before we begin\n\n- `uv sync` (or `pip install amoorion` and the packages of your platforms)\n- `cp example.env .env`: this file only says where the vault is. Secrets never go\n  in it, nor in the repository.\n- `uv run task vault:new` when you use KeePassXC: it makes the file and an empty\n  entry per platform.\n\n### Basic, simple\n\nWith no arguments it takes `.env` of the current directory, as the CLI does.\n\"\"\")", "code_hash": "eb5af81c8e3a579e8bbee6239aab25a9", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "MJUe", "name": "_"}, {"code": "from amoorion import Amoorion\n\n# init() answers its temporary folder: we will write files there.\n# A sandbox for this whole notebook: secrets only from variables, the inbox and\n# the dataset in a temporary folder. Nothing here can touch your real setup.\nscratch = Amoorion.init()", "code_hash": "41aaff0315d1c87a5d52cdd4f944abab", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "vblA", "name": "_"}, {"code": "# Without an env file: the sandbox. Look at what it says about its vault.\namo = Amoorion()\n\namo", "code_hash": "f800075aec11a65f73ca7fd4448a01eb", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "bkHC", "name": "_"}, {"code": "mo.md(r\"\"\"\n### Three variants of config, three vaults\n\nAn env file belongs to one object and doesn't touch the environment of the\nprocess. Opening the vault waits for its first use, so these three can be looked\nat without any server.\n\"\"\")", "code_hash": "b5b30f3ce936abecd2fb7919baf3e15f", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "lEQa", "name": "_"}, {"code": "from amoorion.utilities import read_env, write_env\n\n# The three kinds of vault. An env file holds only the link to a vault, never the\n# secrets themselves.\nvariants = {\n    \"keepassxc\": {\n        \"AMOORION_VAULT\": \"keepassxc\",\n        \"AMOORION_VAULT_PATH\": \"./dataset/.secrets.kdbx\",\n    },\n    \"bitwarden\": {\n        \"AMOORION_VAULT\": \"bitwarden\",\n        \"AMOORION_VAULT_ADDR\": \"https://vault.example.org\",\n    },\n    \"openbao\": {\n        \"AMOORION_VAULT\": \"http\",\n        \"AMOORION_VAULT_ADDR\": \"https://bao.example.org\",\n        \"AMOORION_VAULT_PATH\": \"secret/amoorion\",\n    },\n}\n\n# Each goes into a file of its own, in the sandbox; other lines of a file would stay.\nfor label, values in variants.items():\n    write_env(\n        scratch / f\"{label}.env\",\n        **values,\n    )\n\n# Read back as a dict.\nprint(read_env(scratch / \"openbao.env\"))\n\n\n# An env file gives the object its real setup. No vault is opened yet: that\n# happens at the first secret, so these don't need the vaults to exist.\namo1 = Amoorion(scratch / \"keepassxc.env\")\n\n# The second argument overrides where the dataset goes.\namo2 = Amoorion(\n    scratch / \"bitwarden.env\",\n    scratch / \"dataset-two\",\n)\n\n# Flags are free values of yours, saved along with the state.\namo3 = Amoorion(\n    scratch / \"openbao.env\",\n    scratch / \"dataset-three\",\n    flags={\"mode\": \"mcp\"},\n)\n\n# Three identities side by side: the objects leave the process environment alone.\nfor one in (amo1, amo2, amo3):\n    print(one)", "code_hash": "bdd3935172b382c4a5210249c9883e6b", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "PKri", "name": "_"}, {"code": "mo.md(r\"\"\"\n### Flags\n\n`mode` says which front-end `amo.run()` starts: `cli` (default), `api` or `mcp`.\n\"\"\")", "code_hash": "64671e13f2574b2d327ad3014fe1f112", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "Xref", "name": "_"}, {"code": "# The same flags work for any front-end.\ncli = Amoorion(flags={\"mode\": \"cli\"})\n\n# `run` is the command line of this setup; 0 is its exit code for success.\ncli.run(\"--json\", \"inbox\") == 0", "code_hash": "8feda1987888200e3c251d359dd8d4b3", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "SFPL", "name": "_"}, {"code": "mo.md(r\"\"\"\n### States\n\n`save` writes where things are, and hashes to detect changes; `load` takes it back.\nNo secret is written: of the vault only its kind, address and path are hashed.\n\"\"\")", "code_hash": "f09bb1dc7e8e117354d38ac0e2430d05", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "BYtC", "name": "_"}, {"code": "# Platforms can be named as plain strings too.\ncli.use(\"dryrun\")\n\n# The state is a YAML file with where things are and their hashes.\nstate = scratch / \"state.yaml\"\n\n# Saving remembers the hashes as they are now.\ncli.save(state)\n\n# No secret in there: read it and see.\nprint(state.read_text())", "code_hash": "101d78adf2a7e047f4528242e8b17310", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "RGSE", "name": "_"}, {"code": "# Back to the same setup, from the file.\nrestored = Amoorion().load(state)\n\n# Nothing has happened since saving.\nprint(\n    \"changed so far:\",\n    restored.changes(),\n)\n\n# Now something does: a post\u2026\nrestored.publish(text=\"something happens\")\n\n# \u2026and reading it writes the inbox and the dataset.\nrestored.read(limit=1)\n\n# The hashes tell what changed.\nprint(\n    \"changed now:\",\n    restored.changes(),\n)\n\n# Saving again makes the current state the new base.\nprint(\n    \"after saving:\",\n    restored.load(state).save(state).changes(),\n)", "code_hash": "0cccf968720b210c11546d2cdf1b7660", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "Kclp", "name": "_"}], "metadata": {"marimo_version": "0.25.2"}, "version": "1"},
+            "session": {"cells": [{"code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "console": [], "id": "Hbol", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "eb5af81c8e3a579e8bbee6239aab25a9", "console": [], "id": "MJUe", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch1 id=\"config-and-setup\"\u003EConfig and setup\u003C/h1\u003E\n\u003Ch3 id=\"before-we-begin\"\u003EBefore we begin\u003C/h3\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Ccode\u003Euv sync\u003C/code\u003E (or \u003Ccode\u003Epip install amoorion\u003C/code\u003E and the packages of your platforms)\u003C/li\u003E\n\u003Cli\u003E\u003Ccode\u003Ecp example.env .env\u003C/code\u003E: this file only says where the vault is. Secrets never go\n  in it, nor in the repository.\u003C/li\u003E\n\u003Cli\u003E\u003Ccode\u003Euv run task vault:new\u003C/code\u003E when you use KeePassXC: it makes the file and an empty\n  entry per platform.\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch3 id=\"basic-simple\"\u003EBasic, simple\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003EWith no arguments it takes \u003Ccode\u003E.env\u003C/code\u003E of the current directory, as the CLI does.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "41aaff0315d1c87a5d52cdd4f944abab", "console": [], "id": "vblA", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "f800075aec11a65f73ca7fd4448a01eb", "console": [], "id": "bkHC", "outputs": [{"data": {"text/html": "\u003Cpre class='text-xs'\u003E\u0026lt;Amoorion vault=env plugins=[] flags={}\u0026gt;\u003C/pre\u003E"}, "type": "data"}]}, {"code_hash": "b5b30f3ce936abecd2fb7919baf3e15f", "console": [], "id": "lEQa", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch3 id=\"three-variants-of-config-three-vaults\"\u003EThree variants of config, three vaults\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003EAn env file belongs to one object and doesn't touch the environment of the\nprocess. Opening the vault waits for its first use, so these three can be looked\nat without any server.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "bdd3935172b382c4a5210249c9883e6b", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "OrderedDict({'AMOORION_VAULT': 'http', 'AMOORION_VAULT_ADDR': 'https://bao.example.org', 'AMOORION_VAULT_PATH': 'secret/amoorion'})\n\u003CAmoorion vault=keepassxc plugins=[] flags={}\u003E\n\u003CAmoorion vault=bitwarden plugins=[] flags={}\u003E\n\u003CAmoorion vault=http plugins=[] flags={'mode': 'mcp'}\u003E\n", "type": "stream"}], "id": "PKri", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "64671e13f2574b2d327ad3014fe1f112", "console": [], "id": "Xref", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch3 id=\"flags\"\u003EFlags\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003E\u003Ccode\u003Emode\u003C/code\u003E says which front-end \u003Ccode\u003Eamo.run()\u003C/code\u003E starts: \u003Ccode\u003Ecli\u003C/code\u003E (default), \u003Ccode\u003Eapi\u003C/code\u003E or \u003Ccode\u003Emcp\u003C/code\u003E.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "8feda1987888200e3c251d359dd8d4b3", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "[]\n", "type": "stream"}], "id": "SFPL", "outputs": [{"data": {"text/html": "\u003Cpre class='text-xs'\u003ETrue\u003C/pre\u003E"}, "type": "data"}]}, {"code_hash": "f09bb1dc7e8e117354d38ac0e2430d05", "console": [], "id": "BYtC", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch3 id=\"states\"\u003EStates\u003C/h3\u003E\n\u003Cspan class=\"paragraph\"\u003E\u003Ccode\u003Esave\u003C/code\u003E writes where things are, and hashes to detect changes; \u003Ccode\u003Eload\u003C/code\u003E takes it back.\nNo secret is written: of the vault only its kind, address and path are hashed.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "101d78adf2a7e047f4528242e8b17310", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "env: null\ndataset: null\nflags:\n  mode: cli\nplugins:\n- dryrun\nhashes:\n  vault: 13965bd3ec565ad18d72c4faed96675f8882d613327d31fc19b164d0b6b79d47\n  dataset: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n  inbox: 80e8a085fec80086c9db903619b0a2b728108427268c175a705cc5a9d5de0e56\n\n", "type": "stream"}], "id": "RGSE", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "0cccf968720b210c11546d2cdf1b7660", "console": [{"mimetype": "text/plain", "name": "stdout", "text": "changed so far: ['inbox']\nchanged now: ['dataset', 'inbox']\nafter saving: []\n", "type": "stream"}], "id": "Kclp", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}], "metadata": {"marimo_version": "0.25.2", "script_metadata_hash": null}, "version": "1"},
+            "runtimeConfig": null
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  
+<marimo-code hidden="">
+    import%20marimo%0A%0A__generated_with%20%3D%20%220.25.2%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%20Config%20and%20setup%0A%0A%20%20%20%20%23%23%23%20Before%20we%20begin%0A%0A%20%20%20%20-%20%60uv%20sync%60%20(or%20%60pip%20install%20amoorion%60%20and%20the%20packages%20of%20your%20platforms)%0A%20%20%20%20-%20%60cp%20example.env%20.env%60%3A%20this%20file%20only%20says%20where%20the%20vault%20is.%20Secrets%20never%20go%0A%20%20%20%20%20%20in%20it%2C%20nor%20in%20the%20repository.%0A%20%20%20%20-%20%60uv%20run%20task%20vault%3Anew%60%20when%20you%20use%20KeePassXC%3A%20it%20makes%20the%20file%20and%20an%20empty%0A%20%20%20%20%20%20entry%20per%20platform.%0A%0A%20%20%20%20%23%23%23%20Basic%2C%20simple%0A%0A%20%20%20%20With%20no%20arguments%20it%20takes%20%60.env%60%20of%20the%20current%20directory%2C%20as%20the%20CLI%20does.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20from%20amoorion%20import%20Amoorion%0A%0A%20%20%20%20%23%20init()%20answers%20its%20temporary%20folder%3A%20we%20will%20write%20files%20there.%0A%20%20%20%20%23%20A%20sandbox%20for%20this%20whole%20notebook%3A%20secrets%20only%20from%20variables%2C%20the%20inbox%20and%0A%20%20%20%20%23%20the%20dataset%20in%20a%20temporary%20folder.%20Nothing%20here%20can%20touch%20your%20real%20setup.%0A%20%20%20%20scratch%20%3D%20Amoorion.init()%0A%20%20%20%20return%20Amoorion%2C%20scratch%0A%0A%0A%40app.cell%0Adef%20_(Amoorion)%3A%0A%20%20%20%20%23%20Without%20an%20env%20file%3A%20the%20sandbox.%20Look%20at%20what%20it%20says%20about%20its%20vault.%0A%20%20%20%20amo%20%3D%20Amoorion()%0A%0A%20%20%20%20amo%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%23%20Three%20variants%20of%20config%2C%20three%20vaults%0A%0A%20%20%20%20An%20env%20file%20belongs%20to%20one%20object%20and%20doesn't%20touch%20the%20environment%20of%20the%0A%20%20%20%20process.%20Opening%20the%20vault%20waits%20for%20its%20first%20use%2C%20so%20these%20three%20can%20be%20looked%0A%20%20%20%20at%20without%20any%20server.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(Amoorion%2C%20scratch)%3A%0A%20%20%20%20from%20amoorion.utilities%20import%20read_env%2C%20write_env%0A%0A%20%20%20%20%23%20The%20three%20kinds%20of%20vault.%20An%20env%20file%20holds%20only%20the%20link%20to%20a%20vault%2C%20never%20the%0A%20%20%20%20%23%20secrets%20themselves.%0A%20%20%20%20variants%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%22keepassxc%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT%22%3A%20%22keepassxc%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT_PATH%22%3A%20%22.%2Fdataset%2F.secrets.kdbx%22%2C%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%22bitwarden%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT%22%3A%20%22bitwarden%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT_ADDR%22%3A%20%22https%3A%2F%2Fvault.example.org%22%2C%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%22openbao%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT%22%3A%20%22http%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT_ADDR%22%3A%20%22https%3A%2F%2Fbao.example.org%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AMOORION_VAULT_PATH%22%3A%20%22secret%2Famoorion%22%2C%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%7D%0A%0A%20%20%20%20%23%20Each%20goes%20into%20a%20file%20of%20its%20own%2C%20in%20the%20sandbox%3B%20other%20lines%20of%20a%20file%20would%20stay.%0A%20%20%20%20for%20label%2C%20values%20in%20variants.items()%3A%0A%20%20%20%20%20%20%20%20write_env(%0A%20%20%20%20%20%20%20%20%20%20%20%20scratch%20%2F%20f%22%7Blabel%7D.env%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20**values%2C%0A%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20%23%20Read%20back%20as%20a%20dict.%0A%20%20%20%20print(read_env(scratch%20%2F%20%22openbao.env%22))%0A%0A%0A%20%20%20%20%23%20An%20env%20file%20gives%20the%20object%20its%20real%20setup.%20No%20vault%20is%20opened%20yet%3A%20that%0A%20%20%20%20%23%20happens%20at%20the%20first%20secret%2C%20so%20these%20don't%20need%20the%20vaults%20to%20exist.%0A%20%20%20%20amo1%20%3D%20Amoorion(scratch%20%2F%20%22keepassxc.env%22)%0A%0A%20%20%20%20%23%20The%20second%20argument%20overrides%20where%20the%20dataset%20goes.%0A%20%20%20%20amo2%20%3D%20Amoorion(%0A%20%20%20%20%20%20%20%20scratch%20%2F%20%22bitwarden.env%22%2C%0A%20%20%20%20%20%20%20%20scratch%20%2F%20%22dataset-two%22%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20Flags%20are%20free%20values%20of%20yours%2C%20saved%20along%20with%20the%20state.%0A%20%20%20%20amo3%20%3D%20Amoorion(%0A%20%20%20%20%20%20%20%20scratch%20%2F%20%22openbao.env%22%2C%0A%20%20%20%20%20%20%20%20scratch%20%2F%20%22dataset-three%22%2C%0A%20%20%20%20%20%20%20%20flags%3D%7B%22mode%22%3A%20%22mcp%22%7D%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20Three%20identities%20side%20by%20side%3A%20the%20objects%20leave%20the%20process%20environment%20alone.%0A%20%20%20%20for%20one%20in%20(amo1%2C%20amo2%2C%20amo3)%3A%0A%20%20%20%20%20%20%20%20print(one)%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%23%20Flags%0A%0A%20%20%20%20%60mode%60%20says%20which%20front-end%20%60amo.run()%60%20starts%3A%20%60cli%60%20(default)%2C%20%60api%60%20or%20%60mcp%60.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(Amoorion)%3A%0A%20%20%20%20%23%20The%20same%20flags%20work%20for%20any%20front-end.%0A%20%20%20%20cli%20%3D%20Amoorion(flags%3D%7B%22mode%22%3A%20%22cli%22%7D)%0A%0A%20%20%20%20%23%20%60run%60%20is%20the%20command%20line%20of%20this%20setup%3B%200%20is%20its%20exit%20code%20for%20success.%0A%20%20%20%20cli.run(%22--json%22%2C%20%22inbox%22)%20%3D%3D%200%0A%20%20%20%20return%20(cli%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%23%20States%0A%0A%20%20%20%20%60save%60%20writes%20where%20things%20are%2C%20and%20hashes%20to%20detect%20changes%3B%20%60load%60%20takes%20it%20back.%0A%20%20%20%20No%20secret%20is%20written%3A%20of%20the%20vault%20only%20its%20kind%2C%20address%20and%20path%20are%20hashed.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20_(cli%2C%20scratch)%3A%0A%20%20%20%20%23%20Platforms%20can%20be%20named%20as%20plain%20strings%20too.%0A%20%20%20%20cli.use(%22dryrun%22)%0A%0A%20%20%20%20%23%20The%20state%20is%20a%20YAML%20file%20with%20where%20things%20are%20and%20their%20hashes.%0A%20%20%20%20state%20%3D%20scratch%20%2F%20%22state.yaml%22%0A%0A%20%20%20%20%23%20Saving%20remembers%20the%20hashes%20as%20they%20are%20now.%0A%20%20%20%20cli.save(state)%0A%0A%20%20%20%20%23%20No%20secret%20in%20there%3A%20read%20it%20and%20see.%0A%20%20%20%20print(state.read_text())%0A%20%20%20%20return%20(state%2C)%0A%0A%0A%40app.cell%0Adef%20_(Amoorion%2C%20state)%3A%0A%20%20%20%20%23%20Back%20to%20the%20same%20setup%2C%20from%20the%20file.%0A%20%20%20%20restored%20%3D%20Amoorion().load(state)%0A%0A%20%20%20%20%23%20Nothing%20has%20happened%20since%20saving.%0A%20%20%20%20print(%0A%20%20%20%20%20%20%20%20%22changed%20so%20far%3A%22%2C%0A%20%20%20%20%20%20%20%20restored.changes()%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20Now%20something%20does%3A%20a%20post%E2%80%A6%0A%20%20%20%20restored.publish(text%3D%22something%20happens%22)%0A%0A%20%20%20%20%23%20%E2%80%A6and%20reading%20it%20writes%20the%20inbox%20and%20the%20dataset.%0A%20%20%20%20restored.read(limit%3D1)%0A%0A%20%20%20%20%23%20The%20hashes%20tell%20what%20changed.%0A%20%20%20%20print(%0A%20%20%20%20%20%20%20%20%22changed%20now%3A%22%2C%0A%20%20%20%20%20%20%20%20restored.changes()%2C%0A%20%20%20%20)%0A%0A%20%20%20%20%23%20Saving%20again%20makes%20the%20current%20state%20the%20new%20base.%0A%20%20%20%20print(%0A%20%20%20%20%20%20%20%20%22after%20saving%3A%22%2C%0A%20%20%20%20%20%20%20%20restored.load(state).save(state).changes()%2C%0A%20%20%20%20)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A
+</marimo-code>
+
+<marimo-code-hash hidden="">11eaf04d17ebcadbefc0731eef800d70</marimo-code-hash>
+</body>
+</html>

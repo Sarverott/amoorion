@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "Platform": {
+      "description": "One platform plugin and what it can do.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "capabilities"
+      ],
+      "title": "Platform",
+      "type": "object"
+    }
+  },
+  "description": "manifest.json: what a release holds. `pages` is empty until the whole site is built.",
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "repository": {
+      "title": "Repository",
+      "type": "string"
+    },
+    "docs": {
+      "title": "Docs",
+      "type": "string"
+    },
+    "openapi": {
+      "title": "Openapi",
+      "type": "string"
+    },
+    "packages": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Packages",
+      "type": "object"
+    },
+    "platforms": {
+      "items": {
+        "$ref": "#/$defs/Platform"
+      },
+      "title": "Platforms",
+      "type": "array"
+    },
+    "pages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pages",
+      "type": "array"
+    },
+    "examples": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Examples",
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "repository",
+    "docs",
+    "openapi",
+    "packages",
+    "platforms",
+    "pages",
+    "examples"
+  ],
+  "title": "Manifest",
+  "type": "object"
+}

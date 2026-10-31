@@ -1,0 +1,200 @@
+{
+  "name": "amoorion",
+  "version": "0.4.36",
+  "repository": "https://github.com/Sarverott/amoorion",
+  "docs": "https://amoorion.readthedocs.io/",
+  "openapi": "openapi.json",
+  "packages": {
+    "amoorion": "0.4.36",
+    "amoorion-blogger": "0.4.4",
+    "amoorion-bluesky": "0.4.5",
+    "amoorion-discord": "0.4.5",
+    "amoorion-email": "0.4.10",
+    "amoorion-facebook": "0.4.4",
+    "amoorion-mastodon": "0.4.6",
+    "amoorion-matrix": "0.4.5",
+    "amoorion-ntfy": "0.4.8",
+    "amoorion-telegram": "0.4.5",
+    "amoorion-tumblr": "0.4.5",
+    "amoorion-x": "0.4.6"
+  },
+  "platforms": [
+    {
+      "name": "blogger",
+      "description": "Blogger by mail: post",
+      "capabilities": [
+        "post"
+      ]
+    },
+    {
+      "name": "bluesky",
+      "description": "Bluesky (AT Protocol): post, read, reply, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "discord",
+      "description": "Discord bot in one channel (REST API): post, read, reply, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "discord-webhook",
+      "description": "Discord channel webhook, no bot: post, delete what it posted",
+      "capabilities": [
+        "delete",
+        "post"
+      ]
+    },
+    {
+      "name": "dryrun",
+      "description": "sends nothing; remembers posts for the running process",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "email",
+      "description": "E-mail: send by SMTP, read by IMAP, reply",
+      "capabilities": [
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "facebook",
+      "description": "Facebook Page (Graph API): post, read, reply as comment, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "mastodon",
+      "description": "Mastodon (REST API): post, read, reply, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "matrix",
+      "description": "Matrix room (client-server API): post, read, reply, delete (redact)",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "ntfy",
+      "description": "ntfy: push notifications to one topic, and read them",
+      "capabilities": [
+        "post",
+        "read"
+      ]
+    },
+    {
+      "name": "telegram",
+      "description": "Telegram bot in one chat (Bot API): post, read, reply, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    },
+    {
+      "name": "tumblr",
+      "description": "Tumblr API v2: post, read, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read"
+      ]
+    },
+    {
+      "name": "x",
+      "description": "X (twitter) API v2: post, read, reply, delete",
+      "capabilities": [
+        "delete",
+        "post",
+        "read",
+        "reply"
+      ]
+    }
+  ],
+  "pages": [
+    "examples/01-getting-started.html",
+    "examples/02-config-and-setup.html",
+    "examples/03-data-object-modeling.html",
+    "examples/04-identity-vaults.html",
+    "examples/05-cli-and-terminals.html",
+    "examples/06-getting-over-dataset.html",
+    "examples/07-summoning-daemons.html",
+    "examples/08-using-nats.html",
+    "examples/09-how-to-use-packages.html",
+    "examples/10-webapp-interfacing.html",
+    "examples/11-additional-utilities.html",
+    "examples/12-rest-api.html",
+    "examples/13-mcp-in-action.html",
+    "examples/14-hooks-as-event-listeners.html",
+    "examples/15-calling-procedures-by-methods.html",
+    "examples/16-defining-own-plugins.html",
+    "examples/17-unified-inbox.html",
+    "examples/18-automation-workflowing.html",
+    "examples/19-trying-society-emulations.html",
+    "examples/20-all-socialmedia-posting-from-one-script.html",
+    "examples/index.html",
+    "examples/old.01-first-steps.html",
+    "examples/old.02-vault-and-accounts.html",
+    "examples/old.03-api-hooks-inbox.html",
+    "examples/old.04-own-plugin.html",
+    "index.html",
+    "project.html",
+    "releases.html"
+  ],
+  "examples": [
+    "examples/01-getting-started.html",
+    "examples/02-config-and-setup.html",
+    "examples/03-data-object-modeling.html",
+    "examples/04-identity-vaults.html",
+    "examples/05-cli-and-terminals.html",
+    "examples/06-getting-over-dataset.html",
+    "examples/07-summoning-daemons.html",
+    "examples/08-using-nats.html",
+    "examples/09-how-to-use-packages.html",
+    "examples/10-webapp-interfacing.html",
+    "examples/11-additional-utilities.html",
+    "examples/12-rest-api.html",
+    "examples/13-mcp-in-action.html",
+    "examples/14-hooks-as-event-listeners.html",
+    "examples/15-calling-procedures-by-methods.html",
+    "examples/16-defining-own-plugins.html",
+    "examples/17-unified-inbox.html",
+    "examples/18-automation-workflowing.html",
+    "examples/19-trying-society-emulations.html",
+    "examples/20-all-socialmedia-posting-from-one-script.html",
+    "examples/old.01-first-steps.html",
+    "examples/old.02-vault-and-accounts.html",
+    "examples/old.03-api-hooks-inbox.html",
+    "examples/old.04-own-plugin.html"
+  ]
+}
