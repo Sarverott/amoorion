@@ -1,3 +1,11 @@
+## v0.4.29 (2026-10-31)
+
+**Packages:** amoorion 0.4.29
+
+### Feat
+
+- **workflows**: workflows in Python, rules in files; automate is part of workflow
+
 ## v0.4.28 (2026-10-31)
 
 **Packages:** amoorion 0.4.28
