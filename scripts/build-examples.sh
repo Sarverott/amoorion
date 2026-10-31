@@ -11,7 +11,16 @@ rm -rf "$build"
 mkdir -p "$build"
 for notebook in "$root"/examples/*.ipynb; do
     name=$(basename "$notebook" .ipynb)
-    "${marimo[@]}" convert "$notebook" -o "$build/$name.py"
+    # marimo runs every cell it converts; raw cells hold text not meant to run.
+    python3 - "$notebook" "$build/$name.ipynb" <<'PYTHON'
+import json
+import sys
+notebook = json.load(open(sys.argv[1]))
+notebook["cells"] = [cell for cell in notebook["cells"] if cell["cell_type"] != "raw"]
+json.dump(notebook, open(sys.argv[2], "w"))
+PYTHON
+    "${marimo[@]}" convert "$build/$name.ipynb" -o "$build/$name.py"
+    rm "$build/$name.ipynb"
     # Run from build/, with the examples' own safe settings (env vault, temporary inbox).
     (cd "$build" && env -u AMOORION_VAULT "${marimo[@]}" export html "$name.py" -o "$name.html")
     echo "built $build/$name.html"

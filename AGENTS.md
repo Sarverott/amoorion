@@ -41,7 +41,7 @@ batches).
 ```sh
 uv run task init         # fresh checkout: tools, lefthook hooks, .env, check
 uv run task setup        # tools (uv sync) and lefthook git hooks
-uv run task check        # tests, YAML, commits, docs build (= CI)
+uv run task check        # tests, YAML, commits, docs and marimo builds (= CI)
 uv run task test         # pytest only
 uv run task format       # the code in its open shape (amoorion-dev shape, then ruff)
 uv run task flow:pull    # on development: pull master in, mark the next pre-release

@@ -96,6 +96,8 @@ tasks:
   check:
     desc: Run every static check (same as CI)
     deps: [test:quiet, check:format, check:yaml, check:commits, docs:build, docs:check:requirements]
+    cmds:
+      - task: examples:build
 
   format:
     desc: Format the code in amoorion's open shape (ruff and amoorion-dev shape)
