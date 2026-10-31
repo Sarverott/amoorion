@@ -104,6 +104,10 @@ fastjsonschema==2.22.2
     # via nbformat
 furo==2025.12.19
     # via amoorion-docs
+gitdb==4.0.12
+    # via gitpython
+gitpython==3.2.1
+    # via amoorion-dev
 h11==0.16.0
     # via
     #   httpcore2
@@ -305,6 +309,8 @@ shellingham==1.5.4
     # via typer
 six==1.17.0
     # via python-dateutil
+smmap==5.0.3
+    # via gitdb
 snowballstemmer==3.1.1
     # via sphinx
 soupsieve==3.0.4

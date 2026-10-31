@@ -2,6 +2,20 @@
 
 Newest on top.
 
+## 2026-10-31: the author's reading of the examples
+
+- The author's `CALL()>"read"-"platform">"nowhere"[output]` can't work: Python applies `-` and `[]`
+  to the strings first. Hence `/`, `-`, `+`, `>>`; `>>` binds last, so nothing needs parentheses.
+- Their drafts' `except Exception():` would raise a TypeError when something fails; the examples
+  don't use it, as `@step` catches failures itself.
+- No general method running any command: methods reach MCP and the API. One method per program.
+  `bw_cli` stays below the methods, which need the vault. GitPython still starts the `git` program.
+- The menus were driven in a pseudo-terminal once, and by a pipe in the tests; never by a person.
+- `resources/scopes/*.sheme.*` are still empty, unread: their purpose was assumed to be input and
+  output schemas of workflows, nothing built on that. Example 20 has no per-platform graphics or video,
+  no identity labels, no `HOOKS.listen`; it reacts to a message put in the inbox by hand.
+- `docs/_build` can hold a stale docstring: delete it if the LaTeX check names what the source no longer has.
+
 ## 2026-10-30: `Amoorion()` is a sandbox
 
 - The author's note in `app/base.py`: no args = default config. Taken as a sandbox that ignores

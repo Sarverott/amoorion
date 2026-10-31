@@ -125,7 +125,7 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] MCP: resources, the official style in example 13, a client for the simulated party
 - [x] CLI: arrow menus, forms, going back, loading screens
 - [ ] Filling the vault through those menus
-- [ ] Every outside program a method; `amoorion-dev` on GitPython
+- [x] Every outside program a method; `amoorion-dev` on GitPython
 - [x] Examples show data with pandas and plots; env files read and written by a helper;
       the dataset example filled; `Daemon` with threads and processes; outputs refreshed
 

@@ -666,3 +666,16 @@ def hello_world_posting(amo):
 
 New files of the author: `resources/rulesets/world.rule.yml`, `resources/scopes/{input1,output1}.sheme.json`,
 `resources/scopes/{input2,output2}.sheme.toml` (all empty for now), `resources/templates/hello.template.md`.
+
+## UNIXUSAT=1793434121346 · commit 3364bb1
+
+The author's reading of the examples was worked through. Workflows are Python now (`@amo.workflow`,
+`@step`, `EXECUTE`), with logs and a JSON artifact; `automate` became part of `workflow`; rules and
+templates come from files, and example 20 runs against dryrun. The MCP server has resources and a
+client in memory. The guide of the CLI asks with arrow menus, Esc or left going back, as a terminal
+doesn't report Shift alone. Notebooks show data with pandas and matplotlib, env files have a reader and
+a writer, `amo.CALL()` is a command line as an expression, the dataset goes to a zip and a git repository,
+and `Daemon` has threads and processes. Every outside program is its own method, held by a test, and
+`amoorion-dev` speaks git through GitPython. On the way the web page of v0.4.27 failed, as marimo runs
+raw cells and the gate didn't build its pages: it skips them now, and `task check` builds them.
+Left open: filling the vault through menus, and the items moved to later phases in VISION.md.
