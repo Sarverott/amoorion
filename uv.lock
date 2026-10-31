@@ -48,7 +48,7 @@ wheels = [
 
 [[package]]
 name = "amoorion"
-version = "0.4.25a0"
+version = "0.4.25"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
@@ -261,7 +261,7 @@ requires-dist = [{ name = "amoorion", editable = "." }]
 
 [[package]]
 name = "amoorion-mastodon"
-version = "0.4.5"
+version = "0.4.6"
 source = { editable = "packages/amoorion-mastodon" }
 dependencies = [
     { name = "amoorion" },
@@ -320,7 +320,7 @@ requires-dist = [
 
 [[package]]
 name = "amoorion-x"
-version = "0.4.5"
+version = "0.4.6"
 source = { editable = "packages/amoorion-x" }
 dependencies = [
     { name = "amoorion" },
