@@ -5,6 +5,8 @@ import re
 import shutil
 from pathlib import Path
 
+from docutils import nodes
+
 DOCS = Path(__file__).parent.parent
 ROOT = DOCS.parent
 REPOSITORY = "https://github.com/Sarverott/amoorion"
@@ -180,8 +182,36 @@ def _skills(
         )
 
 
+def _no_badges_on_paper(
+    app,
+    doctree,
+    docname: str,
+) -> None:
+    """SVG images (the badges of the README) out of the PDF: LaTeX can't embed them."""
+
+    if app.builder.format != "latex":
+        return
+
+    for image in list(doctree.findall(nodes.image)):
+        # By now a remote image has been downloaded, so only its ending tells.
+        if image["uri"].endswith(".svg"):
+            # A badge is a link around its image: nothing remains of it.
+            holder = (
+                image.parent
+                if isinstance(image.parent, nodes.reference)
+                else image
+            )
+
+            holder.parent.remove(holder)
+
+
 def setup(app) -> None:
     """Hook all of this into the build of Sphinx."""
+
+    app.connect(
+        "doctree-resolved",
+        _no_badges_on_paper,
+    )
 
     app.connect(
         "build-finished",

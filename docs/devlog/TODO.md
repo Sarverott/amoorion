@@ -114,6 +114,8 @@ What is being worked on now. Vision and the plan of all phases:
 - [x] The nineteen notebooks and five advanced use cases filled and run by the
       tests; Gradio and Streamlit apps for Hugging Face Spaces
 - [x] Every link of the author's inquiry considered, the verdicts in the docs
+- [x] Read the Docs builds again: the PDF survives notebook outputs, and the
+      gate checks its LaTeX sources
 - [ ] New examples from the author's list, with what they present implemented
 
-Phase 6 (deployment): see [VISION.md](VISION.md).
+Phases 6 (deployment) to 9: see [VISION.md](VISION.md).

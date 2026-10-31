@@ -145,3 +145,67 @@ lints YAML before a commit, runs the gate before a push of development and syncs
 `.vscode` has settings, tasks and launchers; `task examples:refresh` reruns notebooks, on demand and
 not by itself, as their outputs change every run. `SKILL.md` brought up to date and installed with
 the package, the `skill` method hands it out, `.claude-plugin/` makes the repository a plugin.
+
+## UNIXUSAT=1793416209800 · commit ff73da2
+
+The author's inquiry, word for word:
+
+### to be added also in 7th phase
+- docker releases on dockerhub with workflow
+- docker and pip publishing on github as packages of container and python pack
+- totp, hotp, oauth, webauthn, elliptic curves and segwit stuff - delegated access permissions (propably requires setternet as carrier of trust but that and other integrations will be in phase 9)
+    - https://github.com/pyauth/pywarp
+    - paramiko
+    - pyotp
+    - qr codes
+- pure python adb package in use as user simulations with scrcpy, remote adb, gsm gateway for sms and phonecalls - also propably ressurectiong of qpython to change phone into fine suite for agents
+- dependabot and rest of security/vurnability/dependency problems on github
+- automation of publications announcements across all socialmedia platforms supported by amoorion with it's plugins
+
+
+### to be added also in 8th phase
+- colab google codes and google stuff integration like google calendar, sheets, docs, slides, forms, drive, youtube, translate, ads, google keep, analitics, contacts, maps, aistudio, gemini and bigquery
+- mirror repository of project on gitlab, bitbucket, gitea and sr.ht - including automations like pipelines and else
+- workflow for handling issues by dev scripts with you in charge - hooks, listeners, self-sufficiency, independency
+
+### to be added also in 9th phase
+- writting in docs in agents own area (docs/.agents) directory of "Almanah" with problems, obstacles, and accidental events—whether encountered in the past or anticipated in advance—along with their solutions, as well as key information on how to devise such solutions, the specific, atypical, or governed logic underlying these occurrences, and the probability of their potential manifestation at some point in the future, whether at a defined or an unspecified time.
+
+## problems with documentation on Readthedocs
+
+it throws this error right now
+
+```
+latexmk -r latexmkrc -pdf -f -dvi- -ps- -jobname=amoorion -interaction=nonstopmode
+Use of uninitialized value in concatenation (.) or string at (eval 10) line 1.
+Use of uninitialized value in concatenation (.) or string at (eval 10) line 2.
+Use of uninitialized value in concatenation (.) or string at (eval 10) line 3.
+Use of uninitialized value in concatenation (.) or string at (eval 10) line 4.
+Latexmk: A user -r option asked me to process an rc file an extra time.
+   Name of file = 'latexmkrc'
+   Abs. path = '/home/docs/checkouts/amoorion/checkouts/latest/_readthedocs/pdf/latexmkrc'
+  I'll not process it
+Rc files read:
+  /etc/LatexMk
+  latexmkrc
+Latexmk: This is Latexmk, John Collins, 31 Jan. 2024. Version 4.83.
+No existing .aux file, so I'll make a simple one, and require run of *latex.
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Category 'other':
+  Rerun of 'pdflatex' forced or previously required:
+    Reason or flag: 'Initial setup'
+------------
+Run number 1 of rule 'pdflatex'
+```
+
+previous one releases of docs was stopped also by this issue
+
+Phases 7 to 9 are planned in VISION.md. Read the Docs had failed on every build since v0.4.21.
+Its PDF stopped there: that release was the first with outputs in the notebooks, whose rich tables
+hold box drawing, and pdflatex gives up at its 100th unknown character, leaving no PDF. `docs/conf.py`
+now draws them with `+ - |`; the README's SVG badges, which LaTeX can't embed either, stay out of the
+PDF. `scripts/check-latex.py`, part of `task docs:build`, refuses both before they reach Read the Docs.
+The PDF was compiled here by `latexmk` in `sphinxdoc/sphinx-latexpdf`: exit code 0, 258 pages. Doing so
+found `python -m amoorion` starting the CLI on import, as the API reference imports every module; it
+now runs only when run.
