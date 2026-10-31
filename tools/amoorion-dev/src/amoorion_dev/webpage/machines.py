@@ -8,6 +8,46 @@ from amoorion_dev.repo import Repo
 from amoorion_dev.webpage.page import page
 
 
+def data(
+    repo: Repo,
+    out: Path,
+    version: str,
+    slug: str,
+    docs: str,
+    examples: list[str],
+    pages: list[str],
+) -> list[Path]:
+    """The files other programs build on: openapi.json, manifest.json, and manifest.schema.json saying its shape."""
+
+    from amoorion_dev.webpage.contract import Manifest, openapi, platforms
+
+    manifest = Manifest(
+        name="amoorion",
+        version=version,
+        repository=f"https://github.com/{slug}",
+        docs=docs,
+        openapi="openapi.json",
+        packages={
+            package.name: package.version(repo)
+            for package in versions.packages(repo)
+        },
+        platforms=platforms(),
+        pages=pages,
+        examples=examples,
+    )
+
+    contents = {
+        out / "openapi.json": openapi(),
+        out / "manifest.json": manifest.model_dump(mode="json"),
+        out / "manifest.schema.json": Manifest.model_json_schema(),
+    }
+
+    for path, content in contents.items():
+        path.write_text(json.dumps(content, indent=2) + "\n")
+
+    return list(contents)
+
+
 def manifests(
     repo: Repo,
     out: Path,
@@ -16,22 +56,17 @@ def manifests(
     docs: str,
     examples: list[Path],
 ) -> list[Path]:
-    """manifest.json: what the site and the release hold, for machines; site.webmanifest: for browsers."""
+    """What the site and the release hold, for machines (see `data`); site.webmanifest: for browsers."""
 
-    contents = {
-        "name": "amoorion",
-        "version": version,
-        "repository": f"https://github.com/{slug}",
-        "docs": docs,
-        "packages": {
-            package.name: package.version(repo)
-            for package in versions.packages(repo)
-        },
-        "pages": sorted(
-            str(path.relative_to(out)) for path in out.rglob("*.html")
-        ),
-        "examples": [f"examples/{path.name}" for path in examples],
-    }
+    contents = data(
+        repo,
+        out,
+        version,
+        slug,
+        docs,
+        [f"examples/{path.name}" for path in examples],
+        sorted(str(path.relative_to(out)) for path in out.rglob("*.html")),
+    )
 
     web = {
         "name": "amoorion",
@@ -50,16 +85,9 @@ def manifests(
         ],
     }
 
-    files = [
-        out / "manifest.json",
-        out / "site.webmanifest",
-    ]
+    (out / "site.webmanifest").write_text(json.dumps(web, indent=2) + "\n")
 
-    files[0].write_text(json.dumps(contents, indent=2) + "\n")
-
-    files[1].write_text(json.dumps(web, indent=2) + "\n")
-
-    return files
+    return contents + [out / "site.webmanifest"]
 
 
 def for_machines(
@@ -117,7 +145,7 @@ def for_machines(
         f"## Docs\n\n- [Documentation, as an index for agents]({docs}llms.txt)\n"
         f"- [Agent skill]({docs}skills/amoorion/SKILL.md)\n\n"
         f"## This site\n\n- [Project]({base}project.html)\n- [Releases]({base}releases.html)\n"
-        f"- [What the site holds]({base}manifest.json)\n"
+        f"- [What the site holds]({base}manifest.json)\n- [The HTTP API, as OpenAPI]({base}openapi.json)\n"
         + (f"\n## Examples (marimo)\n\n{entries}\n" if entries else "")
         + f"\n## Code\n\n- [GitHub](https://github.com/{slug})\n- [PyPI](https://pypi.org/project/amoorion/)\n"
     )

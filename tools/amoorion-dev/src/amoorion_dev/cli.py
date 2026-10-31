@@ -163,6 +163,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="the built presentation page (website/dist), put at the root",
     )
 
+    site_data = commands.add_parser(
+        "site-data",
+        help="only openapi.json and the manifest, for amoorion-website's build",
+    )
+
+    site_data.add_argument(
+        "--out",
+        type=Path,
+        required=True,
+    )
+
+    site_data.add_argument(
+        "--examples",
+        type=Path,
+        default=Path("examples/build"),
+    )
+
     shape = commands.add_parser(
         "shape",
         help="format the code in amoorion's shape (shape.py)",
@@ -412,6 +429,18 @@ def site_command(
     return 0
 
 
+def site_data_command(
+    repo: Repo,
+    args: argparse.Namespace,
+) -> int:
+    """Write what amoorion-website reads while it builds."""
+
+    for path in web.site_data(repo, args.out, args.examples):
+        console.print(f"wrote {path}")
+
+    return 0
+
+
 def identity_command(
     repo: Repo,
     args: argparse.Namespace,
@@ -450,6 +479,7 @@ COMMANDS = {
     "packages": packages_command,
     "setting": setting_command,
     "site": site_command,
+    "site-data": site_data_command,
     "shape": shape_command,
     "identity": identity_command,
 }

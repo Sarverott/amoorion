@@ -1,3 +1,11 @@
+## v0.4.35 (2026-10-31)
+
+**Packages:** amoorion 0.4.35
+
+### Feat
+
+- **site**: openapi.json, platforms and a schema of the manifest at every release
+
 ## v0.4.34 (2026-10-31)
 
 **Packages:** amoorion 0.4.34

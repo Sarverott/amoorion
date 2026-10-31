@@ -54,7 +54,7 @@ wheels = [
 
 [[package]]
 name = "amoorion"
-version = "0.4.34"
+version = "0.4.35"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
@@ -180,17 +180,21 @@ name = "amoorion-dev"
 version = "0.0.0"
 source = { editable = "tools/amoorion-dev" }
 dependencies = [
+    { name = "amoorion" },
     { name = "gitpython" },
     { name = "libcst" },
     { name = "markdown-it-py" },
+    { name = "pydantic" },
     { name = "rich" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "amoorion", editable = "." },
     { name = "gitpython", specifier = ">=3.2.1" },
     { name = "libcst", specifier = ">=1.9.0" },
     { name = "markdown-it-py", specifier = ">=4.0.0" },
+    { name = "pydantic", specifier = ">=2" },
     { name = "rich", specifier = ">=15.0.0" },
 ]
 

@@ -5,8 +5,8 @@ index.html: the presentation page, the build of amoorion-website
 what amoorion is (the README), how to install it, its platforms, links to
 the docs, PyPI and GitHub. releases.html: CHANGELOG.md. examples/: the
 marimo pages of the notebooks (`task examples:build`) and their index.
-manifest.json lists what the site holds, site.webmanifest is for
-browsers. The pages are styled after the presentation page and the
+manifest.json lists what the site holds, openapi.json describes the HTTP
+API and manifest.schema.json the manifest, site.webmanifest is for browsers. The pages are styled after the presentation page and the
 graphics of resources/. Links that leave the page go to the repository.
 """
 
@@ -17,7 +17,7 @@ from pathlib import Path
 
 from amoorion_dev import version as versions
 from amoorion_dev.repo import Repo
-from amoorion_dev.webpage.machines import for_machines, manifests
+from amoorion_dev.webpage.machines import data, for_machines, manifests
 from amoorion_dev.webpage.page import first_paragraph, outward, page, render
 
 # The graphics of resources/images, under the names the pages use.
@@ -25,6 +25,48 @@ GRAPHICS = {
     "wordmark.png": "Amoorion rose-gold gothic wordmark.png",
     "cupid.png": "Amoorion\u2019s Cupid Bot Sends Heart Messages-2-mini.png",
 }
+
+
+def site_data(
+    repo: Repo,
+    out: Path,
+    examples: Path | None = None,
+) -> list[Path]:
+    """Only the files other programs build on, for amoorion-website to read while it builds."""
+
+    settings = repo.settings().get(
+        "repository",
+        {},
+    )
+
+    out.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    built = (
+        sorted(
+            p.name for p in examples.glob("*.html") if p.name != "index.html"
+        )
+        if examples and examples.is_dir()
+        else []
+    )
+
+    return data(
+        repo,
+        out,
+        versions.current(repo),
+        settings.get(
+            "slug",
+            "Sarverott/amoorion",
+        ),
+        settings.get(
+            "docs",
+            "https://amoorion.readthedocs.io/",
+        ),
+        [f"examples/{name}" for name in built],
+        [],
+    )
 
 
 def build(
