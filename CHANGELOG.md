@@ -1,3 +1,11 @@
+## v0.4.36 (2026-10-31)
+
+**Packages:** amoorion 0.4.36
+
+### Feat
+
+- **site**: build amoorion-website by its own npm run build, with amoorion's data
+
 ## v0.4.35 (2026-10-31)
 
 **Packages:** amoorion 0.4.35

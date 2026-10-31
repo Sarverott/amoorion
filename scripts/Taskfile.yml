@@ -32,6 +32,6 @@ tasks:
       - scripts/new-plugin.sh {{.CLI_ARGS}}
 
   site:website:
-    desc: Build the presentation page (amoorion-website, by npm and vite) into website/dist/ (not committed)
+    desc: Build the presentation page (amoorion-website, by its npm run build) into website/dist/ (not committed)
     cmds:
       - scripts/build-website.sh

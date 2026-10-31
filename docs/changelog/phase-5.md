@@ -679,3 +679,13 @@ and `Daemon` has threads and processes. Every outside program is its own method,
 `amoorion-dev` speaks git through GitPython. On the way the web page of v0.4.27 failed, as marimo runs
 raw cells and the gate didn't build its pages: it skips them now, and `task check` builds them.
 Left open: filling the vault through menus, and the items moved to later phases in VISION.md.
+
+## UNIXUSAT=1793442924592 · commit 22e04bb
+
+The author asked that what the website shows be exchanged by OpenAPI, with templating in Astro and
+React in amoorion-website. As GitHub Pages runs no server and method calls need the vault's token, the
+exchange happens at build time, not live: every method now declares its answer in OpenAPI, and each
+release publishes `openapi.json`, `manifest.json` with the platforms, and `manifest.schema.json`.
+`amoorion-dev site-data` writes them before the website builds, and `scripts/build-website.sh` runs the
+website's own `npm run build -- --base`, so the website can change its tool without a change here.
+The Astro version itself belongs to amoorion-website, written down in the notes for repositories.

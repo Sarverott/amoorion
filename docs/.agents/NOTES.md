@@ -2,6 +2,15 @@
 
 Newest on top.
 
+## 2026-10-31: the contract with amoorion-website
+
+- `npm run build -- --base <base>` writing `dist/`; `AMOORION_DATA` (a directory with `openapi.json`,
+  `manifest.json`, `manifest.schema.json`) and `AMOORION_BASE` in its environment. Vite ran through it
+  against website commit 9a9d1e2; Astro is assumed from its documented `--base`, not tried.
+- The website's `main` isn't pinned: a push there is built by the next release here, and with no
+  `package-lock.json` any more, `npm install` takes the newest versions its ranges allow each time.
+- `pages` in the manifest of `AMOORION_DATA` is empty: it is known only when the whole site is built.
+
 ## 2026-10-31: the author's reading of the examples
 
 - The author's `CALL()>"read"-"platform">"nowhere"[output]` can't work: Python applies `-` and `[]`
