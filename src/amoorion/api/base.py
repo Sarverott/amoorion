@@ -9,7 +9,7 @@ themselves (see amoorion.hooks).
 
 import argparse
 import hmac
-from typing import Annotated, Any
+from typing import Annotated, Any, get_type_hints
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
@@ -102,6 +102,8 @@ def create_app(
         app.post(
             f"/methods/{method.name}",
             summary=method.description,
+            # What `run` says it returns: the OpenAPI document tells it, the answer is held to it.
+            response_model=get_type_hints(method.run)["return"],
             dependencies=[Depends(authorized)],
             name=method.name,
         )(call)

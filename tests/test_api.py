@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from amoorion.api import create_app
+from amoorion.methods import METHODS
 from amoorion.vault import VaultLink, open_vault
 
 
@@ -29,6 +30,18 @@ def test_index_lists_methods_and_hooks(client):
     body = client.get("/").json()
 
     assert "publish" in body["methods"] and "generic" in body["hooks"]
+
+
+def test_every_method_says_what_it_answers(client):
+
+    paths = client.get("/openapi.json").json()["paths"]
+
+    for name in METHODS.names():
+        answer = paths[f"/methods/{name}"]["post"]["responses"]["200"]
+
+        schema = answer["content"]["application/json"]["schema"]
+
+        assert {"$ref", "items", "anyOf"} & schema.keys(), name
 
 
 def test_method_call(client):
