@@ -51,6 +51,7 @@ class Publish(Method):
                         ).post(post),
                     )
                 )
+            # One platform's failure must not stop the others.
             except (
                 Exception
             ) as error:  # one platform failing must not stop the others

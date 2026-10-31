@@ -152,6 +152,7 @@ class X(HttpPlugin):
             "GET",
             f"/2/users/{user['id']}/tweets",
             params={
+                # X takes from 5 to 100, whatever was asked for.
                 "max_results": min(
                     max(
                         limit,

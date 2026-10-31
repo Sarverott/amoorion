@@ -59,6 +59,7 @@ class DryRun(Plugin):
     ) -> list[Message]:
         """The kept messages, newest first."""
 
+        # They are kept oldest first.
         return self._messages[-limit:][::-1]
 
     def reply(

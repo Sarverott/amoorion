@@ -72,6 +72,7 @@ def length(
     """The length as Mastodon counts: each link as a fixed number of characters."""
 
     for link in links:
+        # A link counts the same, whatever its length, on Mastodon.
         text = text.replace(
             link,
             "x" * LINK_LENGTH,

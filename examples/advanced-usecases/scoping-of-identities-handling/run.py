@@ -10,7 +10,9 @@ from amoorion.plugins import load_plugins
 from amoorion.vault import VaultLink
 from amoorion.vault.kpxc_db_file import initialize
 
+# A folder for the env and vault files of both identities.
 scratch = Path(tempfile.mkdtemp())
+# What a new vault gets an empty entry for.
 schemas = {"ntfy": load_plugins().get("ntfy").schema()}
 
 
@@ -57,7 +59,9 @@ def identity(
     )
 
 
+# Only `work` gets a topic, so only it will be ready.
 work, private = identity("work", "work-news"), identity("private", None)
+# Neither sees the secrets of the other, in one process.
 for label, amo in (("work", work), ("private", private)):
     ready = next(
         status["ready"]

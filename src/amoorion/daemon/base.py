@@ -91,6 +91,7 @@ class Daemon(Controller):
         ]
 
         try:
+            # One ending is enough: see the class.
             done, _ = await asyncio.wait(
                 tasks,
                 return_when=asyncio.FIRST_COMPLETED,

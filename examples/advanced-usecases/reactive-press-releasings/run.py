@@ -9,9 +9,11 @@ from fastapi.testclient import TestClient
 
 from amoorion import Amoorion
 
+# The secret set on the webhook at GitHub; made up here.
 os.environ["AMOORION_SECRET_HOOKS_GITHUB_SECRET"] = "example"
 
 amo = Amoorion()
+# What GitHub sends when a release is published.
 body = json.dumps(
     {
         "action": "published",
@@ -22,7 +24,9 @@ body = json.dumps(
         },
     }
 ).encode()
+# GitHub signs the body with the secret; the hook refuses anything else.
 signature = "sha256=" + hmac.new(b"example", body, hashlib.sha256).hexdigest()
+# The call GitHub would make; it ends up in the inbox.
 TestClient(amo.api()).post(
     "/hooks/github",
     content=body,
@@ -33,6 +37,7 @@ TestClient(amo.api()).post(
     },
 )
 
+# Which of the inbox's messages become a press note, and how.
 rule = {
     "name": "press",
     "platform": "hook:github",
@@ -47,6 +52,7 @@ rule = {
         }
     ],
 }
+# Run twice: the second run finds nothing to do.
 for done in amo.automate(rules=[rule]) + amo.automate(
     rules=[rule]
 ):  # the second finds nothing new

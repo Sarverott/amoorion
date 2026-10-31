@@ -118,3 +118,30 @@ webpage), the docs' hooks (`docs/_ext`), and what shapes a post's text in seven 
 (`text.py`; the Discord webhook got its own file). Only the inbox's list and search, which
 repeated each other, and the servers' table of the CLI were simplified. Tests and notebook 08
 follow the new places; no test was removed.
+
+## UNIXUSAT=1793412625813 · commit 7bf1882
+
+The author, in their own words: "okidoki, let's play with form of code formating. look at
+current state of code, you may notice unpresent state of tabs and idents. it is not wrong but
+propably many people will find it \"unclean\" - for me it looks open and reading is faster this
+way. if it is possible then set up that code autoformatter or linter (i'm not sure what ruff is)
+to format not into standard shaping but our style... or at least as similar as possible. besides
+that add more commentary a lot in the examples, some of inside source codes (this splitting into
+multiline style was commenting-friendly strategy) and descriptional multiline stringings at heads
+of classes and functions so it is more defined and selfexplanatory there. besides that i added
+comment in lefthook about more stuff to be placed there. also we can consider to upgrade that
+`.vscode` dir there so for example jupyter notebooks will be refreshed on their own by task or
+louncher (i never used that before). also skills dir was updated long time ago i think. if it is
+not a sin then maybe we can define amoorion additionally as agentic skill itself as additional
+extra feacher?"
+
+Ruff alone can't write that shape: it adds no blank lines, and splits only by width. So
+`amoorion-dev shape` adds trailing commas and blank lines first (libcst) and ruff keeps them;
+`task format` runs it, `task check` and a `pre-commit` hook hold it. Differences from the
+author's hand: no blank line under `for`, `if` and the like, as ruff removes it; conditions stay
+on one line; a trailing comma after the last item. Docstrings on all 420 classes and functions
+that lacked one, kept by a test; the notebooks and scripts of `examples/` commented. lefthook also
+lints YAML before a commit, runs the gate before a push of development and syncs after a pull.
+`.vscode` has settings, tasks and launchers; `task examples:refresh` reruns notebooks, on demand and
+not by itself, as their outputs change every run. `SKILL.md` brought up to date and installed with
+the package, the `skill` method hands it out, `.claude-plugin/` makes the repository a plugin.

@@ -10,8 +10,10 @@ import uvicorn
 from amoorion import Amoorion
 from amoorion_post import post
 
+# The API wants a token; made up, as is everything here.
 os.environ["AMOORION_SECRET_API_TOKEN"] = "example"
 
+# Port 0 asks the system for a free port.
 with socket.socket() as probe:
     probe.bind(
         (
@@ -20,6 +22,7 @@ with socket.socket() as probe:
         )
     )
     port = probe.getsockname()[1]
+# The API on a real port, in the background, as `amoorion api` would run it.
 server = uvicorn.Server(
     uvicorn.Config(
         Amoorion().api(),
@@ -33,9 +36,11 @@ thread = threading.Thread(
     daemon=True,
 )
 thread.start()
+# Wait until it listens.
 while not server.started:
     time.sleep(0.05)
 
+# This is all a script in Blender has to call; see amoorion_post.py.
 [result] = post(
     "render finished",
     ["dryrun"],
@@ -47,5 +52,6 @@ print(
     result["ok"],
     result["message"]["text"],
 )
+# Ask the server to finish, and wait until it has.
 server.should_exit = True
 thread.join()
