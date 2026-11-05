@@ -177,5 +177,6 @@ author sets up once on GitHub: [Releasing](releasing.md).
 | a request in the author's own words | `INQUIRIES.md`, then the plan and the changelog |
 | a plan | [VISION.md](devlog/VISION.md), [TODO.md](devlog/TODO.md) |
 | a question for the author | [BRAINSTORM.md](devlog/BRAINSTORM.md) as `Q<n>` |
+| an idea for debate | [PROPOSALS.md](devlog/PROPOSALS.md) as `PP<n>` |
 | what was done and why | `docs/changelog/phase-<n>.md`, a new section |
 | how the code is shaped | [structure](structure.md), `docs/.agents/MAP.md` |

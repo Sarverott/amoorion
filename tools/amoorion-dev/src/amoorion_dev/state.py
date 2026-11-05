@@ -2,7 +2,7 @@
 
 Local: branch, version and where it stands in the release loop, the last
 release, what development has that master hasn't. The plan: phases, open
-questions, orders and inquiries waiting. Remote (optional): remote.py.
+questions and proposals, orders and inquiries waiting. Remote (optional): remote.py.
 """
 
 import re
@@ -16,6 +16,10 @@ from amoorion_dev.repo import Repo
 
 QUESTION = re.compile(
     r"^## (Q\d+): (.+)$",
+    re.MULTILINE,
+)
+PROPOSAL = re.compile(
+    r"^### (PP\d+) beg\n(?:>.*\n)*?> label/topic/name/title: (.+)$",
     re.MULTILINE,
 )
 WAITING = {
@@ -45,6 +49,7 @@ class State:
     phases: list[dict[str, Any]]
     phase_release: list[str]
     questions: list[str]
+    proposals: list[str]
     waiting: dict[str, bool]
     # name -> {"version": now, "next": in the next release} (Q15: a version each)
     packages: dict[str, dict[str, str]] = field(default_factory=dict)
@@ -169,6 +174,12 @@ def read(
             f"{number}: {title}"
             for number, title in QUESTION.findall(
                 repo.read("docs/devlog/BRAINSTORM.md")
+            )
+        ],
+        proposals=[
+            f"{number}: {title}"
+            for number, title in PROPOSAL.findall(
+                repo.read("docs/devlog/PROPOSALS.md")
             )
         ],
         waiting={name: waiting(repo, path) for name, path in WAITING.items()},

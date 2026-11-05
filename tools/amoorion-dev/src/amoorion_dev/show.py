@@ -157,6 +157,12 @@ def show_state(state: State) -> None:
             + "; ".join(state.questions)
         )
 
+    if state.proposals:
+        console.print(
+            "[bold]Open proposals[/] (docs/devlog/PROPOSALS.md): "
+            + "; ".join(state.proposals)
+        )
+
     runs = remote.get("runs")
 
     if isinstance(runs, dict) and runs:

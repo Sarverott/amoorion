@@ -59,7 +59,9 @@ in your scratch space, never on the real branches.
    `## UNIXUSAT=<ms> · commit <hash>`, what was done, in prose.
 2. Add a dated entry on top of `docs/.agents/NOTES.md`: what you found,
    what you assumed, what is untried.
-3. Open questions go to BRAINSTORM.md as `Q<n>` with a *Lean:*.
+3. Open questions go to BRAINSTORM.md as `Q<n>` with a *Lean:*. An idea of
+   your own, worked out far enough to argue about, goes to PROPOSALS.md as
+   `PP<n>` in its form; never decide one in code.
 4. Push `development`, watch `check` and `flow` (`gh run list`), fix what
    fails.
 5. Tell the author: what was done, what broke and how it was fixed, what
@@ -83,6 +85,7 @@ in your scratch space, never on the real branches.
 | the author's words | changelog, verbatim |
 | a plan | VISION.md (why, what), TODO.md (checklist) |
 | a question for the author | BRAINSTORM.md `Q<n>` |
+| an idea of your own, for debate | PROPOSALS.md `PP<n>` |
 | a finding, an assumption | `docs/.agents/NOTES.md` |
 | how the repository is shaped | `MAP.md`, `docs/structure.md` |
 | work for another repository | `~/__WORKSHOP/forge/NOTES-for-repositories.md` |

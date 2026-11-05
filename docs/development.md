@@ -14,6 +14,7 @@ devlog/TODO
 devlog/BRAINSTORM
 devlog/ORDERS
 devlog/INQUIRIES
+devlog/PROPOSALS
 changelog
 releasing
 agents

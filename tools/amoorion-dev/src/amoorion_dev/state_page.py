@@ -83,6 +83,14 @@ def markdown(state: State) -> str:
 
     lines += [f"- {question}" for question in state.questions] or ["None."]
 
+    lines += [
+        "",
+        "## Open proposals",
+        "",
+    ]
+
+    lines += [f"- {proposal}" for proposal in state.proposals] or ["None."]
+
     if isinstance(remote.get("runs"), dict) and remote["runs"]:
         lines += [
             "",
