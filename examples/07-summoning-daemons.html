@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/apple-touch-icon.png" />
+    <link rel="manifest" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>07-summoning-daemons.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>07-summoning-daemons</title>
+    <script type="module" crossorigin src="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-s-M1OXjs.js"></script>
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/rolldown-runtime-B0Z9INg1.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-DVplv7_D.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/compiler-runtime-BrajqUja.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEvent-Dfcbgjhg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-dom-_LrxgvjW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/schemas-Dv42wLFq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isObject-BCaOs5rp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isSymbol-oX0TOjjx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/now-Cmx0b_zA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/debounce-aFmHgJZY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isArrayLikeObject-DnwgSs_Z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseMerge-CQpUq7ep.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objects-snlMn4yk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useEventListener-D9cftcHj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/invariant-Ci2dTZ72.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-VPSq73n8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-B4K466FK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/session-DqoWmb7X.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/Deferred-CrTnjj37.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-DX8Y2WbJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/clsx-DB0hHKMi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cn-ldLVeaqm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/jsx-runtime-B74pBk57.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fullscreen-B9tHcfpV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-iaThVDkA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/menu-items-BrwnTgyK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-restore-focus-BxEGwIbk.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createLucideIcon-DfJ2oMlA.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/circle-DXf-VWZG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/button-COI-NGrx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/check-BQNapYaf.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/I18nProvider-Cg2I_s1_.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useNumberFormatter-D7O_26UI.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/select-DTBn5eTb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toast-BGzLGnvw.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-C9TuY18o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/paths-bkIFVj8h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useLifecycle-Mq4gc5kS.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/toDate-DOj9Q6uC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/database-zap-B_PMVg8T.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-dialog-BaPGzeOK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/arrays-BqUx5USx.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/once-Haz_uxEL.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/numbers-Mk3-CcoU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDebounce-B_ccBZTp.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/input-BoBxR50a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/use-toast-Wu434mLr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/requests-lt0JK8Jt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/uuid-k9DpjH68.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/write-secret-modal-DzKAInL2.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/plus-C5silF6g.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/trash-2-DcgaW8fn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/preload-helper-uBIymjUX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-Cny7_yZb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DBMV4gqt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/capabilities-BJvf-MD4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cjs-C49f7GXV.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/createReducer-DgRODTW6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-qhAY4L2r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/marked.esm-B_3iMIUq.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/strings-B2vv-ENv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BOfh4hMd.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/badge-crT3E0Rm.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DtH-7lot.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-BmExfiwX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-1tmpVXyz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-LSsCJjA3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dist-DusFODSa.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/stex-Dc5bKD4z.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useTheme-COhSHkCj.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAsyncData-C7aJJz0Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/purify.es--06brOip.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-BRkCaSsh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/coerce-CpE6kUdX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/get-DjNf4SIX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_hasPath-BmRQipI0.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hasIn-yw4sIeJR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/_baseSet-Bpdo9AvU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pick-DKIID_Mo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-BAJYRhmO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-C3oDoyFe.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/LazyAnyLanguageCodeMirror-CKcCbG2G.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-D8O_CYCG.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/micromark-factory-space-D9Dr-k4J.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chunk-YOKDWASO-BIpRENEC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-BG3sp2rs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-Djr5m5ac.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/copy-icon-BIiRXh_3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useRunCells-B2vUhREg.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/RenderHTML-BbOqmHy3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/blob-D5nfNHOo.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/kbd-pdKBv96t.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useInstallPackage-iX1eufdl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/errors-DCrsa1nH.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/api-BeC_VSGv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/share-BZW3tzEX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/events-CbeVJ6OD.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-_Qai_QyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pair-CaQyK6En.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ErrorBoundary-Gl5nCA8C.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/config-BOKzA3tF.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chevron-right-eAtVhbNZ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dropdown-menu-C1rnl-0o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/html-to-image-DK9Zl1lU.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/download-DCJXy66H.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/switch-CTaiAjrz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tabs-BuQlZFbt.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-DG7Ap4H4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/eye-off-CxVozGAC.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/refresh-cw-Qw1f8Jhy.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tree-actions-GM5E_bUs.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/ellipsis-63DyBLHQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/external-link-UrX9KO36.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spinner-DyNE-o8o.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/message-circle-C3rKm8_a.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/hat-glasses-C8RhSVii.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-GSoSTiIK.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/datasource-Cq6x_5ML.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/alert-DTaqCu_d.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/state-XsPO8hNi.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cell-link-LSth_8hT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/MarimoErrorOutput-D60XkCny.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDateFormatter-DA-62E-Y.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/en-US-Buu61juQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/isValid-q_Ad80ug.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/dates-BbFQ2oE4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-CNPGWpMu.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/precisionRound-Bq_nmf5u.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/defaultLocale-D5bOh7g6.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/vega-loader.browser-CLRkNgm7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/tooltip-mT3CGest.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-icons.esm-D6tfmvq8.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/extends-CvVTau-c.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/objectWithoutPropertiesLoose-Do6ywDBO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useIframeCapabilities-CwTkczVN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/error-banner-Cd69vvyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/utils-CaQYvazl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/formats-yZ06h1Pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/table-vrvqpuKJ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/react-resizable-panels.browser.esm-Dbe0MrFr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-D6HIIsCb.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/chart-no-axes-column-C4_v6fQW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-function-_W_Lo0P4.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/spec-BfSBcO5B.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/semaphore-BjoL5P0h.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/fileToBase64-BgBraYAr.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useBoolean-BDD6_xQQ.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/code-xml-SQaZqvcO.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-headphone-Dl35U6h3.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-BPBVl9pl.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/image-wZvTj8WY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/file-icons-CdJgUy-I.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/globe-UdPdIbF7.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/esm-CI_o7NhW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useAddCell-GR7eEQrT.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/readonly-python-code-DCSMIsTX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/data-grid-types-DgHVN_Zz.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/glide-utils-CIrAxdjv.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/column-preview-Cm2D6vyX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/square-BPmgQFnh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/triangle-alert-DmIqR8sY.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/prop-types-Djf4O40e.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/es-Cqst59WX.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/package-data-dv4FBHxR.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-export-DzhB1FrN.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/renderShortcut-BkVJQ_Zh.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/bundle.esm-D3tw5rqW.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/icons-CiZ_8zS-.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/useDeepCompareMemoize-DFIVN9dn.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/pathUtils-DPmlLd-r.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/floating-outline-XD9FAV-f.js">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/cells-0PFKL3SH.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/markdown-renderer-DjIHoF9Z.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/JsonOutput-B0GmlMnR.css">
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/npm/@marimo-team/frontend@0.25.2/dist/assets/index-Bcdzex-3.css">
+  
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_STATIC__", {
+        value: Object.freeze({
+            files: Object.freeze({}),
+            modelNotifications: Object.freeze([]),
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.25.2\"\napp = marimo.App()\n\n\n@app.cell\ndef _():\n    import marimo as mo\n\n    return (mo,)\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    # Summoning daemons\n\n    The daemon runs services side by side until one ends or it is stopped, when the\n    others are stopped too. A service is anything with `run` and `stop`.\n    \"\"\")\n    return\n\n\n@app.cell\nasync def _():\n    import asyncio\n\n    # A service is one long-running job; the daemon runs them together.\n    from amoorion.daemon import Daemon, Service\n\n\n    # Ticks some times, or endlessly with None, and remembers being stopped.\n    class Ticker(Service):\n        name = \"ticker\"\n\n        def __init__(\n            self,\n            times,\n        ):\n\n            super().__init__()\n\n            self.times, self.ticks, self.stopped = times, 0, False\n\n        async def run(self):\n\n            while not self.stopped and (\n                self.times is None or self.ticks \u003C self.times\n            ):\n                self.ticks += 1\n\n                await asyncio.sleep(0.01)\n\n        async def stop(self):\n\n            self.stopped = True\n\n\n    # One that ends by itself, one that never would.\n    short, endless = Ticker(3), Ticker(None)\n\n\n    # The daemon ends when the first service ends, and stops the others.\n    async def summon():\n\n        await Daemon(\n            [\n                short,\n                endless,\n            ]\n        ).run()\n\n\n    # A notebook can `await` right away, as it already runs an event loop.\n    await summon()\n\n    # The short one finished, the endless one was stopped.\n    short.ticks, endless.stopped\n    return Daemon, Service, Ticker, asyncio\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    A service that fails brings the daemon down with its error, so a supervisor sees it:\n    \"\"\")\n    return\n\n\n@app.cell\nasync def _(Daemon, Service, Ticker):\n    # A service that fails as soon as it starts.\n    class Broken(Service):\n        name = \"broken\"\n\n        async def run(self):\n\n            raise RuntimeError(\"no connection\")\n\n\n    # Its failure comes out of `run`, after the others were stopped.\n    async def summon_broken():\n\n        try:\n            await Daemon(\n                [\n                    Broken(),\n                    Ticker(None),\n                ]\n            ).run()\n        except RuntimeError as error:\n            return f\"daemon stopped: {error}\"\n\n\n    await summon_broken()\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    ## Threads and processes\n\n    The daemon itself is asyncio: services wait side by side. What blocks goes to a thread, and what fills a processor goes to a process; the service stays the same from the outside.\n    \"\"\")\n    return\n\n\n@app.cell\nasync def _(Daemon, Service, asyncio):\n    from concurrent.futures import ProcessPoolExecutor\n\n    import time\n\n\n    # Waiting on something blocking: a thread.\n    class Blocking(Service):\n        name = \"blocking\"\n\n        async def run(self):\n\n            await asyncio.to_thread(\n                time.sleep,\n                0.01,\n            )\n\n            self.answer = \"slept in a thread\"\n\n        async def stop(self):\n\n            pass\n\n\n    # Heavy computing: a process, as threads would share one processor.\n    class Heavy(Service):\n        name = \"heavy\"\n\n        async def run(self):\n\n            with ProcessPoolExecutor(1) as pool:\n                digits = await asyncio.get_running_loop().run_in_executor(\n                    pool,\n                    pow,\n                    2,\n                    100000,\n                )\n\n            self.answer = f\"computed {digits.bit_length()} bits in a process\"\n\n        async def stop(self):\n\n            pass\n\n\n    services = [\n        Blocking(),\n        Heavy(),\n    ]\n\n    await Daemon(services).run()\n\n    [service.answer for service in services]\n    return\n\n\n@app.cell(hide_code=True)\ndef _(mo):\n    mo.md(r\"\"\"\n    For real, the API and hooks, and NATS when `.env` names a server:\n\n    ```sh\n    uv run amoorion daemon --host 127.0.0.1 --port 8000\n    ```\n    \"\"\")\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "07-summoning-daemons.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.25.2",
+            "serverToken": "static",
+            "config": {"ai": {"allow_provider_config": true, "custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "code_lens": true, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "uv"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "after_delay", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "compact"},
+            "layout": null,
+            "view": {"showAppCode": true},
+            "notebook": {"cells": [{"code": "import marimo as mo", "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "Hbol", "name": "_"}, {"code": "mo.md(r\"\"\"\n# Summoning daemons\n\nThe daemon runs services side by side until one ends or it is stopped, when the\nothers are stopped too. A service is anything with `run` and `stop`.\n\"\"\")", "code_hash": "15c8685572bb55a8a590ff97083ff43f", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "MJUe", "name": "_"}, {"code": "import asyncio\n\n# A service is one long-running job; the daemon runs them together.\nfrom amoorion.daemon import Daemon, Service\n\n\n# Ticks some times, or endlessly with None, and remembers being stopped.\nclass Ticker(Service):\n    name = \"ticker\"\n\n    def __init__(\n        self,\n        times,\n    ):\n\n        super().__init__()\n\n        self.times, self.ticks, self.stopped = times, 0, False\n\n    async def run(self):\n\n        while not self.stopped and (\n            self.times is None or self.ticks \u003C self.times\n        ):\n            self.ticks += 1\n\n            await asyncio.sleep(0.01)\n\n    async def stop(self):\n\n        self.stopped = True\n\n\n# One that ends by itself, one that never would.\nshort, endless = Ticker(3), Ticker(None)\n\n\n# The daemon ends when the first service ends, and stops the others.\nasync def summon():\n\n    await Daemon(\n        [\n            short,\n            endless,\n        ]\n    ).run()\n\n\n# A notebook can `await` right away, as it already runs an event loop.\nawait summon()\n\n# The short one finished, the endless one was stopped.\nshort.ticks, endless.stopped", "code_hash": "37f8a0b372fc67d313fe521e24c89cb5", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "vblA", "name": "_"}, {"code": "mo.md(r\"\"\"\nA service that fails brings the daemon down with its error, so a supervisor sees it:\n\"\"\")", "code_hash": "63b425233f4951960d45272af59014c1", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "bkHC", "name": "_"}, {"code": "# A service that fails as soon as it starts.\nclass Broken(Service):\n    name = \"broken\"\n\n    async def run(self):\n\n        raise RuntimeError(\"no connection\")\n\n\n# Its failure comes out of `run`, after the others were stopped.\nasync def summon_broken():\n\n    try:\n        await Daemon(\n            [\n                Broken(),\n                Ticker(None),\n            ]\n        ).run()\n    except RuntimeError as error:\n        return f\"daemon stopped: {error}\"\n\n\nawait summon_broken()", "code_hash": "9076fe64dc62bc5e59013cbb16af6df5", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "lEQa", "name": "_"}, {"code": "mo.md(r\"\"\"\n## Threads and processes\n\nThe daemon itself is asyncio: services wait side by side. What blocks goes to a thread, and what fills a processor goes to a process; the service stays the same from the outside.\n\"\"\")", "code_hash": "3d484271fe3da6c32c0b2206d070298d", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "PKri", "name": "_"}, {"code": "from concurrent.futures import ProcessPoolExecutor\n\nimport time\n\n\n# Waiting on something blocking: a thread.\nclass Blocking(Service):\n    name = \"blocking\"\n\n    async def run(self):\n\n        await asyncio.to_thread(\n            time.sleep,\n            0.01,\n        )\n\n        self.answer = \"slept in a thread\"\n\n    async def stop(self):\n\n        pass\n\n\n# Heavy computing: a process, as threads would share one processor.\nclass Heavy(Service):\n    name = \"heavy\"\n\n    async def run(self):\n\n        with ProcessPoolExecutor(1) as pool:\n            digits = await asyncio.get_running_loop().run_in_executor(\n                pool,\n                pow,\n                2,\n                100000,\n            )\n\n        self.answer = f\"computed {digits.bit_length()} bits in a process\"\n\n    async def stop(self):\n\n        pass\n\n\nservices = [\n    Blocking(),\n    Heavy(),\n]\n\nawait Daemon(services).run()\n\n[service.answer for service in services]", "code_hash": "069e92382f3f474b958a57dd744f0868", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": false}, "id": "Xref", "name": "_"}, {"code": "mo.md(r\"\"\"\nFor real, the API and hooks, and NATS when `.env` names a server:\n\n```sh\nuv run amoorion daemon --host 127.0.0.1 --port 8000\n```\n\"\"\")", "code_hash": "c437e5ac46d84a3b0158afcdd545d18a", "config": {"column": null, "disabled": false, "expand_output": false, "hide_code": true}, "id": "SFPL", "name": "_"}], "metadata": {"marimo_version": "0.25.2"}, "version": "1"},
+            "session": {"cells": [{"code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e", "console": [], "id": "Hbol", "outputs": [{"data": {"text/plain": ""}, "type": "data"}]}, {"code_hash": "15c8685572bb55a8a590ff97083ff43f", "console": [], "id": "MJUe", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch1 id=\"summoning-daemons\"\u003ESummoning daemons\u003C/h1\u003E\n\u003Cspan class=\"paragraph\"\u003EThe daemon runs services side by side until one ends or it is stopped, when the\nothers are stopped too. A service is anything with \u003Ccode\u003Erun\u003C/code\u003E and \u003Ccode\u003Estop\u003C/code\u003E.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "37f8a0b372fc67d313fe521e24c89cb5", "console": [], "id": "vblA", "outputs": [{"data": {"application/json": "[3, true]"}, "type": "data"}]}, {"code_hash": "63b425233f4951960d45272af59014c1", "console": [], "id": "bkHC", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003EA service that fails brings the daemon down with its error, so a supervisor sees it:\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "9076fe64dc62bc5e59013cbb16af6df5", "console": [], "id": "lEQa", "outputs": [{"data": {"text/html": "\u003Cpre class='text-xs'\u003E\u0026#x27;daemon stopped: no connection\u0026#x27;\u003C/pre\u003E"}, "type": "data"}]}, {"code_hash": "3d484271fe3da6c32c0b2206d070298d", "console": [], "id": "PKri", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Ch2 id=\"threads-and-processes\"\u003EThreads and processes\u003C/h2\u003E\n\u003Cspan class=\"paragraph\"\u003EThe daemon itself is asyncio: services wait side by side. What blocks goes to a thread, and what fills a processor goes to a process; the service stays the same from the outside.\u003C/span\u003E\u003C/span\u003E"}, "type": "data"}]}, {"code_hash": "069e92382f3f474b958a57dd744f0868", "console": [], "id": "Xref", "outputs": [{"data": {"application/json": "[\"slept in a thread\", \"computed 100001 bits in a process\"]"}, "type": "data"}]}, {"code_hash": "c437e5ac46d84a3b0158afcdd545d18a", "console": [], "id": "SFPL", "outputs": [{"data": {"text/markdown": "\u003Cspan class=\"markdown prose dark:prose-invert contents\"\u003E\u003Cspan class=\"paragraph\"\u003EFor real, the API and hooks, and NATS when \u003Ccode\u003E.env\u003C/code\u003E names a server:\u003C/span\u003E\n\u003Cdiv class=\"language-sh codehilite\"\u003E\u003Cpre\u003E\u003Cspan\u003E\u003C/span\u003E\u003Ccode\u003Euv\u003Cspan class=\"w\"\u003E \u003C/span\u003Erun\u003Cspan class=\"w\"\u003E \u003C/span\u003Eamoorion\u003Cspan class=\"w\"\u003E \u003C/span\u003Edaemon\u003Cspan class=\"w\"\u003E \u003C/span\u003E--host\u003Cspan class=\"w\"\u003E \u003C/span\u003E\u003Cspan class=\"m\"\u003E127\u003C/span\u003E.0.0.1\u003Cspan class=\"w\"\u003E \u003C/span\u003E--port\u003Cspan class=\"w\"\u003E \u003C/span\u003E\u003Cspan class=\"m\"\u003E8000\u003C/span\u003E\n\u003C/code\u003E\u003C/pre\u003E\u003C/div\u003E\u003C/span\u003E"}, "type": "data"}]}], "metadata": {"marimo_version": "0.25.2", "script_metadata_hash": null}, "version": "1"},
+            "runtimeConfig": null
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  
+<marimo-code hidden="">
+    import%20marimo%0A%0A__generated_with%20%3D%20%220.25.2%22%0Aapp%20%3D%20marimo.App()%0A%0A%0A%40app.cell%0Adef%20_()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%20Summoning%20daemons%0A%0A%20%20%20%20The%20daemon%20runs%20services%20side%20by%20side%20until%20one%20ends%20or%20it%20is%20stopped%2C%20when%20the%0A%20%20%20%20others%20are%20stopped%20too.%20A%20service%20is%20anything%20with%20%60run%60%20and%20%60stop%60.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Aasync%20def%20_()%3A%0A%20%20%20%20import%20asyncio%0A%0A%20%20%20%20%23%20A%20service%20is%20one%20long-running%20job%3B%20the%20daemon%20runs%20them%20together.%0A%20%20%20%20from%20amoorion.daemon%20import%20Daemon%2C%20Service%0A%0A%0A%20%20%20%20%23%20Ticks%20some%20times%2C%20or%20endlessly%20with%20None%2C%20and%20remembers%20being%20stopped.%0A%20%20%20%20class%20Ticker(Service)%3A%0A%20%20%20%20%20%20%20%20name%20%3D%20%22ticker%22%0A%0A%20%20%20%20%20%20%20%20def%20__init__(%0A%20%20%20%20%20%20%20%20%20%20%20%20self%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20times%2C%0A%20%20%20%20%20%20%20%20)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20super().__init__()%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.times%2C%20self.ticks%2C%20self.stopped%20%3D%20times%2C%200%2C%20False%0A%0A%20%20%20%20%20%20%20%20async%20def%20run(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20while%20not%20self.stopped%20and%20(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20self.times%20is%20None%20or%20self.ticks%20%3C%20self.times%0A%20%20%20%20%20%20%20%20%20%20%20%20)%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20self.ticks%20%2B%3D%201%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20await%20asyncio.sleep(0.01)%0A%0A%20%20%20%20%20%20%20%20async%20def%20stop(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.stopped%20%3D%20True%0A%0A%0A%20%20%20%20%23%20One%20that%20ends%20by%20itself%2C%20one%20that%20never%20would.%0A%20%20%20%20short%2C%20endless%20%3D%20Ticker(3)%2C%20Ticker(None)%0A%0A%0A%20%20%20%20%23%20The%20daemon%20ends%20when%20the%20first%20service%20ends%2C%20and%20stops%20the%20others.%0A%20%20%20%20async%20def%20summon()%3A%0A%0A%20%20%20%20%20%20%20%20await%20Daemon(%0A%20%20%20%20%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20short%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20endless%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%20%20).run()%0A%0A%0A%20%20%20%20%23%20A%20notebook%20can%20%60await%60%20right%20away%2C%20as%20it%20already%20runs%20an%20event%20loop.%0A%20%20%20%20await%20summon()%0A%0A%20%20%20%20%23%20The%20short%20one%20finished%2C%20the%20endless%20one%20was%20stopped.%0A%20%20%20%20short.ticks%2C%20endless.stopped%0A%20%20%20%20return%20Daemon%2C%20Service%2C%20Ticker%2C%20asyncio%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20A%20service%20that%20fails%20brings%20the%20daemon%20down%20with%20its%20error%2C%20so%20a%20supervisor%20sees%20it%3A%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Aasync%20def%20_(Daemon%2C%20Service%2C%20Ticker)%3A%0A%20%20%20%20%23%20A%20service%20that%20fails%20as%20soon%20as%20it%20starts.%0A%20%20%20%20class%20Broken(Service)%3A%0A%20%20%20%20%20%20%20%20name%20%3D%20%22broken%22%0A%0A%20%20%20%20%20%20%20%20async%20def%20run(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20raise%20RuntimeError(%22no%20connection%22)%0A%0A%0A%20%20%20%20%23%20Its%20failure%20comes%20out%20of%20%60run%60%2C%20after%20the%20others%20were%20stopped.%0A%20%20%20%20async%20def%20summon_broken()%3A%0A%0A%20%20%20%20%20%20%20%20try%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20await%20Daemon(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Broken()%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20Ticker(None)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%20%20%20%20%20%20).run()%0A%20%20%20%20%20%20%20%20except%20RuntimeError%20as%20error%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22daemon%20stopped%3A%20%7Berror%7D%22%0A%0A%0A%20%20%20%20await%20summon_broken()%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20%23%23%20Threads%20and%20processes%0A%0A%20%20%20%20The%20daemon%20itself%20is%20asyncio%3A%20services%20wait%20side%20by%20side.%20What%20blocks%20goes%20to%20a%20thread%2C%20and%20what%20fills%20a%20processor%20goes%20to%20a%20process%3B%20the%20service%20stays%20the%20same%20from%20the%20outside.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Aasync%20def%20_(Daemon%2C%20Service%2C%20asyncio)%3A%0A%20%20%20%20from%20concurrent.futures%20import%20ProcessPoolExecutor%0A%0A%20%20%20%20import%20time%0A%0A%0A%20%20%20%20%23%20Waiting%20on%20something%20blocking%3A%20a%20thread.%0A%20%20%20%20class%20Blocking(Service)%3A%0A%20%20%20%20%20%20%20%20name%20%3D%20%22blocking%22%0A%0A%20%20%20%20%20%20%20%20async%20def%20run(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20await%20asyncio.to_thread(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20time.sleep%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200.01%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.answer%20%3D%20%22slept%20in%20a%20thread%22%0A%0A%20%20%20%20%20%20%20%20async%20def%20stop(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20pass%0A%0A%0A%20%20%20%20%23%20Heavy%20computing%3A%20a%20process%2C%20as%20threads%20would%20share%20one%20processor.%0A%20%20%20%20class%20Heavy(Service)%3A%0A%20%20%20%20%20%20%20%20name%20%3D%20%22heavy%22%0A%0A%20%20%20%20%20%20%20%20async%20def%20run(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20with%20ProcessPoolExecutor(1)%20as%20pool%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20digits%20%3D%20await%20asyncio.get_running_loop().run_in_executor(%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20pool%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20pow%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%202%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20100000%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20)%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20self.answer%20%3D%20f%22computed%20%7Bdigits.bit_length()%7D%20bits%20in%20a%20process%22%0A%0A%20%20%20%20%20%20%20%20async%20def%20stop(self)%3A%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20pass%0A%0A%0A%20%20%20%20services%20%3D%20%5B%0A%20%20%20%20%20%20%20%20Blocking()%2C%0A%20%20%20%20%20%20%20%20Heavy()%2C%0A%20%20%20%20%5D%0A%0A%20%20%20%20await%20Daemon(services).run()%0A%0A%20%20%20%20%5Bservice.answer%20for%20service%20in%20services%5D%0A%20%20%20%20return%0A%0A%0A%40app.cell(hide_code%3DTrue)%0Adef%20_(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20For%20real%2C%20the%20API%20and%20hooks%2C%20and%20NATS%20when%20%60.env%60%20names%20a%20server%3A%0A%0A%20%20%20%20%60%60%60sh%0A%20%20%20%20uv%20run%20amoorion%20daemon%20--host%20127.0.0.1%20--port%208000%0A%20%20%20%20%60%60%60%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A
+</marimo-code>
+
+<marimo-code-hash hidden="">a79f4904936f70a8c396bef446981e64</marimo-code-hash>
+</body>
+</html>

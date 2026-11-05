@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# The docs keep their own: https://amoorion.readthedocs.io/robots.txt
