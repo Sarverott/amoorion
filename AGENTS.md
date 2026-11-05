@@ -24,7 +24,8 @@ Read first:
    loop, workflows and tools; `uv run task state` for where it stands now
 1. [docs/devlog/VISION.md](docs/devlog/VISION.md): the idea
 2. [docs/devlog/TODO.md](docs/devlog/TODO.md): what is being worked on now
-3. [docs/devlog/BRAINSTORM.md](docs/devlog/BRAINSTORM.md): open questions `Q<n>`
+3. [docs/devlog/BRAINSTORM.md](docs/devlog/BRAINSTORM.md): open questions `Q<n>`, and
+   [docs/devlog/PROPOSALS.md](docs/devlog/PROPOSALS.md): ideas for debate `PP<n>`
 4. [docs/changelog/](docs/changelog/): how it got here, answered orders and decisions
 5. [docs/structure.md](docs/structure.md): the shape of `src/amoorion/`
 6. [docs/plugins.md](docs/plugins.md): how to write a platform plugin

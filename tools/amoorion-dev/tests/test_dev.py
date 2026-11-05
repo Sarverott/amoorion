@@ -257,6 +257,26 @@ def test_state_reads_offline(repo):
     ) and "(Z: a step)" in markdown(read)
 
 
+def test_state_lists_the_open_proposals(repo):
+
+    found, commit, _ = repo
+
+    commit(
+        "docs: a proposal",
+        {
+            "docs/devlog/PROPOSALS.md": "# PROPOSALS\n\n```md\n### PP<n> beg\n> label/topic/name/title: the form\n```\n\n"
+            "### PP1 beg\n> from: Cleo\n> related to: PP0\n> label/topic/name/title: one lockfile\n"
+            "> taggings: `website`\n\n###### DEFINE\nwhy\n### PP1 end\n"
+        },
+    )
+
+    read = state.read(found)
+
+    assert read.proposals == ["PP1: one lockfile"]
+
+    assert "- PP1: one lockfile" in markdown(read)
+
+
 def test_a_patch_bumps_amoorion_and_the_changed_packages_only(repo):
 
     found, commit, _ = repo

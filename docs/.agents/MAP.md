@@ -24,6 +24,7 @@ structure, a workflow or a tool updates this map in the same commit.
 | `docs/devlog/INQUIRIES.md` | the author's requests in their own words | **author**; agents empty it |
 | `docs/devlog/VISION.md`, `TODO.md` | the plan and its checklist, by phase | agents, from the author's words |
 | `docs/devlog/BRAINSTORM.md` | open questions `Q<n>` with a *Lean:* | agents ask, the author decides |
+| `docs/devlog/PROPOSALS.md` | ideas for debate `PP<n>` (DEFINE, COMBINE, CONCLUDE), in the author's form | anyone proposes, the author decides |
 | `docs/changelog/phase-<n>.md` | the story: orders word for word, decisions, what was done; **append-only** | agents |
 | `CHANGELOG.md` | the commits per release; written by `amoorion-dev version final` | the flow |
 | `docs/.agents/` | this map, the guide, the notes, `CLEO.md` (Cleo's own view); the author reads it | agents |

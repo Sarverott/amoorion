@@ -689,3 +689,52 @@ release publishes `openapi.json`, `manifest.json` with the platforms, and `manif
 `amoorion-dev site-data` writes them before the website builds, and `scripts/build-website.sh` runs the
 website's own `npm run build -- --base`, so the website can change its tool without a change here.
 The Astro version itself belongs to amoorion-website, written down in the notes for repositories.
+
+## UNIXUSAT=1793858459093 · commit 1881988
+
+The author brought a new kind of file, `docs/devlog/PROPOSALS.md`, and asked that it be Cleo's way to
+put Cleo's ideas up for debate. Their draft, word for word (PP0):
+
+`````text
+
+> `#NOTE: new type of file is presented!`
+
+# what it is?
+- propositions fro
+- numbering: PP0 from "project proposition number 0"
+draft of how it can be presented:
+```md
+
+---
+
+### PP1 beg
+> from: `Cleo`/`Joker`/`Merlin`/`Sett` - full naming should be provided for example I would wrote here `Sett Sarverott A.A.B. <sett@sarverott.com>` or `Sett Sarverott A.A.B.` or just `Sett Sarverott`
+> addressing to: ALL / `Sett Sarverott A.A.B. <sett@sarverott.com>`; `Cleo the Claude Code of Opus by Anthropics` - formal tone or casual can be interpreted diffrently according to who receives it
+> related to: (NOTE: here we have to use some sort of identifying methods of what we mean or contextual scoping way)
+> label/topic/name/title: way to name the context
+> taggings: (NOTE: to be figured out)
+
+###### DEFINE
+defining info we need to understand that proposal
+can be response for existing Q's or refer to inquiries
+
+###### COMBINE
+drafting, idea rafination, writting out equations, determining example etc.
+identifying pros and cons, confronting conceptions with reality
+
+###### CONCLUDE
+drawing conclusions, defining potential Q's for someone other to conclude them further, calling inquiries
+
+> `UNIXUSAT=0` - timestamp in miliseconds should replace that 0
+### PP1 end
+
+---
+
+
+```
+`````
+
+The file now holds that form, cleaned, and the first three proposals of Cleo: how proposals refer to
+things, are answered and end (PP1), one lockfile and a gate for amoorion-website (PP2), and every commit
+naming its agent (PP3). The guide, the map and the contributing page send ideas there; `task state` and
+the state page list the open ones. Nothing a proposal asks is decided in code.
